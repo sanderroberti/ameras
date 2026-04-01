@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Confidence intervals</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Confidence intervals</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ameras)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; Loading required package: nimble</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; nimble version 1.4.1 is loaded.</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; For more information on NIMBLE and a User Manual,</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; please visit https://R-nimble.org.</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;nimble&#39;</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt; The following object is masked from &#39;package:stats&#39;:</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co">#&gt;     simulate</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co">#&gt; The following object is masked from &#39;package:base&#39;:</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co">#&gt;     declare</span></span></code></pre></div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>There are several options for confidence intervals that can be
+supplied to the <code>CI</code> argument, see below. When
+<code>ameras</code> is called with <code>methods</code> containing at
+least one of <code>RC</code>, <code>ERC</code>, and <code>MCML</code>
+and at least one of <code>FMA</code> and <code>BMA</code>,
+<code>CI</code> should be a vector of length 2 with one method for
+<code>RC</code>, <code>ERC</code> and <code>MCML</code> and one for
+<code>FMA</code> and <code>BMA</code>.</p>
+</div>
+<div id="regression-calibration-extended-regression-calibration-and-monte-carlo-maximum-likelihood" class="section level1">
+<h1>Regression calibration, extended regression calibration, and Monte
+Carlo maximum likelihood</h1>
+<p>For (extended) regression calibration and Monte Carlo maximum
+likelihood, there are two types of Wald intervals, obtained either
+before or after transformation. If no transformation is specified,
+<code>wald.orig</code> should be used to obtain the standard Wald
+intervals. When a transformation is used, <code>wald.transformed</code>
+is determined before transforming, and <code>wald.orig</code> is
+obtained after transforming using the delta method (using
+<code>transform.jacobian</code> is required). The third option is
+<code>proflik</code>, which uses the profile likelihood to compute
+confidence bounds. For this, the profile log (partial) likelihood for
+parameter <span class="math inline">\(\theta_p\)</span> is defined as
+<span class="math display">\[
+    PL_p (\theta_p^*) = \max_{\mathbf\theta: \theta_p = \theta_p^*} \ell
+(\mathbf \theta),
+\]</span> where <span class="math inline">\(\ell\)</span> is the log
+(partial) likelihood. Next, profile confidence intervals <span class="math inline">\((\theta_p^l, \theta_p^h)\)</span> are obtained for
+parameter <span class="math inline">\(\theta_p\)</span> at significance
+level <span class="math inline">\(\alpha=0.95\)</span> by solving <span class="math inline">\(-2 \{PL_p(\theta_p^*) -
+\ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}\)</span> using the
+bisection method, with <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> the maximum
+likelihood estimate. Note that profile likelihoods are more
+computationally intensive to obtain. For this reason,
+<code>ameras</code> offers the option to only determine them for the
+exposure-related parameters, which is the default setting. To obtain
+profile likelihood intervals for all parameters, use
+<code>params.profCI = &quot;all&quot;</code>.</p>
+<p>To illustrate, we determine the three types of confidence intervals
+for a regression calibration analysis using the example data, using a
+linear excess relative risk model with the default exponential
+transformation (see <a href="transformations.html">Parameter
+transformations</a>).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(data, <span class="at">package=</span><span class="st">&quot;ameras&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>dosevars <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>fit.ameras.waldorig <span class="ot">&lt;-</span> <span class="fu">ameras</span>(<span class="at">Y=</span><span class="st">&quot;Y.binomial&quot;</span>, <span class="at">dosevars=</span>dosevars, <span class="at">X=</span><span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>,<span class="st">&quot;X2&quot;</span>), <span class="at">data=</span>data, </span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="fu">c</span>(<span class="st">&quot;RC&quot;</span>), <span class="at">CI=</span><span class="st">&quot;wald.orig&quot;</span>, <span class="at">doseRRmod=</span><span class="st">&quot;ERR&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; Fitting RC</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>fit.ameras.waldtransformed <span class="ot">&lt;-</span> <span class="fu">ameras</span>(<span class="at">Y=</span><span class="st">&quot;Y.binomial&quot;</span>, <span class="at">dosevars=</span>dosevars, <span class="at">X=</span><span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>,<span class="st">&quot;X2&quot;</span>), </span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>                                     <span class="at">data=</span>data, <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="fu">c</span>(<span class="st">&quot;RC&quot;</span>), </span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>                                     <span class="at">CI=</span><span class="st">&quot;wald.transformed&quot;</span>, <span class="at">doseRRmod=</span><span class="st">&quot;ERR&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; Fitting RC</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>fit.ameras.proflik <span class="ot">&lt;-</span> <span class="fu">ameras</span>(<span class="at">Y=</span><span class="st">&quot;Y.binomial&quot;</span>, <span class="at">dosevars=</span>dosevars, <span class="at">X=</span><span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>,<span class="st">&quot;X2&quot;</span>), <span class="at">data=</span>data, </span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="fu">c</span>(<span class="st">&quot;RC&quot;</span>), <span class="at">CI=</span><span class="st">&quot;proflik&quot;</span>, <span class="at">doseRRmod=</span><span class="st">&quot;ERR&quot;</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>                            <span class="at">params.profCI =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; Fitting RC</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; Obtaining profile likelihood CI for (Intercept)</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; Obtaining profile likelihood CI for X1</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt; Obtaining profile likelihood CI for X2</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; Obtaining profile likelihood CI for dose</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.waldorig)</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; ameras(data = data, family = &quot;binomial&quot;, Y = &quot;Y.binomial&quot;, dosevars = dosevars, </span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt;     X = c(&quot;X1&quot;, &quot;X2&quot;), methods = c(&quot;RC&quot;), doseRRmod = &quot;ERR&quot;, </span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt;     CI = &quot;wald.orig&quot;)</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt; Total run time: 0.3 seconds</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt;      RC     0.3</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788       -1.2363       -0.8918</span></span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628        0.2914        0.5904</span></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544       -0.5230       -0.1489</span></span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517        0.5663        1.1353</span></span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.waldtransformed)</span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt; ameras(data = data, family = &quot;binomial&quot;, Y = &quot;Y.binomial&quot;, dosevars = dosevars, </span></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt;     X = c(&quot;X1&quot;, &quot;X2&quot;), methods = c(&quot;RC&quot;), doseRRmod = &quot;ERR&quot;, </span></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt;     CI = &quot;wald.transformed&quot;)</span></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt; Total run time: 0.1 seconds</span></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt;      RC     0.1</span></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788       -1.2363       -0.8918</span></span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628        0.2914        0.5904</span></span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544       -0.5230       -0.1489</span></span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517        0.6050        1.1827</span></span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.proflik)</span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a><span class="co">#&gt; ameras(data = data, family = &quot;binomial&quot;, Y = &quot;Y.binomial&quot;, dosevars = dosevars, </span></span>
+<span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a><span class="co">#&gt;     X = c(&quot;X1&quot;, &quot;X2&quot;), methods = c(&quot;RC&quot;), doseRRmod = &quot;ERR&quot;, </span></span>
+<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a><span class="co">#&gt;     CI = &quot;proflik&quot;, params.profCI = &quot;all&quot;)</span></span>
+<span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a><span class="co">#&gt; Total run time: 2 seconds</span></span>
+<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
+<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a><span class="co">#&gt;      RC     2.0</span></span>
+<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
+<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788       -1.2391       -0.8971</span></span>
+<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628        0.2908        0.5917</span></span>
+<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544       -0.5256       -0.1490</span></span>
+<span id="cb2-77"><a href="#cb2-77" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517        0.6009        1.1784</span></span></code></pre></div>
+</div>
+<div id="frequentist-and-bayesian-model-averaging" class="section level1">
+<h1>Frequentist and Bayesian model averaging</h1>
+<p>For frequentist and Bayesian model averaging methods, the options are
+<code>percentile</code> which uses 2.5% and 97.5% percentiles, and
+<code>hpd</code> which computes highest posterior density intervals
+using <code>HPDinterval</code> from the <code>coda</code> package, using
+either the FMA samples or Bayesian posterior samples.</p>
+<p>Again, we use the example data to illustrate.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>fit.ameras.hpd <span class="ot">&lt;-</span> <span class="fu">ameras</span>(<span class="at">Y=</span><span class="st">&quot;Y.binomial&quot;</span>, <span class="at">dosevars=</span>dosevars, <span class="at">X=</span><span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>,<span class="st">&quot;X2&quot;</span>), <span class="at">data=</span>data, </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="fu">c</span>(<span class="st">&quot;FMA&quot;</span>), <span class="at">CI=</span><span class="st">&quot;hpd&quot;</span>, <span class="at">doseRRmod=</span><span class="st">&quot;ERR&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; Fitting FMA</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>fit.ameras.percentile <span class="ot">&lt;-</span> <span class="fu">ameras</span>(<span class="at">Y=</span><span class="st">&quot;Y.binomial&quot;</span>, <span class="at">dosevars=</span>dosevars, <span class="at">X=</span><span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>,<span class="st">&quot;X2&quot;</span>), <span class="at">data=</span>data, </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="fu">c</span>(<span class="st">&quot;FMA&quot;</span>), <span class="at">CI=</span><span class="st">&quot;percentile&quot;</span>, </span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                            <span class="at">doseRRmod=</span><span class="st">&quot;ERR&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Fitting FMA</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.hpd)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; ameras(data = data, family = &quot;binomial&quot;, Y = &quot;Y.binomial&quot;, dosevars = dosevars, </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;     X = c(&quot;X1&quot;, &quot;X2&quot;), methods = c(&quot;FMA&quot;), doseRRmod = &quot;ERR&quot;, </span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;     CI = &quot;hpd&quot;)</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; Total run time: 0.9 seconds</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt;     FMA     0.9</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt;     FMA (Intercept)  -1.0577 0.08752       -1.2300       -0.8863</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt;     FMA          X1   0.4430 0.07625        0.2912        0.5899</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt;     FMA          X2  -0.3375 0.09560       -0.5267       -0.1512</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt;     FMA        dose   0.8447 0.14479        0.5659        1.1329</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.percentile)</span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt; ameras(data = data, family = &quot;binomial&quot;, Y = &quot;Y.binomial&quot;, dosevars = dosevars, </span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt;     X = c(&quot;X1&quot;, &quot;X2&quot;), methods = c(&quot;FMA&quot;), doseRRmod = &quot;ERR&quot;, </span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt;     CI = &quot;percentile&quot;)</span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt; Total run time: 1 seconds</span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt;     FMA     1.0</span></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt;     FMA (Intercept)  -1.0576 0.08758       -1.2304       -0.8864</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt;     FMA          X1   0.4431 0.07642        0.2934        0.5929</span></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt;     FMA          X2  -0.3374 0.09537       -0.5236       -0.1507</span></span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="co">#&gt;     FMA        dose   0.8441 0.14510        0.5595        1.1311</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

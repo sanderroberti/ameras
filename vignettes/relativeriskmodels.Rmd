@@ -1,0 +1,89 @@
+---
+title: "Relative risk models"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Relative risk models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ameras)
+library(ggplot2)
+data(data, package="ameras")
+dosevars <- paste0("V", 1:10)
+```
+
+# Introduction
+
+For non-Gaussian families, three relative risk models for the main exposure are supported, the usual exponential model $$RR_i=\exp(\beta_1 D_i+\beta_2 D_i^2+ \mathbf{M}_i^T \mathbf{\beta}_{m1}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2} D_i^2),$$ the linear(-quadratic) excess relative risk (ERR) model $$RR_i= 1+\beta_1 D_i+\beta_2 D_i^2 + \mathbf{M}_i^T \mathbf{\beta_{m1}}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2}D_i^2,$$ and the linear-exponential model $$ RR_i= 1+(\beta_1 + \mathbf{M}_i^T \mathbf{\beta}_{m1}) D_i \exp\{(\beta_2+  \mathbf{M}_i^T \mathbf{\beta}_{m2})D_i\}. $$ This vignette illustrates fitting the three models using regression calibration for logistic regression, but the same syntax applies to all other settings.
+
+# Exponential relative risk
+
+The usual exponential relative risk model is given by $RR_i=\exp(\beta_1 D_i+\beta_2 D_i^2+ \mathbf{M}_i^T \mathbf{\beta}_{m1}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2} D_i^2)$, where the quadratic and effect modification terms are optional (not fit by setting `deg=1` and not passing anything to `M`, respectively). This model is fit by setting `doseRRmod="EXP"` as follows:
+
+```{r modelfit.exp}
+fit.ameras.exp <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="binomial", deg=2, doseRRmod = "EXP", methods="RC")
+summary(fit.ameras.exp)
+```
+
+
+
+
+# Linear excess relative risk
+
+The linear excess relative risk model is given by $RR_i=1+\beta_1 D_i+\beta_2 D_i^2+ \mathbf{M}_i^T \mathbf{\beta}_{m1}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2} D_i^2$, where again the quadratic and effect modification terms are optional. This model is fit by setting `doseRRmod="ERR"` as follows:
+
+```{r modelfit.err}
+fit.ameras.err <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="binomial", deg=2, doseRRmod = "ERR", methods="RC")
+summary(fit.ameras.err)
+```
+
+
+# Linear-exponential relative risk
+
+The linear-exponential relative risk model is given by $RR_i= 1+(\beta_1 + \mathbf{M}_i^T \mathbf{\beta}_{m1}) D_i \exp\{(\beta_2+  \mathbf{M}_i^T \mathbf{\beta}_{m2})D_i\}$, where the effect modification terms are optional. This model is fit by setting `doseRRmod="LINEXP"` as follows:
+
+```{r modelfit.linexp}
+fit.ameras.linexp <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="binomial", doseRRmod = "LINEXP", methods="RC")
+summary(fit.ameras.linexp)
+```
+
+
+# Comparison between models
+
+To compare between models, it is easiest to do so visually:
+
+```{r comparison, fig.width=7, fig.height=6}
+ggplot(data.frame(x=c(0, 5)), aes(x))+
+  theme_light(base_size=15)+
+  xlab("Exposure")+
+  ylab("Relative risk")+
+  labs(col="Model", lty="Model") +
+  theme(legend.position = "inside", 
+        legend.position.inside = c(.2,.85),
+        legend.box.background = element_rect(color = "black", fill = "white", linewidth = 1))+
+  stat_function(aes(col="Linear-quadratic ERR", lty="Linear-quadratic ERR" ),fun=function(x){
+    1+fit.ameras.err$RC$coefficients["dose"]*x + fit.ameras.err$RC$coefficients["dose_squared"]*x^2
+  }, linewidth=1.2) + 
+  stat_function(aes(col="Exponential", lty="Exponential"),fun=function(x){
+    exp(fit.ameras.exp$RC$coefficients["dose"]*x + fit.ameras.exp$RC$coefficients["dose_squared"]*x^2)
+  }, linewidth=1.2) +
+  stat_function(aes(col="Linear-exponential", lty="Linear-exponential"),fun=function(x){
+    1+fit.ameras.linexp$RC$coefficients["dose_linear"]*x * exp(fit.ameras.linexp$RC$coefficients["dose_exponential"]*x)
+  }, linewidth=1.2)
+
+
+```

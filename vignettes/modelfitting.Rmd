@@ -1,0 +1,307 @@
+---
+title: "Fitting models and displaying output"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Fitting models and displaying output}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>"
+)
+```
+
+```{r setup}
+library(ameras)
+```
+
+# Introduction
+
+All functionality of the package is included in the function `ameras`. This vignette demonstrates the basic functionality and the generated output.
+
+## Example data
+
+The included example dataset contains 3,000 individuals with 10 exposure replicates `V1`-`V10`, binary covariates `X1` and `X2` and risk modifiers `M1` and `M2`, and outcomes of all types (`Y.gaussian`, `Y.binomial`, `Y.poisson`, `status`, `time`, `Y.multinomial`, `Y.clogit`, and `setnr`).
+
+```{r}
+data(data, package="ameras")
+head(data)
+```
+
+There are exposure replicates are in columns `V1`-`V10`, so define `dosevars` as follows:
+```{r}
+dosevars <- paste0("V", 1:10)
+```
+
+
+# Linear regression & displaying output
+
+Now we fit all methods to the data through one function call:
+```{r modelfit.linreg, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(12345)
+fit.ameras.linreg <- ameras(Y="Y.gaussian", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="gaussian", methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
+                            niter.BMA = 5000, nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+
+
+The output is a list object with a `call` component, and one component for each method, each being a list:
+```{r, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+str(fit.ameras.linreg)
+```
+
+Access the results for e.g. regression calibration as follows:
+```{r, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+fit.ameras.linreg$RC
+```
+
+For a summary of results, use `summary` (note that `Rhat` and `n.eff` only apply to BMA results):
+
+```{r, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+summary(fit.ameras.linreg)
+```
+
+
+To extract model coefficients and compare between methods, use `coef`:
+```{r, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+coef(fit.ameras.linreg)
+```
+
+To produce traceplots and density plots for BMA results, use `traceplot`:
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.linreg)
+```
+
+
+# Logistic regression
+
+To fit a logistic regression model, the syntax is very similar. However, `ameras` offers three functional forms for modeling the exposure-outcome relationship. Here, we will illustrate the standard exponential relationship `doseRRmod="EXP"`. For more information, see the vignette [Relative risk models](relativeriskmodels.html).
+
+First, we fit models including a quadratic exposure term by setting `deg=2`.
+```{r modelfit.logreg, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(33521)
+fit.ameras.logreg <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="binomial", deg=2, doseRRmod = "EXP", 
+                            methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                            nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+summary(fit.ameras.logreg)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+coef(fit.ameras.logreg)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.logreg)
+```
+
+Without the quadratic term (`deg=1`):
+```{r modelfit.logreg.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(3521216)
+fit.ameras.logreg.lin <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                                family="binomial", deg=1, doseRRmod = "EXP", 
+                                methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                                nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+summary(fit.ameras.logreg.lin)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+coef(fit.ameras.logreg.lin)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.logreg.lin)
+```
+
+# Poisson regression
+
+
+Again, we first fit models including a quadratic exposure term by setting `deg=2`.
+
+```{r modelfit.poisson, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(332101)
+fit.ameras.poisson <- ameras(Y="Y.poisson", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                             family="poisson", deg=2, doseRRmod = "EXP", 
+                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                             nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+summary(fit.ameras.poisson)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+coef(fit.ameras.poisson)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.poisson)
+```
+
+Without the quadratic term (`deg=1`):
+```{r modelfit.poisson.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(24252)
+fit.ameras.poisson.lin <- ameras(Y="Y.poisson", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                                 family="poisson", deg=1, doseRRmod = "EXP", 
+                                 methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                                 nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+summary(fit.ameras.poisson.lin)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+coef(fit.ameras.poisson.lin)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.poisson.lin)
+```
+
+# Proportional hazards regression
+Proportional hazards regression uses the same syntax, with `Y` the 0-1 status variable and `exit` for the exit time variable. In case of left truncation, entry times can be specified through the `entry` argument. Note that BMA fits a piecewise constant baseline hazard `h0` as the proportional hazards model is not directly supported. By default, the observed time interval is divided into 10 intervals using quantiles of the observed event times among cases. This number of such intervals can be specified through the `prophaz.numints.BMA` argument. The BMA output contains the `prophaz.numints.BMA+1` cutpoints defining the intervals in addition to `h0`.
+
+
+Again, we first fit models including a quadratic exposure term by setting `deg=2`.
+
+```{r modelfit.prophaz, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(332120000)
+fit.ameras.prophaz <- ameras(Y="status", exit="time", dosevars=dosevars, X=c("X1","X2"), 
+                             data=data, family="prophaz", deg=2, doseRRmod = "EXP", 
+                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                             nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+summary(fit.ameras.prophaz)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+coef(fit.ameras.prophaz)
+```
+
+The BMA output now contains the intervals with piecewise constant baseline hazards, corresponding to the estimates `h0`:
+```{r, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+fit.ameras.prophaz$BMA$prophaz.timepoints
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.prophaz)
+```
+
+Without the quadratic term (`deg=1`):
+```{r modelfit.prophaz.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(24978252)
+fit.ameras.prophaz.lin <- ameras(Y="status", exit="time", dosevars=dosevars, X=c("X1","X2"), 
+                                 data=data, family="prophaz", deg=1, doseRRmod = "EXP", 
+                                 methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                                 nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+summary(fit.ameras.prophaz.lin)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+coef(fit.ameras.prophaz.lin)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.prophaz.lin)
+
+```
+
+
+# Multinomial logistic regression
+
+For multinomial logistic regression, the last category (in the case of the example data, `Y.multinomial='3'`) is used as the referent category.
+
+Again, we first fit models including a quadratic exposure term by setting `deg=2`.
+```{r modelfit.multinomial, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(33)
+fit.ameras.multinomial <- ameras(Y="Y.multinomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="multinomial", deg=2, doseRRmod = "EXP", 
+                            methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                            nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+summary(fit.ameras.multinomial)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+coef(fit.ameras.multinomial)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.multinomial)
+```
+
+Without the quadratic term (`deg=1`):
+
+```{r modelfit.multinomial.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(44)
+fit.ameras.multinomial.lin <- ameras(Y="Y.multinomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="multinomial", deg=1, doseRRmod = "EXP", 
+                            methods=c("RC","ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                            nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+summary(fit.ameras.multinomial.lin)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+coef(fit.ameras.multinomial.lin)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.multinomial.lin)
+```
+
+# Conditional logistic regression
+
+Again, we first fit models including a quadratic exposure term by setting `deg=2`.
+```{r modelfit.clogit, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(3301)
+fit.ameras.clogit <- ameras(Y="Y.clogit", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="clogit", deg=2, doseRRmod = "EXP", setnr="setnr",
+                            methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                            nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+summary(fit.ameras.clogit)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+coef(fit.ameras.clogit)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.clogit)
+```
+
+Without the quadratic term (`deg=1`):
+
+```{r modelfit.clogit.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(4401)
+fit.ameras.clogit.lin <- ameras(Y="Y.clogit", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="clogit", deg=1, doseRRmod = "EXP", setnr="setnr",
+                            methods=c("RC","ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                            nburnin.BMA = 1000, CI=c("wald.orig","percentile"))
+```
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+summary(fit.ameras.clogit.lin)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+coef(fit.ameras.clogit.lin)
+```
+
+```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
+traceplot(fit.ameras.clogit.lin)
+```

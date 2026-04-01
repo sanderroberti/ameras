@@ -1,0 +1,67 @@
+---
+title: "Confidence intervals"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Confidence intervals}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ameras)
+
+```
+
+# Introduction
+
+There are several options for confidence intervals that can be supplied to the `CI` argument, see below. When `ameras` is called with `methods` containing at least one of `RC`, `ERC`, and `MCML` and at least one of `FMA` and `BMA`, `CI` should be a vector of length 2 with one method for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
+
+# Regression calibration, extended regression calibration, and Monte Carlo maximum likelihood
+
+For (extended) regression calibration and Monte Carlo maximum likelihood, there are two types of Wald intervals, obtained either before or after transformation. If no transformation is specified, `wald.orig` should be used to obtain the standard Wald intervals. When a transformation is used, `wald.transformed` is determined before transforming, and `wald.orig` is obtained after transforming using the delta method (using `transform.jacobian` is required). The third option is `proflik`, which uses the profile likelihood to compute confidence bounds. For this, the profile log (partial) likelihood for parameter $\theta_p$ is defined as
+$$
+    PL_p (\theta_p^*) = \max_{\mathbf\theta: \theta_p = \theta_p^*} \ell (\mathbf \theta),
+$$
+where $\ell$ is the log (partial) likelihood. Next, profile confidence intervals $(\theta_p^l, \theta_p^h)$ are obtained for parameter $\theta_p$ at significance level $\alpha=0.95$ by solving 
+$-2 \{PL_p(\theta_p^*) - \ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}$ using the bisection method, with $\hat{\mathbf{\theta}}$ the maximum likelihood estimate. Note that profile likelihoods are more computationally intensive to obtain. For this reason, `ameras` offers the option to only determine them for the exposure-related parameters, which is the default setting. To obtain profile likelihood intervals for all parameters, use `params.profCI = "all"`.
+
+To illustrate, we determine the three types of confidence intervals for a regression calibration analysis using the example data, using a linear excess relative risk model with the default exponential transformation (see [Parameter transformations](transformations.html)).
+
+```{r fits1, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+data(data, package="ameras")
+dosevars <- paste0("V", 1:10)
+fit.ameras.waldorig <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="binomial", methods=c("RC"), CI="wald.orig", doseRRmod="ERR")
+fit.ameras.waldtransformed <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), 
+                                     data=data, family="binomial", methods=c("RC"), 
+                                     CI="wald.transformed", doseRRmod="ERR")
+fit.ameras.proflik <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="binomial", methods=c("RC"), CI="proflik", doseRRmod="ERR", 
+                            params.profCI = "all")
+summary(fit.ameras.waldorig)
+summary(fit.ameras.waldtransformed)
+summary(fit.ameras.proflik)
+```
+# Frequentist and Bayesian model averaging
+
+For frequentist and Bayesian model averaging methods, the options are `percentile` which uses 2.5\% and 97.5\% percentiles, and `hpd` which computes highest posterior density intervals using `HPDinterval` from the `coda` package, using either the FMA samples or Bayesian posterior samples.
+
+Again, we use the example data to illustrate.
+
+```{r fits2, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+fit.ameras.hpd <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="binomial", methods=c("FMA"), CI="hpd", doseRRmod="ERR")
+fit.ameras.percentile <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="binomial", methods=c("FMA"), CI="percentile", 
+                            doseRRmod="ERR")
+
+summary(fit.ameras.hpd)
+summary(fit.ameras.percentile)
+```

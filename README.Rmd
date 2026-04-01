@@ -1,0 +1,44 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# ameras
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of ameras is to provide a user-friendly interface to analyze association studies with multiple replicates of a noisy exposure using a variety of methods. ameras supports continuous, count, binary, multinomial, and right-censored time-to-event outcomes. For binary outcomes, the nested case-control design is also accommodated. Besides the common exponential relative risk model $RR=\exp(\beta D)$ for the exposure-outcome association with noisy exposure $D$, linear excess relative risk $RR=1+\beta D$ and linear-exponential excess relative risk models $RR=1+\beta_1 D \exp(\beta_2 D)$ can be used. 
+
+
+
+## Installation
+
+To install from CRAN:
+```{r install}
+# install.packages("ameras")
+```
+
+
+## Example
+
+This is a basic example which shows you how to fit a simple logistic regression model:
+
+```{r example}
+library(ameras)
+data(data, package="ameras")
+dosevars <- paste0("V", 1:10)
+fit <- ameras(data, family="binomial", Y="Y.binomial", methods=c("RC","ERC","MCML", "FMA", "BMA"), 
+              dosevars=dosevars)
+summary(fit)
+```

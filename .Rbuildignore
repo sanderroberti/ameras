@@ -1,0 +1,10 @@
+^vignettes/modelfitting_cache$
+^vignettes/modelfitting_files$
+^doc$
+^Meta$
+^cran-comments\.md$
+^README\.Rmd$
+
+^LICENSE\.md$
+^.*\.Rproj$
+^\.Rproj\.user$

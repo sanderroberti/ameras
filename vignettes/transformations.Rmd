@@ -1,0 +1,133 @@
+---
+title: "Parameter transformations"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Parameter transformations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r, include = FALSE}
+  knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+  )
+```
+  
+```{r setup}
+  library(ameras)
+```
+
+# Introduction
+
+A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at `transform(parameters)`, where `parameters` are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function `transform1` applies an exponential transformation to the desired parameters, see below. When supplying a function to `transform`, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order (see `?ameras` for the model definitions): $\alpha_0, \mathbf \alpha, \beta_1, \beta_2, \mathbf \beta_{m1}, \mathbf \beta_{m2}, \sigma$, where $\mathbf \alpha$, $\mathbf\beta_{m1}$ and $\mathbf \beta_{m2}$ can be vectors, with lengths matching `X` and `M`, respectively. $\sigma$ is only included for the linear model (Gaussian family), and no intercept is included for the Cox and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of $Z-1$ parameter vectors in the order as given above, where $Z$ is the number of outcome categories. When no transformation is specified and the linear ERR model is used, `transform1` is used for ERR parameters $\beta_1$ and $\beta_2$ by default, with lower limits $-1/max(D)$ for linear dose-response and $(0,-1/max(D^2))$ for linear-quadratic dose-response, respectively (see below). For the linear-exponential model, a lower limit of 0 is used for $\beta_1$, and no transformation is used for $\beta_2$. If effect modifiers `M` are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization given in `?ameras`. The Jacobian of the transformation (`transform.jacobian`) is required when using a transformation with methods other than BMA. For `transform1`, the Jacobian is given by `transform1.jacobian`. 
+
+
+
+# Exponential transformation using transform1
+
+The included function `transform1` applies the exponential transformation $f(\theta_i)=\exp(\theta_i)+LB_i$ to one or multiple components of parameter vector $\mathbf \theta$, where $LB_i$ are lower limits that can be different for each component. In particular, a vector of indices of parameters to be transformed and a vector of corresponding lower bounds LB can be supplied to arguments `index.t` and `lowlimit`, respectively, resulting in transformed parameters $f(\theta_i)=\exp(\theta_i)+\text{LB}_i$.
+
+
+In particular, `transform1` and `transform1.jacobian` are defined as follows:
+```{r}
+transform1 <- function(params, index.t=1:length(params), lowlimit=rep(0,length(index.t)), 
+                       boundcheck=FALSE, boundtol=1e-3, ...){
+  
+  if(length(index.t)!=length(lowlimit)) 
+    stop("Length mismatch between index.t and lowlimit")
+  if(any(!(index.t %in% 1:length(params)))) 
+    stop("Incorrect indices for transformation specified")
+  params[index.t] <- exp(params[index.t]) + lowlimit
+  if(boundcheck){
+    if(any(params[index.t]-lowlimit < boundtol)) 
+      warning(paste0("WARNING: one or multiple parameter estimates within ", boundtol, " of 
+        lower bounds. Try different bounds or starting values."))
+  }
+  return(params)
+}
+
+transform1.jacobian <- function(params, index.t=1:length(params), ...){ 
+  if(any(!(index.t %in% 1:length(params)))) 
+    stop("Incorrect indices for transformation specified")
+  grad <- rep(1, length(params))
+  grad[index.t] <- exp(params[index.t])
+  if(length(params)>1){
+    return(diag(grad))
+  } else{
+    return(matrix(grad))
+  }
+}
+```
+
+# Defining a custom transformation
+
+If you wish to supply your own transformation, it is helpful to start from the definition of `transform1`. It is also important to keep the following in mind:
+
+1. At a minimum, the function should take arguments `params` and `...`, where `params` is the full parameter vector. Parameters are in a specific order (see above), in case of doubt it is always possible to run `ameras` with the default settings to verify correct the order from the result.
+2. Extra arguments can be used and should be supplied when calling `ameras`
+3. Optional: if `boundcheck` is an argument to the function, it should be a logical. When transforming parameters after the optimization, the transformation is called with `boundcheck=TRUE`. If `boundcheck` is not an argument of the function, this is ignored.
+4. Also define the Jacobian of the transformation, keeping in mind point 1 above.
+
+See the definition of `transform1` above for an example of how to apply the transformation only to specific parameters, and how to use extra arguments.
+
+As an example, suppose instead of the exponential transformation from `transform1`, for the parameters $\beta_1$ and $\beta_2$ we wish to use the sigmoid transformation $f: \mathbb{R} \rightarrow (a,b)$ given by $$f_{a_i,b_i}(\theta_i)= a_i + (b_i-a_i) \frac{1}{1+\exp(-\theta_i)}.$$ Then, using `transform1` as a starting point, we can define the transformation as follows (note that since $\mathbf{a}$ and $\mathbf{b}$ act as bounds, we use an updated bound check):
+
+```{r}
+transform.sigmoid <- function(params, index.t=1:length(params), a=rep(0,length(index.t)), 
+                              b=rep(1,length(index.t)), boundcheck=FALSE, boundtol=1e-3, ...){
+  
+  if(length(index.t)!=length(a) | length(index.t) != length(b)) 
+    stop("Length mismatch between index.t, a, and b")
+  if(any(!(index.t %in% 1:length(params)))) 
+    stop("Incorrect indices for transformation specified")
+  
+  params[index.t] <- a + (b-a) * 1/(1+exp(-1*params[index.t]))
+  if(boundcheck){
+    if(any( (params[index.t]-a < boundtol) | (b-params[index.t] < boundtol))) 
+      warning(paste0("WARNING: one or multiple parameter estimates within ", boundtol, 
+      " of bounds. Try different bounds or starting values."))
+  }
+  return(params)
+}
+```
+
+Next, noting that $\mathrm{d}f_{a_i,b_i}/d\theta_i = (b_i-a_i)\exp(-\theta_i)/\{1+\exp(-\theta_i) \}^2$, we can define the Jacobian as follows, using `transform1.jacobian` as a starting point:
+
+```{r}
+transform.sigmoid.jacobian <- function(params, index.t=1:length(params), 
+                                       a=rep(0,length(index.t)), b=rep(1,length(index.t)), ...){ 
+  if(length(index.t)!=length(a) | length(index.t) != length(b)) 
+    stop("Length mismatch between index.t, a, and b")
+  if(any(!(index.t %in% 1:length(params)))) 
+    stop("Incorrect indices for transformation specified")
+  grad <- rep(1, length(params))
+  grad[index.t] <- (b-a)*exp(-1*params[index.t])/(1+exp(-1*params[index.t]))^2
+  if(length(params)>1){
+    return(diag(grad))
+  } else{
+    return(matrix(grad))
+  }
+}
+```
+
+Now let us try this transformation on the example data using regression calibration for a linear-quadratic ERR model. Note that all parameters are returned after transformation, and so there should be no difference between using `transform1` and `transform.sigmoid`. First, we fit the model using the sigmoid transformation:
+
+```{r modelfit.sigmoid}
+data(data, package="ameras")
+dosevars <- paste0("V", 1:10)
+fit.ameras.sigmoid <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="binomial", deg=2, doseRRmod = "ERR", methods="RC",
+                         transform=transform.sigmoid, transform.jacobian=transform.sigmoid.jacobian,
+                         index.t=4:5)
+summary(fit.ameras.sigmoid)
+```
+
+Next with default settings, using `transform1`:
+```{r modelfit.transform1}
+fit.ameras.transform1 <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
+                            family="binomial", deg=2, doseRRmod = "ERR", methods="RC")
+summary(fit.ameras.transform1)
+```
+
+As expected, there is no difference between the results.

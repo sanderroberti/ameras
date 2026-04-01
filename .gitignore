@@ -1,0 +1,6 @@
+^vignettes/modelfitting_cache$
+^vignettes/modelfitting_files$
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
