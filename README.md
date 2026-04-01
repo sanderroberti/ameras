@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/sanderroberti/ameras/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sanderroberti/ameras/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of ameras is to provide a user-friendly interface to analyze
@@ -33,7 +34,7 @@ regression model:
 ``` r
 library(ameras)
 #> Loading required package: nimble
-#> nimble version 1.4.1 is loaded.
+#> nimble version 1.4.2 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
 #> 
@@ -48,9 +49,15 @@ data(data, package="ameras")
 dosevars <- paste0("V", 1:10)
 fit <- ameras(data, family="binomial", Y="Y.binomial", methods=c("RC","ERC","MCML", "FMA", "BMA"), 
               dosevars=dosevars)
+#> Note: BMA may require extensive computation time in the order of multiple hours
 #> Fitting RC
+#> Obtaining profile likelihood CI for dose
 #> Fitting ERC
+#> Note: computation times for profile likelihood intervals for ERC may be extensive with large datasets or complex models
+#> Obtaining profile likelihood CI for dose
 #> Fitting MCML
+#> Note: computation times for profile likelihood intervals for MCML may be extensive with large datasets or complex models
+#> Obtaining profile likelihood CI for dose
 #> Fitting FMA
 #> Fitting BMA
 #> Defining model
@@ -79,28 +86,28 @@ summary(fit)
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 31 seconds
+#> Total run time: 65.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.0
-#>     ERC     8.5
-#>    MCML     0.1
+#>      RC     0.3
+#>     ERC    21.1
+#>    MCML     0.5
 #>     FMA     0.2
-#>     BMA    22.2
+#>     BMA    43.2
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound Rhat  n.eff
-#>      RC (Intercept)  -0.8847 0.07378       -1.0293       -0.7401   NA     NA
-#>      RC        dose   0.8020 0.13751        0.5324        1.0715   NA     NA
-#>     ERC (Intercept)  -0.8849 0.07477       -1.0315       -0.7384   NA     NA
-#>     ERC        dose   0.8214 0.14304        0.5411        1.1018   NA     NA
-#>    MCML (Intercept)  -0.8758 0.07323       -1.0193       -0.7323   NA     NA
-#>    MCML        dose   0.7910 0.13644        0.5236        1.0584   NA     NA
-#>     FMA (Intercept)  -0.8758 0.07321       -1.0197       -0.7329   NA     NA
-#>     FMA        dose   0.7913 0.13635        0.5245        1.0580   NA     NA
-#>     BMA (Intercept)  -0.8718 0.07342       -1.0201       -0.7342 1.00 291.00
-#>     BMA        dose   0.7920 0.14133        0.5546        1.0999 1.00 281.00
+#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound Rhat   n.eff
+#>      RC (Intercept)  -0.8847 0.07378            NA            NA   NA      NA
+#>      RC        dose   0.8020 0.13751        0.5648        1.1116   NA      NA
+#>     ERC (Intercept)  -0.8849 0.07477            NA            NA   NA      NA
+#>     ERC        dose   0.8214 0.14304        0.5728        1.1439   NA      NA
+#>    MCML (Intercept)  -0.8758 0.07323            NA            NA   NA      NA
+#>    MCML        dose   0.7910 0.13644        0.5554        1.0981   NA      NA
+#>     FMA (Intercept)  -0.8760 0.07348       -1.0210       -0.7314   NA      NA
+#>     FMA        dose   0.7912 0.13699        0.5208        1.0605   NA      NA
+#>     BMA (Intercept)  -0.8714 0.07255       -1.0221       -0.7321 1.00 1004.00
+#>     BMA        dose   0.7903 0.13813        0.5495        1.0870 1.00 1069.00
 ```

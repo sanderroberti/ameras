@@ -1,6 +1,8 @@
 ^vignettes/modelfitting_cache$
 ^vignettes/modelfitting_files$
+^cran-comments\.md$
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+^LICENSE\.md$

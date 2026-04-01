@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # ameras
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/sanderroberti/ameras/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sanderroberti/ameras/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of ameras is to provide a user-friendly interface to analyze association studies with multiple replicates of a noisy exposure using a variety of methods. ameras supports continuous, count, binary, multinomial, and right-censored time-to-event outcomes. For binary outcomes, the nested case-control design is also accommodated. Besides the common exponential relative risk model $RR=\exp(\beta D)$ for the exposure-outcome association with noisy exposure $D$, linear excess relative risk $RR=1+\beta D$ and linear-exponential excess relative risk models $RR=1+\beta_1 D \exp(\beta_2 D)$ can be used. 
