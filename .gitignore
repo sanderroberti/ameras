@@ -1,8 +1,11 @@
-^vignettes/modelfitting_cache$
-^vignettes/modelfitting_files$
-^cran-comments\.md$
+vignettes/modelfitting_cache/
+vignettes/modelfitting_files/
+cran-comments.md
+ameras.Rproj
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
-LICENSE
+doc/
+Meta/
+inst/doc
