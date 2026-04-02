@@ -1,6 +1,6 @@
 Package: ameras
 Title: Analyze Multiple Exposure Realizations in Association Studies
-Version: 0.1.1
+Version: 0.1.1.9000
 Authors@R: c(person(given = "Sander",
                       family = "Roberti",
                       role =  c("aut", "cre"),
