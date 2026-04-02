@@ -27,11 +27,14 @@ The goal of ameras is to provide a user-friendly interface to analyze associatio
 ## Installation
 
 To install from CRAN:
-```{r install}
-# install.packages("ameras")
+```{r install, eval=FALSE}
+install.packages("ameras")
 ```
 
-
+To install the development version from GitHub:
+```{r install_github, eval=FALSE}
+pak::pak("sanderroberti/ameras")
+```
 ## Example
 
 This is a basic example which shows you how to fit a simple logistic regression model:

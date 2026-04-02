@@ -6,6 +6,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/sanderroberti/ameras/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sanderroberti/ameras/actions/workflows/R-CMD-check.yaml)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/ameras)](https://CRAN.R-project.org/package=ameras)
 <!-- badges: end -->
 
 The goal of ameras is to provide a user-friendly interface to analyze
@@ -23,7 +24,13 @@ models $RR=1+\beta_1 D \exp(\beta_2 D)$ can be used.
 To install from CRAN:
 
 ``` r
-# install.packages("ameras")
+install.packages("ameras")
+```
+
+To install the development version from GitHub:
+
+``` r
+pak::pak("sanderroberti/ameras")
 ```
 
 ## Example
@@ -86,28 +93,28 @@ summary(fit)
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 65.3 seconds
+#> Total run time: 67.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC    21.1
+#>     ERC    21.6
 #>    MCML     0.5
 #>     FMA     0.2
-#>     BMA    43.2
+#>     BMA    44.8
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound Rhat   n.eff
-#>      RC (Intercept)  -0.8847 0.07378            NA            NA   NA      NA
-#>      RC        dose   0.8020 0.13751        0.5648        1.1116   NA      NA
-#>     ERC (Intercept)  -0.8849 0.07477            NA            NA   NA      NA
-#>     ERC        dose   0.8214 0.14304        0.5728        1.1439   NA      NA
-#>    MCML (Intercept)  -0.8758 0.07323            NA            NA   NA      NA
-#>    MCML        dose   0.7910 0.13644        0.5554        1.0981   NA      NA
-#>     FMA (Intercept)  -0.8760 0.07348       -1.0210       -0.7314   NA      NA
-#>     FMA        dose   0.7912 0.13699        0.5208        1.0605   NA      NA
-#>     BMA (Intercept)  -0.8714 0.07255       -1.0221       -0.7321 1.00 1004.00
-#>     BMA        dose   0.7903 0.13813        0.5495        1.0870 1.00 1069.00
+#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound Rhat  n.eff
+#>      RC (Intercept)  -0.8847 0.07378            NA            NA   NA     NA
+#>      RC        dose   0.8020 0.13751        0.5648        1.1116   NA     NA
+#>     ERC (Intercept)  -0.8849 0.07477            NA            NA   NA     NA
+#>     ERC        dose   0.8214 0.14304        0.5728        1.1439   NA     NA
+#>    MCML (Intercept)  -0.8758 0.07323            NA            NA   NA     NA
+#>    MCML        dose   0.7910 0.13644        0.5554        1.0981   NA     NA
+#>     FMA (Intercept)  -0.8761 0.07339       -1.0210       -0.7322   NA     NA
+#>     FMA        dose   0.7918 0.13673        0.5257        1.0610   NA     NA
+#>     BMA (Intercept)  -0.8736 0.07505       -1.0239       -0.7289 1.00 894.00
+#>     BMA        dose   0.7951 0.14051        0.5438        1.1021 1.00 990.00
 ```
