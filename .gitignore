@@ -1,12 +1,9 @@
-vignettes/modelfitting_cache/
-vignettes/modelfitting_files/
 cran-comments.md
 ameras.Rproj
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
-doc/
 Meta/
-inst/doc
 README.html
+.DS_Store
