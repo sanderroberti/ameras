@@ -280,11 +280,17 @@ loglik.poisson <- function(params, Y, D, X=NULL, offset=NULL,M=NULL, doseRRmod, 
     dmdd <- exp(pmin(a0+Xlinpred,7e1))*derivs$first*offset
     dmdd2 <- exp(pmin(a0+Xlinpred,7e1))*derivs$second*offset
     
-    mymat <- tcrossprod(data[,Y]/mus-1)*tcrossprod(dmdd)
-    diag(mymat) <- diag(mymat)+(data[,Y]/mus-1)*dmdd2-data[,Y]/mus^2*dmdd^2
+    v <- (data[,Y]/mus - 1) * dmdd
     
+    term1 <- as.numeric(crossprod(v, Kmat %*% v))
     
-    return(-1*(ls+log(max(1+.5*sum(mymat*Kmat), loglim))))
+    # diagonal correction
+    corrterm <- (data[,Y]/mus - 1) * dmdd2 - data[,Y]/mus^2 * dmdd^2
+    term2 <- sum(diag(Kmat) * corrterm)
+    
+    val <- term1 + term2
+    
+    return(-1*(ls+log(max(1+.5*val, loglim))))
   } else{
     return(-1*ls)
   }
