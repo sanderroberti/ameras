@@ -174,7 +174,7 @@ loglik.binomial <- function(params, Y, D, M=NULL, X=NULL, data, doseRRmod, ERC=F
   }
   
   A <- exp(pmin(a0+Xlinpred,7e1))*exposureRR(params=betavec, D=D, M=M, data=data, doseRRmod=doseRRmod, deg=deg)
- 
+  
   if(any(A<0)) stop("RR <0, please check supplied transformation")
   p <- A/(1+A)
   p <- pmin(pmax(p, 1e-10), 1-1e-10)
@@ -207,12 +207,10 @@ loglik.binomial <- function(params, Y, D, M=NULL, X=NULL, data, doseRRmod, ERC=F
 
 
 
-loglik.poisson <- function(params, Y, D, X=NULL, offset=NULL,M=NULL, doseRRmod, data, ERC=FALSE, Kmat=NULL,deg=1, loglim=1e-30, transform=NULL, ...){ # C++ version
+loglik.poisson <- function(params, Y, D, X=NULL, offset=NULL,M=NULL, doseRRmod, data, deg=1, loglim=1e-30, transform=NULL, ...){ # C++ version
   # params = c(a0, a1, ..., ap, b1, b2, (bm1), (bm2))
   
   if(length(params) != deg*length(M)+deg+length(X)+1) stop("Parameter vector length mismatch")
-  if(ERC & is.null(Kmat)) stop("Kmat necessary for ERC")
-  if(ERC & length(D)>1) stop("ERC only works with one supplied dose (i.e., the mean across replicates)")
   
   if(!is.null(transform)){
     if(is.function(transform)){
@@ -275,28 +273,112 @@ loglik.poisson <- function(params, Y, D, X=NULL, offset=NULL,M=NULL, doseRRmod, 
     ls <- sum(data[,Y]*log(mus)-mus-ifelse(data[,Y]>0,data[,Y]*log(data[,Y])-data[,Y],0))  # Stirling's approximation like Mark
   }
   
-  if(ERC){
-    derivs <- dRRdD(params=betavec, D=D, M=M, data=data, doseRRmod=doseRRmod, deg=deg)
-    dmdd <- exp(pmin(a0+Xlinpred,7e1))*derivs$first*offset
-    dmdd2 <- exp(pmin(a0+Xlinpred,7e1))*derivs$second*offset
-    
-    v <- (data[,Y]/mus - 1) * dmdd
-    
-    term1 <- as.numeric(crossprod(v, Kmat %*% v))
-    
-    # diagonal correction
-    corrterm <- (data[,Y]/mus - 1) * dmdd2 - data[,Y]/mus^2 * dmdd^2
-    term2 <- sum(diag(Kmat) * corrterm)
-    
-    val <- term1 + term2
-    
-    return(-1*(ls+log(max(1+.5*val, loglim))))
-  } else{
-    return(-1*ls)
-  }
+  return(-1*ls)
   
 }
 
+
+loglik.poisson.erc <- function(params, Y, D, X=NULL, offset=NULL,M=NULL, doseRRmod, data,deg=1, loglim=1e-30, transform=NULL, ...){ # C++ version
+  # params = c(a0, a1, ..., ap, b1, b2, (bm1), (bm2))
+  
+  if(length(params) != deg*length(M)+deg+length(X)+1) stop("Parameter vector length mismatch")
+  #if(ERC & is.null(Kmat)) stop("Kmat necessary for ERC")
+  #if(ERC & length(D)>1) stop("ERC only works with one supplied dose (i.e., the mean across replicates)")
+  
+  dosemat <- as.matrix(data[,D])
+  
+  if(!is.null(transform)){
+    if(is.function(transform)){
+      params <- transform(params=params, ...)
+    } else{
+      stop("transform should be a function")
+    }
+  }
+  
+  if(is.null(offset)){
+    offset <- 1
+  } else{
+    offset <- data[,offset]
+  }
+  
+  a0 <- params[1]
+  
+  if(!is.null(X)){
+    a <- params[2:(length(X)+1)]
+    Xlinpred <- c(as.matrix(data[,X])%*%a)
+  } else{
+    Xlinpred <- 0
+  }
+  
+  b1 <- params[length(X)+2]
+  
+  
+  if(deg==2){
+    b2 <- params[length(X)+3]
+  } else if(deg==1){
+    b2 <- 0
+  }
+  
+  if(!is.null(M)){
+    bm1 <- params[(2+deg+length(X)):(length(M)+deg+length(X)+1)]
+    if(deg==2){
+      bm2 <- params[(length(M)+2+deg+length(X)):(2*length(M)+deg+length(X)+1)]
+    } else{
+      bm2 <- NULL
+    }
+  } else{
+    bm1 <- bm2 <- NULL
+  }
+  
+  if(deg==2){
+    betavec <- c(b1, b2, bm1, bm2)
+  } else{
+    betavec <- c(b1, bm1)
+  }
+  
+  #data$rcdose_ameras <- rowMeans(dosemat)
+  
+  mus <- pmax(exp(pmin(a0+Xlinpred,7e1))*pmax(exposureRR(params=betavec, D="rcdose_ameras", M=M, data=data, doseRRmod=doseRRmod, deg=deg), loglim)*offset, loglim)
+  if(any(mus<0)) stop("RR <0, please check supplied transformation")
+  
+  
+  #ls <- sum(data[,Y]*log(mus)-mus-lfactorial(data[,Y]))
+  ls <- sum(data[,Y]*log(mus)-mus-ifelse(data[,Y]>0,data[,Y]*log(data[,Y])-data[,Y],0))  # Stirling's approximation like Mark
+  
+  
+  derivs <- dRRdD(params=betavec, D="rcdose_ameras", M=M, data=data, doseRRmod=doseRRmod, deg=deg)
+  dmdd <- exp(pmin(a0+Xlinpred,7e1))*derivs$first*offset
+  dmdd2 <- exp(pmin(a0+Xlinpred,7e1))*derivs$second*offset
+  
+  v <- (data[,Y]/mus - 1) * dmdd
+  
+  
+  
+  
+  
+  
+  
+  # center dose for covariance
+  Xc <- dosemat - rowMeans(dosemat)
+  Xt_v <- crossprod(Xc, v)
+  
+  term1 <- sum(Xt_v^2) / (ncol(dosemat) - 1)
+  
+  # diagonal correction
+  corrterm <- (data[,Y]/mus - 1) * dmdd2 - data[,Y]/mus^2 * dmdd^2
+  
+  # diag(Kmat) = row variances of dosemat
+  row_var <- rowSums(Xc^2) / (ncol(dosemat) - 1)
+  
+  term2 <- sum(row_var * corrterm)
+  
+  val <- term1 + term2
+  
+  
+  return(-1*(ls+log(max(1+.5*val, loglim))))
+  
+  
+}
 
 
 loglik.gaussian <- function(params, D, Y,X=NULL,M=NULL, data, ERC=FALSE, Kmat=NULL,deg=1, loglim=1e-30, transform=NULL, ...){
@@ -832,7 +914,7 @@ ameras.mcml <- function(family, dosevars, data, deg, transform=NULL,transform.ja
     }
     
     loglik.mcml <- function(params, ...){
-      logliks <- loglik.poisson(params, D=dosevars,X=X, Y=Y,offset=offset, M=M,doseRRmod=doseRRmod, data=data, deg=deg, ERC=FALSE, loglim=loglim, transform=transform, ...)
+      logliks <- loglik.poisson(params, D=dosevars,X=X, Y=Y,offset=offset, M=M,doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, ...)
       #return(log(mean(exp(logliks-mean(logliks))))+mean(logliks)) # log of mean of likelihoods
       return(-1*log(mean(exp(pmax(pmin(-1*logliks-max(-1*logliks), 7e1), -7e1))))-max(-1*logliks)) # with explim=7e1
       #return(mean(logliks)) # mean of log likelihoods
@@ -1141,10 +1223,10 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
   
   if(CI=="proflik" & ERC==TRUE) message("Note: computation times for profile likelihood intervals for ERC may be extensive with large datasets or complex models")
   
-  data.rc <- data#[,-dosevars]
-  data.rc$rcdose_ameras <- rowMeans(data[,dosevars, drop=FALSE])
+  #data.rc <- data#[,-dosevars]
+  data$rcdose_ameras <- rowMeans(data[,dosevars, drop=FALSE])
   
-  if(ERC){
+  if(ERC & family!="poisson"){
     Kmat <- cov(t(data[,dosevars]))
   } else{
     Kmat <- NULL
@@ -1158,13 +1240,13 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
       inpar <- rep(0, 2+length(X)+length(M)*deg+deg)
     }
     
-    fit <- optim(inpar, loglik.gaussian, D="rcdose_ameras",X=X, Y=Y, M=M, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+    fit <- optim(inpar, loglik.gaussian, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
     if(optim.method=="Nelder-Mead"){
       count0 <- fit$counts
-      fit <- optim(fit$par, loglik.gaussian, D="rcdose_ameras",X=X, Y=Y, M=M, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+      fit <- optim(fit$par, loglik.gaussian, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
       fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
     }
-    fit$hessian <- numDeriv::hessian(func=loglik.gaussian, x=fit$par, D="rcdose_ameras",X=X, Y=Y, M=M, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
+    fit$hessian <- numDeriv::hessian(func=loglik.gaussian, x=fit$par, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
     
     parnames <- c("(Intercept)",names(data[,X,drop=FALSE]),c("dose","dose_squared")[1:deg])
     if(!is.null(M)){
@@ -1186,14 +1268,14 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
       inpar <- rep(0, 1+length(X)+length(M)*deg+deg)
     }
     
-    fit <- optim(inpar, loglik.binomial, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+    fit <- optim(inpar, loglik.binomial, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
     if(optim.method=="Nelder-Mead"){
       count0 <- fit$counts
-      fit <- optim(fit$par, loglik.binomial, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+      fit <- optim(fit$par, loglik.binomial, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
       fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
     }
     
-    fit$hessian <- numDeriv::hessian(func=loglik.binomial, x=fit$par, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
+    fit$hessian <- numDeriv::hessian(func=loglik.binomial, x=fit$par, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
     
     
     if(doseRRmod!="LINEXP"){
@@ -1222,16 +1304,26 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
     if(is.null(inpar)){
       inpar <- rep(0, 1+length(X)+length(M)*deg+deg)
     }
-    
-    fit <- optim(inpar, loglik.poisson, D="rcdose_ameras",X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+    if(ERC){
+      fit <- optim(inpar, loglik.poisson.erc, D=dosevars,X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method=optim.method, ...)
+    } else{
+      fit <- optim(inpar, loglik.poisson, D="rcdose_ameras",X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method=optim.method, ...)
+    }
     if(optim.method=="Nelder-Mead"){
       count0 <- fit$counts
-      fit <- optim(fit$par, loglik.poisson, D="rcdose_ameras",X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+      if(ERC){
+        fit <- optim(fit$par, loglik.poisson.erc, D=dosevars,X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method="BFGS", ...)
+      } else {
+        fit <- optim(fit$par, loglik.poisson, D="rcdose_ameras",X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method="BFGS", ...)
+      }
       fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
     }
     
-    fit$hessian <- numDeriv::hessian(func=loglik.poisson, x=fit$par, D="rcdose_ameras",X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
-    
+    if(ERC){
+      fit$hessian <- numDeriv::hessian(func=loglik.poisson.erc, x=fit$par, D=dosevars,X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, ...)
+    } else {
+      fit$hessian <- numDeriv::hessian(func=loglik.poisson, x=fit$par, D="rcdose_ameras",X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, ...)
+    }
     if(doseRRmod!="LINEXP"){
       parnames <- c("(Intercept)",names(data[,X,drop=FALSE]),c("dose","dose_squared")[1:deg])
       if(!is.null(M)){
@@ -1260,21 +1352,21 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
     
     if(length(X)+length(M)*deg+deg == 1){ # Optimize 1-dimensional model: use optimize instead of optim
       
-      fit0 <- optimize(f=loglik.clogit, lower=-20, upper=5, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
+      fit0 <- optimize(f=loglik.clogit, lower=-20, upper=5, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
       
       
-      fit <- list(par=fit0$minimum, value=fit0$objective, convergence=0, hessian=numDeriv::hessian(func=loglik.clogit, x=fit0$minimum, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...))
+      fit <- list(par=fit0$minimum, value=fit0$objective, convergence=0, hessian=numDeriv::hessian(func=loglik.clogit, x=fit0$minimum, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...))
     } else {
       
-      fit <- optim(inpar, loglik.clogit, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+      fit <- optim(inpar, loglik.clogit, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
       
       if(optim.method=="Nelder-Mead"){
         count0 <- fit$counts
-        fit <- optim(fit$par, loglik.clogit, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+        fit <- optim(fit$par, loglik.clogit, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
         fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
         
       }
-      fit$hessian <- numDeriv::hessian(func=loglik.clogit, x=fit$par, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
+      fit$hessian <- numDeriv::hessian(func=loglik.clogit, x=fit$par, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
     }
     
     if(doseRRmod!="LINEXP"){
@@ -1304,19 +1396,19 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
     }
     
     if(length(X)+length(M)*deg+deg == 1){ # Optimize 1-dimensional model: use optimize instead of optim
-      fit0 <- optimize(f=loglik.prophaz, lower=-20, upper=5, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod,entry=entry,exit=exit, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
-      fit <- list(par=fit0$minimum, value=fit0$objective, convergence=0, hessian=numDeriv::hessian(func=loglik.prophaz, x=fit0$minimum, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod,entry=entry,exit=exit, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...))
+      fit0 <- optimize(f=loglik.prophaz, lower=-20, upper=5, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
+      fit <- list(par=fit0$minimum, value=fit0$objective, convergence=0, hessian=numDeriv::hessian(func=loglik.prophaz, x=fit0$minimum, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...))
     } else {
       
-      fit <- optim(inpar, loglik.prophaz, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod,entry=entry,exit=exit, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+      fit <- optim(inpar, loglik.prophaz, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
       
       if(optim.method=="Nelder-Mead"){
         count0 <- fit$counts
-        fit <- optim(fit$par, loglik.prophaz, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, entry=entry,exit=exit, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+        fit <- optim(fit$par, loglik.prophaz, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
         fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
         
       }
-      fit$hessian <- numDeriv::hessian(func=loglik.prophaz, x=fit$par, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, entry=entry,exit=exit, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
+      fit$hessian <- numDeriv::hessian(func=loglik.prophaz, x=fit$par, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
     }
     
     if(doseRRmod!="LINEXP"){
@@ -1343,13 +1435,13 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
       inpar <- rep(0, (length(unique(data[,Y]))-1)*(1+length(X)+length(M)*deg+deg))
     }
     
-    fit <- optim(inpar, loglik.multinomial, D="rcdose_ameras", X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+    fit <- optim(inpar, loglik.multinomial, D="rcdose_ameras", X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
     if(optim.method=="Nelder-Mead"){
       count0 <- fit$counts
-      fit <- optim(fit$par, loglik.multinomial, D="rcdose_ameras", X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+      fit <- optim(fit$par, loglik.multinomial, D="rcdose_ameras", X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
       fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
     }
-    fit$hessian <- numDeriv::hessian(func=loglik.multinomial, x=fit$par, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
+    fit$hessian <- numDeriv::hessian(func=loglik.multinomial, x=fit$par, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
     
     
     if(doseRRmod!="LINEXP"){
@@ -1432,27 +1524,34 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
     
     if(family=="gaussian"){
       funforprofCI <- function(params, ...){
-        loglik.gaussian(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, data=data.rc, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method, ...)
+        loglik.gaussian(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method, ...)
       }
     } else if(family=="binomial"){
       funforprofCI <- function(params, ...){
-        loglik.binomial(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, data=data.rc, deg=deg,doseRRmod=doseRRmod, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
+        loglik.binomial(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg,doseRRmod=doseRRmod, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
       }
     } else if(family=="poisson"){
-      funforprofCI <- function(params, ...){
-        loglik.poisson(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, offset=offset, data=data.rc, doseRRmod=doseRRmod, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
+      if(ERC){
+        funforprofCI <- function(params, ...){
+          loglik.poisson.erc(params=params, D=dosevars,X=X, Y=Y, M=M, offset=offset, data=data, doseRRmod=doseRRmod, deg=deg, loglim=loglim, transform=transform, optim.method=optim.method,...)
+        }
+      } else{
+        funforprofCI <- function(params, ...){
+          loglik.poisson(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, offset=offset, data=data, doseRRmod=doseRRmod, deg=deg, loglim=loglim, transform=transform, optim.method=optim.method,...)
+        }
       }
+      
     } else if(family=="prophaz"){
       funforprofCI <- function(params, ...){
-        loglik.prophaz(params=params, D="rcdose_ameras",X=X, status=status,entry=entry, exit=exit, M=M, data=data.rc, doseRRmod=doseRRmod, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
+        loglik.prophaz(params=params, D="rcdose_ameras",X=X, status=status,entry=entry, exit=exit, M=M, data=data, doseRRmod=doseRRmod, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
       } 
     } else if(family=="clogit"){
       funforprofCI <- function(params, ...){
-        loglik.clogit(params=params, D="rcdose_ameras",X=X, status=status, designmat=designmat, M=M, data=data.rc, doseRRmod=doseRRmod, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
+        loglik.clogit(params=params, D="rcdose_ameras",X=X, status=status, designmat=designmat, M=M, data=data, doseRRmod=doseRRmod, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
       } 
     } else if(family=="multinomial"){
       funforprofCI <- function(params, ...){
-        loglik.multinomial(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, data=data.rc, deg=deg,doseRRmod=doseRRmod, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
+        loglik.multinomial(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg,doseRRmod=doseRRmod, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
       }
     }
     
@@ -1515,7 +1614,7 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
         pval_lower[myindex] <- lowroot$f.root+.05
         pval_upper[myindex] <- uproot$f.root+.05
         
-       
+        
         iter_lower[myindex] <- lowroot$iter
         iter_upper[myindex] <- uproot$iter
       } else{
@@ -1667,11 +1766,11 @@ ameras.fma <- function(family, dosevars, data, deg, transform=NULL,transform.jac
     
     FMAfits <-  lapply(1:length(dosevars), function(Xi){
       
-      fit.FMAi <- optim(inpar, loglik.poisson, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, ERC=FALSE, transform=transform, method=optim.method, ...)
+      fit.FMAi <- optim(inpar, loglik.poisson, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, transform=transform, method=optim.method, ...)
       if(optim.method=="Nelder-Mead"){
-        fit.FMAi <- optim(fit.FMAi$par, loglik.poisson, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, ERC=FALSE, transform=transform, method="BFGS", ...)
+        fit.FMAi <- optim(fit.FMAi$par, loglik.poisson, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, transform=transform, method="BFGS", ...)
       }
-      fit.FMAi$hessian <- numDeriv::hessian(func=loglik.poisson, x=fit.FMAi$par, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, ERC=FALSE, transform=transform, ...)
+      fit.FMAi$hessian <- numDeriv::hessian(func=loglik.poisson, x=fit.FMAi$par, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, transform=transform, ...)
       
       if(det(fit.FMAi$hessian)!=0 & rcond(fit.FMAi$hessian)>.Machine$double.eps & fit.FMAi$convergence==0 &  all(eigen(fit.FMAi$hessian)$values > 0)){
         include <- TRUE
@@ -1899,7 +1998,7 @@ ameras.fma <- function(family, dosevars, data, deg, transform=NULL,transform.jac
       x
     })
     
-
+    
     
     FMAsamples <- lapply(FMAfits, function(fit.FMAi, ...){
       
@@ -1915,7 +2014,7 @@ ameras.fma <- function(family, dosevars, data, deg, transform=NULL,transform.jac
         samplemeans <- fit.FMAi$coef
         samplevar <- solve(fit.FMAi$hess)
       }
-
+      
       return(rmvnorm(n=fit.FMAi$M, mean=samplemeans, sigma=samplevar))
       
       # if(isSymmetric(samplevar)){
@@ -3239,11 +3338,11 @@ ameras.bma <- function(family, dosevars, data, deg, Y=NULL, M=NULL, X=NULL, offs
       
       toInclude <-  sapply(1:length(dosevars), function(Xi){
         
-        fit.FMAi <- optim(inpar, loglik.poisson, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, ERC=FALSE, transform=transform, method=optim.method, ...)
+        fit.FMAi <- optim(inpar, loglik.poisson, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, transform=transform, method=optim.method, ...)
         if(optim.method=="Nelder-Mead"){
-          fit.FMAi <- optim(fit.FMAi$par, loglik.poisson, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, ERC=FALSE, transform=transform, method="BFGS", ...)
+          fit.FMAi <- optim(fit.FMAi$par, loglik.poisson, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, transform=transform, method="BFGS", ...)
         }
-        fit.FMAi$hessian <- numDeriv::hessian(func=loglik.poisson, x=fit.FMAi$par, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, ERC=FALSE, transform=transform, ...)
+        fit.FMAi$hessian <- numDeriv::hessian(func=loglik.poisson, x=fit.FMAi$par, D=dosevars[Xi], X=X, Y=Y, M=M, offset=offset, doseRRmod=doseRRmod, data=data, deg=deg, transform=transform, ...)
         
         if(det(fit.FMAi$hessian)!=0 & rcond(fit.FMAi$hessian)>.Machine$double.eps & fit.FMAi$convergence==0 &  all(eigen(fit.FMAi$hessian)$values > 0)){
           include <- TRUE
