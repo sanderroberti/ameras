@@ -359,7 +359,7 @@ loglik.poisson.erc <- function(params, Y, D, X=NULL, offset=NULL,M=NULL, doseRRm
   
   
   # center dose for covariance
-  Xc <- dosemat - rowMeans(dosemat)
+  Xc <- dosemat - data[,"rcdose_ameras"]
   Xt_v <- crossprod(Xc, v)
   
   term1 <- sum(Xt_v^2) / (ncol(dosemat) - 1)
