@@ -79,12 +79,12 @@ summary(fit.ameras.waldorig)
 #>     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR", 
 #>     CI = "wald.orig")
 #> 
-#> Total run time: 0.4 seconds
+#> Total run time: 0.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.4
+#>      RC     0.5
 #> 
 #> Summary of coefficients by method:
 #> 

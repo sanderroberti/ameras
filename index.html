@@ -13,6 +13,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Analyze Multiple Exposure Realizations in Association Studies">
 <meta name="description" content="Analyze association studies with multiple realizations of a noisy or uncertain exposure. These can be obtained from e.g. a two-dimensional Monte Carlo dosimetry system (Simon et al 2015 &lt;doi:10.1667/RR13729.1&gt;) to characterize exposure uncertainty. The implemented methods are regression calibration (Carroll et al. 2006 &lt;doi:10.1201/9781420010138&gt;), extended regression calibration (Little et al. 2023 &lt;doi:10.1038/s41598-023-42283-y&gt;), Monte Carlo maximum likelihood (Stayner et al. 2007 &lt;doi:10.1667/RR0677.1&gt;), frequentist model averaging (Kwon et al. 2023 &lt;doi:10.1371/journal.pone.0290498&gt;), and Bayesian model averaging (Kwon et al. 2016 &lt;doi:10.1002/sim.6635&gt;). Supported model families are Gaussian, binomial, multinomial, Poisson, proportional hazards, and conditional logistic.">
 <meta property="og:description" content="Analyze association studies with multiple realizations of a noisy or uncertain exposure. These can be obtained from e.g. a two-dimensional Monte Carlo dosimetry system (Simon et al 2015 &lt;doi:10.1667/RR13729.1&gt;) to characterize exposure uncertainty. The implemented methods are regression calibration (Carroll et al. 2006 &lt;doi:10.1201/9781420010138&gt;), extended regression calibration (Little et al. 2023 &lt;doi:10.1038/s41598-023-42283-y&gt;), Monte Carlo maximum likelihood (Stayner et al. 2007 &lt;doi:10.1667/RR0677.1&gt;), frequentist model averaging (Kwon et al. 2023 &lt;doi:10.1371/journal.pone.0290498&gt;), and Bayesian model averaging (Kwon et al. 2016 &lt;doi:10.1002/sim.6635&gt;). Supported model families are Gaussian, binomial, multinomial, Poisson, proportional hazards, and conditional logistic.">
+<meta property="og:image" content="https://ameras.sanderroberti.com/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -56,8 +57,11 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="ameras">ameras<a class="anchor" aria-label="anchor" href="#ameras"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="ameras-">ameras 
+<a class="anchor" aria-label="anchor" href="#ameras-"></a>
+</h1>
+</div>
 <!-- badges: start -->
 
 <p>The goal of ameras is to provide a user-friendly interface to analyze association studies with multiple replicates of a noisy exposure using a variety of methods. ameras supports continuous, count, binary, multinomial, and right-censored time-to-event outcomes. For binary outcomes, the nested case-control design is also accommodated. Besides the common exponential relative risk model <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>R</mi><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>β</mi><mi>D</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">RR=\exp(\beta D)</annotation></semantics></math> for the exposure-outcome association with noisy exposure <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>, linear excess relative risk <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>R</mi><mo>=</mo><mn>1</mn><mo>+</mo><mi>β</mi><mi>D</mi></mrow><annotation encoding="application/x-tex">RR=1+\beta D</annotation></semantics></math> and linear-exponential excess relative risk models <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>R</mi><mo>=</mo><mn>1</mn><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mi>D</mi><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>β</mi><mn>2</mn></msub><mi>D</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">RR=1+\beta_1 D \exp(\beta_2 D)</annotation></semantics></math> can be used.</p>
@@ -69,7 +73,8 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ameras"</span><span class="op">)</span></span></code></pre></div>
 <p>To install the development version from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"sanderroberti/ameras"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("pak") # If pak is not already installed</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"sanderroberti/ameras"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -130,16 +135,16 @@
 <span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 67.4 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 74.5 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC    21.6</span></span>
-<span><span class="co">#&gt;    MCML     0.5</span></span>
+<span><span class="co">#&gt;     ERC    24.1</span></span>
+<span><span class="co">#&gt;    MCML     0.6</span></span>
 <span><span class="co">#&gt;     FMA     0.2</span></span>
-<span><span class="co">#&gt;     BMA    44.8</span></span>
+<span><span class="co">#&gt;     BMA    49.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -150,10 +155,10 @@
 <span><span class="co">#&gt;     ERC        dose   0.8214 0.14304        0.5728        1.1439   NA     NA</span></span>
 <span><span class="co">#&gt;    MCML (Intercept)  -0.8758 0.07323            NA            NA   NA     NA</span></span>
 <span><span class="co">#&gt;    MCML        dose   0.7910 0.13644        0.5554        1.0981   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA (Intercept)  -0.8761 0.07339       -1.0210       -0.7322   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA        dose   0.7918 0.13673        0.5257        1.0610   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA (Intercept)  -0.8736 0.07505       -1.0239       -0.7289 1.00 894.00</span></span>
-<span><span class="co">#&gt;     BMA        dose   0.7951 0.14051        0.5438        1.1021 1.00 990.00</span></span></code></pre></div>
+<span><span class="co">#&gt;     FMA (Intercept)  -0.8754 0.07327       -1.0196       -0.7320   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        dose   0.7909 0.13670        0.5232        1.0607   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -0.8713 0.07586       -1.0291       -0.7322 1.00 897.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   0.7870 0.14378        0.5471        1.0995 1.00 933.00</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -161,6 +166,7 @@
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=ameras" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/sanderroberti/ameras/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/sanderroberti/ameras/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 

@@ -58,8 +58,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Fitting models and displaying output</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Fitting models and displaying output</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/sanderroberti/ameras/blob/main/vignettes/modelfitting.Rmd" class="external-link"><code>vignettes/modelfitting.Rmd</code></a></small>
@@ -204,7 +203,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   ..$ counts.optim     : Named num [1:2] 546 9</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
 <span><span class="co">#&gt;   ..$ loglik           : num -4559</span></span>
-<span><span class="co">#&gt;   ..$ runtime          : chr "121.1 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ runtime          : chr "126.6 seconds"</span></span>
 <span><span class="co">#&gt;  $ MCML:List of 8</span></span>
 <span><span class="co">#&gt;   ..$ coefficients     : Named num [1:5] -1.28 0.484 -0.517 1.079 1.138</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
@@ -254,7 +253,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   .. .. .. ..$ : NULL</span></span>
 <span><span class="co">#&gt;   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   ..$ included.replicates: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
-<span><span class="co">#&gt;   ..$ runtime            : chr "72.7 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ runtime            : chr "74.7 seconds"</span></span>
 <span><span class="co">#&gt;  - attr(*, "class")= chr "amerasfit"</span></span></code></pre></div>
 <p>Access the results for e.g. regression calibration as follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -311,16 +310,16 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;         "BMA"), CI = c("wald.orig", "percentile"), nburnin.BMA = 1000, </span></span>
 <span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 196.2 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 203.7 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC   121.1</span></span>
+<span><span class="co">#&gt;     ERC   126.6</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
 <span><span class="co">#&gt;     FMA     1.4</span></span>
-<span><span class="co">#&gt;     BMA    72.7</span></span>
+<span><span class="co">#&gt;     BMA    74.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -420,16 +419,16 @@ risk models</a>.</p>
 <span><span class="co">#&gt;         "BMA"), deg = 2, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
 <span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 140.9 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 148.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC    79.8</span></span>
+<span><span class="co">#&gt;     ERC    85.4</span></span>
 <span><span class="co">#&gt;    MCML     1.0</span></span>
-<span><span class="co">#&gt;     FMA     3.0</span></span>
-<span><span class="co">#&gt;     BMA    56.8</span></span>
+<span><span class="co">#&gt;     FMA     2.9</span></span>
+<span><span class="co">#&gt;     BMA    58.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -512,16 +511,16 @@ risk models</a>.</p>
 <span><span class="co">#&gt;         "BMA"), deg = 1, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
 <span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 117.9 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 124.5 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC    63.8</span></span>
+<span><span class="co">#&gt;     ERC    68.4</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
 <span><span class="co">#&gt;     FMA     1.6</span></span>
-<span><span class="co">#&gt;     BMA    51.6</span></span>
+<span><span class="co">#&gt;     BMA    53.6</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -607,16 +606,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;         "BMA"), deg = 2, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
 <span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 69.3 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 71.7 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC     1.9</span></span>
+<span><span class="co">#&gt;     ERC     2.0</span></span>
 <span><span class="co">#&gt;    MCML     1.5</span></span>
-<span><span class="co">#&gt;     FMA     3.5</span></span>
-<span><span class="co">#&gt;     BMA    62.1</span></span>
+<span><span class="co">#&gt;     FMA     3.6</span></span>
+<span><span class="co">#&gt;     BMA    64.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -699,16 +698,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;         "BMA"), deg = 1, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
 <span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 62.5 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 65.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC     0.7</span></span>
+<span><span class="co">#&gt;     ERC     1.0</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
 <span><span class="co">#&gt;     FMA     2.0</span></span>
-<span><span class="co">#&gt;     BMA    58.9</span></span>
+<span><span class="co">#&gt;     BMA    61.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -841,16 +840,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
 <span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 635.8 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 657.9 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC   526.9</span></span>
+<span><span class="co">#&gt;     ERC   544.1</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
 <span><span class="co">#&gt;     FMA     2.1</span></span>
-<span><span class="co">#&gt;     BMA   105.8</span></span>
+<span><span class="co">#&gt;     BMA   110.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -955,16 +954,16 @@ baseline hazards, corresponding to the estimates <code>h0</code>:</p>
 <span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
 <span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 378.7 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 392.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.1</span></span>
-<span><span class="co">#&gt;     ERC   271.8</span></span>
-<span><span class="co">#&gt;    MCML     0.4</span></span>
+<span><span class="co">#&gt;     ERC   282.1</span></span>
+<span><span class="co">#&gt;    MCML     1.3</span></span>
 <span><span class="co">#&gt;     FMA     1.2</span></span>
-<span><span class="co">#&gt;     BMA   105.2</span></span>
+<span><span class="co">#&gt;     BMA   107.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1063,16 +1062,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;         "ERC", "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", </span></span>
 <span><span class="co">#&gt;     CI = c("wald.orig", "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 441 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 461.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     1.1</span></span>
-<span><span class="co">#&gt;     ERC   158.2</span></span>
-<span><span class="co">#&gt;    MCML     8.0</span></span>
-<span><span class="co">#&gt;     FMA    10.7</span></span>
-<span><span class="co">#&gt;     BMA   263.0</span></span>
+<span><span class="co">#&gt;      RC     1.3</span></span>
+<span><span class="co">#&gt;     ERC   169.6</span></span>
+<span><span class="co">#&gt;    MCML     9.0</span></span>
+<span><span class="co">#&gt;     FMA    11.0</span></span>
+<span><span class="co">#&gt;     BMA   270.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1247,16 +1246,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;         "ERC", "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", </span></span>
 <span><span class="co">#&gt;     CI = c("wald.orig", "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 350.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 369.7 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     1.0</span></span>
-<span><span class="co">#&gt;     ERC   111.5</span></span>
-<span><span class="co">#&gt;    MCML     6.1</span></span>
+<span><span class="co">#&gt;     ERC   122.6</span></span>
+<span><span class="co">#&gt;    MCML     6.4</span></span>
 <span><span class="co">#&gt;     FMA     8.4</span></span>
-<span><span class="co">#&gt;     BMA   223.6</span></span>
+<span><span class="co">#&gt;     BMA   231.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1403,16 +1402,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
 <span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 696.8 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 729.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.5</span></span>
-<span><span class="co">#&gt;     ERC   618.4</span></span>
-<span><span class="co">#&gt;    MCML     1.8</span></span>
-<span><span class="co">#&gt;     FMA     6.4</span></span>
-<span><span class="co">#&gt;     BMA    69.7</span></span>
+<span><span class="co">#&gt;      RC     0.6</span></span>
+<span><span class="co">#&gt;     ERC   648.5</span></span>
+<span><span class="co">#&gt;    MCML     2.0</span></span>
+<span><span class="co">#&gt;     FMA     6.5</span></span>
+<span><span class="co">#&gt;     BMA    71.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1492,16 +1491,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
 <span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 345.5 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 361.5 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC   279.3</span></span>
-<span><span class="co">#&gt;    MCML     0.7</span></span>
-<span><span class="co">#&gt;     FMA     3.1</span></span>
-<span><span class="co">#&gt;     BMA    62.1</span></span>
+<span><span class="co">#&gt;     ERC   292.9</span></span>
+<span><span class="co">#&gt;    MCML     0.8</span></span>
+<span><span class="co">#&gt;     FMA     3.2</span></span>
+<span><span class="co">#&gt;     BMA    64.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
