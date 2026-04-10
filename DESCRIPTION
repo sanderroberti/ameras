@@ -46,3 +46,4 @@ Author: Sander Roberti [aut, cre] (ORCID: <https://orcid.org/0000-0002-6275-7442
     NCI [cph, fnd]
 Maintainer: Sander Roberti <sander.roberti@nih.gov>
 URL: https://ameras.sanderroberti.com, https://github.com/sanderroberti/ameras
+BugReports: https://github.com/sanderroberti/ameras/issues

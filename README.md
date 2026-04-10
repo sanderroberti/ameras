@@ -1,7 +1,5 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# ameras
+# ameras <a href="https://ameras.sanderroberti.com"><img src="man/figures/logo.png" align="right" height="139" alt="ameras website" /></a>
 
 <!-- badges: start -->
 
@@ -30,6 +28,7 @@ install.packages("ameras")
 To install the development version from GitHub:
 
 ``` r
+# install.packages("pak") # If pak is not already installed
 pak::pak("sanderroberti/ameras")
 ```
 
@@ -93,16 +92,16 @@ summary(fit)
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 67.4 seconds
+#> Total run time: 74.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC    21.6
-#>    MCML     0.5
+#>     ERC    24.1
+#>    MCML     0.6
 #>     FMA     0.2
-#>     BMA    44.8
+#>     BMA    49.3
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -113,8 +112,8 @@ summary(fit)
 #>     ERC        dose   0.8214 0.14304        0.5728        1.1439   NA     NA
 #>    MCML (Intercept)  -0.8758 0.07323            NA            NA   NA     NA
 #>    MCML        dose   0.7910 0.13644        0.5554        1.0981   NA     NA
-#>     FMA (Intercept)  -0.8761 0.07339       -1.0210       -0.7322   NA     NA
-#>     FMA        dose   0.7918 0.13673        0.5257        1.0610   NA     NA
-#>     BMA (Intercept)  -0.8736 0.07505       -1.0239       -0.7289 1.00 894.00
-#>     BMA        dose   0.7951 0.14051        0.5438        1.1021 1.00 990.00
+#>     FMA (Intercept)  -0.8754 0.07327       -1.0196       -0.7320   NA     NA
+#>     FMA        dose   0.7909 0.13670        0.5232        1.0607   NA     NA
+#>     BMA (Intercept)  -0.8713 0.07586       -1.0291       -0.7322 1.00 897.00
+#>     BMA        dose   0.7870 0.14378        0.5471        1.0995 1.00 933.00
 ```
