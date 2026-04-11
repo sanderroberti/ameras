@@ -499,7 +499,7 @@ Studies
 #> [1] -4448.713
 #> 
 #> $RC$runtime
-#> [1] "6.7 seconds"
+#> [1] "6.5 seconds"
 #> 
 #> 
 #> attr(,"class")

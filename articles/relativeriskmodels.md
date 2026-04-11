@@ -57,12 +57,12 @@ summary(fit.ameras.exp)
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "EXP")
 #> 
-#> Total run time: 3.8 seconds
+#> Total run time: 3.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     3.8
+#>      RC     3.6
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -95,12 +95,12 @@ summary(fit.ameras.err)
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "ERR")
 #> 
-#> Total run time: 5.7 seconds
+#> Total run time: 5.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     5.7
+#>      RC     5.5
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -130,12 +130,12 @@ summary(fit.ameras.linexp)
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     X = c("X1", "X2"), methods = "RC", doseRRmod = "LINEXP")
 #> 
-#> Total run time: 5.4 seconds
+#> Total run time: 5.2 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     5.4
+#>      RC     5.2
 #> 
 #> Summary of coefficients by method:
 #> 
