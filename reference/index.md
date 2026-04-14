@@ -8,6 +8,8 @@
   Analyze multiple exposure realizations
 - [`data`](https://ameras.sanderroberti.com/reference/data.md) : Example
   data
+- [`ecdfplot()`](https://ameras.sanderroberti.com/reference/ecdfplot.md)
+  : Visualize multiple dose realizations
 - [`traceplot()`](https://ameras.sanderroberti.com/reference/traceplot.md)
   : Traceplots for MCMC samples
 - [`transform1()`](https://ameras.sanderroberti.com/reference/transform1.md)

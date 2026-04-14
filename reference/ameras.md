@@ -447,62 +447,18 @@ Studies
 #> Obtaining profile likelihood CI for dose:M2
 #> Warning: P-value for dose:M2 upper bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended
 #> Warning: P-value for dose:M2 lower bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended
-#> $call
+#> Call:
 #> ameras(data = data, family = "gaussian", Y = "Y.gaussian", dosevars = dosevars, 
 #>     M = c("M1", "M2"), X = c("X1", "X2"))
 #> 
-#> $RC
-#> $RC$coefficients
-#> (Intercept)          X1          X2        dose     dose:M1     dose:M2 
-#>  -1.3795847   0.4965539  -0.5151334   0.9817904   0.1738918   0.5054444 
-#>       sigma 
-#>   1.0660556 
+#> Number of individuals: 3000
+#> Number of dose replicates: 10
 #> 
-#> $RC$sd
-#> (Intercept)          X1          X2        dose     dose:M1     dose:M2 
-#>  0.03531066  0.03895627  0.04785715  0.02547356  0.02779861  0.03518118 
-#>       sigma 
-#>  0.01376271 
+#> Total run time: 6.3 seconds
 #> 
-#> $RC$vcov
-#>               (Intercept)            X1            X2          dose
-#> (Intercept)  1.246842e-03 -7.761770e-04 -4.509516e-04 -3.805202e-04
-#> X1          -7.761770e-04  1.517591e-03 -1.236947e-05  1.044708e-05
-#> X2          -4.509516e-04 -1.236947e-05  2.290307e-03 -2.348377e-05
-#> dose        -3.805202e-04  1.044708e-05 -2.348377e-05  6.489024e-04
-#> dose:M1      8.269652e-06 -8.145006e-06 -1.927736e-06 -4.140406e-04
-#> dose:M2     -4.742008e-05  4.342286e-05  1.013751e-05 -2.495313e-04
-#> sigma        1.222532e-11  6.799541e-12  7.030303e-13  2.357885e-11
-#>                   dose:M1       dose:M2         sigma
-#> (Intercept)  8.269652e-06 -4.742008e-05  1.222532e-11
-#> X1          -8.145006e-06  4.342286e-05  6.799541e-12
-#> X2          -1.927736e-06  1.013751e-05  7.030303e-13
-#> dose        -4.140406e-04 -2.495313e-04  2.357885e-11
-#> dose:M1      7.727630e-04  4.230091e-05  2.615828e-11
-#> dose:M2      4.230091e-05  1.237716e-03 -1.319876e-13
-#> sigma        2.615828e-11 -1.319876e-13  1.894123e-04
+#> Runtime in seconds by method:
 #> 
-#> $RC$CI
-#>             lower     upper pval.lower pval.upper iter.lower iter.upper
-#> dose    0.9333875 1.0301933 0.05749237 0.05749167          3          3
-#> dose:M1 0.1210710 0.2267126 0.05749235 0.05749168          3          3
-#> dose:M2 0.4385959 0.5722930 0.05749201 0.05749198          3          3
-#> 
-#> $RC$convergence.optim
-#> [1] 0
-#> 
-#> $RC$counts.optim
-#> function gradient 
-#>      551       10 
-#> 
-#> $RC$loglik
-#> [1] -4448.713
-#> 
-#> $RC$runtime
-#> [1] "6.5 seconds"
-#> 
-#> 
-#> attr(,"class")
-#> [1] "amerasfit"
+#>  Method Runtime
+#>      RC     6.3
 # }
 ```
