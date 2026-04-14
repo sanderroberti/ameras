@@ -3956,8 +3956,51 @@ ameras_main <- function(family="gaussian", methods="RC", dosevars, data, deg=1, 
 
 #-------------
 
+print.amerasfit <- function(object, digits = max(3, getOption("digits") - 3), ...) {
+  
+  object0 <- object[intersect(names(object), c("RC","ERC","MCML","FMA","BMA"))]
+  
+  runtime_table <- do.call("rbind",lapply(1:length(object0), function(i){
+    
+    y <- object0[[i]]
+    method <- names(object0)[i]
+    
+    runtime <- as.numeric(strsplit(y$runtime, " seconds")[[1]])
+    
+    
+    
+    res <- data.frame(Method=method,
+                      Runtime=runtime)
+    rownames(res) <- NULL
+    res
+    
+  })
+  )
+  
+  total_runtime_seconds <- sum(sapply(object0, function(x) as.numeric(strsplit(x$runtime, " seconds")[[1]])))
+  
+  
+  cat("Call:\n")
+  print(object$call)
+  
+  cat(paste0("\nNumber of individuals: ", object$num.individuals, "\n" ))
+  cat(paste0("Number of dose replicates: ", object$num.replicates, "\n"))
+  
+  cat(paste0("\nTotal run time: ", total_runtime_seconds, " seconds\n\n"))
+  
+  cat("Runtime in seconds by method:\n\n")
+  print(format(runtime_table, digits = digits, nsmall = 1), row.names = FALSE)
+  
+
+  
+  
+  invisible(object)
+}
+
+
+
 coef.amerasfit <- function(object, ...) {
-  object <- object[setdiff(names(object), "call")]
+  object <- object[intersect(names(object), c("RC","ERC","MCML","FMA","BMA"))]
   
   bma <- ("BMA" %in% names(object))
   
@@ -3982,7 +4025,7 @@ coef.amerasfit <- function(object, ...) {
 
 summary.amerasfit <- function(object, ...) {
   
-  object0 <- object[setdiff(names(object), "call")]
+  object0 <- object[intersect(names(object), c("RC","ERC","MCML","FMA","BMA"))]
   
   bma <- ("BMA" %in% names(object0))
   

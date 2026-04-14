@@ -18,7 +18,7 @@ ameras <- function(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=
   check_M(M, data)
   check_X(X, data)
   if (family == "poisson") {
-      check_offset(offset, data)
+    check_offset(offset, data)
   }
   if (family == "prophaz") {
     check_entry_exit(entry, exit, data)
@@ -37,7 +37,7 @@ ameras <- function(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=
   
   
   status <- NULL
-
+  
   if(family=="clogit"){
     #data$exit <- 1
     status <- Y
@@ -61,7 +61,9 @@ ameras <- function(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=
   
   # Need variable numbers for M
   M <- getVarNumbers(M, data)
-  ret <- c(list(call=match.call()),
+  ret <- c(list(call=match.call(),
+                num.individuals=nrow(data),
+                num.replicates=length(dosevars)),
            ameras_main(family, methods=methods, dosevars, data, deg, doseRRmod=doseRRmod, 
                        transform=transform, transform.jacobian=transform.jacobian, setnr=setnr,
                        Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status, 
@@ -165,11 +167,11 @@ compute_ERCmatrix_prophaz <- function(entry, exit, status, RRs, drdd, drdd2) {
 }
 
 loglik_prophaz_rcpp <- function(exit_t,
-                           entry_t,
-                           RR_entry,
-                           RR_exit,
-                           status_ord,
-                           loglim = 1e-30) {
+                                entry_t,
+                                RR_entry,
+                                RR_exit,
+                                status_ord,
+                                loglim = 1e-30) {
   
   n <- length(exit_t)
   K <- ncol(RR_exit)
