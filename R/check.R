@@ -1,10 +1,3 @@
-new_amerasfit <- function(x = list()) {
-  stopifnot(is.list(x))
-  structure(
-    x,
-    class = "amerasfit"
-  )
-}
 
 check_df <- function(x, nm="data") {
   
@@ -213,13 +206,6 @@ check_vars <- function(data, vars, nm, minlen=0, maxlen=0) {
   
 }
 
-getCharVecStr <- function(x, sep=",") {
-  
-  ret <- paste0("'", x, "'")
-  ret <- paste0(ret, collapse=sep)
-  ret
-  
-}
 
 check_char_vec <- function(x, nm, valid=NULL, def=NULL, len=0) {
   
@@ -251,18 +237,7 @@ check_integer <- function(x, nm, minlen=1, maxlen=0, min=NULL, max=NULL) {
   NULL
 }
 
-# Function to check that an object is a string
-isString <- function(obj) {
-  
-  if ((length(obj) == 1) && is.character(obj)) {
-    ret <- TRUE
-  } else {
-    ret <- FALSE
-  }
-  
-  ret
-  
-} # END: isString
+
 
 check_string <- function(obj, valid, parm) {
   
@@ -287,3 +262,4 @@ check_string <- function(obj, valid, parm) {
   obj
   
 } # END: check.string
+

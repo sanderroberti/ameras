@@ -11,7 +11,7 @@ importFrom("coda","HPDinterval",  "as.mcmc")
 importFrom("numDeriv", "hessian")
 importFrom("MCMCvis", "MCMCsummary", "MCMCtrace")
 importFrom("utils", "head")
-export(ameras, transform1, transform1.inv, transform1.jacobian, traceplot) # ecdfplot
+export(ameras, transform1, transform1.inv, transform1.jacobian, traceplot, ecdfplot)
 S3method(coef,amerasfit)
 S3method(summary, amerasfit)
 S3method(print, summary.amerasfit)
