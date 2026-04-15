@@ -1,3 +1,99 @@
+set.seed(123)
+data("data", package="ameras")
+dosevars <- paste0("V", 1:10)
+
+
+# Snapshot test 
+binomial_combos <- Filter(
+  function(x) x$family == "binomial", 
+  snapshot_combinations
+)
+
+for (combo in binomial_combos) {
+  
+  label <- sprintf("%s_%s_deg%d",
+                   combo$family,
+                   combo$doseRRmod,
+                   combo$deg)
+  
+  test_that(paste("snapshot:", label), {
+    fit <- fit_combination(
+      family    = combo$family,
+      Y         = combo$Y,
+      doseRRmod = combo$doseRRmod,
+      deg       = combo$deg,
+      X         = "X1",
+      M         = NULL,
+      data      = data,
+      dosevars  = dosevars
+    )
+    expect_snapshot(fit$RC$coefficients)
+    expect_snapshot(fit$RC$sd)
+    expect_snapshot(fit$RC$CI)
+  })
+}
+
+
+# Test all non-RC methods with snapshot for a basic model
+for(method in setdiff(all_methods,"RC")){
+  test_that(paste("binomial snapshot:", method), {
+    if(method%in%c("ERC","MCML","BMA")){
+      skip_on_cran()
+    }
+    
+    fit <- fit_combination(
+      family    = "binomial",
+      Y         = "Y.binomial",
+      doseRRmod = "EXP",
+      deg       = 2,
+      X         = NULL,
+      M         = NULL,
+      data      = data,
+      dosevars  = dosevars,
+      methods   = method,
+      CI        = c("wald.orig", "percentile"),
+      niter.BMA = 1000,
+      nburnin.BMA = 500
+    )
+    expect_snapshot(fit[[method]]$coefficients)
+    expect_snapshot(fit[[method]]$sd)
+    expect_snapshot(fit[[method]]$CI)
+  })
+}
+
+
+# Basic no-error check for RC and all combinations of doseRRmod, deg, and lengths of X and M
+
+# for(combo in binomial_combos){
+#   for(cov_combo in covariate_combinations){
+#     X_label <- if(is.null(cov_combo$X)) "NULL" else paste(cov_combo$X, collapse="-")
+#     M_label <- if(is.null(cov_combo$M)) "NULL" else paste(cov_combo$M, collapse="-")
+#     label <- sprintf("%s_%s_deg%d_X%s_M%s",
+#                      combo$family,
+#                      combo$doseRRmod,
+#                      combo$deg,
+#                      X_label,
+#                      M_label)
+#     
+#     test_that(label, {
+#       
+#       expect_no_error({
+#         fit_combination(
+#           family    = combo$family,
+#           Y         = combo$Y,
+#           deg       = combo$deg,
+#           doseRRmod = combo$doseRRmod,
+#           X         = cov_combo$X,
+#           M         = cov_combo$M,
+#           data      = data,
+#           dosevars  = dosevars,
+#           methods   = "RC",
+#           CI        = "wald.orig"
+#         )
+#       })
+#     })
+#   }
+# }
 
 # Test RC with all 45 combinations of doseRRmod, deg and lengths of X and M
 
@@ -319,49 +415,7 @@ test_that("ameras binomial  EXP deg=2 methods=RC X=NULL M=NULL", {
 
 
 
-#-------------------------
-
-# Basic test of all methods for all other outcome models
-
-# Poisson, basic model, all methods 
-test_that("ameras poisson EXP deg=2 methods=RC,ERC,MCML,FMA X=NULL M=NULL", {
-  skip_on_cran()
-  data("data", package="ameras")
-  dosevars <- paste0("V",1:10)
-  expect_no_error(ameras(data=data, family="poisson", Y="Y.poisson", dosevars=dosevars, deg=2, CI=c("wald.orig", "percentile"),methods=c("RC", "ERC", "MCML", "FMA", "BMA"), X=NULL, M=NULL, doseRRmod="EXP"))
-})
-
-# Gaussian, basic model, all methods 
-test_that("ameras gaussian deg=2 methods=RC,ERC,MCML,FMA X=NULL M=NULL", {
-  skip_on_cran()
-  data("data", package="ameras")
-  dosevars <- paste0("V",1:10)
-  expect_no_error(ameras(data=data, family="gaussian", Y="Y.gaussian", dosevars=dosevars, deg=2, CI=c("wald.orig", "percentile"),methods=c("RC", "ERC", "MCML", "FMA", "BMA"), X=NULL, M=NULL))
-})
 
 
-# Multinomial, basic model, all methods except BMA
-test_that("ameras multinomial EXP deg=2 methods=RC,ERC,MCML,FMA X=NULL M=NULL", {
-  skip_on_cran()
-  data("data", package="ameras")
-  dosevars <- paste0("V",1:10)
-  expect_warning(ameras(data=data, family="multinomial", Y="Y.multinomial", dosevars=dosevars, deg=2,CI=c("wald.orig", "percentile"), methods=c("RC", "ERC", "MCML", "FMA", "BMA"), X=NULL, M=NULL, doseRRmod="EXP"))
-})
 
 
-# Prophaz, basic model, all methods 
-test_that("ameras prophaz EXP deg=2 methods=RC,ERC,MCML,FMA X=NULL M=NULL", {
-  skip_on_cran()
-  data("data", package="ameras")
-  dosevars <- paste0("V",1:10)
-  expect_warning(ameras(data=data, family="prophaz", Y="status", exit="time", dosevars=dosevars, deg=2,CI=c("wald.orig", "percentile"), methods=c("RC", "ERC", "MCML", "FMA", "BMA"), X=NULL, M=NULL, doseRRmod="EXP"))
-})
-
-
-# Clogit, basic model, all methods
-test_that("ameras clogit EXP deg=2 methods=RC,ERC,MCML,FMA X=NULL M=NULL", {
-  skip_on_cran()
-  data("data", package="ameras")
-  dosevars <- paste0("V",1:10)
-  expect_no_error(ameras(data=data, family="clogit", Y="Y.clogit", setnr="setnr", dosevars=dosevars, deg=2, CI=c("wald.orig", "percentile"),methods=c("RC", "ERC", "MCML", "FMA", "BMA"), X=NULL, M=NULL, doseRRmod="EXP"))
-})
