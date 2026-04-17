@@ -18,11 +18,13 @@ library(ameras)
 
 ## Introduction
 
-There are several options for confidence intervals that can be supplied
-to the `CI` argument, see below. When `ameras` is called with `methods`
-containing at least one of `RC`, `ERC`, and `MCML` and at least one of
-`FMA` and `BMA`, `CI` should be a vector of length 2 with one method for
-`RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
+To compute confidence intervals, first fit the model using `ameras`,
+then use the `confint` method to attach confidence intervals. Several
+types of confidence intervals are supported, which should be supplied to
+the `type` argument of `confint`, see below. When `confint` is called
+with `methods` containing at least one of `RC`, `ERC`, and `MCML` and at
+least one of `FMA` and `BMA`, `type` should be a vector of length 2 with
+one method for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
 
 ## Regression calibration, extended regression calibration, and Monte Carlo maximum likelihood
 
@@ -32,8 +34,8 @@ before or after transformation. If no transformation is specified,
 `wald.orig` should be used to obtain the standard Wald intervals. When a
 transformation is used, `wald.transformed` is determined before
 transforming, and `wald.orig` is obtained after transforming using the
-delta method (using `transform.jacobian` is required). The third option
-is `proflik`, which uses the profile likelihood to compute confidence
+delta method (using `transform.jacobian`). The third option is
+`proflik`, which uses the profile likelihood to compute confidence
 bounds. For this, the profile log (partial) likelihood for parameter
 $\theta_{p}$ is defined as
 $$PL_{p}\left( \theta_{p}^{*} \right) = \max\limits_{{\mathbf{θ}}:\theta_{p} = \theta_{p}^{*}}\ell({\mathbf{θ}}),$$
@@ -44,10 +46,10 @@ solving
 $- 2\{ PL_{p}\left( \theta_{p}^{*} \right) - \ell\left( \widehat{\mathbf{θ}} \right)\} = \chi_{1,1 - \alpha}^{2}$
 using the bisection method, with $\widehat{\mathbf{θ}}$ the maximum
 likelihood estimate. Note that profile likelihoods are more
-computationally intensive to obtain. For this reason, `ameras` offers
+computationally intensive to obtain. For this reason, `confint` offers
 the option to only determine them for the exposure-related parameters,
 which is the default setting. To obtain profile likelihood intervals for
-all parameters, use `params.profCI = "all"`.
+all parameters, use `parm = "all"`.
 
 To illustrate, we determine the three types of confidence intervals for
 a regression calibration analysis using the example data, using a linear
@@ -59,25 +61,29 @@ transformations](https://ameras.sanderroberti.com/articles/transformations.md)).
 data(data, package="ameras")
 dosevars <- paste0("V", 1:10)
 fit.ameras.waldorig <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("RC"), CI="wald.orig", doseRRmod="ERR")
+                            family="binomial", methods=c("RC"), doseRRmod="ERR")
 #> Fitting RC
+fit.ameras.waldorig <- confint(fit.ameras.waldorig, type="wald.orig")
+
 fit.ameras.waldtransformed <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), 
                                      data=data, family="binomial", methods=c("RC"), 
-                                     CI="wald.transformed", doseRRmod="ERR")
+                                     doseRRmod="ERR")
 #> Fitting RC
+fit.ameras.waldtransformed <- confint(fit.ameras.waldtransformed, type="wald.transformed")
+
 fit.ameras.proflik <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("RC"), CI="proflik", doseRRmod="ERR", 
-                            params.profCI = "all")
+                            family="binomial", methods=c("RC"), CI="proflik", doseRRmod="ERR")
 #> Fitting RC
+fit.ameras.proflik <- confint(fit.ameras.proflik, type="proflik", parm="all")
 #> Obtaining profile likelihood CI for (Intercept)
 #> Obtaining profile likelihood CI for X1
 #> Obtaining profile likelihood CI for X2
 #> Obtaining profile likelihood CI for dose
+
 summary(fit.ameras.waldorig)
 #> Call:
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR", 
-#>     CI = "wald.orig")
+#>     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR")
 #> 
 #> Total run time: 0.4 seconds
 #> 
@@ -96,8 +102,7 @@ summary(fit.ameras.waldorig)
 summary(fit.ameras.waldtransformed)
 #> Call:
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR", 
-#>     CI = "wald.transformed")
+#>     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR")
 #> 
 #> Total run time: 0.2 seconds
 #> 
@@ -117,14 +122,14 @@ summary(fit.ameras.proflik)
 #> Call:
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR", 
-#>     CI = "proflik", params.profCI = "all")
+#>     CI = "proflik")
 #> 
-#> Total run time: 3.5 seconds
+#> Total run time: 0.2 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     3.5
+#>      RC     0.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -147,25 +152,26 @@ Again, we use the example data to illustrate.
 
 ``` r
 fit.ameras.hpd <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("FMA"), CI="hpd", doseRRmod="ERR")
+                            family="binomial", methods=c("FMA"), doseRRmod="ERR")
 #> Fitting FMA
+fit.ameras.hpd <- confint(fit.ameras.hpd, type="hpd")
+
 fit.ameras.percentile <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("FMA"), CI="percentile", 
-                            doseRRmod="ERR")
+                            family="binomial", methods=c("FMA"), doseRRmod="ERR")
 #> Fitting FMA
+fit.ameras.percentile <- confint(fit.ameras.percentile, type="percentile")
 
 summary(fit.ameras.hpd)
 #> Call:
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("FMA"), doseRRmod = "ERR", 
-#>     CI = "hpd")
+#>     X = c("X1", "X2"), methods = c("FMA"), doseRRmod = "ERR")
 #> 
-#> Total run time: 1.7 seconds
+#> Total run time: 1.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.7
+#>     FMA     1.6
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -177,15 +183,14 @@ summary(fit.ameras.hpd)
 summary(fit.ameras.percentile)
 #> Call:
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("FMA"), doseRRmod = "ERR", 
-#>     CI = "percentile")
+#>     X = c("X1", "X2"), methods = c("FMA"), doseRRmod = "ERR")
 #> 
-#> Total run time: 1.8 seconds
+#> Total run time: 1.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.8
+#>     FMA     1.7
 #> 
 #> Summary of coefficients by method:
 #> 

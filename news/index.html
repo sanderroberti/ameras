@@ -40,9 +40,24 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ameras-development-version">ameras (development version)<a class="anchor" aria-label="anchor" href="#ameras-development-version"></a></h2>
+<div class="section level4">
+<h4 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h4>
+<ul><li>Added function ecdfplot for descriptive data visualization.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="general-improvements-development-version">General improvements<a class="anchor" aria-label="anchor" href="#general-improvements-development-version"></a></h4>
 <ul><li>Removed the use of an N x N matrix for ERC for the Poisson family to better handle large data and speed up likelihood computation.</li>
 <li>Removed duplication of data for RC and ERC for all families to better handle large data.</li>
 </ul></div>
+<div class="section level4">
+<h4 id="user-interface-changes-development-version">User interface changes<a class="anchor" aria-label="anchor" href="#user-interface-changes-development-version"></a></h4>
+<ul><li>Added a print method for the amerasfit class.</li>
+<li>Moved the computation of confidence intervals to a new method confint. The ameras function now returns an amerasfit object without confidence intervals. The method confint takes this object and returns the same object with confidence intervals added. Importantly, this means ameras no longer uses arguments related to confidence intervals.</li>
+<li>Added additional components to the output of ameras for use by the new confint method.</li>
+<li>Added the argument keep.data to ameras (default TRUE). If TRUE, the data object is included in the amerasfit object for future profile likelihood confidence interval computations.</li>
+<li>The summary method for amerasfit now only prints confidence intervals after they have been computed using confint.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.1" id="ameras-011">ameras 0.1.1<a class="anchor" aria-label="anchor" href="#ameras-011"></a></h2><p class="text-muted">CRAN release: 2026-03-29</p>
 <ul><li>Initial CRAN submission.</li>

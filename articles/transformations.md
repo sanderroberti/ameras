@@ -188,11 +188,6 @@ fit.ameras.sigmoid <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), 
                          transform=transform.sigmoid, transform.jacobian=transform.sigmoid.jacobian,
                          index.t=4:5)
 #> Fitting RC
-#> Obtaining profile likelihood CI for dose
-#> Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :
-#> WARNING: Lower bound for dose is < 0 and may not exist if rescaling the
-#> variable does not help
-#> Obtaining profile likelihood CI for dose_squared
 summary(fit.ameras.sigmoid)
 #> Call:
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
@@ -200,21 +195,23 @@ summary(fit.ameras.sigmoid)
 #>     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, 
 #>     index.t = 4:5)
 #> 
-#> Total run time: 5.2 seconds
+#> Total run time: 0.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     5.2
+#>      RC     0.6
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC  (Intercept) -0.87358 0.09758            NA            NA
-#>      RC           X1  0.44587 0.07672            NA            NA
-#>      RC           X2 -0.33552 0.09610            NA            NA
-#>      RC         dose  0.04875 0.21281        0.0000        0.5130
-#>      RC dose_squared  0.28764 0.08100        0.1328        0.4121
+#>  Method         Term Estimate      SE
+#>      RC  (Intercept) -0.87358 0.09758
+#>      RC           X1  0.44587 0.07672
+#>      RC           X2 -0.33552 0.09610
+#>      RC         dose  0.04875 0.21281
+#>      RC dose_squared  0.28764 0.08100
+#> 
+#> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
 
 Next with default settings, using `transform1`:
@@ -223,31 +220,28 @@ Next with default settings, using `transform1`:
 fit.ameras.transform1 <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
                             family="binomial", deg=2, doseRRmod = "ERR", methods="RC")
 #> Fitting RC
-#> Obtaining profile likelihood CI for dose
-#> Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :
-#> WARNING: Lower bound for dose is < 0 and may not exist if rescaling the
-#> variable does not help
-#> Obtaining profile likelihood CI for dose_squared
 summary(fit.ameras.transform1)
 #> Call:
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "ERR")
 #> 
-#> Total run time: 5.5 seconds
+#> Total run time: 0.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     5.5
+#>      RC     0.3
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC  (Intercept) -0.87359 0.09759            NA            NA
-#>      RC           X1  0.44587 0.07672            NA            NA
-#>      RC           X2 -0.33552 0.09610            NA            NA
-#>      RC         dose  0.04878 0.21283        0.0000        0.5115
-#>      RC dose_squared  0.28763 0.08100        0.1325        0.4108
+#>  Method         Term Estimate      SE
+#>      RC  (Intercept) -0.87359 0.09759
+#>      RC           X1  0.44587 0.07672
+#>      RC           X2 -0.33552 0.09610
+#>      RC         dose  0.04878 0.21283
+#>      RC dose_squared  0.28763 0.08100
+#> 
+#> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
 
 As expected, there is no difference between the results.

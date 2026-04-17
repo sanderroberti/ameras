@@ -141,7 +141,7 @@ follows:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.linreg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.gaussian"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                            family<span class="op">=</span><span class="st">"gaussian"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
-<span>                            niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                            niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -173,80 +173,126 @@ follows:</p>
 one component for each method, each being a list:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">fit.ameras.linreg</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 8</span></span>
-<span><span class="co">#&gt;  $ call           : language ameras(data = data, family = "gaussian", Y = "Y.gaussian", dosevars = dosevars,      X = c("X1", "X2"), methods =| __truncated__ ...</span></span>
-<span><span class="co">#&gt;  $ num.individuals: int 3000</span></span>
-<span><span class="co">#&gt;  $ num.replicates : int 10</span></span>
-<span><span class="co">#&gt;  $ RC             :List of 8</span></span>
-<span><span class="co">#&gt;   ..$ coefficients     : Named num [1:5] -1.362 0.481 -0.519 1.166 1.108</span></span>
+<span><span class="co">#&gt; List of 13</span></span>
+<span><span class="co">#&gt;  $ call              : language ameras(data = data, family = "gaussian", Y = "Y.gaussian", dosevars = dosevars,      X = c("X1", "X2"), methods =| __truncated__ ...</span></span>
+<span><span class="co">#&gt;  $ num.rows          : int 3000</span></span>
+<span><span class="co">#&gt;  $ num.replicates    : int 10</span></span>
+<span><span class="co">#&gt;  $ transform         :function (params, boundcheck = FALSE, ...)  </span></span>
+<span><span class="co">#&gt;  $ transform.jacobian:function (params, ...)  </span></span>
+<span><span class="co">#&gt;  $ other.args        : list()</span></span>
+<span><span class="co">#&gt;  $ model             :List of 16</span></span>
+<span><span class="co">#&gt;   ..$ data        :'data.frame': 3000 obs. of  23 variables:</span></span>
+<span><span class="co">#&gt;   .. ..$ Y.gaussian   : num [1:3000] -0.326 -0.187 0.084 0.224 -0.463 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ Y.binomial   : int [1:3000] 0 1 0 0 0 0 1 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ Y.poisson    : int [1:3000] 0 0 2 0 0 0 4 1 0 0 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ time         : num [1:3000] 0.303 0.197 0.303 0.236 0.303 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ status       : num [1:3000] 0 1 0 1 0 1 0 0 1 0 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ setnr        : int [1:3000] 1 1 1 1 2 2 2 2 3 3 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ Y.clogit     : num [1:3000] 0 1 0 0 0 0 1 0 0 1 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ Y.multinomial: Factor w/ 3 levels "1","2","3": 3 2 2 3 3 2 1 3 1 1 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ X1           : int [1:3000] 0 1 0 0 1 1 0 0 1 1 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ X2           : int [1:3000] 0 0 0 0 0 1 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ M1           : int [1:3000] 0 1 1 1 0 1 0 1 1 0 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ M2           : int [1:3000] 1 0 0 0 0 0 1 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ V1           : num [1:3000] 0.4287 0.7332 0.7037 0.0185 0.3939 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ V2           : num [1:3000] 0.6154 0.3551 0.4341 0.0137 0.4009 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ V3           : num [1:3000] 0.4196 0.4188 1.0412 0.0273 0.6193 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ V4           : num [1:3000] 0.4927 0.4924 0.7988 0.0191 0.5172 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ V5           : num [1:3000] 0.3136 0.4952 0.6661 0.0192 0.3644 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ V6           : num [1:3000] 0.4222 0.5684 0.7235 0.0306 0.6026 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ V7           : num [1:3000] 0.4246 0.6113 0.6408 0.0154 0.4751 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ V8           : num [1:3000] 0.2963 0.6772 0.7989 0.0214 0.5257 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ V9           : num [1:3000] 0.3821 0.5336 0.9828 0.0155 0.5339 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ V10          : num [1:3000] 0.458 0.494 1.061 0.016 0.56 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ rcdose_ameras: num [1:3000] 0.4253 0.5379 0.7851 0.0197 0.4993 ...</span></span>
+<span><span class="co">#&gt;   ..$ keep.data   : logi TRUE</span></span>
+<span><span class="co">#&gt;   ..$ family      : chr "gaussian"</span></span>
+<span><span class="co">#&gt;   ..$ dosevars    : chr [1:10] "V1" "V2" "V3" "V4" ...</span></span>
+<span><span class="co">#&gt;   ..$ Y           : chr "Y.gaussian"</span></span>
+<span><span class="co">#&gt;   ..$ M           : NULL</span></span>
+<span><span class="co">#&gt;   ..$ X           : chr [1:2] "X1" "X2"</span></span>
+<span><span class="co">#&gt;   ..$ offset      : NULL</span></span>
+<span><span class="co">#&gt;   ..$ entry       : NULL</span></span>
+<span><span class="co">#&gt;   ..$ exit        : NULL</span></span>
+<span><span class="co">#&gt;   ..$ status      : NULL</span></span>
+<span><span class="co">#&gt;   ..$ setnr       : NULL</span></span>
+<span><span class="co">#&gt;   ..$ deg         : num 1</span></span>
+<span><span class="co">#&gt;   ..$ doseRRmod   : chr "ERR"</span></span>
+<span><span class="co">#&gt;   ..$ loglim      : num 1e-30</span></span>
+<span><span class="co">#&gt;   ..$ optim.method: chr "Nelder-Mead"</span></span>
+<span><span class="co">#&gt;  $ CI.computed       : logi FALSE</span></span>
+<span><span class="co">#&gt;  $ RC                :List of 7</span></span>
+<span><span class="co">#&gt;   ..$ coefficients: Named num [1:5] -1.362 0.481 -0.519 1.166 1.108</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ sd               : Named num [1:5] 0.0367 0.0405 0.0497 0.0204 0.0143</span></span>
+<span><span class="co">#&gt;   ..$ sd          : Named num [1:5] 0.0367 0.0405 0.0497 0.0204 0.0143</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ vcov             : num [1:5, 1:5] 1.34e-03 -8.36e-04 -4.86e-04 -4.15e-04 1.55e-09 ...</span></span>
+<span><span class="co">#&gt;   ..$ vcov        : num [1:5, 1:5] 1.34e-03 -8.36e-04 -4.86e-04 -4.15e-04 1.55e-09 ...</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span></span>
 <span><span class="co">#&gt;   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ CI               :'data.frame':    5 obs. of  2 variables:</span></span>
-<span><span class="co">#&gt;   .. ..$ lower: num [1:5] -1.434 0.401 -0.616 1.126 1.08</span></span>
-<span><span class="co">#&gt;   .. ..$ upper: num [1:5] -1.29 0.56 -0.421 1.206 1.136</span></span>
-<span><span class="co">#&gt;   ..$ convergence.optim: int 0</span></span>
-<span><span class="co">#&gt;   ..$ counts.optim     : Named num [1:2] 509 1</span></span>
-<span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
-<span><span class="co">#&gt;   ..$ loglik           : num -4563</span></span>
-<span><span class="co">#&gt;   ..$ runtime          : chr "0.3 seconds"</span></span>
-<span><span class="co">#&gt;  $ ERC            :List of 8</span></span>
-<span><span class="co">#&gt;   ..$ coefficients     : Named num [1:5] -1.361 0.48 -0.519 1.165 1.106</span></span>
+<span><span class="co">#&gt;   ..$ optim       :List of 4</span></span>
+<span><span class="co">#&gt;   .. ..$ par        : num [1:5] -1.362 0.481 -0.519 1.166 0.102</span></span>
+<span><span class="co">#&gt;   .. ..$ hessian    : num [1:5, 1:5] 2.45e+03 1.23e+03 5.12e+02 2.43e+03 2.15e-03 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ convergence: int 0</span></span>
+<span><span class="co">#&gt;   .. ..$ counts     : Named num [1:2] 509 1</span></span>
+<span><span class="co">#&gt;   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
+<span><span class="co">#&gt;   ..$ loglik      : num -4563</span></span>
+<span><span class="co">#&gt;   ..$ runtime     : chr "0.3 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ ERC         : logi FALSE</span></span>
+<span><span class="co">#&gt;  $ ERC               :List of 7</span></span>
+<span><span class="co">#&gt;   ..$ coefficients: Named num [1:5] -1.361 0.48 -0.519 1.165 1.106</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ sd               : Named num [1:5] 0.0366 0.0404 0.0497 0.0204 0.0142</span></span>
+<span><span class="co">#&gt;   ..$ sd          : Named num [1:5] 0.0366 0.0404 0.0497 0.0204 0.0142</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ vcov             : num [1:5, 1:5] 1.34e-03 -8.34e-04 -4.85e-04 -4.14e-04 1.53e-06 ...</span></span>
+<span><span class="co">#&gt;   ..$ vcov        : num [1:5, 1:5] 1.34e-03 -8.34e-04 -4.85e-04 -4.14e-04 1.53e-06 ...</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span></span>
 <span><span class="co">#&gt;   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ CI               :'data.frame':    5 obs. of  2 variables:</span></span>
-<span><span class="co">#&gt;   .. ..$ lower: num [1:5] -1.433 0.4 -0.616 1.125 1.078</span></span>
-<span><span class="co">#&gt;   .. ..$ upper: num [1:5] -1.289 0.559 -0.421 1.205 1.134</span></span>
-<span><span class="co">#&gt;   ..$ convergence.optim: int 0</span></span>
-<span><span class="co">#&gt;   ..$ counts.optim     : Named num [1:2] 546 9</span></span>
-<span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
-<span><span class="co">#&gt;   ..$ loglik           : num -4559</span></span>
-<span><span class="co">#&gt;   ..$ runtime          : chr "121.2 seconds"</span></span>
-<span><span class="co">#&gt;  $ MCML           :List of 8</span></span>
-<span><span class="co">#&gt;   ..$ coefficients     : Named num [1:5] -1.28 0.484 -0.517 1.079 1.138</span></span>
+<span><span class="co">#&gt;   ..$ optim       :List of 4</span></span>
+<span><span class="co">#&gt;   .. ..$ par        : num [1:5] -1.361 0.48 -0.519 1.165 0.101</span></span>
+<span><span class="co">#&gt;   .. ..$ hessian    : num [1:5, 1:5] 2448.9 1232.8 513.4 2428.2 7.1 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ convergence: int 0</span></span>
+<span><span class="co">#&gt;   .. ..$ counts     : Named num [1:2] 546 9</span></span>
+<span><span class="co">#&gt;   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
+<span><span class="co">#&gt;   ..$ loglik      : num -4559</span></span>
+<span><span class="co">#&gt;   ..$ runtime     : chr "134.2 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ ERC         : logi TRUE</span></span>
+<span><span class="co">#&gt;  $ MCML              :List of 6</span></span>
+<span><span class="co">#&gt;   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ sd               : Named num [1:5] 0.0371 0.0416 0.0511 0.0199 0.0147</span></span>
+<span><span class="co">#&gt;   ..$ sd          : Named num [1:5] 0.0371 0.0416 0.0511 0.0199 0.0147</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ CI               :'data.frame':    5 obs. of  2 variables:</span></span>
-<span><span class="co">#&gt;   .. ..$ lower: num [1:5] -1.353 0.402 -0.617 1.04 1.109</span></span>
-<span><span class="co">#&gt;   .. ..$ upper: num [1:5] -1.207 0.565 -0.417 1.118 1.167</span></span>
-<span><span class="co">#&gt;   ..$ vcov             : num [1:5, 1:5] 1.38e-03 -8.83e-04 -5.14e-04 -3.98e-04 -1.91e-08 ...</span></span>
+<span><span class="co">#&gt;   ..$ vcov        : num [1:5, 1:5] 1.38e-03 -8.83e-04 -5.14e-04 -3.98e-04 -1.91e-08 ...</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span></span>
 <span><span class="co">#&gt;   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ convergence.optim: int 0</span></span>
-<span><span class="co">#&gt;   ..$ counts.optim     : Named num [1:2] 555 7</span></span>
-<span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
-<span><span class="co">#&gt;   ..$ loglik           : num -4646</span></span>
-<span><span class="co">#&gt;   ..$ runtime          : chr "0.7 seconds"</span></span>
-<span><span class="co">#&gt;  $ FMA            :List of 6</span></span>
+<span><span class="co">#&gt;   ..$ optim       :List of 4</span></span>
+<span><span class="co">#&gt;   .. ..$ par        : num [1:5] -1.28 0.484 -0.517 1.079 0.129</span></span>
+<span><span class="co">#&gt;   .. ..$ hessian    : num [1:5, 1:5] 2316.337 1165.788 484.911 2300.887 -0.322 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ convergence: int 0</span></span>
+<span><span class="co">#&gt;   .. ..$ counts     : Named num [1:2] 555 7</span></span>
+<span><span class="co">#&gt;   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
+<span><span class="co">#&gt;   ..$ loglik      : num -4646</span></span>
+<span><span class="co">#&gt;   ..$ runtime     : chr "0.6 seconds"</span></span>
+<span><span class="co">#&gt;  $ FMA               :List of 6</span></span>
 <span><span class="co">#&gt;   ..$ coefficients       : Named num [1:5] -1.28 0.484 -0.517 1.079 1.138</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   ..$ sd                 : Named num [1:5] 0.0373 0.0418 0.0512 0.0202 0.0147</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ CI                 :'data.frame':  5 obs. of  2 variables:</span></span>
-<span><span class="co">#&gt;   .. ..$ lower: num [1:5] -1.353 0.402 -0.618 1.04 1.109</span></span>
-<span><span class="co">#&gt;   .. ..$ upper: num [1:5] -1.206 0.565 -0.417 1.119 1.166</span></span>
 <span><span class="co">#&gt;   ..$ included.replicates: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
 <span><span class="co">#&gt;   ..$ included.samples   : int 100006</span></span>
-<span><span class="co">#&gt;   ..$ runtime            : chr "1.4 seconds"</span></span>
-<span><span class="co">#&gt;  $ BMA            :List of 7</span></span>
+<span><span class="co">#&gt;   ..$ samples            :'data.frame':  100006 obs. of  5 variables:</span></span>
+<span><span class="co">#&gt;   .. ..$ (Intercept): num [1:100006] -1.27 -1.32 -1.32 -1.26 -1.24 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ X1         : num [1:100006] 0.516 0.511 0.534 0.415 0.509 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ X2         : num [1:100006] -0.525 -0.535 -0.49 -0.529 -0.538 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ dose       : num [1:100006] 1.08 1.09 1.1 1.11 1.03 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ sigma      : num [1:100006] 1.17 1.14 1.13 1.15 1.12 ...</span></span>
+<span><span class="co">#&gt;   ..$ runtime            : chr "1.2 seconds"</span></span>
+<span><span class="co">#&gt;  $ BMA               :List of 6</span></span>
 <span><span class="co">#&gt;   ..$ coefficients       : Named num [1:5] -1.28 0.483 -0.517 1.079 1.139</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   ..$ sd                 : Named num [1:5] 0.038 0.0424 0.0525 0.0202 0.015</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ CI                 :'data.frame':  5 obs. of  2 variables:</span></span>
-<span><span class="co">#&gt;   .. ..$ lower: num [1:5] -1.351 0.402 -0.623 1.039 1.111</span></span>
-<span><span class="co">#&gt;   .. ..$ upper: num [1:5] -1.208 0.567 -0.417 1.118 1.168</span></span>
 <span><span class="co">#&gt;   ..$ Rhat               :'data.frame':  5 obs. of  2 variables:</span></span>
 <span><span class="co">#&gt;   .. ..$ Rhat : num [1:5] 1 1.01 1 1 1.02</span></span>
 <span><span class="co">#&gt;   .. ..$ n.eff: num [1:5] 871 822 800 800 744</span></span>
@@ -260,7 +306,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   .. .. .. ..$ : NULL</span></span>
 <span><span class="co">#&gt;   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   ..$ included.replicates: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
-<span><span class="co">#&gt;   ..$ runtime            : chr "72.7 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ runtime            : chr "67 seconds"</span></span>
 <span><span class="co">#&gt;  - attr(*, "class")= chr "amerasfit"</span></span></code></pre></div>
 <p>Access the results for e.g. regression calibration as follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -287,26 +333,34 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt; dose         2.066810e-09</span></span>
 <span><span class="co">#&gt; sigma        2.044510e-04</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $CI</span></span>
-<span><span class="co">#&gt;                  lower      upper</span></span>
-<span><span class="co">#&gt; (Intercept) -1.4340719 -1.2903760</span></span>
-<span><span class="co">#&gt; X1           0.4014616  0.5600310</span></span>
-<span><span class="co">#&gt; X2          -0.6162385 -0.4213368</span></span>
-<span><span class="co">#&gt; dose         1.1260604  1.2060132</span></span>
-<span><span class="co">#&gt; sigma        1.0795443  1.1355949</span></span>
+<span><span class="co">#&gt; $optim</span></span>
+<span><span class="co">#&gt; $optim$par</span></span>
+<span><span class="co">#&gt; [1] -1.3622239  0.4807463 -0.5187877  1.1660368  0.1021681</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $convergence.optim</span></span>
+<span><span class="co">#&gt; $optim$hessian</span></span>
+<span><span class="co">#&gt;              [,1]         [,2]        [,3]          [,4]          [,5]</span></span>
+<span><span class="co">#&gt; [1,] 2.445565e+03 1.230934e+03 511.9382502 2427.17149144  2.153852e-03</span></span>
+<span><span class="co">#&gt; [2,] 1.230934e+03 1.230934e+03 260.8602549 1199.43455144  3.805417e-02</span></span>
+<span><span class="co">#&gt; [3,] 5.119383e+02 2.608603e+02 511.9382503  531.74442357 -1.892140e-02</span></span>
+<span><span class="co">#&gt; [4,] 2.427171e+03 1.199435e+03 531.7444236 4814.95714494 -2.727097e-02</span></span>
+<span><span class="co">#&gt; [5,] 2.153852e-03 3.805417e-02  -0.0189214   -0.02727097  6.000020e+03</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optim$convergence</span></span>
 <span><span class="co">#&gt; [1] 0</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $counts.optim</span></span>
+<span><span class="co">#&gt; $optim$counts</span></span>
 <span><span class="co">#&gt; function gradient </span></span>
 <span><span class="co">#&gt;      509        1 </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $loglik</span></span>
 <span><span class="co">#&gt; [1] -4563.325</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $runtime</span></span>
-<span><span class="co">#&gt; [1] "0.3 seconds"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "0.3 seconds"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ERC</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
 <p>For a summary of results, use <code>summary</code> (note that
 <code>Rhat</code> and <code>n.eff</code> only apply to BMA results):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -314,48 +368,49 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "gaussian", Y = "Y.gaussian", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("RC", "ERC", "MCML", "FMA", </span></span>
-<span><span class="co">#&gt;         "BMA"), CI = c("wald.orig", "percentile"), nburnin.BMA = 1000, </span></span>
-<span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;         "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 196.3 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 203.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC   121.2</span></span>
-<span><span class="co">#&gt;    MCML     0.7</span></span>
-<span><span class="co">#&gt;     FMA     1.4</span></span>
-<span><span class="co">#&gt;     BMA    72.7</span></span>
+<span><span class="co">#&gt;     ERC   134.2</span></span>
+<span><span class="co">#&gt;    MCML     0.6</span></span>
+<span><span class="co">#&gt;     FMA     1.2</span></span>
+<span><span class="co">#&gt;     BMA    67.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound Rhat  n.eff</span></span>
-<span><span class="co">#&gt;      RC (Intercept)  -1.3622 0.03666       -1.4341       -1.2904   NA     NA</span></span>
-<span><span class="co">#&gt;      RC          X1   0.4807 0.04045        0.4015        0.5600   NA     NA</span></span>
-<span><span class="co">#&gt;      RC          X2  -0.5188 0.04972       -0.6162       -0.4213   NA     NA</span></span>
-<span><span class="co">#&gt;      RC        dose   1.1660 0.02040        1.1261        1.2060   NA     NA</span></span>
-<span><span class="co">#&gt;      RC       sigma   1.1076 0.01430        1.0795        1.1356   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC (Intercept)  -1.3611 0.03660       -1.4328       -1.2893   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC          X1   0.4795 0.04041        0.4003        0.5587   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC          X2  -0.5188 0.04969       -0.6162       -0.4214   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC        dose   1.1649 0.02038        1.1250        1.2049   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC       sigma   1.1062 0.01425        1.0783        1.1342   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML (Intercept)  -1.2803 0.03714       -1.3530       -1.2075   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML          X1   0.4837 0.04156        0.4022        0.5651   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML          X2  -0.5171 0.05108       -0.6173       -0.4170   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML        dose   1.0790 0.01993        1.0400        1.1181   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML       sigma   1.1378 0.01469        1.1090        1.1666   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA (Intercept)  -1.2803 0.03732       -1.3534       -1.2065   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA          X1   0.4837 0.04181        0.4017        0.5652   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA          X2  -0.5173 0.05124       -0.6183       -0.4172   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA        dose   1.0792 0.02015        1.0397        1.1187   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA       sigma   1.1377 0.01467        1.1091        1.1664   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA (Intercept)  -1.2796 0.03797       -1.3511       -1.2077 1.00 871.00</span></span>
-<span><span class="co">#&gt;     BMA          X1   0.4831 0.04240        0.4024        0.5668 1.01 822.00</span></span>
-<span><span class="co">#&gt;     BMA          X2  -0.5169 0.05254       -0.6226       -0.4172 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA        dose   1.0788 0.02024        1.0386        1.1176 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA       sigma   1.1391 0.01503        1.1108        1.1685 1.02 744.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method        Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC (Intercept)  -1.3622 0.03666   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X1   0.4807 0.04045   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X2  -0.5188 0.04972   NA     NA</span></span>
+<span><span class="co">#&gt;      RC        dose   1.1660 0.02040   NA     NA</span></span>
+<span><span class="co">#&gt;      RC       sigma   1.1076 0.01430   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (Intercept)  -1.3611 0.03660   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X1   0.4795 0.04041   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X2  -0.5188 0.04969   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC        dose   1.1649 0.02038   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC       sigma   1.1062 0.01425   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (Intercept)  -1.2803 0.03714   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X1   0.4837 0.04156   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X2  -0.5171 0.05108   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML        dose   1.0790 0.01993   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML       sigma   1.1378 0.01469   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (Intercept)  -1.2803 0.03732   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X1   0.4837 0.04181   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X2  -0.5173 0.05124   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        dose   1.0792 0.02015   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA       sigma   1.1377 0.01467   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -1.2796 0.03797 1.00 871.00</span></span>
+<span><span class="co">#&gt;     BMA          X1   0.4831 0.04240 1.01 822.00</span></span>
+<span><span class="co">#&gt;     BMA          X2  -0.5169 0.05254 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   1.0788 0.02024 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA       sigma   1.1391 0.01503 1.02 744.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <p>To extract model coefficients and compare between methods, use
 <code>coef</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -388,7 +443,7 @@ risk models</a>.</p>
 <span><span class="va">fit.ameras.logreg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                            family<span class="op">=</span><span class="st">"binomial"</span>, deg<span class="op">=</span><span class="fl">2</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, </span>
 <span>                            methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, niter.BMA <span class="op">=</span> <span class="fl">5000</span>, </span>
-<span>                            nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                            nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -423,48 +478,50 @@ risk models</a>.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("RC", "ERC", "MCML", "FMA", </span></span>
-<span><span class="co">#&gt;         "BMA"), deg = 2, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
-<span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;         "BMA"), deg = 2, doseRRmod = "EXP", nburnin.BMA = 1000, </span></span>
+<span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 142 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 158 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC    80.5</span></span>
-<span><span class="co">#&gt;    MCML     1.0</span></span>
-<span><span class="co">#&gt;     FMA     2.9</span></span>
-<span><span class="co">#&gt;     BMA    57.3</span></span>
+<span><span class="co">#&gt;     ERC   100.2</span></span>
+<span><span class="co">#&gt;    MCML     1.1</span></span>
+<span><span class="co">#&gt;     FMA     2.7</span></span>
+<span><span class="co">#&gt;     BMA    53.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method         Term Estimate      SE CI.lowerbound CI.upperbound Rhat   n.eff</span></span>
-<span><span class="co">#&gt;      RC  (Intercept) -0.94461 0.08409     -1.109439      -0.77979   NA      NA</span></span>
-<span><span class="co">#&gt;      RC           X1  0.44552 0.07667      0.295254       0.59579   NA      NA</span></span>
-<span><span class="co">#&gt;      RC           X2 -0.33376 0.09601     -0.521945      -0.14557   NA      NA</span></span>
-<span><span class="co">#&gt;      RC         dose  0.37904 0.10388      0.175441       0.58265   NA      NA</span></span>
-<span><span class="co">#&gt;      RC dose_squared  0.01943 0.02750     -0.034468       0.07334   NA      NA</span></span>
-<span><span class="co">#&gt;     ERC  (Intercept) -0.93189 0.08533     -1.099136      -0.76464   NA      NA</span></span>
-<span><span class="co">#&gt;     ERC           X1  0.44998 0.07678      0.299496       0.60046   NA      NA</span></span>
-<span><span class="co">#&gt;     ERC           X2 -0.33924 0.09614     -0.527664      -0.15081   NA      NA</span></span>
-<span><span class="co">#&gt;     ERC         dose  0.33858 0.10745      0.127985       0.54917   NA      NA</span></span>
-<span><span class="co">#&gt;     ERC dose_squared  0.03528 0.02841     -0.020409       0.09097   NA      NA</span></span>
-<span><span class="co">#&gt;    MCML  (Intercept) -0.91147 0.08356     -1.075241      -0.74770   NA      NA</span></span>
-<span><span class="co">#&gt;    MCML           X1  0.44619 0.07674      0.295784       0.59660   NA      NA</span></span>
-<span><span class="co">#&gt;    MCML           X2 -0.34431 0.09625     -0.532951      -0.15567   NA      NA</span></span>
-<span><span class="co">#&gt;    MCML         dose  0.31654 0.10412      0.112472       0.52061   NA      NA</span></span>
-<span><span class="co">#&gt;    MCML dose_squared  0.03800 0.02774     -0.016375       0.09237   NA      NA</span></span>
-<span><span class="co">#&gt;     FMA  (Intercept) -0.91244 0.08386     -1.076771      -0.74789   NA      NA</span></span>
-<span><span class="co">#&gt;     FMA           X1  0.44619 0.07686      0.295520       0.59764   NA      NA</span></span>
-<span><span class="co">#&gt;     FMA           X2 -0.34400 0.09627     -0.533249      -0.15610   NA      NA</span></span>
-<span><span class="co">#&gt;     FMA         dose  0.31871 0.10523      0.114880       0.52709   NA      NA</span></span>
-<span><span class="co">#&gt;     FMA dose_squared  0.03735 0.02816     -0.018766       0.09172   NA      NA</span></span>
-<span><span class="co">#&gt;     BMA  (Intercept) -0.90779 0.08101     -1.056223      -0.74279 1.03  214.00</span></span>
-<span><span class="co">#&gt;     BMA           X1  0.44552 0.07775      0.286128       0.59552 1.01  370.00</span></span>
-<span><span class="co">#&gt;     BMA           X2 -0.34361 0.09652     -0.529598      -0.15370 1.00 1242.00</span></span>
-<span><span class="co">#&gt;     BMA         dose  0.30658 0.09894      0.102541       0.49441 1.08   92.00</span></span>
-<span><span class="co">#&gt;     BMA dose_squared  0.04134 0.02564     -0.007435       0.09729 1.11  105.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method         Term Estimate      SE Rhat   n.eff</span></span>
+<span><span class="co">#&gt;      RC  (Intercept) -0.94461 0.08409   NA      NA</span></span>
+<span><span class="co">#&gt;      RC           X1  0.44552 0.07667   NA      NA</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.33376 0.09601   NA      NA</span></span>
+<span><span class="co">#&gt;      RC         dose  0.37904 0.10388   NA      NA</span></span>
+<span><span class="co">#&gt;      RC dose_squared  0.01943 0.02750   NA      NA</span></span>
+<span><span class="co">#&gt;     ERC  (Intercept) -0.93189 0.08533   NA      NA</span></span>
+<span><span class="co">#&gt;     ERC           X1  0.44998 0.07678   NA      NA</span></span>
+<span><span class="co">#&gt;     ERC           X2 -0.33924 0.09614   NA      NA</span></span>
+<span><span class="co">#&gt;     ERC         dose  0.33858 0.10745   NA      NA</span></span>
+<span><span class="co">#&gt;     ERC dose_squared  0.03528 0.02841   NA      NA</span></span>
+<span><span class="co">#&gt;    MCML  (Intercept) -0.91147 0.08356   NA      NA</span></span>
+<span><span class="co">#&gt;    MCML           X1  0.44619 0.07674   NA      NA</span></span>
+<span><span class="co">#&gt;    MCML           X2 -0.34431 0.09625   NA      NA</span></span>
+<span><span class="co">#&gt;    MCML         dose  0.31654 0.10412   NA      NA</span></span>
+<span><span class="co">#&gt;    MCML dose_squared  0.03800 0.02774   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA  (Intercept) -0.91244 0.08386   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA           X1  0.44619 0.07686   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA           X2 -0.34400 0.09627   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA         dose  0.31871 0.10523   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA dose_squared  0.03735 0.02816   NA      NA</span></span>
+<span><span class="co">#&gt;     BMA  (Intercept) -0.90779 0.08101 1.03  214.00</span></span>
+<span><span class="co">#&gt;     BMA           X1  0.44552 0.07775 1.01  370.00</span></span>
+<span><span class="co">#&gt;     BMA           X2 -0.34361 0.09652 1.00 1242.00</span></span>
+<span><span class="co">#&gt;     BMA         dose  0.30658 0.09894 1.08   92.00</span></span>
+<span><span class="co">#&gt;     BMA dose_squared  0.04134 0.02564 1.11  105.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.logreg</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                       RC         ERC        MCML         FMA         BMA</span></span>
@@ -482,7 +539,7 @@ risk models</a>.</p>
 <span><span class="va">fit.ameras.logreg.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                                family<span class="op">=</span><span class="st">"binomial"</span>, deg<span class="op">=</span><span class="fl">1</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, </span>
 <span>                                methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, niter.BMA <span class="op">=</span> <span class="fl">5000</span>, </span>
-<span>                                nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                                nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -515,43 +572,45 @@ risk models</a>.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("RC", "ERC", "MCML", "FMA", </span></span>
-<span><span class="co">#&gt;         "BMA"), deg = 1, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
-<span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;         "BMA"), deg = 1, doseRRmod = "EXP", nburnin.BMA = 1000, </span></span>
+<span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 119.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 115.6 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC    65.0</span></span>
+<span><span class="co">#&gt;      RC     0.1</span></span>
+<span><span class="co">#&gt;     ERC    63.8</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
-<span><span class="co">#&gt;     FMA     1.6</span></span>
-<span><span class="co">#&gt;     BMA    52.1</span></span>
+<span><span class="co">#&gt;     FMA     1.5</span></span>
+<span><span class="co">#&gt;     BMA    49.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound Rhat  n.eff</span></span>
-<span><span class="co">#&gt;      RC (Intercept)  -0.9760 0.07190       -1.1169       -0.8351   NA     NA</span></span>
-<span><span class="co">#&gt;      RC          X1   0.4460 0.07667        0.2957        0.5963   NA     NA</span></span>
-<span><span class="co">#&gt;      RC          X2  -0.3359 0.09596       -0.5240       -0.1478   NA     NA</span></span>
-<span><span class="co">#&gt;      RC        dose   0.4471 0.04101        0.3668        0.5275   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC (Intercept)  -0.9898 0.07216       -1.1312       -0.8483   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC          X1   0.4533 0.07667        0.3030        0.6036   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC          X2  -0.3437 0.09609       -0.5320       -0.1554   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC        dose   0.4632 0.04086        0.3831        0.5433   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML (Intercept)  -0.9725 0.07154       -1.1127       -0.8323   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML          X1   0.4469 0.07674        0.2965        0.5973   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML          X2  -0.3467 0.09618       -0.5352       -0.1582   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML        dose   0.4498 0.04105        0.3693        0.5302   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA (Intercept)  -0.9725 0.07138       -1.1131       -0.8333   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA          X1   0.4472 0.07664        0.2975        0.5981   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA          X2  -0.3465 0.09602       -0.5347       -0.1580   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA        dose   0.4497 0.04101        0.3697        0.5302   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA (Intercept)  -0.9791 0.06869       -1.1235       -0.8492 1.03 386.00</span></span>
-<span><span class="co">#&gt;     BMA          X1   0.4555 0.07669        0.3098        0.6074 1.00 482.00</span></span>
-<span><span class="co">#&gt;     BMA          X2  -0.3486 0.09589       -0.5382       -0.1523 1.02 882.00</span></span>
-<span><span class="co">#&gt;     BMA        dose   0.4523 0.04042        0.3743        0.5292 1.03 518.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method        Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC (Intercept)  -0.9760 0.07190   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X1   0.4460 0.07667   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X2  -0.3359 0.09596   NA     NA</span></span>
+<span><span class="co">#&gt;      RC        dose   0.4471 0.04101   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (Intercept)  -0.9898 0.07216   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X1   0.4533 0.07667   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X2  -0.3437 0.09609   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC        dose   0.4632 0.04086   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (Intercept)  -0.9725 0.07154   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X1   0.4469 0.07674   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X2  -0.3467 0.09618   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML        dose   0.4498 0.04105   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (Intercept)  -0.9725 0.07138   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X1   0.4472 0.07664   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X2  -0.3465 0.09602   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        dose   0.4497 0.04101   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -0.9791 0.06869 1.03 386.00</span></span>
+<span><span class="co">#&gt;     BMA          X1   0.4555 0.07669 1.00 482.00</span></span>
+<span><span class="co">#&gt;     BMA          X2  -0.3486 0.09589 1.02 882.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   0.4523 0.04042 1.03 518.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.logreg.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     RC        ERC       MCML        FMA        BMA</span></span>
@@ -573,7 +632,7 @@ setting <code>deg=2</code>.</p>
 <span><span class="va">fit.ameras.poisson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.poisson"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                             family<span class="op">=</span><span class="st">"poisson"</span>, deg<span class="op">=</span><span class="fl">2</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, </span>
 <span>                             methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, niter.BMA <span class="op">=</span> <span class="fl">5000</span>, </span>
-<span>                             nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                             nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -610,48 +669,50 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "poisson", Y = "Y.poisson", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("RC", "ERC", "MCML", "FMA", </span></span>
-<span><span class="co">#&gt;         "BMA"), deg = 2, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
-<span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;         "BMA"), deg = 2, doseRRmod = "EXP", nburnin.BMA = 1000, </span></span>
+<span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 69.7 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 69.5 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC     1.8</span></span>
+<span><span class="co">#&gt;     ERC     1.2</span></span>
 <span><span class="co">#&gt;    MCML     1.5</span></span>
-<span><span class="co">#&gt;     FMA     3.6</span></span>
+<span><span class="co">#&gt;     FMA     4.0</span></span>
 <span><span class="co">#&gt;     BMA    62.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method         Term Estimate       SE CI.lowerbound CI.upperbound Rhat  n.eff</span></span>
-<span><span class="co">#&gt;      RC  (Intercept) -1.09456 0.048655      -1.18992      -0.99920   NA     NA</span></span>
-<span><span class="co">#&gt;      RC           X1  0.49070 0.041922       0.40853       0.57287   NA     NA</span></span>
-<span><span class="co">#&gt;      RC           X2 -0.37625 0.055638      -0.48530      -0.26719   NA     NA</span></span>
-<span><span class="co">#&gt;      RC         dose  0.61976 0.040375       0.54062       0.69889   NA     NA</span></span>
-<span><span class="co">#&gt;      RC dose_squared -0.03849 0.007566      -0.05332      -0.02366   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC  (Intercept) -1.09068 0.048474      -1.18569      -0.99567   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC           X1  0.49180 0.042008       0.40946       0.57414   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC           X2 -0.37855 0.055639      -0.48760      -0.26950   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC         dose  0.61138 0.039328       0.53430       0.68847   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC dose_squared -0.03626 0.007177      -0.05033      -0.02220   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML  (Intercept) -1.07519 0.046954      -1.16722      -0.98316   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML           X1  0.49897 0.041918       0.41681       0.58113   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML           X2 -0.37711 0.055643      -0.48617      -0.26805   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML         dose  0.60089 0.034218       0.53383       0.66796   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML dose_squared -0.03644 0.005719      -0.04764      -0.02523   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA  (Intercept) -1.07542 0.047056      -1.16736      -0.98339   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA           X1  0.49896 0.041800       0.41696       0.58065   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA           X2 -0.37716 0.055479      -0.48601      -0.26864   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA         dose  0.60138 0.035163       0.53336       0.67123   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA dose_squared -0.03656 0.005998      -0.04836      -0.02519   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA  (Intercept) -1.07944 0.044741      -1.16649      -0.99362 1.02 215.00</span></span>
-<span><span class="co">#&gt;     BMA           X1  0.49801 0.039956       0.42219       0.57163 1.03 435.00</span></span>
-<span><span class="co">#&gt;     BMA           X2 -0.38167 0.055527      -0.49101      -0.27220 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA         dose  0.60805 0.035663       0.54553       0.68040 1.03  87.00</span></span>
-<span><span class="co">#&gt;     BMA dose_squared -0.03798 0.006215      -0.05048      -0.02715 1.03  79.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method         Term Estimate       SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC  (Intercept) -1.09456 0.048655   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           X1  0.49070 0.041922   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.37625 0.055638   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         dose  0.61976 0.040375   NA     NA</span></span>
+<span><span class="co">#&gt;      RC dose_squared -0.03849 0.007566   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC  (Intercept) -1.09068 0.048474   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X1  0.49180 0.042008   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X2 -0.37855 0.055639   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         dose  0.61138 0.039328   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC dose_squared -0.03626 0.007177   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML  (Intercept) -1.07519 0.046954   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X1  0.49897 0.041918   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X2 -0.37711 0.055643   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         dose  0.60089 0.034218   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML dose_squared -0.03644 0.005719   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA  (Intercept) -1.07542 0.047056   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X1  0.49896 0.041800   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X2 -0.37716 0.055479   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         dose  0.60138 0.035163   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA dose_squared -0.03656 0.005998   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA  (Intercept) -1.07944 0.044741 1.02 215.00</span></span>
+<span><span class="co">#&gt;     BMA           X1  0.49801 0.039956 1.03 435.00</span></span>
+<span><span class="co">#&gt;     BMA           X2 -0.38167 0.055527 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA         dose  0.60805 0.035663 1.03  87.00</span></span>
+<span><span class="co">#&gt;     BMA dose_squared -0.03798 0.006215 1.03  79.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.poisson</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                       RC         ERC        MCML         FMA        BMA</span></span>
@@ -669,7 +730,7 @@ setting <code>deg=2</code>.</p>
 <span><span class="va">fit.ameras.poisson.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.poisson"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                                 family<span class="op">=</span><span class="st">"poisson"</span>, deg<span class="op">=</span><span class="fl">1</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, </span>
 <span>                                 methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, niter.BMA <span class="op">=</span> <span class="fl">5000</span>, </span>
-<span>                                 nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                                 nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -702,43 +763,45 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "poisson", Y = "Y.poisson", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("RC", "ERC", "MCML", "FMA", </span></span>
-<span><span class="co">#&gt;         "BMA"), deg = 1, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
-<span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;         "BMA"), deg = 1, doseRRmod = "EXP", nburnin.BMA = 1000, </span></span>
+<span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 63.3 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 61.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC     1.0</span></span>
-<span><span class="co">#&gt;    MCML     0.7</span></span>
-<span><span class="co">#&gt;     FMA     2.0</span></span>
-<span><span class="co">#&gt;     BMA    59.4</span></span>
+<span><span class="co">#&gt;     ERC     1.5</span></span>
+<span><span class="co">#&gt;    MCML     0.6</span></span>
+<span><span class="co">#&gt;     FMA     1.8</span></span>
+<span><span class="co">#&gt;     BMA    57.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound Rhat  n.eff</span></span>
-<span><span class="co">#&gt;      RC (Intercept)  -0.9650 0.04127       -1.0458       -0.8841   NA     NA</span></span>
-<span><span class="co">#&gt;      RC          X1   0.5054 0.04195        0.4232        0.5876   NA     NA</span></span>
-<span><span class="co">#&gt;      RC          X2  -0.3640 0.05560       -0.4730       -0.2550   NA     NA</span></span>
-<span><span class="co">#&gt;      RC        dose   0.4204 0.01346        0.3940        0.4468   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC (Intercept)  -0.9667 0.04134       -1.0477       -0.8856   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC          X1   0.5049 0.04202        0.4226        0.5873   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC          X2  -0.3667 0.05559       -0.4756       -0.2577   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC        dose   0.4222 0.01361        0.3955        0.4489   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML (Intercept)  -0.9173 0.04048       -0.9967       -0.8380   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML          X1   0.5129 0.04231        0.4300        0.5958   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML          X2  -0.3579 0.05582       -0.4674       -0.2485   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML        dose   0.3823 0.01231        0.3581        0.4064   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA (Intercept)  -0.9174 0.04044       -0.9969       -0.8384   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA          X1   0.5121 0.04257        0.4284        0.5950   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA          X2  -0.3584 0.05587       -0.4680       -0.2496   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA        dose   0.3826 0.01255        0.3585        0.4077   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA (Intercept)  -0.9180 0.04041       -0.9935       -0.8378 1.00 301.00</span></span>
-<span><span class="co">#&gt;     BMA          X1   0.5100 0.04121        0.4248        0.5896 1.01 364.00</span></span>
-<span><span class="co">#&gt;     BMA          X2  -0.3581 0.05584       -0.4661       -0.2460 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA        dose   0.3833 0.01343        0.3561        0.4087 1.01 371.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method        Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC (Intercept)  -0.9650 0.04127   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X1   0.5054 0.04195   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X2  -0.3640 0.05560   NA     NA</span></span>
+<span><span class="co">#&gt;      RC        dose   0.4204 0.01346   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (Intercept)  -0.9667 0.04134   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X1   0.5049 0.04202   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X2  -0.3667 0.05559   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC        dose   0.4222 0.01361   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (Intercept)  -0.9173 0.04048   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X1   0.5129 0.04231   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X2  -0.3579 0.05582   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML        dose   0.3823 0.01231   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (Intercept)  -0.9174 0.04044   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X1   0.5121 0.04257   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X2  -0.3584 0.05587   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        dose   0.3826 0.01255   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -0.9180 0.04041 1.00 301.00</span></span>
+<span><span class="co">#&gt;     BMA          X1   0.5100 0.04121 1.01 364.00</span></span>
+<span><span class="co">#&gt;     BMA          X2  -0.3581 0.05584 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   0.3833 0.01343 1.01 371.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.poisson.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     RC        ERC       MCML        FMA        BMA</span></span>
@@ -771,7 +834,7 @@ setting <code>deg=2</code>.</p>
 <span><span class="va">fit.ameras.prophaz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"status"</span>, exit<span class="op">=</span><span class="st">"time"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, </span>
 <span>                             data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"prophaz"</span>, deg<span class="op">=</span><span class="fl">2</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, </span>
 <span>                             methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, niter.BMA <span class="op">=</span> <span class="fl">5000</span>, </span>
-<span>                             nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                             nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -799,44 +862,235 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[7]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[17]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[41]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[46]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[52]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[58]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[71]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[157]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[166]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[175]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[178]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[212]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[238]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[243]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[246]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[247]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[260]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[261]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[263]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[267]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[270]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[278]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[311]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[335]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[341]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[348]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[352]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[370]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[372]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[378]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[386]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[420]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[432]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[433]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[438]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[440]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[449]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[450]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[458]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[508]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[509]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[528]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[535]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[546]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[547]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[552]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[554]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[577]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[608]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[611]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[620]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[627]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[631]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[656]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[661]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[676]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[684]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[698]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[714]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[716]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[727]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[749]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[806]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[809]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[821]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[833]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[839]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[864]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[873]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[910]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[962]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[971]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1002]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1004]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1009]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1014]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1036]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1040]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1052]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1070]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[1074]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1076]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1081]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1116]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1122]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1137]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1151]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1179]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1187]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1208]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1214]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1245]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1247]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1282]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1296]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1300]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1319]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1322]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1327]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1340]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1354]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1357]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1368]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1373]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1375]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1406]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1425]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1449]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1464]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1470]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1475]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1480]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1492]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1496]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[1517]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1524]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1527]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1541]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1553]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[1566]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1569]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1572]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1588]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1603]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1617]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[1635]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1661]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1663]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1664]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1693]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1716]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[1755]: logProb less than -1e12.</span></span>
-<span><span class="co">#&gt; warning: logProb of data node zeros[1827]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1768]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1783]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1796]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1807]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1818]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1836]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1838]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1851]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1888]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1900]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1921]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1930]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1948]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1968]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1971]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1972]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1979]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[1983]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[1991]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[1997]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2021]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2035]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2054]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2087]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2089]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2101]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2112]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2129]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2131]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2134]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2156]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2198]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2208]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2216]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2227]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2237]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2239]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2255]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2294]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2312]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2338]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2339]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2360]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2368]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2373]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2395]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2398]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2407]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2409]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2413]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2422]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2444]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2452]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2463]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2475]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2478]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2490]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2495]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2524]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2530]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2559]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2562]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2573]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2605]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2617]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2655]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2665]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2671]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2684]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2686]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2688]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2694]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2715]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2723]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2728]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2733]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2743]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2747]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2757]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2771]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2774]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2787]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2807]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2813]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2824]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2838]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2839]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2907]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2909]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2915]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2937]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2945]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2968]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2971]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2993]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node zeros[2998]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
 <span><span class="co">#&gt; running chain 2...</span></span>
-<span><span class="co">#&gt; warning: logProb of data node zeros[1635]: logProb less than -1e12.</span></span>
-<span><span class="co">#&gt; warning: logProb of data node zeros[2907]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
@@ -844,70 +1098,72 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "prophaz", Y = "status", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     X = c("X1", "X2"), exit = "time", methods = c("RC", "ERC", </span></span>
-<span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
-<span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", nburnin.BMA = 1000, </span></span>
+<span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 637.5 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 870.5 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC   529.3</span></span>
-<span><span class="co">#&gt;    MCML     0.7</span></span>
-<span><span class="co">#&gt;     FMA     2.1</span></span>
-<span><span class="co">#&gt;     BMA   105.1</span></span>
+<span><span class="co">#&gt;     ERC   765.8</span></span>
+<span><span class="co">#&gt;    MCML     0.8</span></span>
+<span><span class="co">#&gt;     FMA     2.3</span></span>
+<span><span class="co">#&gt;     BMA   101.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method         Term  Estimate      SE CI.lowerbound CI.upperbound Rhat  n.eff</span></span>
-<span><span class="co">#&gt;      RC           X1  0.629674 0.08485       0.46338      0.795971   NA     NA</span></span>
-<span><span class="co">#&gt;      RC           X2 -0.423116 0.11150      -0.64165     -0.204584   NA     NA</span></span>
-<span><span class="co">#&gt;      RC         dose  0.587614 0.08915       0.41289      0.762339   NA     NA</span></span>
-<span><span class="co">#&gt;      RC dose_squared -0.033682 0.01807      -0.06910      0.001741   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC           X1  0.636755      NA            NA            NA   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC           X2 -0.422042      NA            NA            NA   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC         dose  0.295488      NA            NA            NA   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC dose_squared -0.003357      NA            NA            NA   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML           X1  0.629162 0.08518       0.46221      0.796110   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML           X2 -0.425156 0.11196      -0.64460     -0.205715   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML         dose  0.590217 0.08046       0.43252      0.747910   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML dose_squared -0.038038 0.01523      -0.06789     -0.008184   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA           X1  0.624536 0.08542       0.45624      0.791452   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA           X2 -0.433644 0.11160      -0.65267     -0.215490   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA         dose  0.594196 0.07841       0.44136      0.749143   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA dose_squared -0.038945 0.01454      -0.06778     -0.010701   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA           X1  0.631447 0.08479       0.47316      0.794891 1.02 311.00</span></span>
-<span><span class="co">#&gt;     BMA           X2 -0.432579 0.11574      -0.66168     -0.220190 1.02 740.00</span></span>
-<span><span class="co">#&gt;     BMA         dose  0.579261 0.07815       0.42939      0.725369 1.00  89.00</span></span>
-<span><span class="co">#&gt;     BMA dose_squared -0.036336 0.01514      -0.06570     -0.006216 1.00  82.00</span></span>
-<span><span class="co">#&gt;     BMA        h0[1]  0.331844 0.05060       0.24512      0.437053 1.01 350.00</span></span>
-<span><span class="co">#&gt;     BMA        h0[2]  0.354968 0.05515       0.25388      0.474837 1.00 457.00</span></span>
-<span><span class="co">#&gt;     BMA        h0[3]  0.274038 0.04421       0.19646      0.367043 1.00 341.00</span></span>
-<span><span class="co">#&gt;     BMA        h0[4]  0.304833 0.04870       0.22042      0.413868 1.00 426.00</span></span>
-<span><span class="co">#&gt;     BMA        h0[5]  0.324187 0.05181       0.22952      0.430266 1.01 452.00</span></span>
-<span><span class="co">#&gt;     BMA        h0[6]  0.410268 0.06456       0.29767      0.541362 1.01 300.00</span></span>
-<span><span class="co">#&gt;     BMA        h0[7]  0.275961 0.04233       0.20322      0.366353 1.00 467.00</span></span>
-<span><span class="co">#&gt;     BMA        h0[8]  0.319488 0.04863       0.22558      0.427560 1.00 417.00</span></span>
-<span><span class="co">#&gt;     BMA        h0[9]  0.279575 0.04103       0.20429      0.360305 1.00 358.00</span></span>
-<span><span class="co">#&gt;     BMA       h0[10]  0.317120 0.04949       0.23321      0.431447 1.01 288.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method         Term  Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC           X1  0.629674 0.08485   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.423116 0.11150   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         dose  0.587614 0.08915   NA     NA</span></span>
+<span><span class="co">#&gt;      RC dose_squared -0.033682 0.01807   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X1  0.636755      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X2 -0.422042      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         dose  0.295488      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC dose_squared -0.003357      NA   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X1  0.629162 0.08518   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X2 -0.425156 0.11196   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         dose  0.590217 0.08046   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML dose_squared -0.038038 0.01523   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X1  0.629250 0.08557   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X2 -0.425507 0.11190   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         dose  0.589537 0.08127   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA dose_squared -0.037872 0.01546   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA           X1  0.635157 0.08523 1.00 397.00</span></span>
+<span><span class="co">#&gt;     BMA           X2 -0.423897 0.11063 1.01 747.00</span></span>
+<span><span class="co">#&gt;     BMA         dose  0.617073 0.08181 1.01 101.00</span></span>
+<span><span class="co">#&gt;     BMA dose_squared -0.042851 0.01554 1.01 116.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[1]  0.316373 0.05147 1.00 384.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[2]  0.343831 0.05275 1.00 394.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[3]  0.262707 0.04153 1.00 281.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[4]  0.294011 0.04621 1.00 410.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[5]  0.314660 0.04963 1.01 362.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[6]  0.396503 0.06335 1.00 411.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[7]  0.269226 0.03952 1.00 373.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[8]  0.309864 0.04606 1.00 326.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[9]  0.268182 0.04019 1.00 398.00</span></span>
+<span><span class="co">#&gt;     BMA       h0[10]  0.304145 0.04624 1.01 367.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.prophaz</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                       RC          ERC        MCML         FMA         BMA</span></span>
-<span><span class="co">#&gt; X1            0.62967434  0.636754979  0.62916199  0.62453646  0.63144657</span></span>
-<span><span class="co">#&gt; X2           -0.42311583 -0.422041734 -0.42515576 -0.43364414 -0.43257946</span></span>
-<span><span class="co">#&gt; dose          0.58761408  0.295487972  0.59021691  0.59419590  0.57926053</span></span>
-<span><span class="co">#&gt; dose_squared -0.03368205 -0.003356734 -0.03803829 -0.03894528 -0.03633593</span></span>
-<span><span class="co">#&gt; h0[1]                 NA           NA          NA          NA  0.33184446</span></span>
-<span><span class="co">#&gt; h0[2]                 NA           NA          NA          NA  0.35496760</span></span>
-<span><span class="co">#&gt; h0[3]                 NA           NA          NA          NA  0.27403811</span></span>
-<span><span class="co">#&gt; h0[4]                 NA           NA          NA          NA  0.30483271</span></span>
-<span><span class="co">#&gt; h0[5]                 NA           NA          NA          NA  0.32418664</span></span>
-<span><span class="co">#&gt; h0[6]                 NA           NA          NA          NA  0.41026813</span></span>
-<span><span class="co">#&gt; h0[7]                 NA           NA          NA          NA  0.27596111</span></span>
-<span><span class="co">#&gt; h0[8]                 NA           NA          NA          NA  0.31948789</span></span>
-<span><span class="co">#&gt; h0[9]                 NA           NA          NA          NA  0.27957458</span></span>
-<span><span class="co">#&gt; h0[10]                NA           NA          NA          NA  0.31712022</span></span></code></pre></div>
+<span><span class="co">#&gt; X1            0.62967434  0.636754979  0.62916199  0.62925032  0.63515662</span></span>
+<span><span class="co">#&gt; X2           -0.42311583 -0.422041734 -0.42515576 -0.42550683 -0.42389658</span></span>
+<span><span class="co">#&gt; dose          0.58761408  0.295487972  0.59021691  0.58953694  0.61707317</span></span>
+<span><span class="co">#&gt; dose_squared -0.03368205 -0.003356734 -0.03803829 -0.03787174 -0.04285062</span></span>
+<span><span class="co">#&gt; h0[1]                 NA           NA          NA          NA  0.31637277</span></span>
+<span><span class="co">#&gt; h0[2]                 NA           NA          NA          NA  0.34383087</span></span>
+<span><span class="co">#&gt; h0[3]                 NA           NA          NA          NA  0.26270690</span></span>
+<span><span class="co">#&gt; h0[4]                 NA           NA          NA          NA  0.29401059</span></span>
+<span><span class="co">#&gt; h0[5]                 NA           NA          NA          NA  0.31466013</span></span>
+<span><span class="co">#&gt; h0[6]                 NA           NA          NA          NA  0.39650271</span></span>
+<span><span class="co">#&gt; h0[7]                 NA           NA          NA          NA  0.26922630</span></span>
+<span><span class="co">#&gt; h0[8]                 NA           NA          NA          NA  0.30986447</span></span>
+<span><span class="co">#&gt; h0[9]                 NA           NA          NA          NA  0.26818217</span></span>
+<span><span class="co">#&gt; h0[10]                NA           NA          NA          NA  0.30414532</span></span></code></pre></div>
 <p>The BMA output now contains the intervals with piecewise constant
 baseline hazards, corresponding to the estimates <code>h0</code>:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -922,7 +1178,7 @@ baseline hazards, corresponding to the estimates <code>h0</code>:</p>
 <span><span class="va">fit.ameras.prophaz.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"status"</span>, exit<span class="op">=</span><span class="st">"time"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, </span>
 <span>                                 data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"prophaz"</span>, deg<span class="op">=</span><span class="fl">1</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, </span>
 <span>                                 methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, niter.BMA <span class="op">=</span> <span class="fl">5000</span>, </span>
-<span>                                 nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                                 nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -958,48 +1214,50 @@ baseline hazards, corresponding to the estimates <code>h0</code>:</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "prophaz", Y = "status", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     X = c("X1", "X2"), exit = "time", methods = c("RC", "ERC", </span></span>
-<span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
-<span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", nburnin.BMA = 1000, </span></span>
+<span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 374.7 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 419.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.1</span></span>
-<span><span class="co">#&gt;     ERC   269.7</span></span>
-<span><span class="co">#&gt;    MCML     1.1</span></span>
-<span><span class="co">#&gt;     FMA     1.1</span></span>
-<span><span class="co">#&gt;     BMA   102.7</span></span>
+<span><span class="co">#&gt;     ERC   323.0</span></span>
+<span><span class="co">#&gt;    MCML     0.4</span></span>
+<span><span class="co">#&gt;     FMA     1.3</span></span>
+<span><span class="co">#&gt;     BMA    94.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method   Term Estimate      SE CI.lowerbound CI.upperbound Rhat  n.eff</span></span>
-<span><span class="co">#&gt;      RC     X1   0.6358 0.08488        0.4695        0.8022   NA     NA</span></span>
-<span><span class="co">#&gt;      RC     X2  -0.4161 0.11144       -0.6345       -0.1977   NA     NA</span></span>
-<span><span class="co">#&gt;      RC   dose   0.4284 0.03004        0.3695        0.4873   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC     X1   0.6416      NA            NA            NA   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC     X2  -0.4220      NA            NA            NA   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC   dose   0.2812      NA            NA            NA   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML     X1   0.6462 0.08565        0.4783        0.8141   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML     X2  -0.4125 0.11253       -0.6330       -0.1919   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML   dose   0.4002 0.02908        0.3432        0.4572   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA     X1   0.6457 0.08567        0.4774        0.8142   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA     X2  -0.4125 0.11263       -0.6344       -0.1925   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA   dose   0.4001 0.02901        0.3431        0.4567   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA     X1   0.6474 0.08153        0.4888        0.8140 1.00 388.00</span></span>
-<span><span class="co">#&gt;     BMA     X2  -0.4248 0.11473       -0.6443       -0.2092 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA   dose   0.3987 0.02884        0.3427        0.4572 1.01 478.00</span></span>
-<span><span class="co">#&gt;     BMA  h0[1]   0.3646 0.05506        0.2675        0.4718 1.00 644.00</span></span>
-<span><span class="co">#&gt;     BMA  h0[2]   0.3926 0.05694        0.2857        0.5086 1.01 540.00</span></span>
-<span><span class="co">#&gt;     BMA  h0[3]   0.3036 0.04541        0.2239        0.3993 1.00 549.00</span></span>
-<span><span class="co">#&gt;     BMA  h0[4]   0.3378 0.04899        0.2479        0.4480 1.00 692.00</span></span>
-<span><span class="co">#&gt;     BMA  h0[5]   0.3615 0.05340        0.2688        0.4773 1.00 720.00</span></span>
-<span><span class="co">#&gt;     BMA  h0[6]   0.4547 0.06635        0.3319        0.5874 1.00 546.00</span></span>
-<span><span class="co">#&gt;     BMA  h0[7]   0.3080 0.04573        0.2288        0.4042 1.01 690.00</span></span>
-<span><span class="co">#&gt;     BMA  h0[8]   0.3551 0.05105        0.2575        0.4580 1.00 589.00</span></span>
-<span><span class="co">#&gt;     BMA  h0[9]   0.3091 0.04455        0.2277        0.4003 1.00 907.00</span></span>
-<span><span class="co">#&gt;     BMA h0[10]   0.3496 0.05211        0.2535        0.4542 1.01 542.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method   Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC     X1   0.6358 0.08488   NA     NA</span></span>
+<span><span class="co">#&gt;      RC     X2  -0.4161 0.11144   NA     NA</span></span>
+<span><span class="co">#&gt;      RC   dose   0.4284 0.03004   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC     X1   0.6416      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC     X2  -0.4220      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC   dose   0.2812      NA   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML     X1   0.6462 0.08565   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML     X2  -0.4125 0.11253   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML   dose   0.4002 0.02908   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA     X1   0.6457 0.08567   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA     X2  -0.4125 0.11263   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA   dose   0.4001 0.02901   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA     X1   0.6474 0.08153 1.00 388.00</span></span>
+<span><span class="co">#&gt;     BMA     X2  -0.4248 0.11473 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA   dose   0.3987 0.02884 1.01 478.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[1]   0.3646 0.05506 1.00 644.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[2]   0.3926 0.05694 1.01 540.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[3]   0.3036 0.04541 1.00 549.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[4]   0.3378 0.04899 1.00 692.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[5]   0.3615 0.05340 1.00 720.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[6]   0.4547 0.06635 1.00 546.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[7]   0.3080 0.04573 1.01 690.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[8]   0.3551 0.05105 1.00 589.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[9]   0.3091 0.04455 1.00 907.00</span></span>
+<span><span class="co">#&gt;     BMA h0[10]   0.3496 0.05211 1.01 542.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.prophaz.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                RC        ERC       MCML        FMA        BMA</span></span>
@@ -1033,7 +1291,7 @@ setting <code>deg=2</code>.</p>
 <span><span class="va">fit.ameras.multinomial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.multinomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                            family<span class="op">=</span><span class="st">"multinomial"</span>, deg<span class="op">=</span><span class="fl">2</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, </span>
 <span>                            methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, niter.BMA <span class="op">=</span> <span class="fl">5000</span>, </span>
-<span>                            nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                            nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -1067,123 +1325,74 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; ameras(data = data, family = "multinomial", Y = "Y.multinomial", </span></span>
 <span><span class="co">#&gt;     dosevars = dosevars, X = c("X1", "X2"), methods = c("RC", </span></span>
 <span><span class="co">#&gt;         "ERC", "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", </span></span>
-<span><span class="co">#&gt;     CI = c("wald.orig", "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;     nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 435.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 475.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     1.2</span></span>
-<span><span class="co">#&gt;     ERC   154.3</span></span>
-<span><span class="co">#&gt;    MCML     7.9</span></span>
-<span><span class="co">#&gt;     FMA    10.6</span></span>
-<span><span class="co">#&gt;     BMA   261.6</span></span>
+<span><span class="co">#&gt;     ERC   191.2</span></span>
+<span><span class="co">#&gt;    MCML     8.0</span></span>
+<span><span class="co">#&gt;     FMA    10.3</span></span>
+<span><span class="co">#&gt;     BMA   264.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method             Term  Estimate      SE CI.lowerbound CI.upperbound Rhat</span></span>
-<span><span class="co">#&gt;      RC  (1)_(Intercept) -1.134879 0.11395      -1.35823      -0.91153   NA</span></span>
-<span><span class="co">#&gt;      RC           (1)_X1  0.521885 0.10631       0.31352       0.73025   NA</span></span>
-<span><span class="co">#&gt;      RC           (1)_X2 -0.347821 0.14935      -0.64054      -0.05510   NA</span></span>
-<span><span class="co">#&gt;      RC         (1)_dose  0.541114 0.13250       0.28142       0.80081   NA</span></span>
-<span><span class="co">#&gt;      RC (1)_dose_squared -0.028978 0.03377      -0.09517       0.03721   NA</span></span>
-<span><span class="co">#&gt;      RC  (2)_(Intercept) -0.007547 0.08795      -0.17992       0.16483   NA</span></span>
-<span><span class="co">#&gt;      RC           (2)_X1 -0.513675 0.08620      -0.68264      -0.34471   NA</span></span>
-<span><span class="co">#&gt;      RC           (2)_X2  0.705782 0.10738       0.49532       0.91625   NA</span></span>
-<span><span class="co">#&gt;      RC         (2)_dose  0.555006 0.11504       0.32952       0.78049   NA</span></span>
-<span><span class="co">#&gt;      RC (2)_dose_squared -0.037842 0.03053      -0.09769       0.02201   NA</span></span>
-<span><span class="co">#&gt;     ERC  (1)_(Intercept) -1.139984 0.11278      -1.36104      -0.91893   NA</span></span>
-<span><span class="co">#&gt;     ERC           (1)_X1  0.524098 0.10651       0.31534       0.73286   NA</span></span>
-<span><span class="co">#&gt;     ERC           (1)_X2 -0.351142 0.14952      -0.64420      -0.05808   NA</span></span>
-<span><span class="co">#&gt;     ERC         (1)_dose  0.561788 0.12424       0.31827       0.80531   NA</span></span>
-<span><span class="co">#&gt;     ERC (1)_dose_squared -0.031891 0.02990      -0.09050       0.02672   NA</span></span>
-<span><span class="co">#&gt;     ERC  (2)_(Intercept) -0.008660 0.08626      -0.17772       0.16040   NA</span></span>
-<span><span class="co">#&gt;     ERC           (2)_X1 -0.511536 0.08638      -0.68084      -0.34223   NA</span></span>
-<span><span class="co">#&gt;     ERC           (2)_X2  0.703688 0.10757       0.49285       0.91452   NA</span></span>
-<span><span class="co">#&gt;     ERC         (2)_dose  0.563142 0.10587       0.35564       0.77065   NA</span></span>
-<span><span class="co">#&gt;     ERC (2)_dose_squared -0.036409 0.02606      -0.08748       0.01466   NA</span></span>
-<span><span class="co">#&gt;    MCML  (1)_(Intercept) -1.121541 0.11214      -1.34134      -0.90174   NA</span></span>
-<span><span class="co">#&gt;    MCML           (1)_X1  0.522503 0.10638       0.31400       0.73101   NA</span></span>
-<span><span class="co">#&gt;    MCML           (1)_X2 -0.349944 0.14943      -0.64282      -0.05707   NA</span></span>
-<span><span class="co">#&gt;    MCML         (1)_dose  0.526846 0.12549       0.28090       0.77280   NA</span></span>
-<span><span class="co">#&gt;    MCML (1)_dose_squared -0.027194 0.03020      -0.08639       0.03200   NA</span></span>
-<span><span class="co">#&gt;    MCML  (2)_(Intercept) -0.001584 0.08614      -0.17042       0.16725   NA</span></span>
-<span><span class="co">#&gt;    MCML           (2)_X1 -0.513787 0.08621      -0.68275      -0.34482   NA</span></span>
-<span><span class="co">#&gt;    MCML           (2)_X2  0.703779 0.10746       0.49316       0.91440   NA</span></span>
-<span><span class="co">#&gt;    MCML         (2)_dose  0.559807 0.10680       0.35048       0.76913   NA</span></span>
-<span><span class="co">#&gt;    MCML (2)_dose_squared -0.041118 0.02628      -0.09264       0.01040   NA</span></span>
-<span><span class="co">#&gt;     FMA  (1)_(Intercept) -1.125692 0.11269      -1.34744      -0.90538   NA</span></span>
-<span><span class="co">#&gt;     FMA           (1)_X1  0.522203 0.10653       0.31231       0.72993   NA</span></span>
-<span><span class="co">#&gt;     FMA           (1)_X2 -0.349524 0.14951      -0.64083      -0.05569   NA</span></span>
-<span><span class="co">#&gt;     FMA         (1)_dose  0.536663 0.12823       0.28843       0.79027   NA</span></span>
-<span><span class="co">#&gt;     FMA (1)_dose_squared -0.030264 0.03136      -0.09280       0.03040   NA</span></span>
-<span><span class="co">#&gt;     FMA  (2)_(Intercept) -0.001039 0.08607      -0.16976       0.16766   NA</span></span>
-<span><span class="co">#&gt;     FMA           (2)_X1 -0.513380 0.08602      -0.68183      -0.34437   NA</span></span>
-<span><span class="co">#&gt;     FMA           (2)_X2  0.704601 0.10763       0.49377       0.91608   NA</span></span>
-<span><span class="co">#&gt;     FMA         (2)_dose  0.557269 0.10747       0.34688       0.76959   NA</span></span>
-<span><span class="co">#&gt;     FMA (2)_dose_squared -0.040745 0.02652      -0.09316       0.01108   NA</span></span>
-<span><span class="co">#&gt;     BMA  (1)_(Intercept) -1.120533 0.11510      -1.35169      -0.90697 1.02</span></span>
-<span><span class="co">#&gt;     BMA           (1)_X1  0.518102 0.11473       0.30333       0.74778 1.00</span></span>
-<span><span class="co">#&gt;     BMA           (1)_X2 -0.342415 0.14116      -0.61963      -0.07669 1.01</span></span>
-<span><span class="co">#&gt;     BMA         (1)_dose  0.522811 0.12793       0.27114       0.79384 1.04</span></span>
-<span><span class="co">#&gt;     BMA (1)_dose_squared -0.024286 0.03270      -0.08275       0.04419 1.01</span></span>
-<span><span class="co">#&gt;     BMA  (2)_(Intercept)  0.003372 0.09478      -0.17065       0.19664 1.00</span></span>
-<span><span class="co">#&gt;     BMA           (2)_X1 -0.522597 0.08709      -0.68900      -0.35222 1.00</span></span>
-<span><span class="co">#&gt;     BMA           (2)_X2  0.708877 0.10811       0.49078       0.91896 1.00</span></span>
-<span><span class="co">#&gt;     BMA         (2)_dose  0.554817 0.12798       0.23771       0.76811 1.01</span></span>
-<span><span class="co">#&gt;     BMA (2)_dose_squared -0.037946 0.03326      -0.09258       0.04645 1.01</span></span>
-<span><span class="co">#&gt;   n.eff</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;  173.00</span></span>
-<span><span class="co">#&gt;  330.00</span></span>
-<span><span class="co">#&gt;  663.00</span></span>
-<span><span class="co">#&gt;   73.00</span></span>
-<span><span class="co">#&gt;   73.00</span></span>
-<span><span class="co">#&gt;  101.00</span></span>
-<span><span class="co">#&gt;  364.00</span></span>
-<span><span class="co">#&gt;  462.00</span></span>
-<span><span class="co">#&gt;   47.00</span></span>
-<span><span class="co">#&gt;   45.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method             Term  Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC  (1)_(Intercept) -1.134879 0.11395   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           (1)_X1  0.521885 0.10631   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           (1)_X2 -0.347821 0.14935   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         (1)_dose  0.541114 0.13250   NA     NA</span></span>
+<span><span class="co">#&gt;      RC (1)_dose_squared -0.028978 0.03377   NA     NA</span></span>
+<span><span class="co">#&gt;      RC  (2)_(Intercept) -0.007547 0.08795   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           (2)_X1 -0.513675 0.08620   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           (2)_X2  0.705782 0.10738   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         (2)_dose  0.555006 0.11504   NA     NA</span></span>
+<span><span class="co">#&gt;      RC (2)_dose_squared -0.037842 0.03053   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC  (1)_(Intercept) -1.139984 0.11278   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           (1)_X1  0.524098 0.10651   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           (1)_X2 -0.351142 0.14952   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         (1)_dose  0.561788 0.12424   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (1)_dose_squared -0.031891 0.02990   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC  (2)_(Intercept) -0.008660 0.08626   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           (2)_X1 -0.511536 0.08638   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           (2)_X2  0.703688 0.10757   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         (2)_dose  0.563142 0.10587   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (2)_dose_squared -0.036409 0.02606   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML  (1)_(Intercept) -1.121541 0.11214   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           (1)_X1  0.522503 0.10638   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           (1)_X2 -0.349944 0.14943   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         (1)_dose  0.526846 0.12549   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (1)_dose_squared -0.027194 0.03020   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML  (2)_(Intercept) -0.001584 0.08614   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           (2)_X1 -0.513787 0.08621   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           (2)_X2  0.703779 0.10746   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         (2)_dose  0.559807 0.10680   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (2)_dose_squared -0.041118 0.02628   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA  (1)_(Intercept) -1.125692 0.11269   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           (1)_X1  0.522203 0.10653   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           (1)_X2 -0.349524 0.14951   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         (1)_dose  0.536663 0.12823   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (1)_dose_squared -0.030264 0.03136   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA  (2)_(Intercept) -0.001039 0.08607   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           (2)_X1 -0.513380 0.08602   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           (2)_X2  0.704601 0.10763   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         (2)_dose  0.557269 0.10747   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (2)_dose_squared -0.040745 0.02652   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA  (1)_(Intercept) -1.120533 0.11510 1.02 173.00</span></span>
+<span><span class="co">#&gt;     BMA           (1)_X1  0.518102 0.11473 1.00 330.00</span></span>
+<span><span class="co">#&gt;     BMA           (1)_X2 -0.342415 0.14116 1.01 663.00</span></span>
+<span><span class="co">#&gt;     BMA         (1)_dose  0.522811 0.12793 1.04  73.00</span></span>
+<span><span class="co">#&gt;     BMA (1)_dose_squared -0.024286 0.03270 1.01  73.00</span></span>
+<span><span class="co">#&gt;     BMA  (2)_(Intercept)  0.003372 0.09478 1.00 101.00</span></span>
+<span><span class="co">#&gt;     BMA           (2)_X1 -0.522597 0.08709 1.00 364.00</span></span>
+<span><span class="co">#&gt;     BMA           (2)_X2  0.708877 0.10811 1.00 462.00</span></span>
+<span><span class="co">#&gt;     BMA         (2)_dose  0.554817 0.12798 1.01  47.00</span></span>
+<span><span class="co">#&gt;     BMA (2)_dose_squared -0.037946 0.03326 1.01  45.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.multinomial</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                            RC          ERC        MCML          FMA</span></span>
@@ -1217,7 +1426,7 @@ setting <code>deg=2</code>.</p>
 <span><span class="va">fit.ameras.multinomial.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.multinomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                            family<span class="op">=</span><span class="st">"multinomial"</span>, deg<span class="op">=</span><span class="fl">1</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, </span>
 <span>                            methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>,<span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, niter.BMA <span class="op">=</span> <span class="fl">5000</span>, </span>
-<span>                            nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                            nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -1251,103 +1460,64 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; ameras(data = data, family = "multinomial", Y = "Y.multinomial", </span></span>
 <span><span class="co">#&gt;     dosevars = dosevars, X = c("X1", "X2"), methods = c("RC", </span></span>
 <span><span class="co">#&gt;         "ERC", "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", </span></span>
-<span><span class="co">#&gt;     CI = c("wald.orig", "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;     nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 348.8 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 369.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.9</span></span>
-<span><span class="co">#&gt;     ERC   107.9</span></span>
-<span><span class="co">#&gt;    MCML     6.0</span></span>
-<span><span class="co">#&gt;     FMA     8.3</span></span>
-<span><span class="co">#&gt;     BMA   225.7</span></span>
+<span><span class="co">#&gt;      RC     1.0</span></span>
+<span><span class="co">#&gt;     ERC   128.1</span></span>
+<span><span class="co">#&gt;    MCML     6.1</span></span>
+<span><span class="co">#&gt;     FMA     8.0</span></span>
+<span><span class="co">#&gt;     BMA   225.9</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method            Term Estimate      SE CI.lowerbound CI.upperbound Rhat</span></span>
-<span><span class="co">#&gt;      RC (1)_(Intercept) -1.10156 0.10093      -1.29939      -0.90373   NA</span></span>
-<span><span class="co">#&gt;      RC          (1)_X1  0.52203 0.10628       0.31372       0.73034   NA</span></span>
-<span><span class="co">#&gt;      RC          (1)_X2 -0.34710 0.14929      -0.63971      -0.05448   NA</span></span>
-<span><span class="co">#&gt;      RC        (1)_dose  0.45264 0.05805       0.33885       0.56643   NA</span></span>
-<span><span class="co">#&gt;      RC (2)_(Intercept)  0.04417 0.07667      -0.10611       0.19445   NA</span></span>
-<span><span class="co">#&gt;      RC          (2)_X1 -0.51312 0.08614      -0.68196      -0.34428   NA</span></span>
-<span><span class="co">#&gt;      RC          (2)_X2  0.70793 0.10728       0.49767       0.91819   NA</span></span>
-<span><span class="co">#&gt;      RC        (2)_dose  0.43049 0.05170       0.32915       0.53183   NA</span></span>
-<span><span class="co">#&gt;     ERC (1)_(Intercept) -1.10285 0.10195      -1.30266      -0.90304   NA</span></span>
-<span><span class="co">#&gt;     ERC          (1)_X1  0.52577 0.10650       0.31704       0.73451   NA</span></span>
-<span><span class="co">#&gt;     ERC          (1)_X2 -0.35176 0.14953      -0.64483      -0.05868   NA</span></span>
-<span><span class="co">#&gt;     ERC        (1)_dose  0.46441 0.06099       0.34486       0.58396   NA</span></span>
-<span><span class="co">#&gt;     ERC (2)_(Intercept)  0.03947 0.07756      -0.11255       0.19148   NA</span></span>
-<span><span class="co">#&gt;     ERC          (2)_X1 -0.51003 0.08634      -0.67926      -0.34081   NA</span></span>
-<span><span class="co">#&gt;     ERC          (2)_X2  0.70435 0.10749       0.49368       0.91502   NA</span></span>
-<span><span class="co">#&gt;     ERC        (2)_dose  0.44543 0.05364       0.34031       0.55056   NA</span></span>
-<span><span class="co">#&gt;    MCML (1)_(Intercept) -1.09147 0.10115      -1.28972      -0.89322   NA</span></span>
-<span><span class="co">#&gt;    MCML          (1)_X1  0.52239 0.10633       0.31398       0.73081   NA</span></span>
-<span><span class="co">#&gt;    MCML          (1)_X2 -0.34934 0.14941      -0.64218      -0.05650   NA</span></span>
-<span><span class="co">#&gt;    MCML        (1)_dose  0.44410 0.05912       0.32822       0.55998   NA</span></span>
-<span><span class="co">#&gt;    MCML (2)_(Intercept)  0.05917 0.07624      -0.09027       0.20860   NA</span></span>
-<span><span class="co">#&gt;    MCML          (2)_X1 -0.51290 0.08614      -0.68175      -0.34406   NA</span></span>
-<span><span class="co">#&gt;    MCML          (2)_X2  0.70604 0.10735       0.49564       0.91645   NA</span></span>
-<span><span class="co">#&gt;    MCML        (2)_dose  0.41753 0.05156       0.31647       0.51860   NA</span></span>
-<span><span class="co">#&gt;     FMA (1)_(Intercept) -1.09114 0.10101      -1.28880      -0.89308   NA</span></span>
-<span><span class="co">#&gt;     FMA          (1)_X1  0.52245 0.10612       0.31541       0.73147   NA</span></span>
-<span><span class="co">#&gt;     FMA          (1)_X2 -0.34937 0.14960      -0.64255      -0.05564   NA</span></span>
-<span><span class="co">#&gt;     FMA        (1)_dose  0.44381 0.05893       0.32835       0.56009   NA</span></span>
-<span><span class="co">#&gt;     FMA (2)_(Intercept)  0.05869 0.07627      -0.09165       0.20799   NA</span></span>
-<span><span class="co">#&gt;     FMA          (2)_X1 -0.51272 0.08608      -0.68150      -0.34349   NA</span></span>
-<span><span class="co">#&gt;     FMA          (2)_X2  0.70611 0.10708       0.49662       0.91574   NA</span></span>
-<span><span class="co">#&gt;     FMA        (2)_dose  0.41769 0.05137       0.31727       0.51840   NA</span></span>
-<span><span class="co">#&gt;     BMA (1)_(Intercept) -1.09319 0.09280      -1.26893      -0.92000 1.00</span></span>
-<span><span class="co">#&gt;     BMA          (1)_X1  0.52119 0.10307       0.32635       0.72192 1.02</span></span>
-<span><span class="co">#&gt;     BMA          (1)_X2 -0.34994 0.15277      -0.63763      -0.04922 1.01</span></span>
-<span><span class="co">#&gt;     BMA        (1)_dose  0.44801 0.05670       0.33765       0.56194 1.00</span></span>
-<span><span class="co">#&gt;     BMA (2)_(Intercept)  0.05267 0.07548      -0.09026       0.19230 1.00</span></span>
-<span><span class="co">#&gt;     BMA          (2)_X1 -0.51037 0.08339      -0.67078      -0.34844 1.01</span></span>
-<span><span class="co">#&gt;     BMA          (2)_X2  0.70371 0.11185       0.49766       0.92805 1.01</span></span>
-<span><span class="co">#&gt;     BMA        (2)_dose  0.42386 0.05084       0.32103       0.52702 1.00</span></span>
-<span><span class="co">#&gt;   n.eff</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;      NA</span></span>
-<span><span class="co">#&gt;  245.00</span></span>
-<span><span class="co">#&gt;  390.00</span></span>
-<span><span class="co">#&gt;  447.00</span></span>
-<span><span class="co">#&gt;  254.00</span></span>
-<span><span class="co">#&gt;  324.00</span></span>
-<span><span class="co">#&gt;  373.00</span></span>
-<span><span class="co">#&gt;  650.00</span></span>
-<span><span class="co">#&gt;  313.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method            Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC (1)_(Intercept) -1.10156 0.10093   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          (1)_X1  0.52203 0.10628   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          (1)_X2 -0.34710 0.14929   NA     NA</span></span>
+<span><span class="co">#&gt;      RC        (1)_dose  0.45264 0.05805   NA     NA</span></span>
+<span><span class="co">#&gt;      RC (2)_(Intercept)  0.04417 0.07667   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          (2)_X1 -0.51312 0.08614   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          (2)_X2  0.70793 0.10728   NA     NA</span></span>
+<span><span class="co">#&gt;      RC        (2)_dose  0.43049 0.05170   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (1)_(Intercept) -1.10285 0.10195   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          (1)_X1  0.52577 0.10650   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          (1)_X2 -0.35176 0.14953   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC        (1)_dose  0.46441 0.06099   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (2)_(Intercept)  0.03947 0.07756   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          (2)_X1 -0.51003 0.08634   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          (2)_X2  0.70435 0.10749   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC        (2)_dose  0.44543 0.05364   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (1)_(Intercept) -1.09147 0.10115   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          (1)_X1  0.52239 0.10633   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          (1)_X2 -0.34934 0.14941   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML        (1)_dose  0.44410 0.05912   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (2)_(Intercept)  0.05917 0.07624   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          (2)_X1 -0.51290 0.08614   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          (2)_X2  0.70604 0.10735   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML        (2)_dose  0.41753 0.05156   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (1)_(Intercept) -1.09114 0.10101   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          (1)_X1  0.52245 0.10612   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          (1)_X2 -0.34937 0.14960   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        (1)_dose  0.44381 0.05893   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (2)_(Intercept)  0.05869 0.07627   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          (2)_X1 -0.51272 0.08608   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          (2)_X2  0.70611 0.10708   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        (2)_dose  0.41769 0.05137   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA (1)_(Intercept) -1.09319 0.09280 1.00 245.00</span></span>
+<span><span class="co">#&gt;     BMA          (1)_X1  0.52119 0.10307 1.02 390.00</span></span>
+<span><span class="co">#&gt;     BMA          (1)_X2 -0.34994 0.15277 1.01 447.00</span></span>
+<span><span class="co">#&gt;     BMA        (1)_dose  0.44801 0.05670 1.00 254.00</span></span>
+<span><span class="co">#&gt;     BMA (2)_(Intercept)  0.05267 0.07548 1.00 324.00</span></span>
+<span><span class="co">#&gt;     BMA          (2)_X1 -0.51037 0.08339 1.01 373.00</span></span>
+<span><span class="co">#&gt;     BMA          (2)_X2  0.70371 0.11185 1.01 650.00</span></span>
+<span><span class="co">#&gt;     BMA        (2)_dose  0.42386 0.05084 1.00 313.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.multinomial.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                          RC         ERC        MCML         FMA         BMA</span></span>
@@ -1373,7 +1543,7 @@ setting <code>deg=2</code>.</p>
 <span><span class="va">fit.ameras.clogit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.clogit"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                            family<span class="op">=</span><span class="st">"clogit"</span>, deg<span class="op">=</span><span class="fl">2</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, setnr<span class="op">=</span><span class="st">"setnr"</span>,</span>
 <span>                            methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, niter.BMA <span class="op">=</span> <span class="fl">5000</span>, </span>
-<span>                            nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                            nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -1406,43 +1576,45 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "clogit", Y = "Y.clogit", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     X = c("X1", "X2"), setnr = "setnr", methods = c("RC", "ERC", </span></span>
-<span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
-<span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", nburnin.BMA = 1000, </span></span>
+<span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 716.2 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 854.8 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.5</span></span>
-<span><span class="co">#&gt;     ERC   637.0</span></span>
-<span><span class="co">#&gt;    MCML     1.8</span></span>
-<span><span class="co">#&gt;     FMA     6.5</span></span>
-<span><span class="co">#&gt;     BMA    70.4</span></span>
+<span><span class="co">#&gt;      RC     0.7</span></span>
+<span><span class="co">#&gt;     ERC   776.7</span></span>
+<span><span class="co">#&gt;    MCML     2.4</span></span>
+<span><span class="co">#&gt;     FMA     8.4</span></span>
+<span><span class="co">#&gt;     BMA    66.6</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method         Term Estimate      SE CI.lowerbound CI.upperbound Rhat  n.eff</span></span>
-<span><span class="co">#&gt;      RC           X1  0.54553 0.08896       0.37116      0.719888   NA     NA</span></span>
-<span><span class="co">#&gt;      RC           X2 -0.53392 0.11711      -0.76345     -0.304387   NA     NA</span></span>
-<span><span class="co">#&gt;      RC         dose  0.68029 0.10131       0.48173      0.878856   NA     NA</span></span>
-<span><span class="co">#&gt;      RC dose_squared -0.05146 0.02242      -0.09540     -0.007522   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC           X1  0.61917 0.09205       0.43876      0.799584   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC           X2 -0.51784 0.11993      -0.75291     -0.282781   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC         dose  0.35155 0.08030       0.19416      0.508940   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC dose_squared  0.03687 0.01013       0.01701      0.056735   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML           X1  0.55083 0.08923       0.37594      0.725708   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML           X2 -0.53547 0.11712      -0.76502     -0.305906   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML         dose  0.69334 0.09315       0.51077      0.875908   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML dose_squared -0.05581 0.01950      -0.09404     -0.017584   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA           X1  0.55052 0.08917       0.37652      0.724765   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA           X2 -0.53471 0.11713      -0.76341     -0.306357   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA         dose  0.69461 0.09617       0.50415      0.883034   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA dose_squared -0.05610 0.02045      -0.09714     -0.016029   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA           X1  0.54909 0.09212       0.37679      0.736473 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA           X2 -0.53845 0.12233      -0.78635     -0.299339 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA         dose  0.70058 0.10236       0.48129      0.898905 1.00 154.00</span></span>
-<span><span class="co">#&gt;     BMA dose_squared -0.05764 0.02212      -0.10209     -0.013441 1.00 131.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method         Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC           X1  0.54553 0.08896   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.53392 0.11711   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         dose  0.68029 0.10131   NA     NA</span></span>
+<span><span class="co">#&gt;      RC dose_squared -0.05146 0.02242   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X1  0.61917 0.09205   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X2 -0.51784 0.11993   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         dose  0.35155 0.08030   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC dose_squared  0.03687 0.01013   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X1  0.55083 0.08923   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X2 -0.53547 0.11712   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         dose  0.69334 0.09315   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML dose_squared -0.05581 0.01950   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X1  0.55052 0.08917   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X2 -0.53471 0.11713   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         dose  0.69461 0.09617   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA dose_squared -0.05610 0.02045   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA           X1  0.54909 0.09212 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA           X2 -0.53845 0.12233 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA         dose  0.70058 0.10236 1.00 154.00</span></span>
+<span><span class="co">#&gt;     BMA dose_squared -0.05764 0.02212 1.00 131.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.clogit</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                       RC         ERC        MCML         FMA         BMA</span></span>
@@ -1459,7 +1631,7 @@ setting <code>deg=2</code>.</p>
 <span><span class="va">fit.ameras.clogit.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.clogit"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                            family<span class="op">=</span><span class="st">"clogit"</span>, deg<span class="op">=</span><span class="fl">1</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, setnr<span class="op">=</span><span class="st">"setnr"</span>,</span>
 <span>                            methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>,<span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, niter.BMA <span class="op">=</span> <span class="fl">5000</span>, </span>
-<span>                            nburnin.BMA <span class="op">=</span> <span class="fl">1000</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                            nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time in the order of multiple hours</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -1495,38 +1667,40 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "clogit", Y = "Y.clogit", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     X = c("X1", "X2"), setnr = "setnr", methods = c("RC", "ERC", </span></span>
-<span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", CI = c("wald.orig", </span></span>
-<span><span class="co">#&gt;         "percentile"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
+<span><span class="co">#&gt;         "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", nburnin.BMA = 1000, </span></span>
+<span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 355.1 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 421.8 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC   287.4</span></span>
-<span><span class="co">#&gt;    MCML     0.8</span></span>
-<span><span class="co">#&gt;     FMA     3.2</span></span>
-<span><span class="co">#&gt;     BMA    63.4</span></span>
+<span><span class="co">#&gt;      RC     0.4</span></span>
+<span><span class="co">#&gt;     ERC   356.3</span></span>
+<span><span class="co">#&gt;    MCML     1.0</span></span>
+<span><span class="co">#&gt;     FMA     4.1</span></span>
+<span><span class="co">#&gt;     BMA    60.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Term Estimate      SE CI.lowerbound CI.upperbound Rhat  n.eff</span></span>
-<span><span class="co">#&gt;      RC   X1   0.5463 0.08890        0.3721        0.7206   NA     NA</span></span>
-<span><span class="co">#&gt;      RC   X2  -0.5231 0.11692       -0.7522       -0.2939   NA     NA</span></span>
-<span><span class="co">#&gt;      RC dose   0.4725 0.04268        0.3888        0.5562   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC   X1   0.6405      NA            NA            NA   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC   X2  -0.4907      NA            NA            NA   NA     NA</span></span>
-<span><span class="co">#&gt;     ERC dose   0.3430      NA            NA            NA   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML   X1   0.5514 0.08905        0.3769        0.7259   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML   X2  -0.5191 0.11710       -0.7486       -0.2896   NA     NA</span></span>
-<span><span class="co">#&gt;    MCML dose   0.4575 0.04293        0.3734        0.5417   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA   X1   0.5515 0.08918        0.3764        0.7257   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA   X2  -0.5186 0.11723       -0.7487       -0.2885   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA dose   0.4578 0.04287        0.3745        0.5421   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA   X1   0.5468 0.08828        0.3823        0.7188 1.00 806.00</span></span>
-<span><span class="co">#&gt;     BMA   X2  -0.5265 0.11725       -0.7787       -0.3116 1.00 907.00</span></span>
-<span><span class="co">#&gt;     BMA dose   0.4578 0.04323        0.3715        0.5430 1.00 549.00</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC   X1   0.5463 0.08890   NA     NA</span></span>
+<span><span class="co">#&gt;      RC   X2  -0.5231 0.11692   NA     NA</span></span>
+<span><span class="co">#&gt;      RC dose   0.4725 0.04268   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC   X1   0.6405      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC   X2  -0.4907      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC dose   0.3430      NA   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML   X1   0.5514 0.08905   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML   X2  -0.5191 0.11710   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML dose   0.4575 0.04293   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA   X1   0.5515 0.08918   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA   X2  -0.5186 0.11723   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA dose   0.4578 0.04287   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA   X1   0.5468 0.08828 1.00 806.00</span></span>
+<span><span class="co">#&gt;     BMA   X2  -0.5265 0.11725 1.00 907.00</span></span>
+<span><span class="co">#&gt;     BMA dose   0.4578 0.04323 1.00 549.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.clogit.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;              RC        ERC       MCML        FMA        BMA</span></span>

@@ -89,14 +89,17 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>There are several options for confidence intervals that can be
-supplied to the <code>CI</code> argument, see below. When
-<code>ameras</code> is called with <code>methods</code> containing at
-least one of <code>RC</code>, <code>ERC</code>, and <code>MCML</code>
-and at least one of <code>FMA</code> and <code>BMA</code>,
-<code>CI</code> should be a vector of length 2 with one method for
-<code>RC</code>, <code>ERC</code> and <code>MCML</code> and one for
-<code>FMA</code> and <code>BMA</code>.</p>
+<p>To compute confidence intervals, first fit the model using
+<code>ameras</code>, then use the <code>confint</code> method to attach
+confidence intervals. Several types of confidence intervals are
+supported, which should be supplied to the <code>type</code> argument of
+<code>confint</code>, see below. When <code>confint</code> is called
+with <code>methods</code> containing at least one of <code>RC</code>,
+<code>ERC</code>, and <code>MCML</code> and at least one of
+<code>FMA</code> and <code>BMA</code>, <code>type</code> should be a
+vector of length 2 with one method for <code>RC</code>, <code>ERC</code>
+and <code>MCML</code> and one for <code>FMA</code> and
+<code>BMA</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="regression-calibration-extended-regression-calibration-and-monte-carlo-maximum-likelihood">Regression calibration, extended regression calibration, and Monte
@@ -109,7 +112,7 @@ before or after transformation. If no transformation is specified,
 intervals. When a transformation is used, <code>wald.transformed</code>
 is determined before transforming, and <code>wald.orig</code> is
 obtained after transforming using the delta method (using
-<code>transform.jacobian</code> is required). The third option is
+<code>transform.jacobian</code>). The third option is
 <code>proflik</code>, which uses the profile likelihood to compute
 confidence bounds. For this, the profile log (partial) likelihood for
 parameter
@@ -131,10 +134,10 @@ using the bisection method, with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛉</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\mathbf{\theta}}</annotation></semantics></math>
 the maximum likelihood estimate. Note that profile likelihoods are more
 computationally intensive to obtain. For this reason,
-<code>ameras</code> offers the option to only determine them for the
+<code>confint</code> offers the option to only determine them for the
 exposure-related parameters, which is the default setting. To obtain
 profile likelihood intervals for all parameters, use
-<code>params.profCI = "all"</code>.</p>
+<code>parm = "all"</code>.</p>
 <p>To illustrate, we determine the three types of confidence intervals
 for a regression calibration analysis using the example data, using a
 linear excess relative risk model with the default exponential
@@ -144,25 +147,29 @@ transformations</a>).</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span>
 <span><span class="va">dosevars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.waldorig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
-<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span><span class="op">)</span>, CI<span class="op">=</span><span class="st">"wald.orig"</span>, doseRRmod<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span></span>
+<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span><span class="op">)</span>, doseRRmod<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
+<span><span class="va">fit.ameras.waldorig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit.ameras.waldorig</span>, type<span class="op">=</span><span class="st">"wald.orig"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">fit.ameras.waldtransformed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, </span>
 <span>                                     data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span><span class="op">)</span>, </span>
-<span>                                     CI<span class="op">=</span><span class="st">"wald.transformed"</span>, doseRRmod<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span></span>
+<span>                                     doseRRmod<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
+<span><span class="va">fit.ameras.waldtransformed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit.ameras.waldtransformed</span>, type<span class="op">=</span><span class="st">"wald.transformed"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">fit.ameras.proflik</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
-<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span><span class="op">)</span>, CI<span class="op">=</span><span class="st">"proflik"</span>, doseRRmod<span class="op">=</span><span class="st">"ERR"</span>, </span>
-<span>                            params.profCI <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
+<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span><span class="op">)</span>, CI<span class="op">=</span><span class="st">"proflik"</span>, doseRRmod<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
+<span><span class="va">fit.ameras.proflik</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit.ameras.proflik</span>, type<span class="op">=</span><span class="st">"proflik"</span>, parm<span class="op">=</span><span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Obtaining profile likelihood CI for (Intercept)</span></span>
 <span><span class="co">#&gt; Obtaining profile likelihood CI for X1</span></span>
 <span><span class="co">#&gt; Obtaining profile likelihood CI for X2</span></span>
 <span><span class="co">#&gt; Obtaining profile likelihood CI for dose</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.waldorig</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
-<span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR", </span></span>
-<span><span class="co">#&gt;     CI = "wald.orig")</span></span>
+<span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total run time: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -181,8 +188,7 @@ transformations</a>).</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.waldtransformed</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
-<span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR", </span></span>
-<span><span class="co">#&gt;     CI = "wald.transformed")</span></span>
+<span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total run time: 0.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -202,14 +208,14 @@ transformations</a>).</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
 <span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR", </span></span>
-<span><span class="co">#&gt;     CI = "proflik", params.profCI = "all")</span></span>
+<span><span class="co">#&gt;     CI = "proflik")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 3.5 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 0.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     3.5</span></span>
+<span><span class="co">#&gt;      RC     0.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -230,25 +236,26 @@ either the FMA samples or Bayesian posterior samples.</p>
 <p>Again, we use the example data to illustrate.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.ameras.hpd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
-<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FMA"</span><span class="op">)</span>, CI<span class="op">=</span><span class="st">"hpd"</span>, doseRRmod<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span></span>
+<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FMA"</span><span class="op">)</span>, doseRRmod<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting FMA</span></span>
+<span><span class="va">fit.ameras.hpd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit.ameras.hpd</span>, type<span class="op">=</span><span class="st">"hpd"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">fit.ameras.percentile</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
-<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FMA"</span><span class="op">)</span>, CI<span class="op">=</span><span class="st">"percentile"</span>, </span>
-<span>                            doseRRmod<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span></span>
+<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FMA"</span><span class="op">)</span>, doseRRmod<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting FMA</span></span>
+<span><span class="va">fit.ameras.percentile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit.ameras.percentile</span>, type<span class="op">=</span><span class="st">"percentile"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.hpd</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
-<span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("FMA"), doseRRmod = "ERR", </span></span>
-<span><span class="co">#&gt;     CI = "hpd")</span></span>
+<span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("FMA"), doseRRmod = "ERR")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 1.7 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 1.6 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;     FMA     1.7</span></span>
+<span><span class="co">#&gt;     FMA     1.6</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -260,15 +267,14 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.percentile</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
-<span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("FMA"), doseRRmod = "ERR", </span></span>
-<span><span class="co">#&gt;     CI = "percentile")</span></span>
+<span><span class="co">#&gt;     X = c("X1", "X2"), methods = c("FMA"), doseRRmod = "ERR")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 1.8 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 1.7 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;     FMA     1.8</span></span>
+<span><span class="co">#&gt;     FMA     1.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

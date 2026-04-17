@@ -63,11 +63,10 @@ model averaging (Kwon et al. 2023
 ``` r
 ameras(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=NULL, 
   exit=NULL, setnr=NULL, methods="RC", deg=1, doseRRmod="ERR", transform=NULL,
-  transform.jacobian=NULL, inpar=NULL, CI=c("proflik","percentile"),
-  params.profCI="dose", maxit.profCI=20, tol.profCI=1e-2, loglim=1e-30, MFMA=100000, 
+  transform.jacobian=NULL, inpar=NULL, loglim=1e-30, MFMA=100000, 
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
   niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=1:length(dosevars), 
-  optim.method="Nelder-Mead", control=NULL, ... )
+  optim.method="Nelder-Mead", control=NULL, keep.data=TRUE, ... )
 ```
 
 ## Arguments
@@ -149,32 +148,6 @@ ameras(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=
 
   vector of initial values for log-likelihood optimization (optional).
 
-- CI:
-
-  method for calculation of 95% confidence or credible intervals (see
-  Details). For RC, ERC, and MCML, options are `"wald.orig"`,
-  `"wald.transformed"`, `"proflik"` (default `"proflik"`). For FMA and
-  BMA, options are `"percentile"` and `"hpd"` (default `"percentile"`).
-  If `methods` contains at least one of RC, ERC, and MCML and at least
-  one of FMA and BMA, `CI` must be length 2 and specify one method for
-  RC, ERC, and MCML, and one for FMA and BMA (see Details).
-
-- params.profCI:
-
-  when `CI="proflik"`, whether to obtain profile-likelihood CIs for all
-  parameters (`"all"`) or only dose-related parameters (`"dose"`,
-  default).
-
-- maxit.profCI:
-
-  maximum iterations for determining profile-likelihood CIs; passed to
-  `uniroot` (default 20).
-
-- tol.profCI:
-
-  tolerance for determining profile-likelihood CIs; passed to `uniroot`
-  (default `1e-2`).
-
 - loglim:
 
   parameter used in likelihood computations to avoid taking the log of
@@ -232,15 +205,33 @@ ameras(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=
 
   control list passed to `optim` (default `list(reltol=1e-10)`).
 
+- keep.data:
+
+  whether to attach data to the output object (default `TRUE`). When the
+  data object is large, `keep.data` can be set to `FALSE` to preserve
+  memory. The attached data is used to compute profile likelihood
+  confidence intervals, but can also be supplied seperately when
+  `keep.data=FALSE`. See
+  [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
+
 - ...:
 
   other arguments, passed to functions such as `transform`.
 
 ## Value
 
-The output is an object of class `amerasfit` with a component `call` and
-a component for every method supplied to `methods`. For each method, the
-output is a list containing
+The output is an object of class `amerasfit`. General components are
+`call` (the function call to `ameras`), `num.rows` (the number of rows
+in `data`), `num.replicates` (the number of dose replicates provided),
+`transform` (the used transformation function, if applicable),
+`transform.jacobian` (the used Jacobian function for the transformation,
+if applicable), `other.args` (any other arguments passed to ...),
+`model` (a list containing the specified model definition), and
+`CI.computed` (logical, whether confidence intervals have been attached
+by [`confint`](https://ameras.sanderroberti.com/reference/confint.md)).
+
+For each method supplied to `methods`, the output contains a list with
+components:
 
 - coefficients:
 
@@ -249,14 +240,6 @@ output is a list containing
 - sd:
 
   named vector of standard deviations.
-
-- CI:
-
-  data frame with columns `lower` and `upper` giving 95% confidence
-  bounds or credible interval bounds. When the CI method is `"proflik"`,
-  the data frame also has columns `pval.lower` and `pval.upper`
-  (p-values to verify convergence of the root finder) and `iter.lower`
-  and `iter.upper` (number of iterations used by `uniroot`).
 
 - runtime:
 
@@ -268,19 +251,25 @@ For RC, ERC, and MCML the following additional output is included:
 
   covariance matrix for the full parameter vector.
 
-- convergence.optim:
+- optim:
 
-  convergence code as returned by `optim`, with 0 indicating convergence
-  and 1 indicating that the maximal number of iterations was reached.
-
-- counts.optim:
-
-  number of function evaluations used in the model fit returned by
-  `optim`.
+  a list object with results returned by optim. Components are `par`
+  (raw parameters before applying a transformation if applicable),
+  `hessian` (Hessian matrix for `par`), `convergence` (convergence code
+  with 0 indicating convergence and 1 indicating that the maximal number
+  of iterations was reached), and `counts` (the number of likelihood
+  function evaluations used during optimization).
 
 - loglik:
 
   log-likelihood value at the optimum.
+
+For RC and ERC, the output additionally contains:
+
+- ERC:
+
+  logical, whether the output is for ERC (`ERC=TRUE`) or RC
+  (`ERC=FALSE`).
 
 For BMA the output additionally contains:
 
@@ -316,6 +305,11 @@ For BMA the output additionally contains:
 
 Finally, for FMA the output additionally contains:
 
+- samples:
+
+  the samples generated from the normal distributions associated with
+  each dose replicate.
+
 - included.samples:
 
   the total number of samples included.
@@ -328,8 +322,10 @@ Finally, for FMA the output additionally contains:
   number of iterations without convergence are filtered out and not used
   to obtain results.
 
-The class `amerasfit` supports the methods `coef`, `summary`, and
-[traceplot](https://ameras.sanderroberti.com/reference/traceplot.md).
+The class `amerasfit` supports the methods `print`, `coef`,
+[`confint`](https://ameras.sanderroberti.com/reference/confint.md),
+`summary`, and
+[`traceplot`](https://ameras.sanderroberti.com/reference/traceplot.md).
 
 ## Details
 
@@ -339,7 +335,7 @@ A transformation can be used to reparametrize parameters internally
 should be specified when fitting linear excess relative risk and
 linear-exponential models to ensure nonnegative odds/risk/hazard. The
 included function
-[transform1](https://ameras.sanderroberti.com/reference/transform1.md)
+[`transform1`](https://ameras.sanderroberti.com/reference/transform1.md)
 applies an exponential transformation to the desired parameters, see
 [`?transform1`](https://ameras.sanderroberti.com/reference/transform1.md).
 When supplying a function to `transform`, this should be a function of
@@ -370,30 +366,12 @@ obtained during optimization, an error will be generated and a different
 transformation or bounds should be used. All output is returned in the
 original parametrization. The Jacobian of the transformation
 (`transform.jacobian`) is required when using a transformation. For
-[transform1](https://ameras.sanderroberti.com/reference/transform1.md),
+[`transform1`](https://ameras.sanderroberti.com/reference/transform1.md),
 the Jacobian is given by
-[transform1.jacobian](https://ameras.sanderroberti.com/reference/transform1jacobian.md).
+[`transform1.jacobian`](https://ameras.sanderroberti.com/reference/transform1jacobian.md).
 No transformations are used in BMA, and FMA is applied on the parameters
 using the parametrization as given in above with variances obtained
 using the delta method with the provided Jacobian function.
-
-Multiple options for confidence intervals are provided. For (extended)
-regression calibration and Monte Carlo maximum likelihood, Wald and
-profile likelihood intervals can be obtained. When a parameter
-transformation \\\bm\theta = h(\bm\eta)\\ is used,
-`CI="wald.transformed"` yields the CI \\h(\bm\eta \pm 1.96 \bm V)\\ with
-\\\bm V\\ the vector of standard deviations estimated using the inverse
-Hessian matrix, and `CI="wald.orig"` uses the delta method to obtain the
-CI \\h(\bm\eta)\pm 1.96 \bm V\_\*\\ where \\\bm V\_\*\\ is the vector of
-standard deviations estimated using \\J H^{-1} J^T\\ with \\J\\ the
-Jacobian of the transformation and \\H\\ is the Hessian. When no
-transformation is used, `CI="wald.orig"` should be used. The third
-option is `proflik`, which uses the profile likelihood to compute
-confidence bounds. For FMA and BMA, the options for confidence/credible
-intervals are `CI="percentile"` which uses 2.5% and 97.5% percentiles,
-and `CI="hpd"` which computes highest posterior density intervals using
-`HPDinterval` from the `coda` package, both using the FMA samples or
-Bayesian posterior samples.
 
 For BMA, a prior distribution for exposure-response parameters can be
 chosen when using linear or linear-exponential exposure-response model.
@@ -423,6 +401,15 @@ averaging. The interval `min(entry), max(exit))` is divided into
 of the distribution of event times among cases, and a baseline hazard
 parameter is estimated for each subinterval.
 
+## See also
+
+[`confint`](https://ameras.sanderroberti.com/reference/confint.md) for
+computing confidence intervals,
+[`summary`](https://ameras.sanderroberti.com/reference/summary.md) for a
+summary of the fitted model including confidence intervals if computed,
+[`coef`](https://ameras.sanderroberti.com/reference/coef.md) for
+extracting coefficients.
+
 ## References
 
 Roberti, S., Kwon D., Wheeler W., Pfeiffer R. (in preparation). ameras:
@@ -438,27 +425,29 @@ Studies
   ameras(data=data, family="gaussian", Y="Y.gaussian", dosevars=dosevars, 
   M=c("M1", "M2"), X=c("X1","X2")) 
 #> Fitting RC
-#> Obtaining profile likelihood CI for dose
-#> Warning: P-value for dose upper bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended
-#> Warning: P-value for dose lower bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended
-#> Obtaining profile likelihood CI for dose:M1
-#> Warning: P-value for dose:M1 upper bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended
-#> Warning: P-value for dose:M1 lower bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended
-#> Obtaining profile likelihood CI for dose:M2
-#> Warning: P-value for dose:M2 upper bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended
-#> Warning: P-value for dose:M2 lower bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended
 #> Call:
 #> ameras(data = data, family = "gaussian", Y = "Y.gaussian", dosevars = dosevars, 
 #>     M = c("M1", "M2"), X = c("X1", "X2"))
 #> 
-#> Number of individuals: 3000
+#> Number of rows: 3000
 #> Number of dose replicates: 10
 #> 
-#> Total run time: 6.3 seconds
+#> Total run time: 0.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     6.3
+#>      RC     0.3
+#> 
+#> Table of estimated model parameters:
+#> 
+#>                  RC
+#> (Intercept) -1.3796
+#> X1           0.4966
+#> X2          -0.5151
+#> dose         0.9818
+#> dose:M1      0.1739
+#> dose:M2      0.5054
+#> sigma        1.0661
 # }
 ```

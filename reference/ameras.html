@@ -83,11 +83,10 @@ Methods include regression calibration (Carroll et al. 2006 doi:10.1201/97814200
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ameras</span><span class="op">(</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span>, <span class="va">Y</span>, <span class="va">dosevars</span>, M<span class="op">=</span><span class="cn">NULL</span>, X<span class="op">=</span><span class="cn">NULL</span>, offset<span class="op">=</span><span class="cn">NULL</span>, entry<span class="op">=</span><span class="cn">NULL</span>, </span>
 <span>  exit<span class="op">=</span><span class="cn">NULL</span>, setnr<span class="op">=</span><span class="cn">NULL</span>, methods<span class="op">=</span><span class="st">"RC"</span>, deg<span class="op">=</span><span class="fl">1</span>, doseRRmod<span class="op">=</span><span class="st">"ERR"</span>, transform<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>  transform.jacobian<span class="op">=</span><span class="cn">NULL</span>, inpar<span class="op">=</span><span class="cn">NULL</span>, CI<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proflik"</span>,<span class="st">"percentile"</span><span class="op">)</span>,</span>
-<span>  params.profCI<span class="op">=</span><span class="st">"dose"</span>, maxit.profCI<span class="op">=</span><span class="fl">20</span>, tol.profCI<span class="op">=</span><span class="fl">1e-2</span>, loglim<span class="op">=</span><span class="fl">1e-30</span>, MFMA<span class="op">=</span><span class="fl">100000</span>, </span>
+<span>  transform.jacobian<span class="op">=</span><span class="cn">NULL</span>, inpar<span class="op">=</span><span class="cn">NULL</span>, loglim<span class="op">=</span><span class="fl">1e-30</span>, MFMA<span class="op">=</span><span class="fl">100000</span>, </span>
 <span>  prophaz.numints.BMA<span class="op">=</span><span class="fl">10</span>, ERRprior.BMA<span class="op">=</span><span class="st">"doubleexponential"</span>, nburnin.BMA<span class="op">=</span><span class="fl">5000</span>, </span>
 <span>  niter.BMA<span class="op">=</span><span class="fl">20000</span>, nchains.BMA<span class="op">=</span><span class="fl">2</span>, thin.BMA<span class="op">=</span><span class="fl">10</span>, included.replicates.BMA<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, </span>
-<span>  optim.method<span class="op">=</span><span class="st">"Nelder-Mead"</span>, control<span class="op">=</span><span class="cn">NULL</span>, <span class="va">...</span> <span class="op">)</span></span></code></pre></div>
+<span>  optim.method<span class="op">=</span><span class="st">"Nelder-Mead"</span>, control<span class="op">=</span><span class="cn">NULL</span>, keep.data<span class="op">=</span><span class="cn">TRUE</span>, <span class="va">...</span> <span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -142,21 +141,6 @@ Methods include regression calibration (Carroll et al. 2006 doi:10.1201/97814200
 <dt id="arg-inpar">inpar<a class="anchor" aria-label="anchor" href="#arg-inpar"></a></dt>
 <dd><p>vector of initial values for log-likelihood optimization (optional).</p></dd>
 
-<dt id="arg-ci">CI<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
-<dd><p>method for calculation of 95% confidence or credible intervals (see Details).
-For RC, ERC, and MCML, options are <code>"wald.orig"</code>, <code>"wald.transformed"</code>, <code>"proflik"</code> (default <code>"proflik"</code>).
-For FMA and BMA, options are <code>"percentile"</code> and <code>"hpd"</code> (default <code>"percentile"</code>).
-If <code>methods</code> contains at least one of RC, ERC, and MCML and at least one of FMA and BMA, <code>CI</code> must be length 2 and specify one method for RC, ERC, and MCML, and one for FMA and BMA (see Details).</p></dd>
-
-<dt id="arg-params-profci">params.profCI<a class="anchor" aria-label="anchor" href="#arg-params-profci"></a></dt>
-<dd><p>when <code>CI="proflik"</code>, whether to obtain profile-likelihood CIs for all parameters (<code>"all"</code>) or only dose-related parameters (<code>"dose"</code>, default).</p></dd>
-
-<dt id="arg-maxit-profci">maxit.profCI<a class="anchor" aria-label="anchor" href="#arg-maxit-profci"></a></dt>
-<dd><p>maximum iterations for determining profile-likelihood CIs; passed to <code>uniroot</code> (default 20).</p></dd>
-
-<dt id="arg-tol-profci">tol.profCI<a class="anchor" aria-label="anchor" href="#arg-tol-profci"></a></dt>
-<dd><p>tolerance for determining profile-likelihood CIs; passed to <code>uniroot</code> (default <code>1e-2</code>).</p></dd>
-
 <dt id="arg-loglim">loglim<a class="anchor" aria-label="anchor" href="#arg-loglim"></a></dt>
 <dd><p>parameter used in likelihood computations to avoid taking the log of very small or negative numbers via <code>log(max(x, loglim))</code> (default <code>1e-30</code>).</p></dd>
 
@@ -191,21 +175,22 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
 <dd><p>control list passed to <code>optim</code> (default <code>list(reltol=1e-10)</code>).</p></dd>
 
+<dt id="arg-keep-data">keep.data<a class="anchor" aria-label="anchor" href="#arg-keep-data"></a></dt>
+<dd><p>whether to attach data to the output object (default <code>TRUE</code>). When the data object is large, <code>keep.data</code> can be set to <code>FALSE</code> to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied seperately when <code>keep.data=FALSE</code>. See <code><a href="confint.html">confint</a></code>.</p></dd>
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>other arguments, passed to functions such as <code>transform</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The output is an object of class <code>amerasfit</code> with a component <code>call</code> and a component for every method supplied to <code>methods</code>.  For each method, the output is a list containing</p>
+    <p>The output is an object of class <code>amerasfit</code>. General components are <code>call</code> (the function call to <code>ameras</code>), <code>num.rows</code> (the number of rows in <code>data</code>), <code>num.replicates</code> (the number of dose replicates provided), <code>transform</code> (the used transformation function, if applicable), <code>transform.jacobian</code> (the used Jacobian function for the transformation, if applicable), <code>other.args</code> (any other arguments passed to ...), <code>model</code> (a list containing the specified model definition), and <code>CI.computed</code> (logical, whether confidence intervals have been attached by <code><a href="confint.html">confint</a></code>).</p>
+<p>For each method supplied to <code>methods</code>, the output contains a list with components:</p>
 <dl><dt>coefficients</dt>
 <dd><p>named vector of model coefficients.</p></dd>
 
   <dt>sd</dt>
 <dd><p>named vector of standard deviations.</p></dd>
-
-  <dt>CI</dt>
-<dd><p>data frame with columns <code>lower</code> and <code>upper</code> giving 95% confidence bounds or credible interval bounds. When the CI method is <code>"proflik"</code>, the data frame also has columns <code>pval.lower</code> and <code>pval.upper</code> (p-values to verify convergence of the root finder) and <code>iter.lower</code> and <code>iter.upper</code> (number of iterations used by <code>uniroot</code>).</p></dd>
 
   <dt>runtime</dt>
 <dd><p>string with the runtime in seconds.</p></dd>
@@ -215,14 +200,16 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 <dl><dt>vcov</dt>
 <dd><p>covariance matrix for the full parameter vector.</p></dd>
 
-  <dt>convergence.optim</dt>
-<dd><p>convergence code as returned by <code>optim</code>, with 0 indicating convergence and 1 indicating that the maximal number of iterations was reached.</p></dd>
-
-  <dt>counts.optim</dt>
-<dd><p>number of function evaluations used in the model fit returned by <code>optim</code>.</p></dd>
+  <dt>optim</dt>
+<dd><p>a list object with results returned by optim. Components are <code>par</code> (raw parameters before applying a transformation if applicable), <code>hessian</code> (Hessian matrix for <code>par</code>), <code>convergence</code> (convergence code with 0 indicating convergence and 1 indicating that the maximal number of iterations was reached), and <code>counts</code> (the number of likelihood function evaluations used during optimization).</p></dd>
 
   <dt>loglik</dt>
 <dd><p>log-likelihood value at the optimum.</p></dd>
+
+
+</dl><p>For RC and ERC, the output additionally contains:</p>
+<dl><dt>ERC</dt>
+<dd><p>logical, whether the output is for ERC (<code>ERC=TRUE</code>) or RC (<code>ERC=FALSE</code>).</p></dd>
 
 
 </dl><p>For BMA  the output additionally contains:</p>
@@ -240,26 +227,35 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 
 
 </dl><p>Finally, for FMA the output additionally contains:</p>
-<dl><dt>included.samples</dt>
+<dl><dt>samples</dt>
+<dd><p>the samples generated from the normal distributions associated with each dose replicate.</p></dd>
+
+  <dt>included.samples</dt>
 <dd><p>the total number of samples included.</p></dd>
 
   <dt>included.replicates</dt>
 <dd><p>indices of replicate exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results.</p></dd>
 
 
-</dl><p>The class <code>amerasfit</code> supports the methods <code>coef</code>, <code>summary</code>, and <a href="traceplot.html">traceplot</a>.</p>
+</dl><p>The class <code>amerasfit</code> supports the methods <code>print</code>, <code>coef</code>, <code><a href="confint.html">confint</a></code>, <code>summary</code>, and <code><a href="traceplot.html">traceplot</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at <code>transform(parameters)</code>, where <code>parameters</code> are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function <a href="transform1.html">transform1</a> applies an exponential transformation to the desired parameters, see <code><a href="transform1.html">?transform1</a></code>. When supplying a function to <code>transform</code>, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \(\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma\), where \(\bm \alpha\), \(\bm\beta_{m1}\) and \(\bm \beta_{m2}\) can be vectors, with lengths matching \(\bm X\) and \(\bm M\), respectively. \(\sigma\) is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \(Z-1\) parameter vectors in the order as given above, where \(Z\) is the number of outcome categories, with the last category chosen as the referent category. See <code><a href="../articles/transformations.html">vignette("transformations", package="ameras")</a></code> for an example of how to specify a custom transformation function.</p>
-<p>When no transformation is specified and the linear ERR model is used, <code>transform1</code> is used for ERR parameters \(\beta_1\) and \(\beta_2\) by default, with lower limits \(-1/max(D)\) for \(\beta_1\) in the linear dose-response and \((0,-1/max(D^2))\) for \((\beta_1,\beta_2)\) in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \(\beta_1\), and no transformation is used for \(\beta_2\). If effect modifiers <code>M</code> are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (<code>transform.jacobian</code>) is required when using a transformation. For <a href="transform1.html">transform1</a>, the Jacobian is given by <a href="transform1jacobian.html">transform1.jacobian</a>. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given in above with variances obtained using the delta method with the provided Jacobian function.</p>
-<p>Multiple options for confidence intervals are provided. For (extended) regression calibration and Monte Carlo maximum likelihood, Wald and profile likelihood intervals can be obtained. When a parameter transformation \(\bm\theta = h(\bm\eta)\) is used, <code>CI="wald.transformed"</code> yields the CI \(h(\bm\eta \pm 1.96 \bm V)\) with \(\bm V\) the vector of standard deviations estimated using the inverse Hessian matrix, and <code>CI="wald.orig"</code> uses the delta method to obtain the CI \(h(\bm\eta)\pm 1.96 \bm V_*\) where \(\bm V_*\) is the vector of standard deviations estimated using \(J H^{-1} J^T\) with \(J\) the Jacobian of the transformation and \(H\) is the Hessian. When no transformation is used, <code>CI="wald.orig"</code> should be used. The third option is <code>proflik</code>, which uses the profile likelihood to compute confidence bounds. For FMA and BMA, the options for confidence/credible intervals are <code>CI="percentile"</code> which uses 2.5% and 97.5% percentiles, and <code>CI="hpd"</code> which computes highest posterior density intervals using <code>HPDinterval</code> from the <code>coda</code> package, both using the FMA samples or Bayesian posterior samples.</p>
+    <p>A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at <code>transform(parameters)</code>, where <code>parameters</code> are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function <code><a href="transform1.html">transform1</a></code> applies an exponential transformation to the desired parameters, see <code><a href="transform1.html">?transform1</a></code>. When supplying a function to <code>transform</code>, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \(\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma\), where \(\bm \alpha\), \(\bm\beta_{m1}\) and \(\bm \beta_{m2}\) can be vectors, with lengths matching \(\bm X\) and \(\bm M\), respectively. \(\sigma\) is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \(Z-1\) parameter vectors in the order as given above, where \(Z\) is the number of outcome categories, with the last category chosen as the referent category. See <code><a href="../articles/transformations.html">vignette("transformations", package="ameras")</a></code> for an example of how to specify a custom transformation function.</p>
+<p>When no transformation is specified and the linear ERR model is used, <code>transform1</code> is used for ERR parameters \(\beta_1\) and \(\beta_2\) by default, with lower limits \(-1/max(D)\) for \(\beta_1\) in the linear dose-response and \((0,-1/max(D^2))\) for \((\beta_1,\beta_2)\) in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \(\beta_1\), and no transformation is used for \(\beta_2\). If effect modifiers <code>M</code> are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (<code>transform.jacobian</code>) is required when using a transformation. For <code><a href="transform1.html">transform1</a></code>, the Jacobian is given by <code><a href="transform1jacobian.html">transform1.jacobian</a></code>. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given in above with variances obtained using the delta method with the provided Jacobian function.</p>
 <p>For BMA, a prior distribution for exposure-response parameters can be chosen when using linear or linear-exponential exposure-response model. The options are normal, horshoe, and double exponential priors, and the same priors truncated at 0 to yield positive values. In particular:</p>
 <ul><li><p>Normal: \(\beta_j \sim N(0,1000)\) for all exposure-response parameters \(\beta_j\)</p></li>
 <li><p>Horseshoe (shrinkage prior): \(\tau \sim \text{Cauchy}(0,1)^+; \lambda_j \sim \text{Cauchy}(0,1)^+; \beta_j \sim N(0, \tau^2 \lambda_j^2)\). Here \(\tau\) is shared across all parameters</p></li>
 <li><p>Double exponential (shrinkage prior): \(\lambda_j \sim \text{Cauchy}(0,1)^+; \beta_j \sim \text{DoubleExponential}(0,\lambda_j)\)</p></li>
 </ul><p>For all other parameters, and when using the exponential exposure-response model or the Gaussian outcome family, the prior is \(N(0, 1000)\). For the parameter \(\sigma\) in the Gaussian family, this prior is truncated at 0.</p>
 <p>Because the proportional hazards model is not available in <code>nimble</code>, <code>ameras</code> uses a piecewise constant baseline hazard for Bayesian model averaging. The interval <code>min(entry), max(exit))</code> is divided into <code>prophaz.numints.BMA</code> subintervals with cutpoints obtained as quantiles of the distribution of event times among cases, and a baseline hazard parameter is estimated for each subinterval.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="confint.html">confint</a></code> for computing confidence intervals,
+  <code><a href="summary.html">summary</a></code> for a summary of the fitted model
+  including confidence intervals if computed, <code><a href="coef.html">coef</a></code>
+  for extracting coefficients.</p></div>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -275,28 +271,30 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 <span class="r-in"><span>  <span class="fu">ameras</span><span class="op">(</span>data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span>, Y<span class="op">=</span><span class="st">"Y.gaussian"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, </span></span>
 <span class="r-in"><span>  M<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M1"</span>, <span class="st">"M2"</span><span class="op">)</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span><span class="op">)</span> </span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting RC</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Obtaining profile likelihood CI for dose</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>P-value for dose upper bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>P-value for dose lower bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Obtaining profile likelihood CI for dose:M1</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>P-value for dose:M1 upper bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>P-value for dose:M1 lower bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Obtaining profile likelihood CI for dose:M2</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>P-value for dose:M2 upper bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>P-value for dose:M2 lower bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(data = data, family = "gaussian", Y = "Y.gaussian", dosevars = dosevars, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     M = c("M1", "M2"), X = c("X1", "X2"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of individuals: 3000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose replicates: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 6.3 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 0.3 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC     6.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC     0.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Table of estimated model parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  RC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.3796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X1           0.4966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X2          -0.5151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose         0.9818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose:M1      0.1739</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose:M2      0.5054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma        1.0661</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

@@ -44,34 +44,28 @@ model is fit by setting `doseRRmod="EXP"` as follows:
 fit.ameras.exp <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
                             family="binomial", deg=2, doseRRmod = "EXP", methods="RC")
 #> Fitting RC
-#> Obtaining profile likelihood CI for dose
-#> Obtaining profile likelihood CI for dose_squared
-#> Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :
-#> P-value for dose_squared upper bound more than 0.005 away from 0.05, reducing
-#> tol.profCI and/or increasing maxit.profCI is recommended
-#> Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :
-#> P-value for dose_squared lower bound more than 0.005 away from 0.05, reducing
-#> tol.profCI and/or increasing maxit.profCI is recommended
 summary(fit.ameras.exp)
 #> Call:
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "EXP")
 #> 
-#> Total run time: 3.7 seconds
+#> Total run time: 0.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     3.7
+#>      RC     0.3
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC  (Intercept) -0.94461 0.08409            NA            NA
-#>      RC           X1  0.44552 0.07667            NA            NA
-#>      RC           X2 -0.33376 0.09601            NA            NA
-#>      RC         dose  0.37904 0.10388       0.17336       0.57642
-#>      RC dose_squared  0.01943 0.02750      -0.03282       0.07785
+#>  Method         Term Estimate      SE
+#>      RC  (Intercept) -0.94461 0.08409
+#>      RC           X1  0.44552 0.07667
+#>      RC           X2 -0.33376 0.09601
+#>      RC         dose  0.37904 0.10388
+#>      RC dose_squared  0.01943 0.02750
+#> 
+#> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
 
 ## Linear excess relative risk
@@ -85,31 +79,28 @@ This model is fit by setting `doseRRmod="ERR"` as follows:
 fit.ameras.err <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
                             family="binomial", deg=2, doseRRmod = "ERR", methods="RC")
 #> Fitting RC
-#> Obtaining profile likelihood CI for dose
-#> Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :
-#> WARNING: Lower bound for dose is < 0 and may not exist if rescaling the
-#> variable does not help
-#> Obtaining profile likelihood CI for dose_squared
 summary(fit.ameras.err)
 #> Call:
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "ERR")
 #> 
-#> Total run time: 5.6 seconds
+#> Total run time: 0.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     5.6
+#>      RC     0.3
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC  (Intercept) -0.87359 0.09759            NA            NA
-#>      RC           X1  0.44587 0.07672            NA            NA
-#>      RC           X2 -0.33552 0.09610            NA            NA
-#>      RC         dose  0.04878 0.21283        0.0000        0.5115
-#>      RC dose_squared  0.28763 0.08100        0.1325        0.4108
+#>  Method         Term Estimate      SE
+#>      RC  (Intercept) -0.87359 0.09759
+#>      RC           X1  0.44587 0.07672
+#>      RC           X2 -0.33552 0.09610
+#>      RC         dose  0.04878 0.21283
+#>      RC dose_squared  0.28763 0.08100
+#> 
+#> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
 
 ## Linear-exponential relative risk
@@ -123,28 +114,28 @@ setting `doseRRmod="LINEXP"` as follows:
 fit.ameras.linexp <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
                             family="binomial", doseRRmod = "LINEXP", methods="RC")
 #> Fitting RC
-#> Obtaining profile likelihood CI for dose_linear
-#> Obtaining profile likelihood CI for dose_exponential
 summary(fit.ameras.linexp)
 #> Call:
 #> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
 #>     X = c("X1", "X2"), methods = "RC", doseRRmod = "LINEXP")
 #> 
-#> Total run time: 5.2 seconds
+#> Total run time: 0.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     5.2
+#>      RC     0.6
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method             Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC      (Intercept)  -0.9326 0.08592            NA            NA
-#>      RC               X1   0.4456 0.07668            NA            NA
-#>      RC               X2  -0.3343 0.09603            NA            NA
-#>      RC      dose_linear   0.3255 0.11919        0.1473        0.6339
-#>      RC dose_exponential   0.3455 0.10814        0.1452        0.5770
+#>  Method             Term Estimate      SE
+#>      RC      (Intercept)  -0.9326 0.08592
+#>      RC               X1   0.4456 0.07668
+#>      RC               X2  -0.3343 0.09603
+#>      RC      dose_linear   0.3255 0.11919
+#>      RC dose_exponential   0.3455 0.10814
+#> 
+#> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
 
 ## Comparison between models
