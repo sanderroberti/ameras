@@ -29,7 +29,7 @@ all_methods <- c("RC","ERC","MCML","FMA","BMA")
 
 fit_combination <- function(family, Y, doseRRmod=NULL, deg, X, M, 
                             methods="RC", data, dosevars, niter.BMA=1000,
-                            nburnin.BMA = 200, nthin.BMA = 1, CI=c("wald.orig","percentile") ) {
+                            nburnin.BMA = 200, nthin.BMA = 1 ) {
   args <- list(
     data         = data,
     family       = family,
@@ -41,8 +41,7 @@ fit_combination <- function(family, Y, doseRRmod=NULL, deg, X, M,
     M            = M,
     nburnin.BMA  = nburnin.BMA,
     niter.BMA    = niter.BMA,
-    nthin.BMA    = nthin.BMA,
-    CI           = CI
+    nthin.BMA    = nthin.BMA
   )
   if (!is.null(doseRRmod)) args$doseRRmod <- doseRRmod
   if (family == "prophaz") args$exit <- "time"

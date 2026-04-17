@@ -20,8 +20,8 @@
       fit[[method]]$CI
     Output
                          lower        upper
-      dose          0.44206734  0.831798820
-      dose_squared -0.09016034 -0.003743404
+      dose          0.44207092  0.831795239
+      dose_squared -0.09015955 -0.003744198
 
 # clogit snapshot: ERC
 
@@ -45,8 +45,8 @@
       fit[[method]]$CI
     Output
                         lower      upper
-      dose         0.14202563 0.28040786
-      dose_squared 0.03550084 0.07048688
+      dose         0.14202690 0.28040659
+      dose_squared 0.03550116 0.07048656
 
 # clogit snapshot: MCML
 
@@ -69,9 +69,9 @@
     Code
       fit[[method]]$CI
     Output
-                        lower      upper
-      dose          0.4756943  0.8603701
-      dose_squared -0.0976520 -0.0159168
+                         lower       upper
+      dose          0.47569785  0.86036658
+      dose_squared -0.09765124 -0.01591755
 
 # clogit snapshot: FMA
 

@@ -20,9 +20,9 @@
       fit[[method]]$CI
     Output
                          lower       upper
-      (Intercept)  -0.96438694 -0.80463681
-      dose          0.54246609  0.69851525
-      dose_squared -0.05454144 -0.02564349
+      (Intercept)  -0.96438547 -0.80463828
+      dose          0.54246753  0.69851382
+      dose_squared -0.05454117 -0.02564375
 
 # Poisson snapshot: ERC
 
@@ -46,9 +46,9 @@
       fit[[method]]$CI
     Output
                          lower       upper
-      (Intercept)  -0.95919429 -0.80060683
-      dose          0.53532264  0.68717680
-      dose_squared -0.05162634 -0.02412257
+      (Intercept)  -0.95919283 -0.80060829
+      dose          0.53532404  0.68717540
+      dose_squared -0.05162609 -0.02412282
 
 # Poisson snapshot: MCML
 
@@ -72,9 +72,9 @@
       fit[[method]]$CI
     Output
                          lower       upper
-      (Intercept)  -0.92988711 -0.77881231
-      dose          0.52611911  0.66137223
-      dose_squared -0.04820575 -0.02544522
+      (Intercept)  -0.92988573 -0.77881370
+      dose          0.52612035  0.66137099
+      dose_squared -0.04820554 -0.02544543
 
 # Poisson snapshot: FMA
 

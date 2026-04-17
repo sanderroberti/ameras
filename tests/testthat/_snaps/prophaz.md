@@ -20,8 +20,8 @@
       fit[[method]]$CI
     Output
                          lower        upper
-      dose          0.40549050 0.7470818048
-      dose_squared -0.06803738 0.0000547112
+      dose          0.40549364 7.470787e-01
+      dose_squared -0.06803676 5.408559e-05
 
 # prophaz snapshot: ERC
 
@@ -70,8 +70,8 @@
       fit[[method]]$CI
     Output
                          lower       upper
-      dose          0.42768036  0.73495710
-      dose_squared -0.06722764 -0.01056395
+      dose          0.42768318  0.73495428
+      dose_squared -0.06722712 -0.01056447
 
 # prophaz snapshot: FMA
 

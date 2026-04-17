@@ -223,6 +223,31 @@ check_char_vec <- function(x, nm, valid=NULL, def=NULL, len=0) {
   x
 }
 
+
+required_vars <- function(m) {
+  
+  vars <- c(m$dosevars, m$X, m$M)
+  
+  if (m$family %in% c("gaussian", "binomial", "poisson", "multinomial")) {
+    vars <- c(vars, m$Y)
+  }
+  
+  if (m$family == "poisson" && !is.null(m$offset)) {
+    vars <- c(vars, m$offset)
+  }
+  
+  if (m$family == "prophaz") {
+    vars <- c(vars, m$status, m$exit)
+    if (!is.null(m$entry)) vars <- c(vars, m$entry)
+  }
+  
+  if (m$family == "clogit") {
+    vars <- c(vars, m$status, m$setnr)
+  }
+  
+  vars[!is.null(vars)]
+}
+
 check_integer <- function(x, nm, minlen=1, maxlen=0, min=NULL, max=NULL) {
   
   n <- length(x)

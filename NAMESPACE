@@ -2,7 +2,7 @@ useDynLib(ameras, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
 import(RcppEigen)
 import(methods)
-importFrom("stats", "cov", "optim", "pchisq", "quantile", "rexp",
+importFrom("stats", "cov", "optim", "pchisq", "quantile", "rexp","qnorm",
            "rnorm", "runif", "uniroot", "optimize", "model.matrix")
 importFrom("mvtnorm", "rmvnorm")
 importFrom("memoise", "memoise")
@@ -17,3 +17,4 @@ S3method(summary, amerasfit)
 S3method(print, summary.amerasfit)
 S3method(traceplot, amerasfit)
 S3method(print, amerasfit)
+S3method(confint, amerasfit)

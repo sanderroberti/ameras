@@ -1,5 +1,5 @@
 
-ameras_main <- function(family="gaussian", methods="RC", dosevars, data, deg=1, doseRRmod="ERR", transform=NULL,transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL, setnr=NULL, CI=c("proflik","percentile"), params.profCI="dose",maxit.profCI=20, tol.profCI=1e-2, unweightedFMA=FALSE, loglim=1e-30, MFMA=100000, prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=1:length(dosevars), optim.method="Nelder-Mead", control=NULL, ... ){
+ameras_main <- function(family="gaussian", methods="RC", dosevars, data, deg=1, doseRRmod="ERR", transform=NULL,transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL, setnr=NULL, unweightedFMA=FALSE, loglim=1e-30, MFMA=100000, prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=1:length(dosevars), optim.method="Nelder-Mead", control=NULL, ... ){
   if(is.null(control)) control <- list(reltol=1e-10)
   
   if(!is.null(transform) & is.null(transform.jacobian)) stop("transform.jacobian is required when using a transformation")
@@ -89,23 +89,24 @@ ameras_main <- function(family="gaussian", methods="RC", dosevars, data, deg=1, 
   }
   
   
-  results <- NULL
+  results <- list(transform=transform,
+                  transform.jacobian=transform.jacobian)
   for(method in methods){
     if(method=="MCML"){
       message("Fitting MCML")
-      fit <- ameras.mcml(family=family, dosevars=dosevars, data=data, deg=deg, transform=transform, transform.jacobian=transform.jacobian, Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status, setnr=setnr, CI=CI, params.profCI=params.profCI, maxit.profCI=maxit.profCI, tol.profCI=tol.profCI, doseRRmod=doseRRmod, loglim=loglim, control=control, optim.method=optim.method, ...)
+      fit <- ameras.mcml(family=family, dosevars=dosevars, data=data, deg=deg, transform=transform, transform.jacobian=transform.jacobian, Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status, setnr=setnr, doseRRmod=doseRRmod, loglim=loglim, control=control, optim.method=optim.method, ...)
       results <- c(results, list(MCML=fit))
     } else if(method=="RC"){
       message("Fitting RC")
-      fit <- ameras.rc(family=family, dosevars=dosevars, data=data, deg=deg, ERC=FALSE, transform=transform, transform.jacobian=transform.jacobian, Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status, setnr=setnr, CI=CI, params.profCI=params.profCI, maxit.profCI=maxit.profCI, tol.profCI=tol.profCI, doseRRmod=doseRRmod, loglim=loglim,control=control, optim.method=optim.method, ...)
+      fit <- ameras.rc(family=family, dosevars=dosevars, data=data, deg=deg, ERC=FALSE, transform=transform, transform.jacobian=transform.jacobian, Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status, setnr=setnr, doseRRmod=doseRRmod, loglim=loglim,control=control, optim.method=optim.method, ...)
       results <- c(results, list(RC=fit))
     } else if(method=="ERC"){
       message("Fitting ERC")
-      fit <- ameras.rc(family=family, dosevars=dosevars, data=data, deg=deg, ERC=TRUE, transform=transform, transform.jacobian=transform.jacobian, Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status,setnr=setnr,CI=CI, params.profCI=params.profCI, maxit.profCI=maxit.profCI, tol.profCI=tol.profCI, doseRRmod=doseRRmod, loglim=loglim,control=control, optim.method=optim.method, ...)
+      fit <- ameras.rc(family=family, dosevars=dosevars, data=data, deg=deg, ERC=TRUE, transform=transform, transform.jacobian=transform.jacobian, Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status,setnr=setnr, doseRRmod=doseRRmod, loglim=loglim,control=control, optim.method=optim.method, ...)
       results <- c(results, list(ERC=fit))
     } else if(method=="FMA"){
       message("Fitting FMA")
-      fit <- ameras.fma(family=family, dosevars=dosevars, data=data, deg=deg, transform=transform,transform.jacobian=transform.jacobian, Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status, setnr=setnr,doseRRmod=doseRRmod,CI=CI, unweighted=unweightedFMA, MFMA=MFMA, control=control, ...)
+      fit <- ameras.fma(family=family, dosevars=dosevars, data=data, deg=deg, transform=transform,transform.jacobian=transform.jacobian, Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status, setnr=setnr,doseRRmod=doseRRmod, unweighted=unweightedFMA, MFMA=MFMA, control=control, ...)
       results <- c(results, list(FMA=fit))
     } else if(method=="BMA"){
       message("Fitting BMA")
@@ -116,7 +117,7 @@ ameras_main <- function(family="gaussian", methods="RC", dosevars, data, deg=1, 
       } else{
         increps <- NULL
       }
-      fit <- ameras.bma(family=family, dosevars=dosevars, data=data, deg=deg, transform=transform, Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status,setnr=setnr, doseRRmod=doseRRmod,ERRprior=ERRprior.BMA, prophaz_numints=prophaz.numints.BMA, nburnin=nburnin.BMA, niter=niter.BMA, nchains=nchains.BMA, thin=thin.BMA, CI=CI, control=control, included.replicates=increps, optim.method=optim.method, ...)
+      fit <- ameras.bma(family=family, dosevars=dosevars, data=data, deg=deg, transform=transform, Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status,setnr=setnr, doseRRmod=doseRRmod,ERRprior=ERRprior.BMA, prophaz_numints=prophaz.numints.BMA, nburnin=nburnin.BMA, niter=niter.BMA, nchains=nchains.BMA, thin=thin.BMA, control=control, included.replicates=increps, optim.method=optim.method, ...)
       results <- c(results, list(BMA=fit))
     }
     
@@ -126,10 +127,10 @@ ameras_main <- function(family="gaussian", methods="RC", dosevars, data, deg=1, 
 }
 
 ameras <- function(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=NULL, exit=NULL, setnr=NULL,
-                   methods="RC", deg=1, doseRRmod="ERR", transform=NULL, transform.jacobian=NULL, inpar=NULL, CI=c("proflik","percentile"),
-                   params.profCI="dose", maxit.profCI=20, tol.profCI=1e-2, loglim=1e-30, MFMA=100000, prophaz.numints.BMA=10, 
-                   ERRprior.BMA="doubleexponential", nburnin.BMA=5000, niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=1:length(dosevars), 
-                   optim.method="Nelder-Mead", control=NULL, ... ){
+                   methods="RC", deg=1, doseRRmod="ERR", transform=NULL, transform.jacobian=NULL, inpar=NULL, loglim=1e-30, 
+                   MFMA=100000, prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, niter.BMA=20000, 
+                   nchains.BMA=2, thin.BMA=10, included.replicates.BMA=1:length(dosevars), 
+                   optim.method="Nelder-Mead", control=NULL, keep.data=TRUE, ... ){
   
   # Check for errors
   check_df(data) 
@@ -188,18 +189,50 @@ ameras <- function(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=
   
   # Need variable numbers for M
   M <- getVarNumbers(M, data)
-  ret <- c(list(call=match.call(),
-                num.individuals=nrow(data),
-                num.replicates=length(dosevars)),
-           ameras_main(family, methods=methods, dosevars, data, deg, doseRRmod=doseRRmod, 
-                       transform=transform, transform.jacobian=transform.jacobian, setnr=setnr,
-                       Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status, 
-                       CI=CI, params.profCI=params.profCI, maxit.profCI=maxit.profCI, tol.profCI=tol.profCI, 
-                       loglim=loglim, MFMA=MFMA, prophaz.numints.BMA=prophaz.numints.BMA, 
-                       ERRprior.BMA=ERRprior.BMA, nburnin.BMA=nburnin.BMA, niter.BMA=niter.BMA, 
-                       nchains.BMA=nchains.BMA, thin.BMA=thin.BMA, 
-                       included.replicates.BMA=included.replicates.BMA, control=control, 
-                       optim.method=optim.method, ... )
+  
+  # Add mean dose for RC and ERC to the data
+  data$rcdose_ameras <- rowMeans(data[,dosevars, drop=FALSE])
+  
+  model_list <- list(
+    data      = if (keep.data) data else NULL,
+    keep.data = keep.data,
+    family    = family,
+    dosevars  = dosevars,
+    Y         = Y,
+    M         = M,
+    X         = X,
+    offset    = offset,
+    entry     = entry,
+    exit      = exit,
+    status    = status,
+    setnr     = setnr,
+    deg       = deg,
+    doseRRmod = doseRRmod,
+    loglim    = loglim,
+    optim.method = optim.method
+  )
+  
+  memoise::forget(proflik) # To avoid conflicts with existing cache when determining profile likelihood CI's
+  
+  result <- ameras_main(family, methods=methods, dosevars, data, deg, doseRRmod=doseRRmod, 
+                        transform=transform, transform.jacobian=transform.jacobian, setnr=setnr,
+                        Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status, 
+                        loglim=loglim, MFMA=MFMA, prophaz.numints.BMA=prophaz.numints.BMA, 
+                        ERRprior.BMA=ERRprior.BMA, nburnin.BMA=nburnin.BMA, niter.BMA=niter.BMA, 
+                        nchains.BMA=nchains.BMA, thin.BMA=thin.BMA, 
+                        included.replicates.BMA=included.replicates.BMA, control=control, 
+                        optim.method=optim.method, ... )
+  ret <- c(list(
+    call               = match.call(),
+    num.rows           = nrow(data),
+    num.replicates     = length(dosevars),
+    transform          = result$transform,
+    transform.jacobian = result$transform.jacobian,
+    other.args         = list(...),
+    model              = model_list,
+    CI.computed        = FALSE
+  ),
+  result[setdiff(names(result), c("transform", "transform.jacobian"))]
   )
   
   ret <- new_amerasfit(ret)

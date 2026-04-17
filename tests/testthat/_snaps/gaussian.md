@@ -20,10 +20,10 @@
       fit[[method]]$CI
     Output
                         lower      upper
-      (Intercept)  -0.9291155 -0.7901741
-      dose          0.3178348  0.5069575
-      dose_squared  0.1701915  0.2145681
-      sigma         1.0728956  1.1286005
+      (Intercept)  -0.9291143 -0.7901754
+      dose          0.3178365  0.5069558
+      dose_squared  0.1701919  0.2145677
+      sigma         1.0728961  1.1286000
 
 # gaussian snapshot: ERC
 
@@ -47,10 +47,10 @@
       fit[[method]]$CI
     Output
                         lower      upper
-      (Intercept)  -0.9270183 -0.7881633
-      dose          0.3128039  0.5019410
-      dose_squared  0.1715048  0.2159973
-      sigma         1.0720634  1.1276660
+      (Intercept)  -0.9270170 -0.7881645
+      dose          0.3128056  0.5019393
+      dose_squared  0.1715052  0.2159968
+      sigma         1.0720639  1.1276655
 
 # gaussian snapshot: MCML
 
@@ -74,10 +74,10 @@
       fit[[method]]$CI
     Output
                         lower      upper
-      (Intercept)  -0.9352355 -0.7913369
-      dose          0.3903659  0.5855696
-      dose_squared  0.1261392  0.1704392
-      sigma         1.1219198  1.1801708
+      (Intercept)  -0.9352342 -0.7913382
+      dose          0.3903677  0.5855679
+      dose_squared  0.1261396  0.1704388
+      sigma         1.1219203  1.1801702
 
 # gaussian snapshot: FMA
 

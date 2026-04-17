@@ -20,9 +20,9 @@
       fit$RC$CI
     Output
                        lower      upper
-      (Intercept) -1.2902347 -0.9525342
-      X1           0.2882924  0.5866640
-      dose         0.5511547  1.1071500
+      (Intercept) -1.2902316 -0.9525373
+      X1           0.2882951  0.5866612
+      dose         0.5511598  1.1071449
 
 # snapshot: binomial_ERR_deg2
 
@@ -46,10 +46,10 @@
       fit$RC$CI
     Output
                         lower      upper
-      (Intercept)  -1.1183594 -0.7425606
-      X1            0.2925348  0.5926215
-      dose         -0.3738234  0.4449633
-      dose_squared  0.1281829  0.4394740
+      (Intercept)  -1.1183559 -0.7425640
+      X1            0.2925376  0.5926187
+      dose         -0.3738159  0.4449557
+      dose_squared  0.1281858  0.4394711
 
 # snapshot: binomial_EXP_deg1
 
@@ -73,9 +73,9 @@
       fit$RC$CI
     Output
                        lower      upper
-      (Intercept) -1.1745972 -0.9004379
-      X1           0.2928347  0.5927314
-      dose         0.3615604  0.5215297
+      (Intercept) -1.1745946 -0.9004404
+      X1           0.2928374  0.5927286
+      dose         0.3615619  0.5215283
 
 # snapshot: binomial_EXP_deg2
 
@@ -99,10 +99,10 @@
       fit$RC$CI
     Output
                          lower       upper
-      (Intercept)  -1.16297733 -0.83898747
-      X1            0.29248581  0.59237114
-      dose          0.15999088  0.56649226
-      dose_squared -0.03156948  0.07623692
+      (Intercept)  -1.16297436 -0.83899045
+      X1            0.29248856  0.59236839
+      dose          0.15999461  0.56648852
+      dose_squared -0.03156849  0.07623593
 
 # snapshot: binomial_LINEXP_deg2
 
@@ -126,10 +126,10 @@
       fit$RC$CI
     Output
                              lower      upper
-      (Intercept)      -1.15388040 -0.8246429
-      X1                0.29245674  0.5923965
-      dose_linear       0.08452973  0.5362356
-      dose_exponential  0.13781776  0.5667478
+      (Intercept)      -1.15387738 -0.8246459
+      X1                0.29245950  0.5923937
+      dose_linear       0.08453388  0.5362315
+      dose_exponential  0.13782170  0.5667439
 
 # binomial snapshot: ERC
 
@@ -153,9 +153,9 @@
       fit[[method]]$CI
     Output
                           lower       upper
-      (Intercept)  -0.880297725 -0.60392002
-      dose          0.090353622  0.49717344
-      dose_squared -0.008554199  0.09771152
+      (Intercept)  -0.880295186 -0.60392256
+      dose          0.090357360  0.49716971
+      dose_squared -0.008553222  0.09771054
 
 # binomial snapshot: MCML
 
@@ -179,9 +179,9 @@
       fit[[method]]$CI
     Output
                          lower       upper
-      (Intercept)  -0.86955547 -0.59584667
-      dose          0.08834103  0.49366017
-      dose_squared -0.01342854  0.09487278
+      (Intercept)  -0.86955295 -0.59584918
+      dose          0.08834476  0.49365645
+      dose_squared -0.01342755  0.09487179
 
 # binomial snapshot: FMA
 

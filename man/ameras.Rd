@@ -25,11 +25,10 @@ Methods include regression calibration (Carroll et al. 2006 \doi{10.1201/9781420
 \usage{
 ameras(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=NULL, 
   exit=NULL, setnr=NULL, methods="RC", deg=1, doseRRmod="ERR", transform=NULL,
-  transform.jacobian=NULL, inpar=NULL, CI=c("proflik","percentile"),
-  params.profCI="dose", maxit.profCI=20, tol.profCI=1e-2, loglim=1e-30, MFMA=100000, 
+  transform.jacobian=NULL, inpar=NULL, loglim=1e-30, MFMA=100000, 
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
   niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=1:length(dosevars), 
-  optim.method="Nelder-Mead", control=NULL, ... )
+  optim.method="Nelder-Mead", control=NULL, keep.data=TRUE, ... )
 }
 \arguments{
 \item{data}{input data frame.}
@@ -48,13 +47,6 @@ ameras(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=
 \item{transform}{function for internal parameter transformation (see Details).}
 \item{transform.jacobian}{Jacobian of the transformation function (see Details).}
 \item{inpar}{vector of initial values for log-likelihood optimization (optional).}
-\item{CI}{method for calculation of 95\% confidence or credible intervals (see Details).
-For RC, ERC, and MCML, options are \code{"wald.orig"}, \code{"wald.transformed"}, \code{"proflik"} (default \code{"proflik"}).
-For FMA and BMA, options are \code{"percentile"} and \code{"hpd"} (default \code{"percentile"}).
-If \code{methods} contains at least one of RC, ERC, and MCML and at least one of FMA and BMA, \code{CI} must be length 2 and specify one method for RC, ERC, and MCML, and one for FMA and BMA (see Details).}
-\item{params.profCI}{when \code{CI="proflik"}, whether to obtain profile-likelihood CIs for all parameters (\code{"all"}) or only dose-related parameters (\code{"dose"}, default).}
-\item{maxit.profCI}{maximum iterations for determining profile-likelihood CIs; passed to \code{uniroot} (default 20).}
-\item{tol.profCI}{tolerance for determining profile-likelihood CIs; passed to \code{uniroot} (default \code{1e-2}).}
 \item{loglim}{parameter used in likelihood computations to avoid taking the log of very small or negative numbers via \code{log(max(x, loglim))} (default \code{1e-30}).}
 \item{MFMA}{number of samples for \code{"FMA"} to compute estimates and CIs (default 100,000).}
 \item{prophaz.numints.BMA}{for \code{methods="BMA"} with \code{family="prophaz"}, the number of subintervals with constant baseline hazard (default 10). Cut points are determined based on quantiles of the event time distribution among cases.}
@@ -67,20 +59,24 @@ Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncat
 \item{included.replicates.BMA}{indices of exposure replicates used in BMA (default \ \code{1:length(dosevars)}).}
 \item{optim.method}{method used for optimization by \code{optim}. Options are \code{"Nelder-Mead"} and \code{"BFGS"}. When using Nelder-Mead, a second optimization with BFGS is run to ensure an optimal fit.}
 \item{control}{control list passed to \code{optim} (default \code{list(reltol=1e-10)}).}
+\item{keep.data}{whether to attach data to the output object (default \code{TRUE}). When the data object is large, \code{keep.data} can be set to \code{FALSE} to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied seperately when \code{keep.data=FALSE}. See \code{\link[=confint.amerasfit]{confint}}.}
 \item{\dots}{other arguments, passed to functions such as \code{transform}.}
 }
 \value{
-The output is an object of class \code{amerasfit} with a component \code{call} and a component for every method supplied to \code{methods}.  For each method, the output is a list containing 
+The output is an object of class \code{amerasfit}. General components are \code{call} (the function call to \code{ameras}), \code{num.rows} (the number of rows in \code{data}), \code{num.replicates} (the number of dose replicates provided), \code{transform} (the used transformation function, if applicable), \code{transform.jacobian} (the used Jacobian function for the transformation, if applicable), \code{other.args} (any other arguments passed to \dots), \code{model} (a list containing the specified model definition), and \code{CI.computed} (logical, whether confidence intervals have been attached by \code{\link[=confint.amerasfit]{confint}}).
+
+For each method supplied to \code{methods}, the output contains a list with components:
   \item{coefficients}{named vector of model coefficients.}
   \item{sd}{named vector of standard deviations.}
-  \item{CI}{data frame with columns \code{lower} and \code{upper} giving 95\% confidence bounds or credible interval bounds. When the CI method is \code{"proflik"}, the data frame also has columns \code{pval.lower} and \code{pval.upper} (p-values to verify convergence of the root finder) and \code{iter.lower} and \code{iter.upper} (number of iterations used by \code{uniroot}).}
   \item{runtime}{string with the runtime in seconds.}
   
 For RC, ERC, and MCML  the following additional output is included:
   \item{vcov}{covariance matrix for the full parameter vector.}
-  \item{convergence.optim}{convergence code as returned by \code{optim}, with 0 indicating convergence and 1 indicating that the maximal number of iterations was reached.}
-  \item{counts.optim}{number of function evaluations used in the model fit returned by \code{optim}.}
+  \item{optim}{a list object with results returned by optim. Components are \code{par} (raw parameters before applying a transformation if applicable), \code{hessian} (Hessian matrix for \code{par}), \code{convergence} (convergence code with 0 indicating convergence and 1 indicating that the maximal number of iterations was reached), and \code{counts} (the number of likelihood function evaluations used during optimization).}
   \item{loglik}{log-likelihood value at the optimum.}
+
+For RC and ERC, the output additionally contains:
+  \item{ERC}{logical, whether the output is for ERC (\code{ERC=TRUE}) or RC (\code{ERC=FALSE}).}
   
 For BMA  the output additionally contains:
   \item{samples}{MCMC posterior samples, as obtained from \code{nimble}. This is a list object with \code{nchains.BMA} components, each a named matrix with the samples from one chain in its rows, with columns corresponding to model parameters.} 
@@ -89,18 +85,17 @@ For BMA  the output additionally contains:
   \item{prophaz.timepoints}{for \code{family="prophaz"}, time points defining the intervals on which the estimated baseline hazards is constant; these are \code{prophaz.numints.BMA + 1} time points covering the interval \code{(min(entry), max(exit))}, based on quantiles among observed event times. See Details.}
 
 Finally, for FMA the output additionally contains:
+  \item{samples}{the samples generated from the normal distributions associated with each dose replicate.}
   \item{included.samples}{the total number of samples included.}
   \item{included.replicates}{indices of replicate exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results. }
 
-The class \code{amerasfit} supports the methods \code{coef}, \code{summary}, and \link{traceplot}.
+The class \code{amerasfit} supports the methods \code{print}, \code{coef}, \code{\link[=confint.amerasfit]{confint}}, \code{summary}, and \code{\link{traceplot}}.
 }
 
 \details{
-A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at \code{transform(parameters)}, where \code{parameters} are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function \link{transform1} applies an exponential transformation to the desired parameters, see \code{?transform1}. When supplying a function to \code{transform}, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \eqn{\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma}, where \eqn{\bm \alpha}, \eqn{\bm\beta_{m1}} and \eqn{\bm \beta_{m2}} can be vectors, with lengths matching \eqn{\bm X} and \eqn{\bm M}, respectively. \eqn{\sigma} is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \eqn{Z-1} parameter vectors in the order as given above, where \eqn{Z} is the number of outcome categories, with the last category chosen as the referent category. See \code{vignette("transformations", package="ameras")} for an example of how to specify a custom transformation function. 
+A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at \code{transform(parameters)}, where \code{parameters} are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function \code{\link{transform1}} applies an exponential transformation to the desired parameters, see \code{?transform1}. When supplying a function to \code{transform}, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \eqn{\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma}, where \eqn{\bm \alpha}, \eqn{\bm\beta_{m1}} and \eqn{\bm \beta_{m2}} can be vectors, with lengths matching \eqn{\bm X} and \eqn{\bm M}, respectively. \eqn{\sigma} is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \eqn{Z-1} parameter vectors in the order as given above, where \eqn{Z} is the number of outcome categories, with the last category chosen as the referent category. See \code{vignette("transformations", package="ameras")} for an example of how to specify a custom transformation function. 
 
-When no transformation is specified and the linear ERR model is used, \code{transform1} is used for ERR parameters \eqn{\beta_1} and \eqn{\beta_2} by default, with lower limits \eqn{-1/max(D)} for \eqn{\beta_1} in the linear dose-response and \eqn{(0,-1/max(D^2))} for \eqn{(\beta_1,\beta_2)} in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \eqn{\beta_1}, and no transformation is used for \eqn{\beta_2}. If effect modifiers \code{M} are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (\code{transform.jacobian}) is required when using a transformation. For \link{transform1}, the Jacobian is given by \link{transform1.jacobian}. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given in above with variances obtained using the delta method with the provided Jacobian function.  
-
-Multiple options for confidence intervals are provided. For (extended) regression calibration and Monte Carlo maximum likelihood, Wald and profile likelihood intervals can be obtained. When a parameter transformation \eqn{\bm\theta = h(\bm\eta)} is used, \code{CI="wald.transformed"} yields the CI \eqn{h(\bm\eta \pm 1.96 \bm V)} with \eqn{\bm V} the vector of standard deviations estimated using the inverse Hessian matrix, and \code{CI="wald.orig"} uses the delta method to obtain the CI \eqn{h(\bm\eta)\pm 1.96 \bm V_*} where \eqn{\bm V_*} is the vector of standard deviations estimated using \eqn{J H^{-1} J^T} with \eqn{J} the Jacobian of the transformation and \eqn{H} is the Hessian. When no transformation is used, \code{CI="wald.orig"} should be used. The third option is \code{proflik}, which uses the profile likelihood to compute confidence bounds. For FMA and BMA, the options for confidence/credible intervals are \code{CI="percentile"} which uses 2.5\% and 97.5\% percentiles, and \code{CI="hpd"} which computes highest posterior density intervals using \code{HPDinterval} from the \code{coda} package, both using the FMA samples or Bayesian posterior samples.
+When no transformation is specified and the linear ERR model is used, \code{transform1} is used for ERR parameters \eqn{\beta_1} and \eqn{\beta_2} by default, with lower limits \eqn{-1/max(D)} for \eqn{\beta_1} in the linear dose-response and \eqn{(0,-1/max(D^2))} for \eqn{(\beta_1,\beta_2)} in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \eqn{\beta_1}, and no transformation is used for \eqn{\beta_2}. If effect modifiers \code{M} are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (\code{transform.jacobian}) is required when using a transformation. For \code{\link{transform1}}, the Jacobian is given by \code{\link{transform1.jacobian}}. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given in above with variances obtained using the delta method with the provided Jacobian function.  
 
 For BMA, a prior distribution for exposure-response parameters can be chosen when using linear or linear-exponential exposure-response model. The options are normal, horshoe, and double exponential priors, and the same priors truncated at 0 to yield positive values. In particular:
 
@@ -112,6 +107,13 @@ For BMA, a prior distribution for exposure-response parameters can be chosen whe
 For all other parameters, and when using the exponential exposure-response model or the Gaussian outcome family, the prior is \eqn{N(0, 1000)}. For the parameter \eqn{\sigma} in the Gaussian family, this prior is truncated at 0. 
 
 Because the proportional hazards model is not available in \code{nimble}, \code{ameras} uses a piecewise constant baseline hazard for Bayesian model averaging. The interval \code{min(entry), max(exit))} is divided into \code{prophaz.numints.BMA} subintervals with cutpoints obtained as quantiles of the distribution of event times among cases, and a baseline hazard parameter is estimated for each subinterval.
+}
+
+\seealso{
+  \code{\link[=confint.amerasfit]{confint}} for computing confidence intervals,
+  \code{\link[=summary.amerasfit]{summary}} for a summary of the fitted model
+  including confidence intervals if computed, \code{\link[=coef.amerasfit]{coef}} 
+  for extracting coefficients.
 }
 
 \examples{

@@ -21,10 +21,10 @@ for(method in all_methods){
       data      = data,
       dosevars  = dosevars,
       methods   = method,
-      CI        = c("wald.orig", "percentile"),
       niter.BMA = 1000,
       nburnin.BMA = 500
     )
+    fit <- confint(fit, type=c("wald.orig","percentile"))
     expect_snapshot(fit[[method]]$coefficients)
     expect_snapshot(fit[[method]]$sd)
     expect_snapshot(fit[[method]]$CI)

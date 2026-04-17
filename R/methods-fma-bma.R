@@ -1,16 +1,8 @@
 
 
-ameras.fma <- function(family, dosevars, data, deg, transform=NULL,transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL, setnr=setnr, CI=NULL, unweighted=NULL, doseRRmod=NULL, MFMA=100000, optim.method="Nelder-Mead", ...){
+ameras.fma <- function(family, dosevars, data, deg, transform=NULL,transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL, setnr=setnr, unweighted=NULL, doseRRmod=NULL, MFMA=100000, optim.method="Nelder-Mead", ...){
   
-  # Remove build warnings
-  #HPDinterval <- as.mcmc <- NULL
-  
-  if(length(CI)==0) stop("No CI method specified")
-  CI <- CI[CI %in% c("percentile","hpd")]
-  if(length(CI)>1) stop("Provide one type of CI for FMA: one of percentile and hpd")
-  if(length(CI)==0) stop("Incorrect CI method specified, should be one of percentile and hpd")
-  
-  
+
   if(is.null(unweighted)){
     unweighted <- FALSE
   } else if(!is.logical(unweighted)){
@@ -370,25 +362,16 @@ ameras.fma <- function(family, dosevars, data, deg, transform=NULL,transform.jac
     coefs <- colMeans(FMAsamples)
     sd <- apply(FMAsamples, 2, sd)
     
-    names(coefs) <- names(sd) <- parnames
+    FMAsamples <- as.data.frame(FMAsamples)
+    names(coefs) <- names(sd) <- names(FMAsamples) <- parnames
     
-    if(CI=="percentile"){
-      CIlower=apply(FMAsamples, 2, function(x) quantile(x, .025))
-      CIupper=apply(FMAsamples, 2, function(x) quantile(x, .975))
-      CIresult <- data.frame(lower=CIlower, upper=CIupper)
-    } else if(CI=="hpd"){
-      CIresult <- as.data.frame(HPDinterval(as.mcmc(FMAsamples)))
-    }
-    
-    rownames(CIresult) <- parnames
+
     included.samples <- nrow(FMAsamples)
   } else {
     
-    coefs <- sd <- CIlower <- CIupper <- NA * FMAfits[[1]]$coef
-    CIresult <- data.frame(lower=CIlower, upper=CIupper)
-    
+    coefs <- sd <- NA * FMAfits[[1]]$coef
     names(coefs) <- names(sd) <- parnames
-    rownames(CIresult) <- parnames
+
     included.samples <- 0
   }
   
@@ -403,9 +386,9 @@ ameras.fma <- function(family, dosevars, data, deg, transform=NULL,transform.jac
   out <- list(
     coefficients=coefs,
     sd=sd,
-    CI=CIresult,
     included.replicates=included.replicates,
     included.samples=included.samples,
+    samples=FMAsamples,
     #includedfits=FMAfits,
     #allfits=allfits,
     runtime=runtime
@@ -1518,7 +1501,7 @@ nimblemod <- nimbleCode({
   }
 })
 
-ameras.bma <- function(family, dosevars, data, deg, Y=NULL, M=NULL, X=NULL, offset=NULL, entry=NULL, exit=NULL, status=NULL, setnr=setnr, CI=NULL, transform=NULL, inpar=NULL, doseRRmod=NULL, ERRprior="doubleexponential",prophaz_numints=10, nburnin=1000, niter=5000, included.replicates=1:length(dosevars), nchains=2, thin=10, optim.method="Nelder-Mead", ...){
+ameras.bma <- function(family, dosevars, data, deg, Y=NULL, M=NULL, X=NULL, offset=NULL, entry=NULL, exit=NULL, status=NULL, setnr=setnr, transform=NULL, inpar=NULL, doseRRmod=NULL, ERRprior="doubleexponential",prophaz_numints=10, nburnin=1000, niter=5000, included.replicates=1:length(dosevars), nchains=2, thin=10, optim.method="Nelder-Mead", ...){
   
   # Remove build warnings, local functions may need to be pulled out from this function
   # HPDinterval <- K <- Mlen <- Mmat <- N <- Xlen <- Xmat <- a <- as.mcmc <- 
@@ -1529,11 +1512,6 @@ ameras.bma <- function(family, dosevars, data, deg, Y=NULL, M=NULL, X=NULL, offs
   
   
   ndoses <- length(dosevars)
-  
-  if(length(CI)==0) stop("No CI method specified")
-  CI <- CI[CI %in% c("percentile","hpd")]
-  if(length(CI)>1) stop("Provide one type of CI for BMA: one of percentile and hpd")
-  if(length(CI)==0) stop("Incorrect CI method specified, should be one of percentile and hpd")
   
   if(family!="gaussian"){
     if(doseRRmod%in%c("ERR","LINEXP") & is.null(ERRprior)) {
@@ -2131,15 +2109,15 @@ ameras.bma <- function(family, dosevars, data, deg, Y=NULL, M=NULL, X=NULL, offs
   }
   
   
-  if(CI=="percentile"){
-    CIlower=apply(nimblesamples.stacked, 2, function(x) quantile(x, .025))
-    CIupper=apply(nimblesamples.stacked, 2, function(x) quantile(x, .975))
-    CIresult <- data.frame(lower=CIlower, upper=CIupper)
-  } else if(CI=="hpd"){
-    CIresult <- as.data.frame(HPDinterval(as.mcmc(nimblesamples.stacked)))
-  }
+  # if(CI=="percentile"){
+  #   CIlower=apply(nimblesamples.stacked, 2, function(x) quantile(x, .025))
+  #   CIupper=apply(nimblesamples.stacked, 2, function(x) quantile(x, .975))
+  #   CIresult <- data.frame(lower=CIlower, upper=CIupper)
+  # } else if(CI=="hpd"){
+  #   CIresult <- as.data.frame(HPDinterval(as.mcmc(nimblesamples.stacked)))
+  # }
   
-  rownames(CIresult) <- parnames
+  # rownames(CIresult) <- parnames
   
   t1 <- proc.time()
   timedif <- t1-t0
@@ -2150,7 +2128,7 @@ ameras.bma <- function(family, dosevars, data, deg, Y=NULL, M=NULL, X=NULL, offs
   
   out <- list(coefficients=coef,
               sd=sd,
-              CI=CIresult,
+              #CI=CIresult,
               Rhat=Rhat,
               samples=nimblesamples,
               included.replicates=included.replicates,

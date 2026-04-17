@@ -1,13 +1,13 @@
 
-ameras.mcml <- function(family, dosevars, data, deg, transform=NULL,transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL,setnr=setnr, CI=NULL,params.profCI=NULL, maxit.profCI=NULL,tol.profCI=NULL, doseRRmod=NULL, loglim=1e-30, optim.method="Nelder-Mead", ...){
-  if(length(CI)==0) stop("No CI method specified")
-  CI <- CI[CI %in% c("wald.orig","wald.transformed", "proflik")]
-  if(length(CI)>1) stop("Provide one type of CI for MCML: one of wald.orig, wald.transformed, and proflik")
-  if(length(CI)==0) stop("Incorrect CI method specified, should be one of wald.orig, wald.transformed, and proflik")
-  if(CI=="proflik" & !(params.profCI %in% c("dose","all"))) stop("Incorrect choice of parameters for profile likelihood CI supplied, should be either all or dose")
-  if(CI=="wald.transformed" & is.null(transform)) stop("No transformation specified, specify transformation or choose a different CI type")
-  
-  if(CI=="proflik") message("Note: computation times for profile likelihood intervals for MCML may be extensive with large datasets or complex models")
+ameras.mcml <- function(family, dosevars, data, deg, transform=NULL,transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL,setnr=setnr, doseRRmod=NULL, loglim=1e-30, optim.method="Nelder-Mead", ...){
+  # if(length(CI)==0) stop("No CI method specified")
+  # CI <- CI[CI %in% c("wald.orig","wald.transformed", "proflik")]
+  # if(length(CI)>1) stop("Provide one type of CI for MCML: one of wald.orig, wald.transformed, and proflik")
+  # if(length(CI)==0) stop("Incorrect CI method specified, should be one of wald.orig, wald.transformed, and proflik")
+  # if(CI=="proflik" & !(params.profCI %in% c("dose","all"))) stop("Incorrect choice of parameters for profile likelihood CI supplied, should be either all or dose")
+  # if(CI=="wald.transformed" & is.null(transform)) stop("No transformation specified, specify transformation or choose a different CI type")
+  # 
+  # if(CI=="proflik") message("Note: computation times for profile likelihood intervals for MCML may be extensive with large datasets or complex models")
   
   if(family=="gaussian"){
     if(is.null(Y)) stop("Y is required for family=gaussian")
@@ -250,112 +250,6 @@ ameras.mcml <- function(family, dosevars, data, deg, transform=NULL,transform.ja
   names(coefs) <- parnames
   rownames(vcov) <- colnames(vcov) <- parnames
   
-  if(CI=="wald.transformed"){
-    if(det(fit$hessian)!=0 & rcond(fit$hessian)>.Machine$double.eps &  all(eigen(fit$hessian)$values > 0)){
-      CIlower <- transform(fit$par-1.96*sqrt(diag(solve(fit$hessian))), ...)
-      CIupper <- transform(fit$par+1.96*sqrt(diag(solve(fit$hessian))), ...)
-    } else{
-      warning("WARNING: Hessian was not invertible or inverse was not positive definite, confidence intervals could not be obtained")
-      CIlower <- CIupper <- NA * fit$par
-    }
-  } else if(CI=="wald.orig"){
-    CIlower <- coefs-1.96*sqrt(diag(vcov))
-    CIupper <- coefs+1.96*sqrt(diag(vcov))
-  } else if(CI=="proflik"){
-    if(det(fit$hessian)!=0 & rcond(fit$hessian)>.Machine$double.eps &  all(eigen(fit$hessian)$values > 0)){
-      lowlims <- fit$par-4*sqrt(diag(solve(fit$hessian)))
-      uplims <- fit$par+4*sqrt(diag(solve(fit$hessian)))
-    } else {
-      lowlims <- rep(-20, length(coefs))
-      uplims <- rep(10, length(coefs))
-    }
-    
-    CIlower <- rep(NA, length(coefs))
-    CIupper <- rep(NA, length(coefs))
-    
-    pval_lower <- pval_upper <- rep(NA, length(coefs))
-    iter_lower <- iter_upper <- rep(NA, length(coefs))
-    
-    if(params.profCI=="all"){
-      CIindices <- 1:length(parnames)
-    } else if(params.profCI=="dose"){
-      CIindices <- (1:length(parnames))[startsWith(parnames, "dose") | grepl(")_dose", parnames)]
-    }
-    
-    if(is.null(transform)){
-      p15 <- rep(15, length(parnames))
-      pminus10 <- rep(-10, length(parnames))
-    } else{
-      p15 <- transform(rep(15, length(parnames)), ...)
-      pminus10 <- transform(rep(-10, length(parnames)), ...)
-    }
-    
-    for(myindex in 1:length(parnames)){
-      if(myindex %in% CIindices){  # Implemented this way rather than a loop over a subset of parameters so that the full covariate vector length is maintained, keeping transformation functionality intact
-        message(paste0("Obtaining profile likelihood CI for ", parnames[myindex]))
-        
-        val15 <- profCIfun(par=15,optval=fit$value, index=myindex, fun=loglik.mcml, inpar=fit$par, optim.method=optim.method, ...)
-        if(val15 > 0){
-          if(is.null(transform)){
-            warning(paste0("WARNING: Upper bound for ", parnames[myindex], " is >15 and may not exist if rescaling the variable does not help"))
-          } else{
-            warning(paste0("WARNING: Upper bound for ", parnames[myindex], " is >",round(p15[myindex],1)," and may not exist if rescaling the variable does not help"))
-          }
-          uproot <- list(root=Inf, f.root=val15, iter=NA)
-        } else{
-          uproot <- tryCatch(uniroot(profCIfun, lower=fit$par[myindex], upper=uplims[myindex], optval=fit$value, index=myindex, fun=loglik.mcml, inpar=fit$par, optim.method=optim.method,extendInt="downX", maxiter=maxit.profCI, tol=tol.profCI, ...), error=function(e) list(root=NA, f.root=NA, iter=NA))
-          if(!is.na(uproot$f.root)){
-            if(abs(uproot$f.root)>.005) warning(paste0("P-value for ", parnames[myindex]," upper bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended"))
-          }
-        }
-        
-        valminus10 <- profCIfun(par=-10,optval=fit$value, index=myindex, fun=loglik.mcml, inpar=fit$par, optim.method=optim.method, ...)
-        if(valminus10 > 0){
-          if(is.null(transform)){
-            warning(paste0("WARNING: Lower bound for ", parnames[myindex], " is < -10 and may not exist if rescaling the variable does not help"))
-          } else{
-            warning(paste0("WARNING: Lower bound for ", parnames[myindex], " is < ",round(pminus10[myindex],1)," and may not exist if rescaling the variable does not help"))
-          }
-          lowroot <- list(root=-Inf, f.root=valminus10, iter=NA)
-        } else{
-          lowroot <- tryCatch(uniroot(profCIfun, lower=lowlims[myindex], upper=fit$par[myindex], optval=fit$value, index=myindex, fun=loglik.mcml, optim.method=optim.method, inpar=fit$par, extendInt="upX", maxiter=maxit.profCI,tol=tol.profCI, ...), error=function(e) list(root=NA, f.root=NA, iter=NA))
-          if(!is.na(lowroot$f.root)){
-            if(abs(lowroot$f.root)>.005) warning(paste0("P-value for ", parnames[myindex]," lower bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended"))
-          }
-        }
-        
-        CIlower[myindex] <- lowroot$root
-        CIupper[myindex] <- uproot$root
-        
-        pval_lower[myindex] <- lowroot$f.root+.05
-        pval_upper[myindex] <- uproot$f.root+.05
-        
-        iter_lower[myindex] <- lowroot$iter
-        iter_upper[myindex] <- uproot$iter
-      } else{
-        CIlower[myindex] <- CIupper[myindex] <- pval_lower[myindex] <- pval_upper[myindex] <- iter_lower[myindex] <- iter_upper[myindex] <- NA
-      }
-    }
-    
-    if(!is.null(transform)){
-      CIlower <- transform(CIlower, ...)
-      CIupper <- transform(CIupper, ...)
-    }
-    
-    profCI_pval <- data.frame(pval.lower=pval_lower, pval.upper=pval_upper)
-    profCI_iter <- data.frame(iter.lower=iter_lower, iter.upper=iter_upper)
-  }
-  
-  CIresult <- data.frame(lower=CIlower, upper=CIupper)
-  if(CI=="proflik"){
-    CIresult <- cbind(CIresult, profCI_pval, profCI_iter)
-    rownames(CIresult) <- parnames
-    CIresult <- CIresult[CIindices,]
-  } else{
-    rownames(CIresult) <- parnames
-  }
-  
-  
   t1 <- proc.time()
   timedif <- t1-t0
   runtime <- paste(round(as.numeric(as.difftime(timedif["elapsed"], units="secs")),1), "seconds")
@@ -363,28 +257,20 @@ ameras.mcml <- function(family, dosevars, data, deg, transform=NULL,transform.ja
   
   out <- list(coefficients=coefs,
               sd=sqrt(diag(vcov)),
-              CI=CIresult, 
               vcov=vcov, 
-              convergence.optim=fit$convergence, 
-              counts.optim=fit$counts,
+              optim = list(
+                par = fit$par,
+                hessian = fit$hessian,
+                convergence = fit$convergence,
+                counts = fit$counts
+              ),
               loglik=-1*fit$value,
               runtime=runtime)
   return(out)
 }
 
-ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL, setnr=NULL, CI=NULL, params.profCI=NULL, maxit.profCI=NULL, tol.profCI=NULL, doseRRmod=NULL, loglim=1e-30, optim.method="Nelder-Mead", ...){
-  if(length(CI)==0) stop("No CI method specified")
-  CI <- CI[CI %in% c("wald.orig","wald.transformed", "proflik")]
-  if(length(CI)>1) stop("Provide one type of CI for (E)RC: one of wald.orig, wald.transformed, and proflik")
-  if(length(CI)==0) stop("Incorrect CI method specified, should be one of wald.orig, wald.transformed, and proflik") 
-  if(CI=="proflik" & !(params.profCI %in% c("dose","all"))) stop("Incorrect choice of parameters for profile likelihood CI supplied, should be either all or dose")
-  if(CI=="wald.transformed" & is.null(transform)) stop("No transformation specified, specify transformation or choose a different CI type")
-  
-  if(CI=="proflik" & ERC==TRUE) message("Note: computation times for profile likelihood intervals for ERC may be extensive with large datasets or complex models")
-  
-  #data.rc <- data#[,-dosevars]
-  data$rcdose_ameras <- rowMeans(data[,dosevars, drop=FALSE])
-  
+ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL, setnr=NULL, doseRRmod=NULL, loglim=1e-30, optim.method="Nelder-Mead", ...){
+ 
   if(ERC & family!="poisson"){
     Kmat <- cov(t(data[,dosevars]))
   } else{
@@ -661,162 +547,24 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
   names(coefs) <- parnames
   rownames(vcov) <- colnames(vcov) <- parnames
   
-  if(CI=="wald.transformed"){
-    if(det(fit$hessian)!=0 & rcond(fit$hessian)>.Machine$double.eps &  all(eigen(fit$hessian)$values > 0)){
-      CIlower <- transform(fit$par-1.96*sqrt(diag(solve(fit$hessian))), ...)
-      CIupper <- transform(fit$par+1.96*sqrt(diag(solve(fit$hessian))), ...)
-    } else {
-      warning("WARNING: Hessian was not invertible or inverse was not positive definite, confidence intervals could not be obtained")
-      CIlower <- CIupper <- NA * fit$par
-    }
-  } else if(CI=="wald.orig"){
-    CIlower <- coefs-1.96*sqrt(diag(vcov))
-    CIupper <- coefs+1.96*sqrt(diag(vcov))
-  } else if(CI=="proflik"){
-    if(det(fit$hessian)!=0 & rcond(fit$hessian)>.Machine$double.eps &  all(eigen(fit$hessian)$values > 0)){
-      lowlims <- fit$par-4*sqrt(diag(solve(fit$hessian)))
-      uplims <- fit$par+4*sqrt(diag(solve(fit$hessian)))
-    } else{
-      lowlims <- rep(-20, length(fit$par))
-      uplims <- rep(10, length(fit$par))
-    }
-    
-    if(family=="gaussian"){
-      funforprofCI <- function(params, ...){
-        loglik.gaussian(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method, ...)
-      }
-    } else if(family=="binomial"){
-      funforprofCI <- function(params, ...){
-        loglik.binomial(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg,doseRRmod=doseRRmod, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
-      }
-    } else if(family=="poisson"){
-      if(ERC){
-        funforprofCI <- function(params, ...){
-          loglik.poisson.erc(params=params, D=dosevars,X=X, Y=Y, M=M, offset=offset, data=data, doseRRmod=doseRRmod, deg=deg, loglim=loglim, transform=transform, optim.method=optim.method,...)
-        }
-      } else{
-        funforprofCI <- function(params, ...){
-          loglik.poisson(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, offset=offset, data=data, doseRRmod=doseRRmod, deg=deg, loglim=loglim, transform=transform, optim.method=optim.method,...)
-        }
-      }
-      
-    } else if(family=="prophaz"){
-      funforprofCI <- function(params, ...){
-        loglik.prophaz(params=params, D="rcdose_ameras",X=X, status=status,entry=entry, exit=exit, M=M, data=data, doseRRmod=doseRRmod, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
-      } 
-    } else if(family=="clogit"){
-      funforprofCI <- function(params, ...){
-        loglik.clogit(params=params, D="rcdose_ameras",X=X, status=status, designmat=designmat, M=M, data=data, doseRRmod=doseRRmod, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
-      } 
-    } else if(family=="multinomial"){
-      funforprofCI <- function(params, ...){
-        loglik.multinomial(params=params, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg,doseRRmod=doseRRmod, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, optim.method=optim.method,...)
-      }
-    }
-    
-    CIlower <- rep(NA, length(coefs))
-    CIupper <- rep(NA, length(coefs))
-    
-    pval_lower <- pval_upper <- rep(NA, length(coefs))
-    iter_lower <- iter_upper <- rep(NA, length(coefs))
-    
-    if(params.profCI=="all"){
-      CIindices <- 1:length(parnames)
-    } else if(params.profCI=="dose"){
-      CIindices <- (1:length(parnames))[startsWith(parnames, "dose") | grepl(")_dose", parnames)]
-    }
-    
-    if(is.null(transform)){
-      p15 <- rep(15, length(parnames))
-      pminus10 <- rep(-10, length(parnames))
-    } else{
-      p15 <- transform(rep(15, length(parnames)), ...)
-      pminus10 <- transform(rep(-10, length(parnames)), ...)
-    }
-    
-    for(myindex in 1:length(parnames)){
-      if(myindex %in% CIindices){  # Implemented this way rather than a loop over a subset of parameters so that the full covariate vector length is maintained, keeping transformation functionality intact
-        
-        message(paste0("Obtaining profile likelihood CI for ", parnames[myindex]))
-        val15 <- profCIfun(par=15,optval=fit$value, index=myindex, fun=funforprofCI, inpar=fit$par, optim.method=optim.method, ...)
-        if(val15 > 0){
-          if(is.null(transform)){
-            warning(paste0("WARNING: Upper bound for ", parnames[myindex], " is >15 and may not exist if rescaling the variable does not help"))
-          } else{
-            warning(paste0("WARNING: Upper bound for ", parnames[myindex], " is >",round(p15[myindex],1)," and may not exist if rescaling the variable does not help"))
-          }
-          uproot <- list(root=Inf, f.root=val15, iter=NA)
-        } else{
-          uproot <- tryCatch(uniroot(profCIfun, lower=fit$par[myindex], upper=uplims[myindex], optval=fit$value, index=myindex, fun=funforprofCI, inpar=fit$par, optim.method=optim.method,extendInt="downX", maxiter=maxit.profCI, tol=tol.profCI, ...), error=function(e) list(root=NA, f.root=NA, iter=NA))
-          if(!is.na(uproot$f.root)){
-            if(abs(uproot$f.root)>.005) warning(paste0("P-value for ", parnames[myindex]," upper bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended"))
-          }
-        }
-        
-        valminus10 <- profCIfun(par=-10,optval=fit$value, index=myindex, fun=funforprofCI, inpar=fit$par, optim.method=optim.method, ...)
-        if(valminus10 > 0){
-          if(is.null(transform)){
-            warning(paste0("WARNING: Lower bound for ", parnames[myindex], " is < -10 and may not exist if rescaling the variable does not help"))
-          } else{
-            warning(paste0("WARNING: Lower bound for ", parnames[myindex], " is < ",round(pminus10[myindex],1)," and may not exist if rescaling the variable does not help"))
-          }
-          lowroot <- list(root=-Inf, f.root=valminus10, iter=NA)
-        } else{
-          lowroot <- tryCatch(uniroot(profCIfun, lower=lowlims[myindex], upper=fit$par[myindex], optval=fit$value, index=myindex, fun=funforprofCI, inpar=fit$par, optim.method=optim.method,extendInt="upX", maxiter=maxit.profCI, tol=tol.profCI, ...), error=function(e) list(root=NA, f.root=NA, iter=NA))
-          if(!is.na(lowroot$f.root)){
-            if(abs(lowroot$f.root)>.005) warning(paste0("P-value for ", parnames[myindex]," lower bound more than 0.005 away from 0.05, reducing tol.profCI and/or increasing maxit.profCI is recommended"))
-          }
-        }
-        CIlower[myindex] <- lowroot$root
-        CIupper[myindex] <- uproot$root
-        
-        pval_lower[myindex] <- lowroot$f.root+.05
-        pval_upper[myindex] <- uproot$f.root+.05
-        
-        
-        iter_lower[myindex] <- lowroot$iter
-        iter_upper[myindex] <- uproot$iter
-      } else{
-        CIlower[myindex] <- CIupper[myindex] <- pval_lower[myindex] <- pval_upper[myindex] <- iter_lower[myindex] <- iter_upper[myindex] <- NA
-      }
-    }
-    
-    if(!is.null(transform)){
-      CIlower <- transform(CIlower, ...)
-      CIupper <- transform(CIupper, ...)
-    }
-    
-    profCI_pval <- data.frame(pval.lower=pval_lower, pval.upper=pval_upper)
-    profCI_iter <- data.frame(iter.lower=iter_lower, iter.upper=iter_upper)
-    
-  }
-  
-  CIresult <- data.frame(lower=CIlower, upper=CIupper)
-  if(CI=="proflik"){
-    CIresult <- cbind(CIresult, profCI_pval, profCI_iter)
-    rownames(CIresult) <- parnames
-    CIresult <- CIresult[CIindices,]
-  } else{
-    rownames(CIresult) <- parnames
-  }
   
   t1 <- proc.time()
   timedif <- t1-t0
   runtime <- paste(round(as.numeric(as.difftime(timedif["elapsed"], units="secs")),1), "seconds")
   
   
-  
-  
-  
-  
   out <- list(coefficients=coefs, 
               sd=sqrt(diag(vcov)),
               vcov=vcov,
-              CI=CIresult, 
-              convergence.optim=fit$convergence, 
-              counts.optim=fit$counts,
+              optim = list(
+                par = fit$par,
+                hessian = fit$hessian,
+                convergence = fit$convergence,
+                counts = fit$counts
+              ),
               loglik=-1*fit$value,
-              runtime=runtime)
+              runtime=runtime,
+              ERC = ERC)
   
   return(out)
 }

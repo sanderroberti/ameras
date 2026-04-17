@@ -20,17 +20,17 @@ library(ameras)
 ```
 
 # Introduction
-
-There are several options for confidence intervals that can be supplied to the `CI` argument, see below. When `ameras` is called with `methods` containing at least one of `RC`, `ERC`, and `MCML` and at least one of `FMA` and `BMA`, `CI` should be a vector of length 2 with one method for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
+To compute confidence intervals, first fit the model using `ameras`, then use the `confint` method to attach confidence intervals.
+Several types of confidence intervals are supported, which should be supplied to the `type` argument of `confint`, see below. When `confint` is called with `methods` containing at least one of `RC`, `ERC`, and `MCML` and at least one of `FMA` and `BMA`, `type` should be a vector of length 2 with one method for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
 
 # Regression calibration, extended regression calibration, and Monte Carlo maximum likelihood
 
-For (extended) regression calibration and Monte Carlo maximum likelihood, there are two types of Wald intervals, obtained either before or after transformation. If no transformation is specified, `wald.orig` should be used to obtain the standard Wald intervals. When a transformation is used, `wald.transformed` is determined before transforming, and `wald.orig` is obtained after transforming using the delta method (using `transform.jacobian` is required). The third option is `proflik`, which uses the profile likelihood to compute confidence bounds. For this, the profile log (partial) likelihood for parameter $\theta_p$ is defined as
+For (extended) regression calibration and Monte Carlo maximum likelihood, there are two types of Wald intervals, obtained either before or after transformation. If no transformation is specified, `wald.orig` should be used to obtain the standard Wald intervals. When a transformation is used, `wald.transformed` is determined before transforming, and `wald.orig` is obtained after transforming using the delta method (using `transform.jacobian`). The third option is `proflik`, which uses the profile likelihood to compute confidence bounds. For this, the profile log (partial) likelihood for parameter $\theta_p$ is defined as
 $$
     PL_p (\theta_p^*) = \max_{\mathbf\theta: \theta_p = \theta_p^*} \ell (\mathbf \theta),
 $$
 where $\ell$ is the log (partial) likelihood. Next, profile confidence intervals $(\theta_p^l, \theta_p^h)$ are obtained for parameter $\theta_p$ at significance level $\alpha=0.95$ by solving 
-$-2 \{PL_p(\theta_p^*) - \ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}$ using the bisection method, with $\hat{\mathbf{\theta}}$ the maximum likelihood estimate. Note that profile likelihoods are more computationally intensive to obtain. For this reason, `ameras` offers the option to only determine them for the exposure-related parameters, which is the default setting. To obtain profile likelihood intervals for all parameters, use `params.profCI = "all"`.
+$-2 \{PL_p(\theta_p^*) - \ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}$ using the bisection method, with $\hat{\mathbf{\theta}}$ the maximum likelihood estimate. Note that profile likelihoods are more computationally intensive to obtain. For this reason, `confint` offers the option to only determine them for the exposure-related parameters, which is the default setting. To obtain profile likelihood intervals for all parameters, use `parm = "all"`.
 
 To illustrate, we determine the three types of confidence intervals for a regression calibration analysis using the example data, using a linear excess relative risk model with the default exponential transformation (see [Parameter transformations](transformations.html)).
 
@@ -38,13 +38,18 @@ To illustrate, we determine the three types of confidence intervals for a regres
 data(data, package="ameras")
 dosevars <- paste0("V", 1:10)
 fit.ameras.waldorig <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("RC"), CI="wald.orig", doseRRmod="ERR")
+                            family="binomial", methods=c("RC"), doseRRmod="ERR")
+fit.ameras.waldorig <- confint(fit.ameras.waldorig, type="wald.orig")
+
 fit.ameras.waldtransformed <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), 
                                      data=data, family="binomial", methods=c("RC"), 
-                                     CI="wald.transformed", doseRRmod="ERR")
+                                     doseRRmod="ERR")
+fit.ameras.waldtransformed <- confint(fit.ameras.waldtransformed, type="wald.transformed")
+
 fit.ameras.proflik <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("RC"), CI="proflik", doseRRmod="ERR", 
-                            params.profCI = "all")
+                            family="binomial", methods=c("RC"), CI="proflik", doseRRmod="ERR")
+fit.ameras.proflik <- confint(fit.ameras.proflik, type="proflik", parm="all")
+
 summary(fit.ameras.waldorig)
 summary(fit.ameras.waldtransformed)
 summary(fit.ameras.proflik)
@@ -57,10 +62,12 @@ Again, we use the example data to illustrate.
 
 ```{r fits2, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 fit.ameras.hpd <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("FMA"), CI="hpd", doseRRmod="ERR")
+                            family="binomial", methods=c("FMA"), doseRRmod="ERR")
+fit.ameras.hpd <- confint(fit.ameras.hpd, type="hpd")
+
 fit.ameras.percentile <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("FMA"), CI="percentile", 
-                            doseRRmod="ERR")
+                            family="binomial", methods=c("FMA"), doseRRmod="ERR")
+fit.ameras.percentile <- confint(fit.ameras.percentile, type="percentile")
 
 summary(fit.ameras.hpd)
 summary(fit.ameras.percentile)

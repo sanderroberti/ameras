@@ -36,15 +36,29 @@ To install the development version from GitHub:
 # install.packages("pak") # If pak is not already installed
 pak::pak("sanderroberti/ameras")
 ```
+
 ## Example
 
-This is a basic example which shows you how to fit a simple logistic regression model:
+This is a basic example which shows you how to fit a simple logistic regression model. First, we visualize the dose uncertainty:
 
-```{r example}
+```{r}
 library(ameras)
 data(data, package="ameras")
 dosevars <- paste0("V", 1:10)
+ecdfplot(data, dosevars)
+```
+
+Next, we apply all available methods to the data:
+```{r}
 fit <- ameras(data, family="binomial", Y="Y.binomial", methods=c("RC","ERC","MCML", "FMA", "BMA"), 
               dosevars=dosevars)
 summary(fit)
 ```
+
+Finally, we add confidence intervals to the `fit` object:
+```{r}
+fit <- confint(fit, type=c("wald.orig","percentile"))
+summary(fit)
+```
+
+See the vignettes for additional details on model fitting, confidence intervals, and the use of transformations.
