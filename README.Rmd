@@ -39,9 +39,18 @@ pak::pak("sanderroberti/ameras")
 
 ## Example
 
-This is a basic example which shows you how to fit a simple logistic regression model. First, we visualize the dose uncertainty:
+This is a basic example which shows you how to fit a simple logistic regression model. First, we visualize the dose uncertainty. In the left panel of the plot below, the empirical cumulative distribution function (ECDF) is
+plotted for each dose realization. In other words, each curve shows one distribution
+of dose across individuals. The spread within individual curves reflects the dose range
+across individuals, while the spread between curves reflects between-realization variation
+on the cohort level.
 
-```{r}
+In the right panel, ECDFs are plotted for each individual,
+showing distributions within individuals. A wide spread within individual curves
+is indicative of large within-individual variation, while the spread between
+curves reflects between-individual variation.
+
+```{r, fig.width=11.7, fig.height=8.3}
 library(ameras)
 data(data, package="ameras")
 dosevars <- paste0("V", 1:10)
