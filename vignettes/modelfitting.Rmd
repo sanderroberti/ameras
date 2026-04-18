@@ -14,9 +14,9 @@ vignette: >
   collapse = TRUE,
   comment = "#>"
   )
-  ```
+```
   
-  ```{r setup}
+```{r setup}
   library(ameras)
 ```
 
