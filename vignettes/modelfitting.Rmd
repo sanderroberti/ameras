@@ -7,9 +7,9 @@ vignette: >
 %\VignetteIndexEntry{Fitting models and displaying output}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  ---
+---
   
-  ```{r, include = FALSE}
+```{r, include = FALSE}
   knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
