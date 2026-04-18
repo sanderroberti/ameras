@@ -53,7 +53,7 @@ curves reflects between-individual variation.
 ```{r, fig.width=11.7, fig.height=8.3}
 library(ameras)
 data(data, package="ameras")
-ecdfplot(data, dosevars)
+ecdfplot(data, paste0("V", 1:10))
 ```
 
 Next, we apply all available methods to the data:
