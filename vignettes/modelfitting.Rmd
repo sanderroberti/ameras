@@ -4,7 +4,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-%\VignetteIndexEntry{Fitting models and displaying output}
+  %\VignetteIndexEntry{Fitting models and displaying output}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
