@@ -1,4 +1,5 @@
 url: https://ameras.sanderroberti.com
 template:
   bootstrap: 5
+  math-rendering: katex
 
