@@ -126,106 +126,123 @@ ameras_main <- function(family="gaussian", methods="RC", dosevars, data, deg=1, 
   return(results)
 }
 
-ameras <- function(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=NULL, exit=NULL, setnr=NULL,
-                   methods="RC", deg=1, doseRRmod="ERR", transform=NULL, transform.jacobian=NULL, inpar=NULL, loglim=1e-30, 
+ameras <- function(formula, data, family="gaussian",
+                   methods="RC", transform=NULL, transform.jacobian=NULL, inpar=NULL, loglim=1e-30, 
                    MFMA=100000, prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, niter.BMA=20000, 
-                   nchains.BMA=2, thin.BMA=10, included.replicates.BMA=1:length(dosevars), 
+                   nchains.BMA=2, thin.BMA=10, included.replicates.BMA=NULL, 
                    optim.method="Nelder-Mead", control=NULL, keep.data=TRUE, ... ){
   
   # Check for errors
   check_df(data) 
   check_family(family)
-  if(family!="gaussian") check_doseRRmod(doseRRmod)
-  check_Y(Y, data, family)
-  
   methods <- check_methods(methods)
   
-  if("BMA" %in% methods) message("Note: BMA may require extensive computation time in the order of multiple hours")
+  if("BMA" %in% methods) message("Note: BMA may require extensive computation time")
   
-  check_D(dosevars, data, methods)
-  check_M(M, data)
-  check_X(X, data)
-  if (family == "poisson") {
-    check_offset(offset, data)
-  }
-  if (family == "prophaz") {
-    check_entry_exit(entry, exit, data)
-  }
+  parsed <- parse_ameras_formula(formula, data, family)
+  
   if (family == "clogit") {
-    check_setnr(setnr, data)
-  }
-  
-  
-  deg     <- check_deg(deg)
-  if(family != "multinomial"){
-    inpar   <- check_inpar(inpar, family, M, X, deg)
-  } else {
-    inpar   <- check_inpar(inpar, family, M, X, deg, multinom_levels = length(levels(data[,Y])))
-  }
-  
-  
-  status <- NULL
-  
-  if(family=="clogit"){
-    #data$exit <- 1
-    status <- Y
-    Y <- NULL
-  }
-  
-  
-  if (family == "prophaz") {
-    status <- Y
     Y      <- NULL
+    status <- parsed$Y
+  } else if (family == "prophaz") {
+    Y      <- NULL
+    status <- parsed$status
+  } else {
+    Y      <- parsed$Y
+    status <- NULL
+  }
+
+  # Checks that depend on parsed formula
+  if (family != "gaussian") check_doseRRmod(parsed$doseRRmod)
+  check_Y(Y %||% status, data, family)
+  check_D(parsed$dosevars, data, methods)
+  check_M(parsed$M, data)
+  check_X(parsed$X, data)
+  
+  if (family == "poisson")  check_offset(parsed$offset, data)
+  if (family == "prophaz")  check_entry_exit(parsed$entry, parsed$exit, data)
+  if (family == "clogit")   check_setnr(parsed$setnr, data)
+  
+  
+  deg   <- check_deg(parsed$deg)
+  
+  if (family != "multinomial") {
+    inpar <- check_inpar(inpar, family, parsed$M, parsed$X, deg)
+  } else {
+    inpar <- check_inpar(inpar, family, parsed$M, parsed$X, deg,
+                         multinom_levels=length(levels(data[, parsed$Y])))
   }
   
-  if(!is.null(doseRRmod)){
-    if(doseRRmod=="LINEXP"){
-      deg    <- 2
-    }
+  
+  
+  if (!is.null(parsed$doseRRmod) && parsed$doseRRmod == "LINEXP") {
+    deg <- 2
   }
   
-  
-  
-  
-  # Need variable numbers for M
-  M <- getVarNumbers(M, data)
+
+
+  M <- getVarNumbers(parsed$M, data)
+  X <- getVarNumbers(parsed$X, data)
   
   # Add mean dose for RC and ERC to the data
-  data$rcdose_ameras <- rowMeans(data[,dosevars, drop=FALSE])
+  data$rcdose_ameras <- rowMeans(data[, parsed$dosevars, drop=FALSE])
   
   model_list <- list(
     data      = if (keep.data) data else NULL,
     keep.data = keep.data,
     family    = family,
-    dosevars  = dosevars,
+    dosevars  = parsed$dosevars,
     Y         = Y,
     M         = M,
     X         = X,
-    offset    = offset,
-    entry     = entry,
-    exit      = exit,
+    offset    = parsed$offset,
+    entry     = parsed$entry,
+    exit      = parsed$exit,
     status    = status,
-    setnr     = setnr,
+    setnr     = parsed$setnr,
     deg       = deg,
-    doseRRmod = doseRRmod,
+    doseRRmod = parsed$doseRRmod,
     loglim    = loglim,
     optim.method = optim.method
   )
   
   memoise::forget(proflik) # To avoid conflicts with existing cache when determining profile likelihood CI's
   
-  result <- ameras_main(family, methods=methods, dosevars, data, deg, doseRRmod=doseRRmod, 
-                        transform=transform, transform.jacobian=transform.jacobian, setnr=setnr,
-                        Y=Y, M=M, X=X, offset=offset, inpar=inpar, entry=entry, exit=exit, status=status, 
-                        loglim=loglim, MFMA=MFMA, prophaz.numints.BMA=prophaz.numints.BMA, 
-                        ERRprior.BMA=ERRprior.BMA, nburnin.BMA=nburnin.BMA, niter.BMA=niter.BMA, 
-                        nchains.BMA=nchains.BMA, thin.BMA=thin.BMA, 
-                        included.replicates.BMA=included.replicates.BMA, control=control, 
-                        optim.method=optim.method, ... )
+  result <- ameras_main(
+    family     = family,
+    methods    = methods,
+    dosevars   = parsed$dosevars,
+    data       = data,
+    deg        = deg,
+    doseRRmod  = parsed$doseRRmod,
+    transform  = transform,
+    transform.jacobian = transform.jacobian,
+    setnr      = parsed$setnr,
+    Y          = Y,
+    M          = M,
+    X          = X,
+    offset     = parsed$offset,
+    inpar      = inpar,
+    entry      = parsed$entry,
+    exit       = parsed$exit,
+    status     = status,
+    loglim     = loglim,
+    MFMA       = MFMA,
+    prophaz.numints.BMA  = prophaz.numints.BMA,
+    ERRprior.BMA         = ERRprior.BMA,
+    nburnin.BMA          = nburnin.BMA,
+    niter.BMA            = niter.BMA,
+    nchains.BMA          = nchains.BMA,
+    thin.BMA             = thin.BMA,
+    included.replicates.BMA = included.replicates.BMA %||% seq_along(parsed$dosevars),
+    control      = control,
+    optim.method = optim.method,
+    ...
+  )
   ret <- c(list(
     call               = match.call(),
     num.rows           = nrow(data),
-    num.replicates     = length(dosevars),
+    num.replicates     = length(parsed$dosevars),
     transform          = result$transform,
     transform.jacobian = result$transform.jacobian,
     other.args         = list(...),
@@ -238,5 +255,96 @@ ameras <- function(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=
   ret <- new_amerasfit(ret)
   
   ret
+}
+
+
+parse_ameras_formula <- function(formula, data, family) {
+  
+  specials <- c("dose", "strata", "offset")
+  X        <- collect_X(formula)
+  
+  if (family == "prophaz") {
+    surv         <- parse_surv_term(formula)
+    formula[[2]] <- quote(.response)
+    tt           <- terms(formula, specials=specials)
+    dose         <- parse_dose_term(tt, data)
+    
+    return(list(
+      Y         = NULL,
+      status    = surv$status,
+      entry     = surv$entry,
+      exit      = surv$exit,
+      dosevars  = dose$dosevars,
+      doseRRmod = dose$doseRRmod,
+      deg       = dose$deg,
+      M         = dose$M,
+      X         = X,
+      offset    = NULL,
+      setnr     = NULL
+    ))
+    
+  } else if (family == "clogit") {
+    
+    tt     <- terms(formula, specials=specials)
+    dose   <- parse_dose_term(tt, data)
+    strata <- parse_strata_term(tt)
+    
+    if (is.null(strata$setnr)) {
+      stop("Formula for family='clogit' must contain a strata() term")
+    }
+    
+    return(list(
+      Y         = as.character(formula[[2]]),
+      status    = NULL,
+      entry     = NULL,
+      exit      = NULL,
+      dosevars  = dose$dosevars,
+      doseRRmod = dose$doseRRmod,
+      deg       = dose$deg,
+      M         = dose$M,
+      X         = X,
+      offset    = NULL,
+      setnr     = strata$setnr
+    ))
+    
+  } else if (family == "poisson") {
+    
+    tt   <- terms(formula, specials=specials)
+    dose <- parse_dose_term(tt, data)
+    off  <- parse_offset_term(tt)
+    
+    return(list(
+      Y         = as.character(formula[[2]]),
+      status    = NULL,
+      entry     = NULL,
+      exit      = NULL,
+      dosevars  = dose$dosevars,
+      doseRRmod = dose$doseRRmod,
+      deg       = dose$deg,
+      M         = dose$M,
+      X         = X,
+      offset    = off$offset,
+      setnr     = NULL
+    ))
+    
+  } else {
+    
+    tt   <- terms(formula, specials=specials)
+    dose <- parse_dose_term(tt, data)
+    
+    return(list(
+      Y         = as.character(formula[[2]]),
+      status    = NULL,
+      entry     = NULL,
+      exit      = NULL,
+      dosevars  = dose$dosevars,
+      doseRRmod = dose$doseRRmod,
+      deg       = dose$deg,
+      M         = dose$M,
+      X         = X,
+      offset    = NULL,
+      setnr     = NULL
+    ))
+  }
 }
 

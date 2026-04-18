@@ -8,21 +8,20 @@ knitr::opts_chunk$set(
 library(ameras)
 library(ggplot2)
 data(data, package="ameras")
-dosevars <- paste0("V", 1:10)
 
 ## ----modelfit.exp-------------------------------------------------------------
-fit.ameras.exp <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", deg=2, doseRRmod = "EXP", methods="RC")
+fit.ameras.exp <- ameras(Y.binomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
+                         data=data, family="binomial", methods="RC")
 summary(fit.ameras.exp)
 
 ## ----modelfit.err-------------------------------------------------------------
-fit.ameras.err <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", deg=2, doseRRmod = "ERR", methods="RC")
+fit.ameras.err <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, 
+                         data=data, family="binomial", methods="RC")
 summary(fit.ameras.err)
 
 ## ----modelfit.linexp----------------------------------------------------------
-fit.ameras.linexp <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", doseRRmod = "LINEXP", methods="RC")
+fit.ameras.linexp <- ameras(Y.binomial~dose(V1:V10, model="LINEXP")+X1+X2, 
+                         data=data, family="binomial", methods="RC")
 summary(fit.ameras.linexp)
 
 ## ----comparison, fig.width=7, fig.height=6------------------------------------

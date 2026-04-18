@@ -104,11 +104,10 @@
 
 \examples{
 data("data", package = "ameras")
-dosevars <- paste0("V", 1:10)
 
 ## Fit the model
-fit <- ameras(data = data, family = "binomial", Y = "Y.binomial",
-              dosevars = dosevars, methods = "RC", doseRRmod = "ERR")
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+              methods = "RC")
 
 ## Summary without confidence intervals
 summary(fit)
@@ -123,9 +122,8 @@ s$summary_table
 
 ## Multiple methods
 \dontrun{
-fit2 <- ameras(data = data, family = "binomial", Y = "Y.binomial",
-               dosevars = dosevars, methods = c("RC", "ERC", "MCML"),
-               doseRRmod = "ERR")
+fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+              methods = c("RC", "ERC", "MCML"))
 fit2 <- confint(fit2, method = "wald.orig")
 summary(fit2)
 }

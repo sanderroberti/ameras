@@ -37,18 +37,12 @@ To illustrate, we determine the three types of confidence intervals for a regres
 ```{r fits1, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 data(data, package="ameras")
 dosevars <- paste0("V", 1:10)
-fit.ameras.waldorig <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("RC"), doseRRmod="ERR")
-fit.ameras.waldorig <- confint(fit.ameras.waldorig, type="wald.orig")
+fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
+                            family="binomial", methods=c("RC"))
 
-fit.ameras.waldtransformed <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), 
-                                     data=data, family="binomial", methods=c("RC"), 
-                                     doseRRmod="ERR")
-fit.ameras.waldtransformed <- confint(fit.ameras.waldtransformed, type="wald.transformed")
-
-fit.ameras.proflik <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("RC"), CI="proflik", doseRRmod="ERR")
-fit.ameras.proflik <- confint(fit.ameras.proflik, type="proflik", parm="all")
+fit.ameras.waldorig <- confint(fit.ameras, type="wald.orig")
+fit.ameras.waldtransformed <- confint(fit.ameras, type="wald.transformed")
+fit.ameras.proflik <- confint(fit.ameras, type="proflik", parm="all")
 
 summary(fit.ameras.waldorig)
 summary(fit.ameras.waldtransformed)
@@ -61,13 +55,11 @@ For frequentist and Bayesian model averaging methods, the options are `percentil
 Again, we use the example data to illustrate.
 
 ```{r fits2, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
-fit.ameras.hpd <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("FMA"), doseRRmod="ERR")
-fit.ameras.hpd <- confint(fit.ameras.hpd, type="hpd")
+fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
+                            family="binomial", methods=c("FMA"))
 
-fit.ameras.percentile <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("FMA"), doseRRmod="ERR")
-fit.ameras.percentile <- confint(fit.ameras.percentile, type="percentile")
+fit.ameras.hpd <- confint(fit.ameras2, type="hpd")
+fit.ameras.percentile <- confint(fit.ameras2, type="percentile")
 
 summary(fit.ameras.hpd)
 summary(fit.ameras.percentile)

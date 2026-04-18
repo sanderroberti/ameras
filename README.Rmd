@@ -53,14 +53,12 @@ curves reflects between-individual variation.
 ```{r, fig.width=11.7, fig.height=8.3}
 library(ameras)
 data(data, package="ameras")
-dosevars <- paste0("V", 1:10)
 ecdfplot(data, dosevars)
 ```
 
 Next, we apply all available methods to the data:
 ```{r}
-fit <- ameras(data, family="binomial", Y="Y.binomial", methods=c("RC","ERC","MCML", "FMA", "BMA"), 
-              dosevars=dosevars)
+fit <- ameras(Y.binomial~dose(V1:V10), data, family="binomial", methods=c("RC","ERC","MCML", "FMA", "BMA"))
 summary(fit)
 ```
 

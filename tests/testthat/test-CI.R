@@ -1,6 +1,5 @@
 set.seed(123)
 data("data", package="ameras")
-dosevars <- paste0("V",1:10)
 
 
 
@@ -18,7 +17,6 @@ for(method in c("RC","ERC","MCML")){
       X         = NULL,
       M         = NULL,
       data      = data,
-      dosevars  = dosevars,
       methods   = method
     )
     fit1 <- confint(fit, type=c("proflik"))
@@ -46,7 +44,6 @@ for(method in c("FMA","BMA")){
       X         = NULL,
       M         = NULL,
       data      = data,
-      dosevars  = dosevars,
       methods   = method
     )
     fit1 <- confint(fit, type=c("percentile"))

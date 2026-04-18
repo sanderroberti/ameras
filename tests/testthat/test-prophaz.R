@@ -1,6 +1,5 @@
 set.seed(123)
 data("data", package="ameras")
-dosevars <- paste0("V",1:10)
 
 
 # Prophaz, basic model, all methods 
@@ -20,7 +19,6 @@ for(method in all_methods){
       X         = NULL,
       M         = NULL,
       data      = data,
-      dosevars  = dosevars,
       methods   = method,
       niter.BMA = 1000,
       nburnin.BMA = 500

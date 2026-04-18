@@ -23,27 +23,27 @@ Methods include regression calibration (Carroll et al. 2006 \doi{10.1201/9781420
 }
 
 \usage{
-ameras(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=NULL, 
-  exit=NULL, setnr=NULL, methods="RC", deg=1, doseRRmod="ERR", transform=NULL,
+ameras(formula, data, family="gaussian", methods="RC", transform=NULL,
   transform.jacobian=NULL, inpar=NULL, loglim=1e-30, MFMA=100000, 
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
-  niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=1:length(dosevars), 
+  niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=NULL, 
   optim.method="Nelder-Mead", control=NULL, keep.data=TRUE, ... )
 }
 \arguments{
+\item{formula}{an object of class \code{"formula"} containing the model specification. See Details.}
 \item{data}{input data frame.}
 \item{family}{outcome model family: \code{"gaussian"}, \code{"binomial"}, \code{"poisson"}, \code{"prophaz"}, \code{"multinomial"} or \code{"clogit"} (default \code{"gaussian"}).}
-\item{Y}{name or column index of the outcome variable for linear, binomial, Poisson, multinomial and conditional logistic models, or event indicator variable for the proportional hazards model.}
-\item{dosevars}{names or column indices of exposure replicate vectors.}
-\item{M}{names or column indices of binary effect modifying variables (optional).}
-\item{X}{names or column indices of other covariates (optional).}
-\item{offset}{name or column index of offset variable for Poisson regression (optional).}
-\item{entry}{name or column index of left truncation time variable for proportional hazards regression (optional).}
-\item{exit}{name or column index of exit time variable, required when \code{family=prophaz}.}
-\item{setnr}{name or column index of integer-valued matched set variable, required when \code{family="clogit"}.}
+%\item{Y}{name or column index of the outcome variable for linear, binomial, Poisson, multinomial and conditional logistic models, or event indicator variable for the proportional hazards model.}
+%\item{dosevars}{names or column indices of exposure replicate vectors.}
+%\item{M}{names or column indices of binary effect modifying variables (optional).}
+%\item{X}{names or column indices of other covariates (optional).}
+%\item{offset}{name or column index of offset variable for Poisson regression (optional).}
+%\item{entry}{name or column index of left truncation time variable for proportional hazards regression (optional).}
+%\item{exit}{name or column index of exit time variable, required when \code{family=prophaz}.}
+%\item{setnr}{name or column index of integer-valued matched set variable, required when \code{family="clogit"}.}
 \item{methods}{character vector of one or multiple methods to apply. Options: \code{"RC"}, \code{"ERC"}, \code{"MCML"}, \code{"FMA"}, \code{"BMA"} (default \code{"RC"}).}
-\item{deg}{for \code{doseRRmod="ERR"} and \code{doseRRmod="EXP"}, whether to fit a linear (\code{deg=1}) or linear-quadratic (\code{deg=2}) dose-response model (default linear).}
-\item{doseRRmod}{the functional form of the dose-response relationship; options are exponential RR (\code{"EXP"}), linear ERR (\code{"ERR"}), or linear-exponential RR (\code{"LINEXP"}) (default \code{"ERR"}).}
+%\item{deg}{for \code{doseRRmod="ERR"} and \code{doseRRmod="EXP"}, whether to fit a linear (\code{deg=1}) or linear-quadratic (\code{deg=2}) dose-response model (default linear).}
+%\item{doseRRmod}{the functional form of the dose-response relationship; options are exponential RR (\code{"EXP"}), linear ERR (\code{"ERR"}), or linear-exponential RR (\code{"LINEXP"}) (default \code{"ERR"}).}
 \item{transform}{function for internal parameter transformation (see Details).}
 \item{transform.jacobian}{Jacobian of the transformation function (see Details).}
 \item{inpar}{vector of initial values for log-likelihood optimization (optional).}
@@ -56,7 +56,7 @@ Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncat
 \item{niter.BMA}{number of MCMC iterations per chain for BMA (default 5,000).}
 \item{nchains.BMA}{number of MCMC chains for BMA (default 2).}
 \item{thin.BMA}{thinning rate for BMA (default 10).}
-\item{included.replicates.BMA}{indices of exposure replicates used in BMA (default \ \code{1:length(dosevars)}).}
+\item{included.replicates.BMA}{indices of exposure replicates used in BMA (defaults to all replicates).}
 \item{optim.method}{method used for optimization by \code{optim}. Options are \code{"Nelder-Mead"} and \code{"BFGS"}. When using Nelder-Mead, a second optimization with BFGS is run to ensure an optimal fit.}
 \item{control}{control list passed to \code{optim} (default \code{list(reltol=1e-10)}).}
 \item{keep.data}{whether to attach data to the output object (default \code{TRUE}). When the data object is large, \code{keep.data} can be set to \code{FALSE} to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied seperately when \code{keep.data=FALSE}. See \code{\link[=confint.amerasfit]{confint}}.}
@@ -119,9 +119,7 @@ Because the proportional hazards model is not available in \code{nimble}, \code{
 \examples{
 \donttest{
   data(data, package="ameras")
-  dosevars <- paste0("V", 1:10)
-  ameras(data=data, family="gaussian", Y="Y.gaussian", dosevars=dosevars, 
-  M=c("M1", "M2"), X=c("X1","X2")) 
+  ameras(Y.gaussian~dose(V1:V10, modifier=M1+M2)+X1+X2, data=data, family="gaussian") 
 }
 }
 

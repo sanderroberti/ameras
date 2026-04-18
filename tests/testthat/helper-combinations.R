@@ -28,24 +28,42 @@ covariate_combinations <- list(
 all_methods <- c("RC","ERC","MCML","FMA","BMA")
 
 fit_combination <- function(family, Y, doseRRmod=NULL, deg, X, M, 
-                            methods="RC", data, dosevars, niter.BMA=1000,
-                            nburnin.BMA = 200, nthin.BMA = 1 ) {
-  args <- list(
+                            methods="RC", data, niter.BMA=1000,
+                            nburnin.BMA = 200, nthin.BMA = 1, transform = NULL,
+                            transform.jacobian=NULL, ...) {
+  if(length(M)>0){
+    Mstring <- paste(M, collapse="+")
+  } else{
+    Mstring <- "NULL"
+  }
+  if(length(X)>0){
+    Xstring <- paste("+",X, collapse="+")
+  } else{
+    Xstring <- ""
+  }
+  
+  if(family=="gaussian"){
+    myform <- as.formula(paste0(Y,"~dose(V1:V10, modifier=", Mstring, ", deg=", deg, ")", Xstring))
+  } else if(family=="prophaz"){
+    myform <- as.formula(paste0("Surv(time,",Y,")","~dose(V1:V10, modifier=", Mstring, ", deg=", deg, ",model=",doseRRmod,")" , Xstring))
+  } else if(family=="clogit"){
+    myform <- as.formula(paste0(Y,"~dose(V1:V10, modifier=", Mstring, ", deg=", deg, ",model=",doseRRmod,")", Xstring, "+ strata(setnr)"))
+  } else {
+    myform <- as.formula(paste0(Y,"~dose(V1:V10, modifier=", Mstring, ", deg=", deg, ",model=",doseRRmod,")", Xstring))
+  }
+  
+  args <- c(list(
+    formula = myform,
     data         = data,
     family       = family,
-    Y            = Y,
-    dosevars     = dosevars,
-    deg          = deg,
     methods      = methods,
-    X            = X,
-    M            = M,
     nburnin.BMA  = nburnin.BMA,
     niter.BMA    = niter.BMA,
-    nthin.BMA    = nthin.BMA
+    nthin.BMA    = nthin.BMA,
+    transform = transform,
+    transform.jacobian = transform.jacobian),
+    list(...)
   )
-  if (!is.null(doseRRmod)) args$doseRRmod <- doseRRmod
-  if (family == "prophaz") args$exit <- "time"
-  if (family == "clogit")  args$setnr <- "setnr"
   
   suppressWarnings(do.call(ameras, args))
 }

@@ -21,7 +21,7 @@ Authors@R: c(person(given = "Sander",
                       email = "pfeiffer@mail.nih.gov",
                       comment = c(ORCID = "0000-0001-7791-2698")),
                 person("NCI", role=c("cph","fnd")))
-Depends: R (>= 3.5.0), stats, nimble
+Depends: R (>= 4.1.0), stats, nimble
 Suggests: 
     knitr,
     rmarkdown,
@@ -38,7 +38,7 @@ Description: Analyze association studies with multiple realizations of a noisy o
     and Bayesian model averaging (Kwon et al. 2016 <doi:10.1002/sim.6635>). Supported model families are
     Gaussian, binomial, multinomial, Poisson, proportional hazards, and conditional logistic.
 License: MIT + file LICENSE
-Imports: Rcpp (>= 1.0.10), RcppEigen, coda, numDeriv, mvtnorm, memoise, methods, MCMCvis
+Imports: Rcpp (>= 1.0.10), RcppEigen, coda, numDeriv, mvtnorm, memoise, methods, MCMCvis, tidyselect
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
 VignetteBuilder: knitr

@@ -72,15 +72,13 @@ transform.sigmoid.jacobian <- function(params, index.t=1:length(params),
 
 ## ----modelfit.sigmoid---------------------------------------------------------
 data(data, package="ameras")
-dosevars <- paste0("V", 1:10)
-fit.ameras.sigmoid <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", deg=2, doseRRmod = "ERR", methods="RC",
-                         transform=transform.sigmoid, transform.jacobian=transform.sigmoid.jacobian,
-                         index.t=4:5)
+fit.ameras.sigmoid <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data=data, 
+                            family="binomial", methods="RC", transform=transform.sigmoid, 
+                            transform.jacobian=transform.sigmoid.jacobian, index.t=4:5)
 summary(fit.ameras.sigmoid)
 
 ## ----modelfit.transform1------------------------------------------------------
-fit.ameras.transform1 <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", deg=2, doseRRmod = "ERR", methods="RC")
+fit.ameras.transform1 <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data=data, 
+                            family="binomial", methods="RC")
 summary(fit.ameras.transform1)
 

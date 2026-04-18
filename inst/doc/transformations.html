@@ -497,68 +497,60 @@ difference between using <code>transform1</code> and
 <code>transform.sigmoid</code>. First, we fit the model using the
 sigmoid transformation:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">data</span>(data, <span class="at">package=</span><span class="st">&quot;ameras&quot;</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>dosevars <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>fit.ameras.sigmoid <span class="ot">&lt;-</span> <span class="fu">ameras</span>(<span class="at">Y=</span><span class="st">&quot;Y.binomial&quot;</span>, <span class="at">dosevars=</span>dosevars, <span class="at">X=</span><span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>,<span class="st">&quot;X2&quot;</span>), <span class="at">data=</span>data, </span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">deg=</span><span class="dv">2</span>, <span class="at">doseRRmod =</span> <span class="st">&quot;ERR&quot;</span>, <span class="at">methods=</span><span class="st">&quot;RC&quot;</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>                         <span class="at">transform=</span>transform.sigmoid, <span class="at">transform.jacobian=</span>transform.sigmoid.jacobian,</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>                         <span class="at">index.t=</span><span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; Fitting RC</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Obtaining profile likelihood CI for dose</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; </span><span class="al">WARNING</span><span class="co">: Lower bound for dose is &lt; 0 and may not exist if rescaling the</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; variable does not help</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Obtaining profile likelihood CI for dose_squared</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.sigmoid)</span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; ameras(data = data, family = &quot;binomial&quot;, Y = &quot;Y.binomial&quot;, dosevars = dosevars, </span></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt;     X = c(&quot;X1&quot;, &quot;X2&quot;), methods = &quot;RC&quot;, deg = 2, doseRRmod = &quot;ERR&quot;, </span></span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, </span></span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;     index.t = 4:5)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>fit.ameras.sigmoid <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial<span class="sc">~</span><span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">deg=</span><span class="dv">2</span>, <span class="at">model=</span><span class="st">&quot;ERR&quot;</span>)<span class="sc">+</span>X1<span class="sc">+</span>X2, <span class="at">data=</span>data, </span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="st">&quot;RC&quot;</span>, <span class="at">transform=</span>transform.sigmoid, </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                            <span class="at">transform.jacobian=</span>transform.sigmoid.jacobian, <span class="at">index.t=</span><span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Fitting RC</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.sigmoid)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = &quot;ERR&quot;) + </span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;binomial&quot;, methods = &quot;RC&quot;, </span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, </span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt;     index.t = 4:5)</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Total run time: 0.2 seconds</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;      RC     0.2</span></span>
 <span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; Total run time: 2.5 seconds</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
-<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
-<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co">#&gt;      RC     2.5</span></span>
-<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt;  Method         Term Estimate      SE</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt;      RC  (Intercept) -0.87358 0.09758</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt;      RC           X1  0.44587 0.07672</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co">#&gt;      RC           X2 -0.33552 0.09610</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&gt;      RC         dose  0.04875 0.21281</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="co">#&gt;      RC dose_squared  0.28764 0.08100</span></span>
 <span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt;  Method         Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
-<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="co">#&gt;      RC  (Intercept) -0.87358 0.09758            NA            NA</span></span>
-<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="co">#&gt;      RC           X1  0.44587 0.07672            NA            NA</span></span>
-<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a><span class="co">#&gt;      RC           X2 -0.33552 0.09610            NA            NA</span></span>
-<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a><span class="co">#&gt;      RC         dose  0.04875 0.21281        0.0000        0.5130</span></span>
-<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a><span class="co">#&gt;      RC dose_squared  0.28764 0.08100        0.1328        0.4121</span></span></code></pre></div>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <p>Next with default settings, using <code>transform1</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>fit.ameras.transform1 <span class="ot">&lt;-</span> <span class="fu">ameras</span>(<span class="at">Y=</span><span class="st">&quot;Y.binomial&quot;</span>, <span class="at">dosevars=</span>dosevars, <span class="at">X=</span><span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>,<span class="st">&quot;X2&quot;</span>), <span class="at">data=</span>data, </span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">deg=</span><span class="dv">2</span>, <span class="at">doseRRmod =</span> <span class="st">&quot;ERR&quot;</span>, <span class="at">methods=</span><span class="st">&quot;RC&quot;</span>)</span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>fit.ameras.transform1 <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial<span class="sc">~</span><span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">deg=</span><span class="dv">2</span>, <span class="at">model=</span><span class="st">&quot;ERR&quot;</span>)<span class="sc">+</span>X1<span class="sc">+</span>X2, <span class="at">data=</span>data, </span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="st">&quot;RC&quot;</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; Fitting RC</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; Obtaining profile likelihood CI for dose</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; </span><span class="al">WARNING</span><span class="co">: Lower bound for dose is &lt; 0 and may not exist if rescaling the</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; variable does not help</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; Obtaining profile likelihood CI for dose_squared</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.transform1)</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; ameras(data = data, family = &quot;binomial&quot;, Y = &quot;Y.binomial&quot;, dosevars = dosevars, </span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;     X = c(&quot;X1&quot;, &quot;X2&quot;), methods = &quot;RC&quot;, deg = 2, doseRRmod = &quot;ERR&quot;)</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; Total run time: 2.7 seconds</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.transform1)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = &quot;ERR&quot;) + </span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;binomial&quot;, methods = &quot;RC&quot;)</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Total run time: 0.2 seconds</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;      RC     0.2</span></span>
 <span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;      RC     2.7</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt;  Method         Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt;      RC  (Intercept) -0.87359 0.09759            NA            NA</span></span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt;      RC           X1  0.44587 0.07672            NA            NA</span></span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt;      RC           X2 -0.33552 0.09610            NA            NA</span></span>
-<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt;      RC         dose  0.04878 0.21283        0.0000        0.5115</span></span>
-<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt;      RC dose_squared  0.28763 0.08100        0.1325        0.4108</span></span></code></pre></div>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt;  Method         Term Estimate      SE</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;      RC  (Intercept) -0.87359 0.09759</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt;      RC           X1  0.44587 0.07672</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;      RC           X2 -0.33552 0.09610</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt;      RC         dose  0.04878 0.21283</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt;      RC dose_squared  0.28763 0.08100</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <p>As expected, there is no difference between the results.</p>
 </div>
 

@@ -45,7 +45,7 @@ print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("Runtime in seconds by method:\n\n")
   print(format(runtime_table, digits = digits, nsmall = 1), row.names = FALSE)
   
-  cat("\nTable of estimated model parameters:\n\n")
+  cat("\nEstimated model parameters:\n\n")
   print(format(coefs, digits = digits, nsmall = 1), row.names = TRUE)
   
   
