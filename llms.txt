@@ -57,8 +57,7 @@ library(ameras)
 #> 
 #>     declare
 data(data, package="ameras")
-dosevars <- paste0("V", 1:10)
-ecdfplot(data, dosevars)
+ecdfplot(data, paste0("V", 1:10))
 ```
 
 ![](reference/figures/README-unnamed-chunk-2-1.png)
@@ -66,9 +65,8 @@ ecdfplot(data, dosevars)
 Next, we apply all available methods to the data:
 
 ``` r
-fit <- ameras(data, family="binomial", Y="Y.binomial", methods=c("RC","ERC","MCML", "FMA", "BMA"), 
-              dosevars=dosevars)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit <- ameras(Y.binomial~dose(V1:V10), data, family="binomial", methods=c("RC","ERC","MCML", "FMA", "BMA"))
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
@@ -97,19 +95,19 @@ fit <- ameras(data, family="binomial", Y="Y.binomial", methods=c("RC","ERC","MCM
 #> |-------------------------------------------------------|
 summary(fit)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 52.1 seconds
+#> Total run time: 53.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     8.3
+#>     ERC     8.1
 #>    MCML     0.1
 #>     FMA     0.2
-#>     BMA    43.5
+#>     BMA    45.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -120,10 +118,10 @@ summary(fit)
 #>     ERC        dose   0.8214 0.14304   NA      NA
 #>    MCML (Intercept)  -0.8758 0.07323   NA      NA
 #>    MCML        dose   0.7910 0.13644   NA      NA
-#>     FMA (Intercept)  -0.8757 0.07317   NA      NA
-#>     FMA        dose   0.7907 0.13606   NA      NA
-#>     BMA (Intercept)  -0.8734 0.07257 1.01 1081.00
-#>     BMA        dose   0.7929 0.13689 1.01 1068.00
+#>     FMA (Intercept)  -0.8759 0.07318   NA      NA
+#>     FMA        dose   0.7912 0.13658   NA      NA
+#>     BMA (Intercept)  -0.8719 0.07155 1.00  989.00
+#>     BMA        dose   0.7881 0.13571 1.00 1014.00
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -134,19 +132,19 @@ Finally, we add confidence intervals to the `fit` object:
 fit <- confint(fit, type=c("wald.orig","percentile"))
 summary(fit)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 52.1 seconds
+#> Total run time: 53.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     8.3
+#>     ERC     8.1
 #>    MCML     0.1
 #>     FMA     0.2
-#>     BMA    43.5
+#>     BMA    45.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -157,10 +155,10 @@ summary(fit)
 #>     ERC        dose   0.8214 0.14304        0.5411        1.1018   NA      NA
 #>    MCML (Intercept)  -0.8758 0.07323       -1.0193       -0.7323   NA      NA
 #>    MCML        dose   0.7910 0.13644        0.5236        1.0584   NA      NA
-#>     FMA (Intercept)  -0.8757 0.07317       -1.0184       -0.7326   NA      NA
-#>     FMA        dose   0.7907 0.13606        0.5259        1.0561   NA      NA
-#>     BMA (Intercept)  -0.8734 0.07257       -1.0166       -0.7347 1.01 1081.00
-#>     BMA        dose   0.7929 0.13689        0.5557        1.0829 1.01 1068.00
+#>     FMA (Intercept)  -0.8759 0.07318       -1.0195       -0.7324   NA      NA
+#>     FMA        dose   0.7912 0.13658        0.5227        1.0599   NA      NA
+#>     BMA (Intercept)  -0.8719 0.07155       -1.0128       -0.7327 1.00  989.00
+#>     BMA        dose   0.7881 0.13571        0.5443        1.0731 1.00 1014.00
 ```
 
 See the vignettes for additional details on model fitting, confidence
