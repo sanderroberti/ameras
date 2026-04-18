@@ -21,23 +21,25 @@ data(data, package="ameras")
 ## Introduction
 
 For non-Gaussian families, three relative risk models for the main
-exposure are supported, the usual exponential model
-$$RR_{i} = \exp\left( \beta_{1}D_{i} + \beta_{2}D_{i}^{2} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m1}D_{i} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m2}D_{i}^{2} \right),$$
-the linear(-quadratic) excess relative risk (ERR) model
-$$RR_{i} = 1 + \beta_{1}D_{i} + \beta_{2}D_{i}^{2} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{\mathbf{m}\mathbf{1}}D_{i} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m2}D_{i}^{2},$$
-and the linear-exponential model
-$$RR_{i} = 1 + \left( \beta_{1} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m1} \right)D_{i}\exp\{\left( \beta_{2} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m2} \right)D_{i}\}.$$
-This vignette illustrates fitting the three models using regression
-calibration for logistic regression, but the same syntax applies to all
-other settings.
+exposure are supported, the usual exponential model RR_i=\exp(\beta_1
+D_i+\beta_2 D_i^2+ \mathbf{M}\_i^T \mathbf{\beta}\_{m1}D_i +
+\mathbf{M}\_i^T \mathbf{\beta}\_{m2} D_i^2), the linear(-quadratic)
+excess relative risk (ERR) model RR_i= 1+\beta_1 D_i+\beta_2 D_i^2 +
+\mathbf{M}\_i^T \mathbf{\beta\_{m1}}D_i + \mathbf{M}\_i^T
+\mathbf{\beta}\_{m2}D_i^2, and the linear-exponential model RR_i=
+1+(\beta_1 + \mathbf{M}\_i^T \mathbf{\beta}\_{m1}) D_i \exp\\(\beta_2+
+\mathbf{M}\_i^T \mathbf{\beta}\_{m2})D_i\\. This vignette illustrates
+fitting the three models using regression calibration for logistic
+regression, but the same syntax applies to all other settings.
 
 ## Exponential relative risk
 
-The usual exponential relative risk model is given by
-$RR_{i} = \exp\left( \beta_{1}D_{i} + \beta_{2}D_{i}^{2} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m1}D_{i} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m2}D_{i}^{2} \right)$,
-where the quadratic and effect modification terms are optional (not fit
-by setting `deg=1` and not passing anything to `M`, respectively). This
-model is fit by setting `model="EXP"` as follows:
+The usual exponential relative risk model is given by RR_i=\exp(\beta_1
+D_i+\beta_2 D_i^2+ \mathbf{M}\_i^T \mathbf{\beta}\_{m1}D_i +
+\mathbf{M}\_i^T \mathbf{\beta}\_{m2} D_i^2), where the quadratic and
+effect modification terms are optional (not fit by setting `deg=1` and
+not passing anything to `M`, respectively). This model is fit by setting
+`model="EXP"` as follows:
 
 ``` r
 fit.ameras.exp <- ameras(Y.binomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
@@ -69,11 +71,12 @@ summary(fit.ameras.exp)
 
 ## Linear excess relative risk
 
-The linear excess relative risk model is given by
-$RR_{i} = 1 + \beta_{1}D_{i} + \beta_{2}D_{i}^{2} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m1}D_{i} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m2}D_{i}^{2}$,
-where again the quadratic and effect modification terms are optional. In
-this case, no degree needs to be specified. This model is fit by setting
-`model="ERR"` as follows:
+The linear excess relative risk model is given by RR_i=1+\beta_1
+D_i+\beta_2 D_i^2+ \mathbf{M}\_i^T \mathbf{\beta}\_{m1}D_i +
+\mathbf{M}\_i^T \mathbf{\beta}\_{m2} D_i^2, where again the quadratic
+and effect modification terms are optional. In this case, no degree
+needs to be specified. This model is fit by setting `model="ERR"` as
+follows:
 
 ``` r
 fit.ameras.err <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, 
@@ -105,10 +108,11 @@ summary(fit.ameras.err)
 
 ## Linear-exponential relative risk
 
-The linear-exponential relative risk model is given by
-$RR_{i} = 1 + \left( \beta_{1} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m1} \right)D_{i}\exp\{\left( \beta_{2} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m2} \right)D_{i}\}$,
-where the effect modification terms are optional. This model is fit by
-setting `model="LINEXP"` as follows:
+The linear-exponential relative risk model is given by RR_i=
+1+(\beta_1 + \mathbf{M}\_i^T \mathbf{\beta}\_{m1}) D_i \exp\\(\beta_2+
+\mathbf{M}\_i^T \mathbf{\beta}\_{m2})D_i\\, where the effect
+modification terms are optional. This model is fit by setting
+`model="LINEXP"` as follows:
 
 ``` r
 fit.ameras.linexp <- ameras(Y.binomial~dose(V1:V10, model="LINEXP")+X1+X2, 

@@ -11,7 +11,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" sizes="any" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
-<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="katex-auto.js"></script><script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -24,7 +25,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">ameras</a>
 
@@ -54,6 +55,14 @@
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/sanderroberti/ameras/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -69,7 +78,7 @@
 </div>
 <!-- badges: start -->
 
-<p>The goal of ameras is to provide a user-friendly interface to analyze association studies with multiple replicates of a noisy exposure using a variety of methods. ameras supports continuous, count, binary, multinomial, and right-censored time-to-event outcomes. For binary outcomes, the nested case-control design is also accommodated. Besides the common exponential relative risk model <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>R</mi><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>β</mi><mi>D</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">RR=\exp(\beta D)</annotation></semantics></math> for the exposure-outcome association with noisy exposure <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>, linear excess relative risk <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>R</mi><mo>=</mo><mn>1</mn><mo>+</mo><mi>β</mi><mi>D</mi></mrow><annotation encoding="application/x-tex">RR=1+\beta D</annotation></semantics></math> and linear-exponential excess relative risk models <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>R</mi><mo>=</mo><mn>1</mn><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mi>D</mi><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>β</mi><mn>2</mn></msub><mi>D</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">RR=1+\beta_1 D \exp(\beta_2 D)</annotation></semantics></math> can be used.</p>
+<p>The goal of ameras is to provide a user-friendly interface to analyze association studies with multiple replicates of a noisy exposure using a variety of methods. ameras supports continuous, count, binary, multinomial, and right-censored time-to-event outcomes. For binary outcomes, the nested case-control design is also accommodated. Besides the common exponential relative risk model <span class="math inline">RR=\exp(\beta D)</span> for the exposure-outcome association with noisy exposure <span class="math inline">D</span>, linear excess relative risk <span class="math inline">RR=1+\beta D</span> and linear-exponential excess relative risk models <span class="math inline">RR=1+\beta_1 D \exp(\beta_2 D)</span> can be used.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -105,7 +114,8 @@
 <p><img src="reference/figures/README-unnamed-chunk-2-1.png" alt="" width="100%"></p>
 <p>Next, we apply all available methods to the data:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span>, <span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>,<span class="st">"ERC"</span>,<span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span>, <span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, </span>
+<span>              methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>,<span class="st">"ERC"</span>,<span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="co">#&gt; Fitting ERC</span></span>
@@ -138,16 +148,16 @@
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", </span></span>
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 53.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 51.8 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.0</span></span>
-<span><span class="co">#&gt;     ERC     8.1</span></span>
+<span><span class="co">#&gt;     ERC     8.3</span></span>
 <span><span class="co">#&gt;    MCML     0.1</span></span>
 <span><span class="co">#&gt;     FMA     0.2</span></span>
-<span><span class="co">#&gt;     BMA    45.2</span></span>
+<span><span class="co">#&gt;     BMA    43.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -158,10 +168,10 @@
 <span><span class="co">#&gt;     ERC        dose   0.8214 0.14304   NA      NA</span></span>
 <span><span class="co">#&gt;    MCML (Intercept)  -0.8758 0.07323   NA      NA</span></span>
 <span><span class="co">#&gt;    MCML        dose   0.7910 0.13644   NA      NA</span></span>
-<span><span class="co">#&gt;     FMA (Intercept)  -0.8759 0.07318   NA      NA</span></span>
-<span><span class="co">#&gt;     FMA        dose   0.7912 0.13658   NA      NA</span></span>
-<span><span class="co">#&gt;     BMA (Intercept)  -0.8719 0.07155 1.00  989.00</span></span>
-<span><span class="co">#&gt;     BMA        dose   0.7881 0.13571 1.00 1014.00</span></span>
+<span><span class="co">#&gt;     FMA (Intercept)  -0.8755 0.07364   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA        dose   0.7908 0.13658   NA      NA</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -0.8778 0.07422 1.01  982.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   0.7993 0.13884 1.01 1095.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <p>Finally, we add confidence intervals to the <code>fit</code> object:</p>
@@ -172,16 +182,16 @@
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", </span></span>
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 53.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 51.8 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.0</span></span>
-<span><span class="co">#&gt;     ERC     8.1</span></span>
+<span><span class="co">#&gt;     ERC     8.3</span></span>
 <span><span class="co">#&gt;    MCML     0.1</span></span>
 <span><span class="co">#&gt;     FMA     0.2</span></span>
-<span><span class="co">#&gt;     BMA    45.2</span></span>
+<span><span class="co">#&gt;     BMA    43.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -192,10 +202,10 @@
 <span><span class="co">#&gt;     ERC        dose   0.8214 0.14304        0.5411        1.1018   NA      NA</span></span>
 <span><span class="co">#&gt;    MCML (Intercept)  -0.8758 0.07323       -1.0193       -0.7323   NA      NA</span></span>
 <span><span class="co">#&gt;    MCML        dose   0.7910 0.13644        0.5236        1.0584   NA      NA</span></span>
-<span><span class="co">#&gt;     FMA (Intercept)  -0.8759 0.07318       -1.0195       -0.7324   NA      NA</span></span>
-<span><span class="co">#&gt;     FMA        dose   0.7912 0.13658        0.5227        1.0599   NA      NA</span></span>
-<span><span class="co">#&gt;     BMA (Intercept)  -0.8719 0.07155       -1.0128       -0.7327 1.00  989.00</span></span>
-<span><span class="co">#&gt;     BMA        dose   0.7881 0.13571        0.5443        1.0731 1.00 1014.00</span></span></code></pre></div>
+<span><span class="co">#&gt;     FMA (Intercept)  -0.8755 0.07364       -1.0205       -0.7314   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA        dose   0.7908 0.13658        0.5229        1.0587   NA      NA</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -0.8778 0.07422       -1.0292       -0.7386 1.01  982.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   0.7993 0.13884        0.5500        1.0985 1.01 1095.00</span></span></code></pre></div>
 <p>See the vignettes for additional details on model fitting, confidence intervals, and the use of transformations.</p>
 </div>
 </div>

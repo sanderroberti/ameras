@@ -178,12 +178,13 @@ ameras(formula, data, family="gaussian", methods="RC", transform=NULL,
 ## Value
 
 The output is an object of class `amerasfit`. General components are
-`call` (the function call to `ameras`), `num.rows` (the number of rows
-in `data`), `num.replicates` (the number of dose replicates provided),
-`transform` (the used transformation function, if applicable),
-`transform.jacobian` (the used Jacobian function for the transformation,
-if applicable), `other.args` (any other arguments passed to ...),
-`model` (a list containing the specified model definition), and
+`call` (the function call to `ameras`), `formula` (the formula object
+specifying the model), `num.rows` (the number of rows in `data`),
+`num.replicates` (the number of dose replicates provided), `transform`
+(the used transformation function, if applicable), `transform.jacobian`
+(the used Jacobian function for the transformation, if applicable),
+`other.args` (any other arguments passed to ...), `model` (a list
+containing the specified model components parsed from the formula), and
 `CI.computed` (logical, whether confidence intervals have been attached
 by [`confint`](https://ameras.sanderroberti.com/reference/confint.md)).
 

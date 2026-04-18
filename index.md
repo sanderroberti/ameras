@@ -5,11 +5,10 @@ association studies with multiple replicates of a noisy exposure using a
 variety of methods. ameras supports continuous, count, binary,
 multinomial, and right-censored time-to-event outcomes. For binary
 outcomes, the nested case-control design is also accommodated. Besides
-the common exponential relative risk model $RR = \exp(\beta D)$ for the
-exposure-outcome association with noisy exposure $D$, linear excess
-relative risk $RR = 1 + \beta D$ and linear-exponential excess relative
-risk models $RR = 1 + \beta_{1}D\exp\left( \beta_{2}D \right)$ can be
-used.
+the common exponential relative risk model RR=\exp(\beta D) for the
+exposure-outcome association with noisy exposure D, linear excess
+relative risk RR=1+\beta D and linear-exponential excess relative risk
+models RR=1+\beta_1 D \exp(\beta_2 D) can be used.
 
 ## Installation
 
@@ -65,7 +64,8 @@ ecdfplot(data, paste0("V", 1:10))
 Next, we apply all available methods to the data:
 
 ``` r
-fit <- ameras(Y.binomial~dose(V1:V10), data, family="binomial", methods=c("RC","ERC","MCML", "FMA", "BMA"))
+fit <- ameras(Y.binomial~dose(V1:V10), data, family="binomial", 
+              methods=c("RC","ERC","MCML", "FMA", "BMA"))
 #> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
@@ -98,16 +98,16 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 53.6 seconds
+#> Total run time: 51.8 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     8.1
+#>     ERC     8.3
 #>    MCML     0.1
 #>     FMA     0.2
-#>     BMA    45.2
+#>     BMA    43.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -118,10 +118,10 @@ summary(fit)
 #>     ERC        dose   0.8214 0.14304   NA      NA
 #>    MCML (Intercept)  -0.8758 0.07323   NA      NA
 #>    MCML        dose   0.7910 0.13644   NA      NA
-#>     FMA (Intercept)  -0.8759 0.07318   NA      NA
-#>     FMA        dose   0.7912 0.13658   NA      NA
-#>     BMA (Intercept)  -0.8719 0.07155 1.00  989.00
-#>     BMA        dose   0.7881 0.13571 1.00 1014.00
+#>     FMA (Intercept)  -0.8755 0.07364   NA      NA
+#>     FMA        dose   0.7908 0.13658   NA      NA
+#>     BMA (Intercept)  -0.8778 0.07422 1.01  982.00
+#>     BMA        dose   0.7993 0.13884 1.01 1095.00
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -135,16 +135,16 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 53.6 seconds
+#> Total run time: 51.8 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     8.1
+#>     ERC     8.3
 #>    MCML     0.1
 #>     FMA     0.2
-#>     BMA    45.2
+#>     BMA    43.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -155,10 +155,10 @@ summary(fit)
 #>     ERC        dose   0.8214 0.14304        0.5411        1.1018   NA      NA
 #>    MCML (Intercept)  -0.8758 0.07323       -1.0193       -0.7323   NA      NA
 #>    MCML        dose   0.7910 0.13644        0.5236        1.0584   NA      NA
-#>     FMA (Intercept)  -0.8759 0.07318       -1.0195       -0.7324   NA      NA
-#>     FMA        dose   0.7912 0.13658        0.5227        1.0599   NA      NA
-#>     BMA (Intercept)  -0.8719 0.07155       -1.0128       -0.7327 1.00  989.00
-#>     BMA        dose   0.7881 0.13571        0.5443        1.0731 1.00 1014.00
+#>     FMA (Intercept)  -0.8755 0.07364       -1.0205       -0.7314   NA      NA
+#>     FMA        dose   0.7908 0.13658        0.5229        1.0587   NA      NA
+#>     BMA (Intercept)  -0.8778 0.07422       -1.0292       -0.7386 1.01  982.00
+#>     BMA        dose   0.7993 0.13884        0.5500        1.0985 1.01 1095.00
 ```
 
 See the vignettes for additional details on model fitting, confidence

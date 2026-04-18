@@ -37,19 +37,17 @@ transforming, and `wald.orig` is obtained after transforming using the
 delta method (using `transform.jacobian`). The third option is
 `proflik`, which uses the profile likelihood to compute confidence
 bounds. For this, the profile log (partial) likelihood for parameter
-$\theta_{p}$ is defined as
-$$PL_{p}\left( \theta_{p}^{*} \right) = \max\limits_{{\mathbf{θ}}:\theta_{p} = \theta_{p}^{*}}\ell({\mathbf{θ}}),$$
-where $\ell$ is the log (partial) likelihood. Next, profile confidence
-intervals $\left( \theta_{p}^{l},\theta_{p}^{h} \right)$ are obtained
-for parameter $\theta_{p}$ at significance level $\alpha = 0.95$ by
-solving
-$- 2\{ PL_{p}\left( \theta_{p}^{*} \right) - \ell\left( \widehat{\mathbf{θ}} \right)\} = \chi_{1,1 - \alpha}^{2}$
-using the bisection method, with $\widehat{\mathbf{θ}}$ the maximum
-likelihood estimate. Note that profile likelihoods are more
-computationally intensive to obtain. For this reason, `confint` offers
-the option to only determine them for the exposure-related parameters,
-which is the default setting. To obtain profile likelihood intervals for
-all parameters, use `parm = "all"`.
+\theta_p is defined as PL_p (\theta_p^\*) = \max\_{\mathbf\theta:
+\theta_p = \theta_p^\*} \ell (\mathbf \theta), where \ell is the log
+(partial) likelihood. Next, profile confidence intervals (\theta_p^l,
+\theta_p^h) are obtained for parameter \theta_p at significance level
+\alpha=0.95 by solving -2 \\PL_p(\theta_p^\*) -
+\ell(\hat{\mathbf{\theta}})\\=\chi^2\_{1,1-\alpha} using the bisection
+method, with \hat{\mathbf{\theta}} the maximum likelihood estimate. Note
+that profile likelihoods are more computationally intensive to obtain.
+For this reason, `confint` offers the option to only determine them for
+the exposure-related parameters, which is the default setting. To obtain
+profile likelihood intervals for all parameters, use `parm = "all"`.
 
 To illustrate, we determine the three types of confidence intervals for
 a regression calibration analysis using the example data, using a linear

@@ -11,7 +11,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -21,7 +22,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">ameras</a>
 
@@ -51,6 +52,14 @@
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/sanderroberti/ameras/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -100,63 +109,38 @@ supplying a function to <code>transform</code>, this should be a
 function of the full parameter vector, returning a full (transformed)
 parameter vector. In particular, the full parameter vector contains
 parameters in the following order (see <code><a href="../reference/ameras.html">?ameras</a></code> for the
-model definitions):
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>0</mn></msub><mo>,</mo><mi>𝛂</mi><mo>,</mo><msub><mi>β</mi><mn>1</mn></msub><mo>,</mo><msub><mi>β</mi><mn>2</mn></msub><mo>,</mo><msub><mi>𝛃</mi><mrow><mi>m</mi><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>𝛃</mi><mrow><mi>m</mi><mn>2</mn></mrow></msub><mo>,</mo><mi>σ</mi></mrow><annotation encoding="application/x-tex">\alpha_0, \mathbf \alpha, \beta_1, \beta_2, \mathbf \beta_{m1}, \mathbf \beta_{m2}, \sigma</annotation></semantics></math>,
-where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛂</mi><annotation encoding="application/x-tex">\mathbf \alpha</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝛃</mi><mrow><mi>m</mi><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">\mathbf\beta_{m1}</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝛃</mi><mrow><mi>m</mi><mn>2</mn></mrow></msub><annotation encoding="application/x-tex">\mathbf \beta_{m2}</annotation></semantics></math>
-can be vectors, with lengths matching <code>X</code> and <code>M</code>,
-respectively.
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>
-is only included for the linear model (Gaussian family), and no
-intercept is included for the Cox and conditional logistic models. For
-the multinomial model, the full parameter vector is the concatenation of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">Z-1</annotation></semantics></math>
-parameter vectors in the order as given above, where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>
-is the number of outcome categories. When no transformation is specified
-and the linear ERR model is used, <code>transform1</code> is used for
-ERR parameters
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\beta_1</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\beta_2</annotation></semantics></math>
-by default, with lower limits
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>1</mn><mi>/</mi><mi>m</mi><mi>a</mi><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>D</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">-1/max(D)</annotation></semantics></math>
-for linear dose-response and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><mo>−</mo><mn>1</mn><mi>/</mi><mi>m</mi><mi>a</mi><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>D</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0,-1/max(D^2))</annotation></semantics></math>
-for linear-quadratic dose-response, respectively (see below). For the
-linear-exponential model, a lower limit of 0 is used for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\beta_1</annotation></semantics></math>,
-and no transformation is used for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\beta_2</annotation></semantics></math>.
-If effect modifiers <code>M</code> are specified, no transformation is
-used for those parameters. When negative RRs are obtained during
-optimization, an error will be generated and a different transformation
-or bounds should be used. All output is returned in the original
-parametrization given in <code><a href="../reference/ameras.html">?ameras</a></code>. The Jacobian of the
-transformation (<code>transform.jacobian</code>) is required when using
-a transformation with methods other than BMA. For
-<code>transform1</code>, the Jacobian is given by
-<code>transform1.jacobian</code>.</p>
+model definitions): <span class="math inline">\alpha_0, \mathbf \alpha,
+\beta_1, \beta_2, \mathbf \beta_{m1}, \mathbf \beta_{m2}, \sigma</span>,
+where <span class="math inline">\mathbf \alpha</span>, <span class="math inline">\mathbf\beta_{m1}</span> and <span class="math inline">\mathbf \beta_{m2}</span> can be vectors, with
+lengths matching <code>X</code> and <code>M</code>, respectively. <span class="math inline">\sigma</span> is only included for the linear model
+(Gaussian family), and no intercept is included for the Cox and
+conditional logistic models. For the multinomial model, the full
+parameter vector is the concatenation of <span class="math inline">Z-1</span> parameter vectors in the order as given
+above, where <span class="math inline">Z</span> is the number of outcome
+categories. When no transformation is specified and the linear ERR model
+is used, <code>transform1</code> is used for ERR parameters <span class="math inline">\beta_1</span> and <span class="math inline">\beta_2</span> by default, with lower limits <span class="math inline">-1/max(D)</span> for linear dose-response and <span class="math inline">(0,-1/max(D^2))</span> for linear-quadratic
+dose-response, respectively (see below). For the linear-exponential
+model, a lower limit of 0 is used for <span class="math inline">\beta_1</span>, and no transformation is used for
+<span class="math inline">\beta_2</span>. If effect modifiers
+<code>M</code> are specified, no transformation is used for those
+parameters. When negative RRs are obtained during optimization, an error
+will be generated and a different transformation or bounds should be
+used. All output is returned in the original parametrization given in
+<code><a href="../reference/ameras.html">?ameras</a></code>. The Jacobian of the transformation
+(<code>transform.jacobian</code>) is required when using a
+transformation with methods other than BMA. For <code>transform1</code>,
+the Jacobian is given by <code>transform1.jacobian</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="exponential-transformation-using-transform1">Exponential transformation using transform1<a class="anchor" aria-label="anchor" href="#exponential-transformation-using-transform1"></a>
 </h2>
 <p>The included function <code>transform1</code> applies the exponential
-transformation
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>L</mi><msub><mi>B</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">f(\theta_i)=\exp(\theta_i)+LB_i</annotation></semantics></math>
-to one or multiple components of parameter vector
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛉</mi><annotation encoding="application/x-tex">\mathbf \theta</annotation></semantics></math>,
-where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><msub><mi>B</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">LB_i</annotation></semantics></math>
-are lower limits that can be different for each component. In
-particular, a vector of indices of parameters to be transformed and a
-vector of corresponding lower bounds LB can be supplied to arguments
-<code>index.t</code> and <code>lowlimit</code>, respectively, resulting
-in transformed parameters
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mtext mathvariant="normal">LB</mtext><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">f(\theta_i)=\exp(\theta_i)+\text{LB}_i</annotation></semantics></math>.</p>
+transformation <span class="math inline">f(\theta_i)=\exp(\theta_i)+LB_i</span> to one or
+multiple components of parameter vector <span class="math inline">\mathbf \theta</span>, where <span class="math inline">LB_i</span> are lower limits that can be different
+for each component. In particular, a vector of indices of parameters to
+be transformed and a vector of corresponding lower bounds LB can be
+supplied to arguments <code>index.t</code> and <code>lowlimit</code>,
+respectively, resulting in transformed parameters <span class="math inline">f(\theta_i)=\exp(\theta_i)+\text{LB}_i</span>.</p>
 <p>In particular, <code>transform1</code> and
 <code>transform1.jacobian</code> are defined as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -215,20 +199,13 @@ point 1 above.</li>
 how to apply the transformation only to specific parameters, and how to
 use extra arguments.</p>
 <p>As an example, suppose instead of the exponential transformation from
-<code>transform1</code>, for the parameters
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\beta_1</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\beta_2</annotation></semantics></math>
-we wish to use the sigmoid transformation
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>:</mo><mi>ℝ</mi><mo>→</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">f: \mathbb{R} \rightarrow (a,b)</annotation></semantics></math>
-given by
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mrow><msub><mi>a</mi><mi>i</mi></msub><mo>,</mo><msub><mi>b</mi><mi>i</mi></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>a</mi><mi>i</mi></msub><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>b</mi><mi>i</mi></msub><mo>−</mo><msub><mi>a</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><msub><mi>θ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">f_{a_i,b_i}(\theta_i)= a_i + (b_i-a_i) \frac{1}{1+\exp(-\theta_i)}.</annotation></semantics></math>
-Then, using <code>transform1</code> as a starting point, we can define
-the transformation as follows (note that since
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐚</mi><annotation encoding="application/x-tex">\mathbf{a}</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐛</mi><annotation encoding="application/x-tex">\mathbf{b}</annotation></semantics></math>
-act as bounds, we use an updated bound check):</p>
+<code>transform1</code>, for the parameters <span class="math inline">\beta_1</span> and <span class="math inline">\beta_2</span> we wish to use the sigmoid
+transformation <span class="math inline">f: \mathbb{R} \rightarrow
+(a,b)</span> given by <span class="math display">f_{a_i,b_i}(\theta_i)=
+a_i + (b_i-a_i) \frac{1}{1+\exp(-\theta_i)}.</span> Then, using
+<code>transform1</code> as a starting point, we can define the
+transformation as follows (note that since <span class="math inline">\mathbf{a}</span> and <span class="math inline">\mathbf{b}</span> act as bounds, we use an updated
+bound check):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transform.sigmoid</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">params</span>, <span class="va">index.t</span><span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">params</span><span class="op">)</span>, <span class="va">a</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">index.t</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>                              <span class="va">b</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">index.t</span><span class="op">)</span><span class="op">)</span>, <span class="va">boundcheck</span><span class="op">=</span><span class="cn">FALSE</span>, <span class="va">boundtol</span><span class="op">=</span><span class="fl">1e-3</span>, <span class="va">...</span><span class="op">)</span><span class="op">{</span></span>
@@ -246,10 +223,10 @@ act as bounds, we use an updated bound check):</p>
 <span>  <span class="op">}</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">params</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Next, noting that
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">d</mi><msub><mi>f</mi><mrow><msub><mi>a</mi><mi>i</mi></msub><mo>,</mo><msub><mi>b</mi><mi>i</mi></msub></mrow></msub><mi>/</mi><mi>d</mi><msub><mi>θ</mi><mi>i</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>b</mi><mi>i</mi></msub><mo>−</mo><msub><mi>a</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><msub><mi>θ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>+</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><msub><mi>θ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><msup><mo stretchy="false" form="postfix">}</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\mathrm{d}f_{a_i,b_i}/d\theta_i = (b_i-a_i)\exp(-\theta_i)/\{1+\exp(-\theta_i) \}^2</annotation></semantics></math>,
-we can define the Jacobian as follows, using
-<code>transform1.jacobian</code> as a starting point:</p>
+<p>Next, noting that <span class="math inline">\mathrm{d}f_{a_i,b_i}/d\theta_i =
+(b_i-a_i)\exp(-\theta_i)/\{1+\exp(-\theta_i) \}^2</span>, we can define
+the Jacobian as follows, using <code>transform1.jacobian</code> as a
+starting point:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transform.sigmoid.jacobian</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">params</span>, <span class="va">index.t</span><span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">params</span><span class="op">)</span>, </span>
 <span>                                       <span class="va">a</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">index.t</span><span class="op">)</span><span class="op">)</span>, <span class="va">b</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">index.t</span><span class="op">)</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span><span class="op">{</span> </span>
@@ -284,12 +261,12 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt;     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, </span></span>
 <span><span class="co">#&gt;     index.t = 4:5)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 0.5 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.6</span></span>
+<span><span class="co">#&gt;      RC     0.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

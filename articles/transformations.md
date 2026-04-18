@@ -29,26 +29,24 @@ the desired parameters, see below. When supplying a function to
 returning a full (transformed) parameter vector. In particular, the full
 parameter vector contains parameters in the following order (see
 [`?ameras`](https://ameras.sanderroberti.com/reference/ameras.md) for
-the model definitions):
-$\alpha_{0},{\mathbf{α}},\beta_{1},\beta_{2},{\mathbf{β}}_{m1},{\mathbf{β}}_{m2},\sigma$,
-where $\mathbf{α}$, ${\mathbf{β}}_{m1}$ and ${\mathbf{β}}_{m2}$ can be
-vectors, with lengths matching `X` and `M`, respectively. $\sigma$ is
-only included for the linear model (Gaussian family), and no intercept
-is included for the Cox and conditional logistic models. For the
-multinomial model, the full parameter vector is the concatenation of
-$Z - 1$ parameter vectors in the order as given above, where $Z$ is the
-number of outcome categories. When no transformation is specified and
-the linear ERR model is used, `transform1` is used for ERR parameters
-$\beta_{1}$ and $\beta_{2}$ by default, with lower limits $- 1/max(D)$
-for linear dose-response and
-$\left( 0, - 1/max\left( D^{2} \right) \right)$ for linear-quadratic
-dose-response, respectively (see below). For the linear-exponential
-model, a lower limit of 0 is used for $\beta_{1}$, and no transformation
-is used for $\beta_{2}$. If effect modifiers `M` are specified, no
-transformation is used for those parameters. When negative RRs are
-obtained during optimization, an error will be generated and a different
-transformation or bounds should be used. All output is returned in the
-original parametrization given in
+the model definitions): \alpha_0, \mathbf \alpha, \beta_1, \beta_2,
+\mathbf \beta\_{m1}, \mathbf \beta\_{m2}, \sigma, where \mathbf \alpha,
+\mathbf\beta\_{m1} and \mathbf \beta\_{m2} can be vectors, with lengths
+matching `X` and `M`, respectively. \sigma is only included for the
+linear model (Gaussian family), and no intercept is included for the Cox
+and conditional logistic models. For the multinomial model, the full
+parameter vector is the concatenation of Z-1 parameter vectors in the
+order as given above, where Z is the number of outcome categories. When
+no transformation is specified and the linear ERR model is used,
+`transform1` is used for ERR parameters \beta_1 and \beta_2 by default,
+with lower limits -1/max(D) for linear dose-response and (0,-1/max(D^2))
+for linear-quadratic dose-response, respectively (see below). For the
+linear-exponential model, a lower limit of 0 is used for \beta_1, and no
+transformation is used for \beta_2. If effect modifiers `M` are
+specified, no transformation is used for those parameters. When negative
+RRs are obtained during optimization, an error will be generated and a
+different transformation or bounds should be used. All output is
+returned in the original parametrization given in
 [`?ameras`](https://ameras.sanderroberti.com/reference/ameras.md). The
 Jacobian of the transformation (`transform.jacobian`) is required when
 using a transformation with methods other than BMA. For `transform1`,
@@ -57,15 +55,13 @@ the Jacobian is given by `transform1.jacobian`.
 ## Exponential transformation using transform1
 
 The included function `transform1` applies the exponential
-transformation
-$f\left( \theta_{i} \right) = \exp\left( \theta_{i} \right) + LB_{i}$ to
-one or multiple components of parameter vector $\mathbf{θ}$, where
-$LB_{i}$ are lower limits that can be different for each component. In
-particular, a vector of indices of parameters to be transformed and a
-vector of corresponding lower bounds LB can be supplied to arguments
-`index.t` and `lowlimit`, respectively, resulting in transformed
-parameters
-$f\left( \theta_{i} \right) = \exp\left( \theta_{i} \right) + \text{LB}_{i}$.
+transformation f(\theta_i)=\exp(\theta_i)+LB_i to one or multiple
+components of parameter vector \mathbf \theta, where LB_i are lower
+limits that can be different for each component. In particular, a vector
+of indices of parameters to be transformed and a vector of corresponding
+lower bounds LB can be supplied to arguments `index.t` and `lowlimit`,
+respectively, resulting in transformed parameters
+f(\theta_i)=\exp(\theta_i)+\text{LB}\_i.
 
 In particular, `transform1` and `transform1.jacobian` are defined as
 follows:
@@ -125,13 +121,12 @@ the transformation only to specific parameters, and how to use extra
 arguments.
 
 As an example, suppose instead of the exponential transformation from
-`transform1`, for the parameters $\beta_{1}$ and $\beta_{2}$ we wish to
-use the sigmoid transformation
-$\left. f:{\mathbb{R}}\rightarrow(a,b) \right.$ given by
-$$f_{a_{i},b_{i}}\left( \theta_{i} \right) = a_{i} + \left( b_{i} - a_{i} \right)\frac{1}{1 + \exp\left( - \theta_{i} \right)}.$$
+`transform1`, for the parameters \beta_1 and \beta_2 we wish to use the
+sigmoid transformation f: \mathbb{R} \rightarrow (a,b) given by
+f\_{a_i,b_i}(\theta_i)= a_i + (b_i-a_i) \frac{1}{1+\exp(-\theta_i)}.
 Then, using `transform1` as a starting point, we can define the
-transformation as follows (note that since $\mathbf{a}$ and $\mathbf{b}$
-act as bounds, we use an updated bound check):
+transformation as follows (note that since \mathbf{a} and \mathbf{b} act
+as bounds, we use an updated bound check):
 
 ``` r
 transform.sigmoid <- function(params, index.t=1:length(params), a=rep(0,length(index.t)), 
@@ -152,10 +147,9 @@ transform.sigmoid <- function(params, index.t=1:length(params), a=rep(0,length(i
 }
 ```
 
-Next, noting that
-$df_{a_{i},b_{i}}/d\theta_{i} = \left( b_{i} - a_{i} \right)\exp\left( - \theta_{i} \right)/\{ 1 + \exp\left( - \theta_{i} \right)\}^{2}$,
-we can define the Jacobian as follows, using `transform1.jacobian` as a
-starting point:
+Next, noting that \mathrm{d}f\_{a_i,b_i}/d\theta_i =
+(b_i-a_i)\exp(-\theta_i)/\\1+\exp(-\theta_i) \\^2, we can define the
+Jacobian as follows, using `transform1.jacobian` as a starting point:
 
 ``` r
 transform.sigmoid.jacobian <- function(params, index.t=1:length(params), 
@@ -193,12 +187,12 @@ summary(fit.ameras.sigmoid)
 #>     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, 
 #>     index.t = 4:5)
 #> 
-#> Total run time: 0.6 seconds
+#> Total run time: 0.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.6
+#>      RC     0.5
 #> 
 #> Summary of coefficients by method:
 #> 
