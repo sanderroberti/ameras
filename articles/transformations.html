@@ -273,16 +273,14 @@ difference between using <code>transform1</code> and
 sigmoid transformation:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span>
-<span><span class="va">dosevars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">fit.ameras.sigmoid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
-<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, deg<span class="op">=</span><span class="fl">2</span>, doseRRmod <span class="op">=</span> <span class="st">"ERR"</span>, methods<span class="op">=</span><span class="st">"RC"</span>,</span>
-<span>                         transform<span class="op">=</span><span class="va">transform.sigmoid</span>, transform.jacobian<span class="op">=</span><span class="va">transform.sigmoid.jacobian</span>,</span>
-<span>                         index.t<span class="op">=</span><span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">fit.ameras.sigmoid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data<span class="op">=</span><span class="va">data</span>, </span>
+<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span>, transform<span class="op">=</span><span class="va">transform.sigmoid</span>, </span>
+<span>                            transform.jacobian<span class="op">=</span><span class="va">transform.sigmoid.jacobian</span>, index.t<span class="op">=</span><span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.sigmoid</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
-<span><span class="co">#&gt;     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "ERR", </span></span>
+<span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + </span></span>
+<span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC", </span></span>
 <span><span class="co">#&gt;     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, </span></span>
 <span><span class="co">#&gt;     index.t = 4:5)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -305,13 +303,13 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <p>Next with default settings, using <code>transform1</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.ameras.transform1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
-<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, deg<span class="op">=</span><span class="fl">2</span>, doseRRmod <span class="op">=</span> <span class="st">"ERR"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit.ameras.transform1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data<span class="op">=</span><span class="va">data</span>, </span>
+<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.transform1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
-<span><span class="co">#&gt;     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "ERR")</span></span>
+<span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + </span></span>
+<span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total run time: 0.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>

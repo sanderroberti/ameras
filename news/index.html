@@ -51,7 +51,8 @@
 </ul></div>
 <div class="section level4">
 <h4 id="user-interface-changes-development-version">User interface changes<a class="anchor" aria-label="anchor" href="#user-interface-changes-development-version"></a></h4>
-<ul><li>Added a print method for the amerasfit class.</li>
+<ul><li>Implemented a formula interface for ameras.</li>
+<li>Added a print method for the amerasfit class.</li>
 <li>Moved the computation of confidence intervals to a new method confint. The ameras function now returns an amerasfit object without confidence intervals. The method confint takes this object and returns the same object with confidence intervals added. Importantly, this means ameras no longer uses arguments related to confidence intervals.</li>
 <li>Added additional components to the output of ameras for use by the new confint method.</li>
 <li>Added the argument keep.data to ameras (default TRUE). If TRUE, the data object is included in the amerasfit object for future profile likelihood confidence interval computations.</li>

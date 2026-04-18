@@ -81,11 +81,10 @@ Methods include regression calibration (Carroll et al. 2006 doi:10.1201/97814200
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ameras</span><span class="op">(</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span>, <span class="va">Y</span>, <span class="va">dosevars</span>, M<span class="op">=</span><span class="cn">NULL</span>, X<span class="op">=</span><span class="cn">NULL</span>, offset<span class="op">=</span><span class="cn">NULL</span>, entry<span class="op">=</span><span class="cn">NULL</span>, </span>
-<span>  exit<span class="op">=</span><span class="cn">NULL</span>, setnr<span class="op">=</span><span class="cn">NULL</span>, methods<span class="op">=</span><span class="st">"RC"</span>, deg<span class="op">=</span><span class="fl">1</span>, doseRRmod<span class="op">=</span><span class="st">"ERR"</span>, transform<span class="op">=</span><span class="cn">NULL</span>,</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ameras</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span>, methods<span class="op">=</span><span class="st">"RC"</span>, transform<span class="op">=</span><span class="cn">NULL</span>,</span>
 <span>  transform.jacobian<span class="op">=</span><span class="cn">NULL</span>, inpar<span class="op">=</span><span class="cn">NULL</span>, loglim<span class="op">=</span><span class="fl">1e-30</span>, MFMA<span class="op">=</span><span class="fl">100000</span>, </span>
 <span>  prophaz.numints.BMA<span class="op">=</span><span class="fl">10</span>, ERRprior.BMA<span class="op">=</span><span class="st">"doubleexponential"</span>, nburnin.BMA<span class="op">=</span><span class="fl">5000</span>, </span>
-<span>  niter.BMA<span class="op">=</span><span class="fl">20000</span>, nchains.BMA<span class="op">=</span><span class="fl">2</span>, thin.BMA<span class="op">=</span><span class="fl">10</span>, included.replicates.BMA<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, </span>
+<span>  niter.BMA<span class="op">=</span><span class="fl">20000</span>, nchains.BMA<span class="op">=</span><span class="fl">2</span>, thin.BMA<span class="op">=</span><span class="fl">10</span>, included.replicates.BMA<span class="op">=</span><span class="cn">NULL</span>, </span>
 <span>  optim.method<span class="op">=</span><span class="st">"Nelder-Mead"</span>, control<span class="op">=</span><span class="cn">NULL</span>, keep.data<span class="op">=</span><span class="cn">TRUE</span>, <span class="va">...</span> <span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -93,46 +92,29 @@ Methods include regression calibration (Carroll et al. 2006 doi:10.1201/97814200
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dl><dt id="arg-formula">formula<a class="anchor" aria-label="anchor" href="#arg-formula"></a></dt>
+<dd><p>an object of class <code>"formula"</code> containing the model specification. See Details.</p></dd>
+
+<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>input data frame.</p></dd>
 
 <dt id="arg-family">family<a class="anchor" aria-label="anchor" href="#arg-family"></a></dt>
 <dd><p>outcome model family: <code>"gaussian"</code>, <code>"binomial"</code>, <code>"poisson"</code>, <code>"prophaz"</code>, <code>"multinomial"</code> or <code>"clogit"</code> (default <code>"gaussian"</code>).</p></dd>
 
-<dt id="arg-y">Y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>name or column index of the outcome variable for linear, binomial, Poisson, multinomial and conditional logistic models, or event indicator variable for the proportional hazards model.</p></dd>
-
-<dt id="arg-dosevars">dosevars<a class="anchor" aria-label="anchor" href="#arg-dosevars"></a></dt>
-<dd><p>names or column indices of exposure replicate vectors.</p></dd>
-
-<dt id="arg-m">M<a class="anchor" aria-label="anchor" href="#arg-m"></a></dt>
-<dd><p>names or column indices of binary effect modifying variables (optional).</p></dd>
-
-<dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>names or column indices of other covariates (optional).</p></dd>
-
-<dt id="arg-offset">offset<a class="anchor" aria-label="anchor" href="#arg-offset"></a></dt>
-<dd><p>name or column index of offset variable for Poisson regression (optional).</p></dd>
-
-<dt id="arg-entry">entry<a class="anchor" aria-label="anchor" href="#arg-entry"></a></dt>
-<dd><p>name or column index of left truncation time variable for proportional hazards regression (optional).</p></dd>
-
-<dt id="arg-exit">exit<a class="anchor" aria-label="anchor" href="#arg-exit"></a></dt>
-<dd><p>name or column index of exit time variable, required when <code>family=prophaz</code>.</p></dd>
-
-<dt id="arg-setnr">setnr<a class="anchor" aria-label="anchor" href="#arg-setnr"></a></dt>
-<dd><p>name or column index of integer-valued matched set variable, required when <code>family="clogit"</code>.</p></dd>
-
-<dt id="arg-methods">methods<a class="anchor" aria-label="anchor" href="#arg-methods"></a></dt>
+</dl><p><!-- %\item{Y}{name or column index of the outcome variable for linear, binomial, Poisson, multinomial and conditional logistic models, or event indicator variable for the proportional hazards model.} -->
+<!-- %\item{dosevars}{names or column indices of exposure replicate vectors.} -->
+<!-- %\item{M}{names or column indices of binary effect modifying variables (optional).} -->
+<!-- %\item{X}{names or column indices of other covariates (optional).} -->
+<!-- %\item{offset}{name or column index of offset variable for Poisson regression (optional).} -->
+<!-- %\item{entry}{name or column index of left truncation time variable for proportional hazards regression (optional).} -->
+<!-- %\item{exit}{name or column index of exit time variable, required when \code{family=prophaz}.} -->
+<!-- %\item{setnr}{name or column index of integer-valued matched set variable, required when \code{family="clogit"}.} --></p>
+<dl><dt id="arg-methods">methods<a class="anchor" aria-label="anchor" href="#arg-methods"></a></dt>
 <dd><p>character vector of one or multiple methods to apply. Options: <code>"RC"</code>, <code>"ERC"</code>, <code>"MCML"</code>, <code>"FMA"</code>, <code>"BMA"</code> (default <code>"RC"</code>).</p></dd>
 
-<dt id="arg-deg">deg<a class="anchor" aria-label="anchor" href="#arg-deg"></a></dt>
-<dd><p>for <code>doseRRmod="ERR"</code> and <code>doseRRmod="EXP"</code>, whether to fit a linear (<code>deg=1</code>) or linear-quadratic (<code>deg=2</code>) dose-response model (default linear).</p></dd>
-
-<dt id="arg-doserrmod">doseRRmod<a class="anchor" aria-label="anchor" href="#arg-doserrmod"></a></dt>
-<dd><p>the functional form of the dose-response relationship; options are exponential RR (<code>"EXP"</code>), linear ERR (<code>"ERR"</code>), or linear-exponential RR (<code>"LINEXP"</code>) (default <code>"ERR"</code>).</p></dd>
-
-<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
+</dl><p><!-- %\item{deg}{for \code{doseRRmod="ERR"} and \code{doseRRmod="EXP"}, whether to fit a linear (\code{deg=1}) or linear-quadratic (\code{deg=2}) dose-response model (default linear).} -->
+<!-- %\item{doseRRmod}{the functional form of the dose-response relationship; options are exponential RR (\code{"EXP"}), linear ERR (\code{"ERR"}), or linear-exponential RR (\code{"LINEXP"}) (default \code{"ERR"}).} --></p>
+<dl><dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
 <dd><p>function for internal parameter transformation (see Details).</p></dd>
 
 <dt id="arg-transform-jacobian">transform.jacobian<a class="anchor" aria-label="anchor" href="#arg-transform-jacobian"></a></dt>
@@ -167,7 +149,7 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 <dd><p>thinning rate for BMA (default 10).</p></dd>
 
 <dt id="arg-included-replicates-bma">included.replicates.BMA<a class="anchor" aria-label="anchor" href="#arg-included-replicates-bma"></a></dt>
-<dd><p>indices of exposure replicates used in BMA (default \ <code>1:length(dosevars)</code>).</p></dd>
+<dd><p>indices of exposure replicates used in BMA (defaults to all replicates).</p></dd>
 
 <dt id="arg-optim-method">optim.method<a class="anchor" aria-label="anchor" href="#arg-optim-method"></a></dt>
 <dd><p>method used for optimization by <code>optim</code>. Options are <code>"Nelder-Mead"</code> and <code>"BFGS"</code>. When using Nelder-Mead, a second optimization with BFGS is run to ensure an optimal fit.</p></dd>
@@ -267,13 +249,11 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">dosevars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">ameras</span><span class="op">(</span>data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span>, Y<span class="op">=</span><span class="st">"Y.gaussian"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, </span></span>
-<span class="r-in"><span>  M<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M1"</span>, <span class="st">"M2"</span><span class="op">)</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span><span class="op">)</span> </span></span>
+<span class="r-in"><span>  <span class="fu">ameras</span><span class="op">(</span><span class="va">Y.gaussian</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, modifier<span class="op">=</span><span class="va">M1</span><span class="op">+</span><span class="va">M2</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span><span class="op">)</span> </span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting RC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ameras(data = data, family = "gaussian", Y = "Y.gaussian", dosevars = dosevars, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     M = c("M1", "M2"), X = c("X1", "X2"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.gaussian ~ dose(V1:V10, modifier = M1 + M2) + </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     X1 + X2, data = data, family = "gaussian")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose replicates: 10</span>
@@ -285,7 +265,7 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      RC     0.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Table of estimated model parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  RC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.3796</span>

@@ -61,15 +61,19 @@ model averaging (Kwon et al. 2023
 ## Usage
 
 ``` r
-ameras(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=NULL, 
-  exit=NULL, setnr=NULL, methods="RC", deg=1, doseRRmod="ERR", transform=NULL,
+ameras(formula, data, family="gaussian", methods="RC", transform=NULL,
   transform.jacobian=NULL, inpar=NULL, loglim=1e-30, MFMA=100000, 
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
-  niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=1:length(dosevars), 
+  niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=NULL, 
   optim.method="Nelder-Mead", control=NULL, keep.data=TRUE, ... )
 ```
 
 ## Arguments
+
+- formula:
+
+  an object of class `"formula"` containing the model specification. See
+  Details.
 
 - data:
 
@@ -80,61 +84,14 @@ ameras(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=
   outcome model family: `"gaussian"`, `"binomial"`, `"poisson"`,
   `"prophaz"`, `"multinomial"` or `"clogit"` (default `"gaussian"`).
 
-- Y:
-
-  name or column index of the outcome variable for linear, binomial,
-  Poisson, multinomial and conditional logistic models, or event
-  indicator variable for the proportional hazards model.
-
-- dosevars:
-
-  names or column indices of exposure replicate vectors.
-
-- M:
-
-  names or column indices of binary effect modifying variables
-  (optional).
-
-- X:
-
-  names or column indices of other covariates (optional).
-
-- offset:
-
-  name or column index of offset variable for Poisson regression
-  (optional).
-
-- entry:
-
-  name or column index of left truncation time variable for proportional
-  hazards regression (optional).
-
-- exit:
-
-  name or column index of exit time variable, required when
-  `family=prophaz`.
-
-- setnr:
-
-  name or column index of integer-valued matched set variable, required
-  when `family="clogit"`.
+&nbsp;
 
 - methods:
 
   character vector of one or multiple methods to apply. Options: `"RC"`,
   `"ERC"`, `"MCML"`, `"FMA"`, `"BMA"` (default `"RC"`).
 
-- deg:
-
-  for `doseRRmod="ERR"` and `doseRRmod="EXP"`, whether to fit a linear
-  (`deg=1`) or linear-quadratic (`deg=2`) dose-response model (default
-  linear).
-
-- doseRRmod:
-
-  the functional form of the dose-response relationship; options are
-  exponential RR (`"EXP"`), linear ERR (`"ERR"`), or linear-exponential
-  RR (`"LINEXP"`) (default `"ERR"`).
+&nbsp;
 
 - transform:
 
@@ -192,8 +149,8 @@ ameras(data, family="gaussian", Y, dosevars, M=NULL, X=NULL, offset=NULL, entry=
 
 - included.replicates.BMA:
 
-  indices of exposure replicates used in BMA (default \\
-  `1:length(dosevars)`).
+  indices of exposure replicates used in BMA (defaults to all
+  replicates).
 
 - optim.method:
 
@@ -421,13 +378,11 @@ Studies
 ``` r
 # \donttest{
   data(data, package="ameras")
-  dosevars <- paste0("V", 1:10)
-  ameras(data=data, family="gaussian", Y="Y.gaussian", dosevars=dosevars, 
-  M=c("M1", "M2"), X=c("X1","X2")) 
+  ameras(Y.gaussian~dose(V1:V10, modifier=M1+M2)+X1+X2, data=data, family="gaussian") 
 #> Fitting RC
 #> Call:
-#> ameras(data = data, family = "gaussian", Y = "Y.gaussian", dosevars = dosevars, 
-#>     M = c("M1", "M2"), X = c("X1", "X2"))
+#> ameras(formula = Y.gaussian ~ dose(V1:V10, modifier = M1 + M2) + 
+#>     X1 + X2, data = data, family = "gaussian")
 #> 
 #> Number of rows: 3000
 #> Number of dose replicates: 10
@@ -439,7 +394,7 @@ Studies
 #>  Method Runtime
 #>      RC     0.3
 #> 
-#> Table of estimated model parameters:
+#> Estimated model parameters:
 #> 
 #>                  RC
 #> (Intercept) -1.3796

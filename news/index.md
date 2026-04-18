@@ -15,6 +15,7 @@
 
 #### User interface changes
 
+- Implemented a formula interface for ameras.
 - Added a print method for the amerasfit class.
 - Moved the computation of confidence intervals to a new method confint.
   The ameras function now returns an amerasfit object without confidence

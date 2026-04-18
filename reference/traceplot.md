@@ -60,8 +60,8 @@ Traceplots and posterior density plots.
 ``` r
 # \donttest{
    data(data, package="ameras")
-   fit <- ameras(data, methods="BMA", Y="Y.gaussian", dosevars=paste0("V", 1:10))
-#> Note: BMA may require extensive computation time in the order of multiple hours
+   fit <- ameras(Y.gaussian~dose(V1:V10), data, methods="BMA")
+#> Note: BMA may require extensive computation time
 #> Fitting BMA
 #> Defining model
 #> Building model

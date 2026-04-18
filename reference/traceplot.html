@@ -90,8 +90,8 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span>   <span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">data</span>, methods<span class="op">=</span><span class="st">"BMA"</span>, Y<span class="op">=</span><span class="st">"Y.gaussian"</span>, dosevars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: BMA may require extensive computation time in the order of multiple hours</span>
+<span class="r-in"><span>   <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span>, <span class="va">data</span>, methods<span class="op">=</span><span class="st">"BMA"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: BMA may require extensive computation time</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting BMA</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Defining model</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Building model</span>

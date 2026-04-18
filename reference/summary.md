@@ -131,18 +131,17 @@ extracting coefficients.
 
 ``` r
 data("data", package = "ameras")
-dosevars <- paste0("V", 1:10)
 
 ## Fit the model
-fit <- ameras(data = data, family = "binomial", Y = "Y.binomial",
-              dosevars = dosevars, methods = "RC", doseRRmod = "ERR")
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+              methods = "RC")
 #> Fitting RC
 
 ## Summary without confidence intervals
 summary(fit)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     methods = "RC", doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#>     family = "binomial", methods = "RC")
 #> 
 #> Total run time: 0 seconds
 #> 
@@ -164,8 +163,8 @@ fit <- confint(fit, method = "wald.orig")
 #> Obtaining profile likelihood CI for dose
 summary(fit)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     methods = "RC", doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#>     family = "binomial", methods = "RC")
 #> 
 #> Total run time: 0 seconds
 #> 
@@ -189,9 +188,8 @@ s$summary_table
 
 ## Multiple methods
 if (FALSE) { # \dontrun{
-fit2 <- ameras(data = data, family = "binomial", Y = "Y.binomial",
-               dosevars = dosevars, methods = c("RC", "ERC", "MCML"),
-               doseRRmod = "ERR")
+fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+              methods = c("RC", "ERC", "MCML"))
 fit2 <- confint(fit2, method = "wald.orig")
 summary(fit2)
 } # }

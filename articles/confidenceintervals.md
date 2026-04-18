@@ -60,21 +60,13 @@ transformations](https://ameras.sanderroberti.com/articles/transformations.md)).
 ``` r
 data(data, package="ameras")
 dosevars <- paste0("V", 1:10)
-fit.ameras.waldorig <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("RC"), doseRRmod="ERR")
+fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
+                            family="binomial", methods=c("RC"))
 #> Fitting RC
-fit.ameras.waldorig <- confint(fit.ameras.waldorig, type="wald.orig")
 
-fit.ameras.waldtransformed <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), 
-                                     data=data, family="binomial", methods=c("RC"), 
-                                     doseRRmod="ERR")
-#> Fitting RC
-fit.ameras.waldtransformed <- confint(fit.ameras.waldtransformed, type="wald.transformed")
-
-fit.ameras.proflik <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("RC"), CI="proflik", doseRRmod="ERR")
-#> Fitting RC
-fit.ameras.proflik <- confint(fit.ameras.proflik, type="proflik", parm="all")
+fit.ameras.waldorig <- confint(fit.ameras, type="wald.orig")
+fit.ameras.waldtransformed <- confint(fit.ameras, type="wald.transformed")
+fit.ameras.proflik <- confint(fit.ameras, type="proflik", parm="all")
 #> Obtaining profile likelihood CI for (Intercept)
 #> Obtaining profile likelihood CI for X1
 #> Obtaining profile likelihood CI for X2
@@ -82,8 +74,8 @@ fit.ameras.proflik <- confint(fit.ameras.proflik, type="proflik", parm="all")
 
 summary(fit.ameras.waldorig)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
+#>     X2, data = data, family = "binomial", methods = c("RC"))
 #> 
 #> Total run time: 0.4 seconds
 #> 
@@ -101,15 +93,15 @@ summary(fit.ameras.waldorig)
 #>      RC        dose   0.8508 0.14517        0.5663        1.1353
 summary(fit.ameras.waldtransformed)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
+#>     X2, data = data, family = "binomial", methods = c("RC"))
 #> 
-#> Total run time: 0.2 seconds
+#> Total run time: 0.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.2
+#>      RC     0.4
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -120,16 +112,15 @@ summary(fit.ameras.waldtransformed)
 #>      RC        dose   0.8508 0.14517        0.6050        1.1827
 summary(fit.ameras.proflik)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("RC"), doseRRmod = "ERR", 
-#>     CI = "proflik")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
+#>     X2, data = data, family = "binomial", methods = c("RC"))
 #> 
-#> Total run time: 0.2 seconds
+#> Total run time: 0.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.2
+#>      RC     0.4
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -151,20 +142,17 @@ samples.
 Again, we use the example data to illustrate.
 
 ``` r
-fit.ameras.hpd <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("FMA"), doseRRmod="ERR")
+fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
+                            family="binomial", methods=c("FMA"))
 #> Fitting FMA
-fit.ameras.hpd <- confint(fit.ameras.hpd, type="hpd")
 
-fit.ameras.percentile <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", methods=c("FMA"), doseRRmod="ERR")
-#> Fitting FMA
-fit.ameras.percentile <- confint(fit.ameras.percentile, type="percentile")
+fit.ameras.hpd <- confint(fit.ameras2, type="hpd")
+fit.ameras.percentile <- confint(fit.ameras2, type="percentile")
 
 summary(fit.ameras.hpd)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("FMA"), doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
+#>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
 #> Total run time: 1.6 seconds
 #> 
@@ -182,21 +170,21 @@ summary(fit.ameras.hpd)
 #>     FMA        dose   0.8442 0.14511        0.5604        1.1301
 summary(fit.ameras.percentile)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("FMA"), doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
+#>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.7 seconds
+#> Total run time: 1.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.7
+#>     FMA     1.6
 #> 
 #> Summary of coefficients by method:
 #> 
 #>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>     FMA (Intercept)  -1.0576 0.08738       -1.2293       -0.8862
-#>     FMA          X1   0.4428 0.07607        0.2940        0.5925
-#>     FMA          X2  -0.3377 0.09565       -0.5256       -0.1516
-#>     FMA        dose   0.8444 0.14491        0.5611        1.1297
+#>     FMA (Intercept)  -1.0571 0.08777       -1.2290       -0.8843
+#>     FMA          X1   0.4426 0.07638        0.2929        0.5925
+#>     FMA          X2  -0.3380 0.09564       -0.5270       -0.1503
+#>     FMA        dose   0.8442 0.14511        0.5600        1.1299
 ```

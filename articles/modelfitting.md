@@ -22,10 +22,23 @@ All functionality of the package is included in the function `ameras`.
 This vignette demonstrates the basic functionality and the generated
 output.
 
+### Model specification
+
+Models are specified through formulas. The data should contain the
+exposure replicates in an uninterrupted series of columns with
+sequential names, such as `D1, D2, ..., D1000`. Then the model is
+specified with formulas such as
+`Y~dose(D1:D1000, deg=2, modifier=M1+M2, model="ERR")+X1+X2`. Here the
+terms `M1` and `M2` are binary effect modifiers, and the specified model
+is a linear-quadratic (since `deg=2`) excess relative risk model. The
+other covariates are `X1` and `X2`. When `deg`, `modifier`, and `model`
+are not supplied, the defaults are `deg=1`, no effect modifiers, and
+`model="ERR"`.
+
 ### Example data
 
 The included example dataset contains 3,000 individuals with 10 exposure
-replicates `V1`-`V10`, binary covariates `X1` and `X2` and risk
+replicates `V1`-`V10`, binary covariates `X1` and `X2` and effect
 modifiers `M1` and `M2`, and outcomes of all types (`Y.gaussian`,
 `Y.binomial`, `Y.poisson`, `status`, `time`, `Y.multinomial`,
 `Y.clogit`, and `setnr`).
@@ -56,23 +69,16 @@ head(data)
 #> 6 0.02298922 0.02399258 0.01890339 0.02094013 0.02303085 0.02091743
 ```
 
-There are exposure replicates are in columns `V1`-`V10`, so define
-`dosevars` as follows:
-
-``` r
-dosevars <- paste0("V", 1:10)
-```
-
 ## Linear regression & displaying output
 
 Now we fit all methods to the data through one function call:
 
 ``` r
 set.seed(12345)
-fit.ameras.linreg <- ameras(Y="Y.gaussian", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="gaussian", methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
+fit.ameras.linreg <- ameras(Y.gaussian~dose(V1:V10)+X1+X2, data=data, family="gaussian", 
+                            methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                             niter.BMA = 5000, nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
@@ -107,7 +113,7 @@ for each method, each being a list:
 ``` r
 str(fit.ameras.linreg)
 #> List of 13
-#>  $ call              : language ameras(data = data, family = "gaussian", Y = "Y.gaussian", dosevars = dosevars,      X = c("X1", "X2"), methods =| __truncated__ ...
+#>  $ call              : language ameras(formula = Y.gaussian ~ dose(V1:V10) + X1 + X2, data = data, family = "gaussian",      methods = c("RC", "E| __truncated__ ...
 #>  $ num.rows          : int 3000
 #>  $ num.replicates    : int 10
 #>  $ transform         :function (params, boundcheck = FALSE, ...)  
@@ -143,7 +149,7 @@ str(fit.ameras.linreg)
 #>   ..$ dosevars    : chr [1:10] "V1" "V2" "V3" "V4" ...
 #>   ..$ Y           : chr "Y.gaussian"
 #>   ..$ M           : NULL
-#>   ..$ X           : chr [1:2] "X1" "X2"
+#>   ..$ X           : int [1:2] 9 10
 #>   ..$ offset      : NULL
 #>   ..$ entry       : NULL
 #>   ..$ exit        : NULL
@@ -170,7 +176,7 @@ str(fit.ameras.linreg)
 #>   .. ..$ counts     : Named num [1:2] 509 1
 #>   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"
 #>   ..$ loglik      : num -4563
-#>   ..$ runtime     : chr "0.3 seconds"
+#>   ..$ runtime     : chr "0.2 seconds"
 #>   ..$ ERC         : logi FALSE
 #>  $ ERC               :List of 7
 #>   ..$ coefficients: Named num [1:5] -1.361 0.48 -0.519 1.165 1.106
@@ -188,7 +194,7 @@ str(fit.ameras.linreg)
 #>   .. ..$ counts     : Named num [1:2] 546 9
 #>   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"
 #>   ..$ loglik      : num -4559
-#>   ..$ runtime     : chr "134.2 seconds"
+#>   ..$ runtime     : chr "123 seconds"
 #>   ..$ ERC         : logi TRUE
 #>  $ MCML              :List of 6
 #>   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138
@@ -206,7 +212,7 @@ str(fit.ameras.linreg)
 #>   .. ..$ counts     : Named num [1:2] 555 7
 #>   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"
 #>   ..$ loglik      : num -4646
-#>   ..$ runtime     : chr "0.6 seconds"
+#>   ..$ runtime     : chr "0.7 seconds"
 #>  $ FMA               :List of 6
 #>   ..$ coefficients       : Named num [1:5] -1.28 0.484 -0.517 1.079 1.138
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
@@ -220,7 +226,7 @@ str(fit.ameras.linreg)
 #>   .. ..$ X2         : num [1:100006] -0.525 -0.535 -0.49 -0.529 -0.538 ...
 #>   .. ..$ dose       : num [1:100006] 1.08 1.09 1.1 1.11 1.03 ...
 #>   .. ..$ sigma      : num [1:100006] 1.17 1.14 1.13 1.15 1.12 ...
-#>   ..$ runtime            : chr "1.2 seconds"
+#>   ..$ runtime            : chr "1.3 seconds"
 #>  $ BMA               :List of 6
 #>   ..$ coefficients       : Named num [1:5] -1.28 0.483 -0.517 1.079 1.139
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
@@ -239,7 +245,7 @@ str(fit.ameras.linreg)
 #>   .. .. .. ..$ : NULL
 #>   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...
 #>   ..$ included.replicates: int [1:10] 1 2 3 4 5 6 7 8 9 10
-#>   ..$ runtime            : chr "67 seconds"
+#>   ..$ runtime            : chr "73.2 seconds"
 #>  - attr(*, "class")= chr "amerasfit"
 ```
 
@@ -293,7 +299,7 @@ fit.ameras.linreg$RC
 #> [1] -4563.325
 #> 
 #> $runtime
-#> [1] "0.3 seconds"
+#> [1] "0.2 seconds"
 #> 
 #> $ERC
 #> [1] FALSE
@@ -305,20 +311,20 @@ only apply to BMA results):
 ``` r
 summary(fit.ameras.linreg)
 #> Call:
-#> ameras(data = data, family = "gaussian", Y = "Y.gaussian", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("RC", "ERC", "MCML", "FMA", 
+#> ameras(formula = Y.gaussian ~ dose(V1:V10) + X1 + X2, data = data, 
+#>     family = "gaussian", methods = c("RC", "ERC", "MCML", "FMA", 
 #>         "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 203.3 seconds
+#> Total run time: 198.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.3
-#>     ERC   134.2
-#>    MCML     0.6
-#>     FMA     1.2
-#>     BMA    67.0
+#>      RC     0.2
+#>     ERC   123.0
+#>    MCML     0.7
+#>     FMA     1.3
+#>     BMA    73.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -371,14 +377,14 @@ To produce traceplots and density plots for BMA results, use
 traceplot(fit.ameras.linreg)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-8-1.png)![](modelfitting_files/figure-html/unnamed-chunk-8-2.png)
+![](modelfitting_files/figure-html/unnamed-chunk-7-1.png)![](modelfitting_files/figure-html/unnamed-chunk-7-2.png)
 
 ## Logistic regression
 
 To fit a logistic regression model, the syntax is very similar. However,
 `ameras` offers three functional forms for modeling the exposure-outcome
 relationship. Here, we will illustrate the standard exponential
-relationship `doseRRmod="EXP"`. For more information, see the vignette
+relationship `model="EXP"`. For more information, see the vignette
 [Relative risk
 models](https://ameras.sanderroberti.com/articles/relativeriskmodels.md).
 
@@ -387,11 +393,10 @@ First, we fit models including a quadratic exposure term by setting
 
 ``` r
 set.seed(33521)
-fit.ameras.logreg <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", deg=2, doseRRmod = "EXP", 
-                            methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
-                            nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit.ameras.logreg <- ameras(Y.binomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, data=data, 
+                            family="binomial", methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
+                            niter.BMA = 5000, nburnin.BMA = 1000)
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
@@ -425,21 +430,20 @@ fit.ameras.logreg <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), d
 ``` r
 summary(fit.ameras.logreg)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("RC", "ERC", "MCML", "FMA", 
-#>         "BMA"), deg = 2, doseRRmod = "EXP", nburnin.BMA = 1000, 
-#>     niter.BMA = 5000)
+#> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "EXP") + 
+#>     X1 + X2, data = data, family = "binomial", methods = c("RC", 
+#>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 158 seconds
+#> Total run time: 139.2 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC   100.2
-#>    MCML     1.1
-#>     FMA     2.7
-#>     BMA    53.7
+#>     ERC    78.1
+#>    MCML     1.0
+#>     FMA     2.8
+#>     BMA    57.0
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -487,17 +491,16 @@ coef(fit.ameras.logreg)
 traceplot(fit.ameras.logreg)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-11-1.png)![](modelfitting_files/figure-html/unnamed-chunk-11-2.png)
+![](modelfitting_files/figure-html/unnamed-chunk-10-1.png)![](modelfitting_files/figure-html/unnamed-chunk-10-2.png)
 
 Without the quadratic term (`deg=1`):
 
 ``` r
 set.seed(3521216)
-fit.ameras.logreg.lin <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                                family="binomial", deg=1, doseRRmod = "EXP", 
-                                methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
-                                nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit.ameras.logreg.lin <- ameras(Y.binomial~dose(V1:V10, deg=1, model="EXP")+X1+X2,  data=data, 
+                                family="binomial", methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
+                                niter.BMA = 5000, nburnin.BMA = 1000)
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
@@ -529,21 +532,20 @@ fit.ameras.logreg.lin <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"
 ``` r
 summary(fit.ameras.logreg.lin)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("RC", "ERC", "MCML", "FMA", 
-#>         "BMA"), deg = 1, doseRRmod = "EXP", nburnin.BMA = 1000, 
-#>     niter.BMA = 5000)
+#> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 1, model = "EXP") + 
+#>     X1 + X2, data = data, family = "binomial", methods = c("RC", 
+#>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 115.6 seconds
+#> Total run time: 118.8 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.1
-#>     ERC    63.8
+#>      RC     0.2
+#>     ERC    64.2
 #>    MCML     0.7
-#>     FMA     1.5
-#>     BMA    49.5
+#>     FMA     1.6
+#>     BMA    52.1
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -585,20 +587,21 @@ coef(fit.ameras.logreg.lin)
 traceplot(fit.ameras.logreg.lin)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-14-1.png)![](modelfitting_files/figure-html/unnamed-chunk-14-2.png)
+![](modelfitting_files/figure-html/unnamed-chunk-13-1.png)![](modelfitting_files/figure-html/unnamed-chunk-13-2.png)
 
 ## Poisson regression
 
-Again, we first fit models including a quadratic exposure term by
-setting `deg=2`.
+For Poisson regression, an offset can be optionally used by including an
+`offset` term in the formula, e.g., `Y~dose(V1:V10)~X1+offset(PYR)`.
+Here, we show models without using an offset, first including a
+quadratic exposure term:
 
 ``` r
 set.seed(332101)
-fit.ameras.poisson <- ameras(Y="Y.poisson", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                             family="poisson", deg=2, doseRRmod = "EXP", 
-                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
-                             nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit.ameras.poisson <- ameras(Y.poisson~dose(V1:V10, deg=2, model="EXP")+X1+X2, data=data, 
+                             family="poisson", methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
+                             niter.BMA = 5000, nburnin.BMA = 1000)
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
@@ -634,21 +637,20 @@ fit.ameras.poisson <- ameras(Y="Y.poisson", dosevars=dosevars, X=c("X1","X2"), d
 ``` r
 summary(fit.ameras.poisson)
 #> Call:
-#> ameras(data = data, family = "poisson", Y = "Y.poisson", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("RC", "ERC", "MCML", "FMA", 
-#>         "BMA"), deg = 2, doseRRmod = "EXP", nburnin.BMA = 1000, 
-#>     niter.BMA = 5000)
+#> ameras(formula = Y.poisson ~ dose(V1:V10, deg = 2, model = "EXP") + 
+#>     X1 + X2, data = data, family = "poisson", methods = c("RC", 
+#>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 69.5 seconds
+#> Total run time: 69.9 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC     1.2
-#>    MCML     1.5
-#>     FMA     4.0
-#>     BMA    62.5
+#>     ERC     1.8
+#>    MCML     1.3
+#>     FMA     3.1
+#>     BMA    63.4
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -696,17 +698,16 @@ coef(fit.ameras.poisson)
 traceplot(fit.ameras.poisson)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-17-1.png)![](modelfitting_files/figure-html/unnamed-chunk-17-2.png)
+![](modelfitting_files/figure-html/unnamed-chunk-16-1.png)![](modelfitting_files/figure-html/unnamed-chunk-16-2.png)
 
 Without the quadratic term (`deg=1`):
 
 ``` r
 set.seed(24252)
-fit.ameras.poisson.lin <- ameras(Y="Y.poisson", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                                 family="poisson", deg=1, doseRRmod = "EXP", 
-                                 methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
-                                 nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit.ameras.poisson.lin <- ameras(Y.poisson~dose(V1:V10, deg=1, model="EXP")+X1+X2, data=data, 
+                                 family="poisson", methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
+                                 niter.BMA = 5000, nburnin.BMA = 1000)
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
@@ -738,21 +739,20 @@ fit.ameras.poisson.lin <- ameras(Y="Y.poisson", dosevars=dosevars, X=c("X1","X2"
 ``` r
 summary(fit.ameras.poisson.lin)
 #> Call:
-#> ameras(data = data, family = "poisson", Y = "Y.poisson", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = c("RC", "ERC", "MCML", "FMA", 
-#>         "BMA"), deg = 1, doseRRmod = "EXP", nburnin.BMA = 1000, 
-#>     niter.BMA = 5000)
+#> ameras(formula = Y.poisson ~ dose(V1:V10, deg = 1, model = "EXP") + 
+#>     X1 + X2, data = data, family = "poisson", methods = c("RC", 
+#>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 61.1 seconds
+#> Total run time: 65.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.2
-#>     ERC     1.5
-#>    MCML     0.6
-#>     FMA     1.8
-#>     BMA    57.0
+#>     ERC     1.0
+#>    MCML     0.7
+#>     FMA     1.9
+#>     BMA    61.8
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -794,31 +794,31 @@ coef(fit.ameras.poisson.lin)
 traceplot(fit.ameras.poisson.lin)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-20-1.png)![](modelfitting_files/figure-html/unnamed-chunk-20-2.png)
+![](modelfitting_files/figure-html/unnamed-chunk-19-1.png)![](modelfitting_files/figure-html/unnamed-chunk-19-2.png)
 
 ## Proportional hazards regression
 
-Proportional hazards regression uses the same syntax, with `Y` the 0-1
-status variable and `exit` for the exit time variable. In case of left
-truncation, entry times can be specified through the `entry` argument.
-Note that BMA fits a piecewise constant baseline hazard `h0` as the
-proportional hazards model is not directly supported. By default, the
-observed time interval is divided into 10 intervals using quantiles of
-the observed event times among cases. This number of such intervals can
-be specified through the `prophaz.numints.BMA` argument. The BMA output
-contains the `prophaz.numints.BMA+1` cutpoints defining the intervals in
-addition to `h0`.
+Proportional hazards regression uses syntax similar to the `survival`
+package, with models specified using formulas with `Surv(exit, status)`
+or `Surv(entry, exit, status)` on the left hand side. Note that BMA fits
+a piecewise constant baseline hazard `h0` as the proportional hazards
+model is not directly supported. By default, the observed time interval
+is divided into 10 intervals using quantiles of the observed event times
+among cases. This number of such intervals can be specified through the
+`prophaz.numints.BMA` argument. The BMA output contains the
+`prophaz.numints.BMA+1` cutpoints defining the intervals in addition to
+`h0`.
 
 Again, we first fit models including a quadratic exposure term by
 setting `deg=2`.
 
 ``` r
 set.seed(332120000)
-fit.ameras.prophaz <- ameras(Y="status", exit="time", dosevars=dosevars, X=c("X1","X2"), 
-                             data=data, family="prophaz", deg=2, doseRRmod = "EXP", 
+fit.ameras.prophaz <- ameras(Surv(time, status)~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
+                             data=data, family="prophaz", 
                              methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
                              nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :
@@ -845,235 +845,44 @@ fit.ameras.prophaz <- ameras(Y="status", exit="time", dosevars=dosevars, X=c("X1
 #> running chain 1...
 #> warning: logProb of data node zeros[7]: logProb less than -1e12.
 #> warning: logProb of data node zeros[17]: logProb less than -1e12.
-#> warning: logProb of data node zeros[41]: logProb less than -1e12.
-#> warning: logProb of data node zeros[46]: logProb less than -1e12.
-#> warning: logProb of data node zeros[52]: logProb less than -1e12.
-#> warning: logProb of data node zeros[58]: logProb less than -1e12.
 #> warning: logProb of data node zeros[71]: logProb less than -1e12.
-#> warning: logProb of data node zeros[157]: logProb less than -1e12.
-#> warning: logProb of data node zeros[166]: logProb less than -1e12.
-#> warning: logProb of data node zeros[175]: logProb less than -1e12.
-#> warning: logProb of data node zeros[178]: logProb less than -1e12.
-#> warning: logProb of data node zeros[212]: logProb less than -1e12.
-#> warning: logProb of data node zeros[238]: logProb less than -1e12.
-#> warning: logProb of data node zeros[243]: logProb less than -1e12.
-#> warning: logProb of data node zeros[246]: logProb less than -1e12.
 #> warning: logProb of data node zeros[247]: logProb less than -1e12.
-#> warning: logProb of data node zeros[260]: logProb less than -1e12.
-#> warning: logProb of data node zeros[261]: logProb less than -1e12.
-#> warning: logProb of data node zeros[263]: logProb less than -1e12.
 #> warning: logProb of data node zeros[267]: logProb less than -1e12.
 #> warning: logProb of data node zeros[270]: logProb less than -1e12.
-#> warning: logProb of data node zeros[278]: logProb less than -1e12.
-#> warning: logProb of data node zeros[311]: logProb less than -1e12.
-#> warning: logProb of data node zeros[335]: logProb less than -1e12.
-#> warning: logProb of data node zeros[341]: logProb less than -1e12.
-#> warning: logProb of data node zeros[348]: logProb less than -1e12.
-#> warning: logProb of data node zeros[352]: logProb less than -1e12.
-#> warning: logProb of data node zeros[370]: logProb less than -1e12.
-#> warning: logProb of data node zeros[372]: logProb less than -1e12.
-#> warning: logProb of data node zeros[378]: logProb less than -1e12.
-#> warning: logProb of data node zeros[386]: logProb less than -1e12.
-#> warning: logProb of data node zeros[420]: logProb less than -1e12.
-#> warning: logProb of data node zeros[432]: logProb less than -1e12.
 #> warning: logProb of data node zeros[433]: logProb less than -1e12.
-#> warning: logProb of data node zeros[438]: logProb less than -1e12.
-#> warning: logProb of data node zeros[440]: logProb less than -1e12.
-#> warning: logProb of data node zeros[449]: logProb less than -1e12.
-#> warning: logProb of data node zeros[450]: logProb less than -1e12.
-#> warning: logProb of data node zeros[458]: logProb less than -1e12.
-#> warning: logProb of data node zeros[508]: logProb less than -1e12.
 #> warning: logProb of data node zeros[509]: logProb less than -1e12.
-#> warning: logProb of data node zeros[528]: logProb less than -1e12.
-#> warning: logProb of data node zeros[535]: logProb less than -1e12.
-#> warning: logProb of data node zeros[546]: logProb less than -1e12.
-#> warning: logProb of data node zeros[547]: logProb less than -1e12.
-#> warning: logProb of data node zeros[552]: logProb less than -1e12.
-#> warning: logProb of data node zeros[554]: logProb less than -1e12.
-#> warning: logProb of data node zeros[577]: logProb less than -1e12.
-#> warning: logProb of data node zeros[608]: logProb less than -1e12.
-#> warning: logProb of data node zeros[611]: logProb less than -1e12.
 #> warning: logProb of data node zeros[620]: logProb less than -1e12.
-#> warning: logProb of data node zeros[627]: logProb less than -1e12.
-#> warning: logProb of data node zeros[631]: logProb less than -1e12.
-#> warning: logProb of data node zeros[656]: logProb less than -1e12.
-#> warning: logProb of data node zeros[661]: logProb less than -1e12.
 #> warning: logProb of data node zeros[676]: logProb less than -1e12.
-#> warning: logProb of data node zeros[684]: logProb less than -1e12.
-#> warning: logProb of data node zeros[698]: logProb less than -1e12.
-#> warning: logProb of data node zeros[714]: logProb less than -1e12.
 #> warning: logProb of data node zeros[716]: logProb less than -1e12.
-#> warning: logProb of data node zeros[727]: logProb less than -1e12.
-#> warning: logProb of data node zeros[749]: logProb less than -1e12.
-#> warning: logProb of data node zeros[806]: logProb less than -1e12.
-#> warning: logProb of data node zeros[809]: logProb less than -1e12.
-#> warning: logProb of data node zeros[821]: logProb less than -1e12.
 #> warning: logProb of data node zeros[833]: logProb less than -1e12.
-#> warning: logProb of data node zeros[839]: logProb less than -1e12.
-#> warning: logProb of data node zeros[864]: logProb less than -1e12.
-#> warning: logProb of data node zeros[873]: logProb less than -1e12.
-#> warning: logProb of data node zeros[910]: logProb less than -1e12.
-#> warning: logProb of data node zeros[962]: logProb less than -1e12.
-#> warning: logProb of data node zeros[971]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1002]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1004]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1009]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1014]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1036]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1040]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1052]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1070]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1074]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1076]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1081]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1116]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1122]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1137]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1151]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1179]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1187]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1208]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1214]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1245]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1247]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1282]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1296]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1300]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1319]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1322]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1327]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1340]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1354]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1357]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1368]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1373]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1375]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1406]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1425]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1449]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1464]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1470]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1475]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1480]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1492]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1496]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1517]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1524]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1527]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1541]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1553]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1566]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1569]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1572]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1588]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1603]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1617]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1635]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1661]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1663]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1664]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1693]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1716]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1755]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1768]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1783]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1796]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1807]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1818]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1836]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1838]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1851]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1888]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1900]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1921]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1930]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1948]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1968]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1971]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1972]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1979]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1983]: logProb less than -1e12.
+#> warning: logProb of data node zeros[1827]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1991]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1997]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2021]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2035]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2054]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2087]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2089]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2101]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2112]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2129]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2131]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2134]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2156]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2198]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2208]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2216]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2227]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2237]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2239]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2255]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2294]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2312]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2338]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2339]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2360]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2368]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2373]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2395]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2398]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2407]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2409]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2413]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2422]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2444]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2452]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2463]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2475]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2478]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2490]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2495]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2524]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2530]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2559]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2562]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2573]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2605]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2617]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2655]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2665]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2671]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2684]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2686]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2688]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2694]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2715]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2723]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2728]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2733]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2743]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2747]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2757]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2771]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2774]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2787]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2807]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2813]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2824]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2838]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2839]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2907]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2909]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2915]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2937]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2945]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2968]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2971]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2993]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2998]: logProb less than -1e12.
 #> |-------------|-------------|-------------|-------------|
 #> |-------------------------------------------------------|
 #> running chain 2...
+#> warning: logProb of data node zeros[1635]: logProb less than -1e12.
+#> warning: logProb of data node zeros[2907]: logProb less than -1e12.
 #> |-------------|-------------|-------------|-------------|
 #> |-------------------------------------------------------|
 ```
@@ -1081,21 +890,20 @@ fit.ameras.prophaz <- ameras(Y="status", exit="time", dosevars=dosevars, X=c("X1
 ``` r
 summary(fit.ameras.prophaz)
 #> Call:
-#> ameras(data = data, family = "prophaz", Y = "status", dosevars = dosevars, 
-#>     X = c("X1", "X2"), exit = "time", methods = c("RC", "ERC", 
-#>         "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", nburnin.BMA = 1000, 
-#>     niter.BMA = 5000)
+#> ameras(formula = Surv(time, status) ~ dose(V1:V10, deg = 2, model = "EXP") + 
+#>     X1 + X2, data = data, family = "prophaz", methods = c("RC", 
+#>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 870.5 seconds
+#> Total run time: 671.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC   765.8
-#>    MCML     0.8
-#>     FMA     2.3
-#>     BMA   101.3
+#>     ERC   561.1
+#>    MCML     0.7
+#>     FMA     2.1
+#>     BMA   107.3
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1112,24 +920,24 @@ summary(fit.ameras.prophaz)
 #>    MCML           X2 -0.425156 0.11196   NA     NA
 #>    MCML         dose  0.590217 0.08046   NA     NA
 #>    MCML dose_squared -0.038038 0.01523   NA     NA
-#>     FMA           X1  0.629250 0.08557   NA     NA
-#>     FMA           X2 -0.425507 0.11190   NA     NA
-#>     FMA         dose  0.589537 0.08127   NA     NA
-#>     FMA dose_squared -0.037872 0.01546   NA     NA
-#>     BMA           X1  0.635157 0.08523 1.00 397.00
-#>     BMA           X2 -0.423897 0.11063 1.01 747.00
-#>     BMA         dose  0.617073 0.08181 1.01 101.00
-#>     BMA dose_squared -0.042851 0.01554 1.01 116.00
-#>     BMA        h0[1]  0.316373 0.05147 1.00 384.00
-#>     BMA        h0[2]  0.343831 0.05275 1.00 394.00
-#>     BMA        h0[3]  0.262707 0.04153 1.00 281.00
-#>     BMA        h0[4]  0.294011 0.04621 1.00 410.00
-#>     BMA        h0[5]  0.314660 0.04963 1.01 362.00
-#>     BMA        h0[6]  0.396503 0.06335 1.00 411.00
-#>     BMA        h0[7]  0.269226 0.03952 1.00 373.00
-#>     BMA        h0[8]  0.309864 0.04606 1.00 326.00
-#>     BMA        h0[9]  0.268182 0.04019 1.00 398.00
-#>     BMA       h0[10]  0.304145 0.04624 1.01 367.00
+#>     FMA           X1  0.624536 0.08542   NA     NA
+#>     FMA           X2 -0.433644 0.11160   NA     NA
+#>     FMA         dose  0.594196 0.07841   NA     NA
+#>     FMA dose_squared -0.038945 0.01454   NA     NA
+#>     BMA           X1  0.631447 0.08479 1.02 311.00
+#>     BMA           X2 -0.432579 0.11574 1.02 740.00
+#>     BMA         dose  0.579261 0.07815 1.00  89.00
+#>     BMA dose_squared -0.036336 0.01514 1.00  82.00
+#>     BMA        h0[1]  0.331844 0.05060 1.01 350.00
+#>     BMA        h0[2]  0.354968 0.05515 1.00 457.00
+#>     BMA        h0[3]  0.274038 0.04421 1.00 341.00
+#>     BMA        h0[4]  0.304833 0.04870 1.00 426.00
+#>     BMA        h0[5]  0.324187 0.05181 1.01 452.00
+#>     BMA        h0[6]  0.410268 0.06456 1.01 300.00
+#>     BMA        h0[7]  0.275961 0.04233 1.00 467.00
+#>     BMA        h0[8]  0.319488 0.04863 1.00 417.00
+#>     BMA        h0[9]  0.279575 0.04103 1.00 358.00
+#>     BMA       h0[10]  0.317120 0.04949 1.01 288.00
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -1137,20 +945,20 @@ summary(fit.ameras.prophaz)
 ``` r
 coef(fit.ameras.prophaz)
 #>                       RC          ERC        MCML         FMA         BMA
-#> X1            0.62967434  0.636754979  0.62916199  0.62925032  0.63515662
-#> X2           -0.42311583 -0.422041734 -0.42515576 -0.42550683 -0.42389658
-#> dose          0.58761408  0.295487972  0.59021691  0.58953694  0.61707317
-#> dose_squared -0.03368205 -0.003356734 -0.03803829 -0.03787174 -0.04285062
-#> h0[1]                 NA           NA          NA          NA  0.31637277
-#> h0[2]                 NA           NA          NA          NA  0.34383087
-#> h0[3]                 NA           NA          NA          NA  0.26270690
-#> h0[4]                 NA           NA          NA          NA  0.29401059
-#> h0[5]                 NA           NA          NA          NA  0.31466013
-#> h0[6]                 NA           NA          NA          NA  0.39650271
-#> h0[7]                 NA           NA          NA          NA  0.26922630
-#> h0[8]                 NA           NA          NA          NA  0.30986447
-#> h0[9]                 NA           NA          NA          NA  0.26818217
-#> h0[10]                NA           NA          NA          NA  0.30414532
+#> X1            0.62967434  0.636754979  0.62916199  0.62453646  0.63144657
+#> X2           -0.42311583 -0.422041734 -0.42515576 -0.43364414 -0.43257946
+#> dose          0.58761408  0.295487972  0.59021691  0.59419590  0.57926053
+#> dose_squared -0.03368205 -0.003356734 -0.03803829 -0.03894528 -0.03633593
+#> h0[1]                 NA           NA          NA          NA  0.33184446
+#> h0[2]                 NA           NA          NA          NA  0.35496760
+#> h0[3]                 NA           NA          NA          NA  0.27403811
+#> h0[4]                 NA           NA          NA          NA  0.30483271
+#> h0[5]                 NA           NA          NA          NA  0.32418664
+#> h0[6]                 NA           NA          NA          NA  0.41026813
+#> h0[7]                 NA           NA          NA          NA  0.27596111
+#> h0[8]                 NA           NA          NA          NA  0.31948789
+#> h0[9]                 NA           NA          NA          NA  0.27957458
+#> h0[10]                NA           NA          NA          NA  0.31712022
 ```
 
 The BMA output now contains the intervals with piecewise constant
@@ -1165,17 +973,17 @@ fit.ameras.prophaz$BMA$prophaz.timepoints
 traceplot(fit.ameras.prophaz)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-24-1.png)![](modelfitting_files/figure-html/unnamed-chunk-24-2.png)![](modelfitting_files/figure-html/unnamed-chunk-24-3.png)![](modelfitting_files/figure-html/unnamed-chunk-24-4.png)![](modelfitting_files/figure-html/unnamed-chunk-24-5.png)
+![](modelfitting_files/figure-html/unnamed-chunk-23-1.png)![](modelfitting_files/figure-html/unnamed-chunk-23-2.png)![](modelfitting_files/figure-html/unnamed-chunk-23-3.png)![](modelfitting_files/figure-html/unnamed-chunk-23-4.png)![](modelfitting_files/figure-html/unnamed-chunk-23-5.png)
 
 Without the quadratic term (`deg=1`):
 
 ``` r
 set.seed(24978252)
-fit.ameras.prophaz.lin <- ameras(Y="status", exit="time", dosevars=dosevars, X=c("X1","X2"), 
-                                 data=data, family="prophaz", deg=1, doseRRmod = "EXP", 
-                                 methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
-                                 nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit.ameras.prophaz.lin <- ameras(Surv(time, status)~dose(V1:V10, deg=1, model="EXP")+X1+X2, 
+                             data=data, family="prophaz", 
+                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
+                             nburnin.BMA = 1000)
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :
@@ -1210,21 +1018,20 @@ fit.ameras.prophaz.lin <- ameras(Y="status", exit="time", dosevars=dosevars, X=c
 ``` r
 summary(fit.ameras.prophaz.lin)
 #> Call:
-#> ameras(data = data, family = "prophaz", Y = "status", dosevars = dosevars, 
-#>     X = c("X1", "X2"), exit = "time", methods = c("RC", "ERC", 
-#>         "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", nburnin.BMA = 1000, 
-#>     niter.BMA = 5000)
+#> ameras(formula = Surv(time, status) ~ dose(V1:V10, deg = 1, model = "EXP") + 
+#>     X1 + X2, data = data, family = "prophaz", methods = c("RC", 
+#>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 419.2 seconds
+#> Total run time: 368.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.1
-#>     ERC   323.0
+#>     ERC   261.1
 #>    MCML     0.4
-#>     FMA     1.3
-#>     BMA    94.4
+#>     FMA     1.2
+#>     BMA   105.8
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1280,7 +1087,7 @@ coef(fit.ameras.prophaz.lin)
 traceplot(fit.ameras.prophaz.lin)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-27-1.png)![](modelfitting_files/figure-html/unnamed-chunk-27-2.png)![](modelfitting_files/figure-html/unnamed-chunk-27-3.png)![](modelfitting_files/figure-html/unnamed-chunk-27-4.png)![](modelfitting_files/figure-html/unnamed-chunk-27-5.png)
+![](modelfitting_files/figure-html/unnamed-chunk-26-1.png)![](modelfitting_files/figure-html/unnamed-chunk-26-2.png)![](modelfitting_files/figure-html/unnamed-chunk-26-3.png)![](modelfitting_files/figure-html/unnamed-chunk-26-4.png)![](modelfitting_files/figure-html/unnamed-chunk-26-5.png)
 
 ## Multinomial logistic regression
 
@@ -1292,11 +1099,10 @@ setting `deg=2`.
 
 ``` r
 set.seed(33)
-fit.ameras.multinomial <- ameras(Y="Y.multinomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="multinomial", deg=2, doseRRmod = "EXP", 
-                            methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
-                            nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit.ameras.multinomial <- ameras(Y.multinomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, data=data, 
+                            family="multinomial",methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
+                            niter.BMA = 5000, nburnin.BMA = 1000)
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
@@ -1328,21 +1134,20 @@ fit.ameras.multinomial <- ameras(Y="Y.multinomial", dosevars=dosevars, X=c("X1",
 ``` r
 summary(fit.ameras.multinomial)
 #> Call:
-#> ameras(data = data, family = "multinomial", Y = "Y.multinomial", 
-#>     dosevars = dosevars, X = c("X1", "X2"), methods = c("RC", 
-#>         "ERC", "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", 
-#>     nburnin.BMA = 1000, niter.BMA = 5000)
+#> ameras(formula = Y.multinomial ~ dose(V1:V10, deg = 2, model = "EXP") + 
+#>     X1 + X2, data = data, family = "multinomial", methods = c("RC", 
+#>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 475.2 seconds
+#> Total run time: 446.2 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     1.2
-#>     ERC   191.2
+#>      RC     1.1
+#>     ERC   162.0
 #>    MCML     8.0
-#>     FMA    10.3
-#>     BMA   264.5
+#>     FMA    10.7
+#>     BMA   264.4
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1431,17 +1236,16 @@ coef(fit.ameras.multinomial)
 traceplot(fit.ameras.multinomial)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-30-1.png)![](modelfitting_files/figure-html/unnamed-chunk-30-2.png)![](modelfitting_files/figure-html/unnamed-chunk-30-3.png)![](modelfitting_files/figure-html/unnamed-chunk-30-4.png)
+![](modelfitting_files/figure-html/unnamed-chunk-29-1.png)![](modelfitting_files/figure-html/unnamed-chunk-29-2.png)![](modelfitting_files/figure-html/unnamed-chunk-29-3.png)![](modelfitting_files/figure-html/unnamed-chunk-29-4.png)
 
 Without the quadratic term (`deg=1`):
 
 ``` r
 set.seed(44)
-fit.ameras.multinomial.lin <- ameras(Y="Y.multinomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="multinomial", deg=1, doseRRmod = "EXP", 
-                            methods=c("RC","ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
-                            nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit.ameras.multinomial.lin <- ameras(Y.multinomial~dose(V1:V10, deg=1, model="EXP")+X1+X2, data=data, 
+                            family="multinomial",methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
+                            niter.BMA = 5000, nburnin.BMA = 1000)
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
@@ -1473,21 +1277,20 @@ fit.ameras.multinomial.lin <- ameras(Y="Y.multinomial", dosevars=dosevars, X=c("
 ``` r
 summary(fit.ameras.multinomial.lin)
 #> Call:
-#> ameras(data = data, family = "multinomial", Y = "Y.multinomial", 
-#>     dosevars = dosevars, X = c("X1", "X2"), methods = c("RC", 
-#>         "ERC", "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", 
-#>     nburnin.BMA = 1000, niter.BMA = 5000)
+#> ameras(formula = Y.multinomial ~ dose(V1:V10, deg = 1, model = "EXP") + 
+#>     X1 + X2, data = data, family = "multinomial", methods = c("RC", 
+#>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 369.1 seconds
+#> Total run time: 354.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     1.0
-#>     ERC   128.1
-#>    MCML     6.1
-#>     FMA     8.0
-#>     BMA   225.9
+#>      RC     0.8
+#>     ERC   114.3
+#>    MCML     6.0
+#>     FMA     8.3
+#>     BMA   225.0
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1553,20 +1356,20 @@ coef(fit.ameras.multinomial.lin)
 traceplot(fit.ameras.multinomial.lin)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-33-1.png)![](modelfitting_files/figure-html/unnamed-chunk-33-2.png)![](modelfitting_files/figure-html/unnamed-chunk-33-3.png)
+![](modelfitting_files/figure-html/unnamed-chunk-32-1.png)![](modelfitting_files/figure-html/unnamed-chunk-32-2.png)![](modelfitting_files/figure-html/unnamed-chunk-32-3.png)
 
 ## Conditional logistic regression
 
-Again, we first fit models including a quadratic exposure term by
-setting `deg=2`.
+For conditional logistic regression, the set number variable is
+specified through a `strata` term in the formula. Again, we first fit
+models including a quadratic exposure term by setting `deg=2`.
 
 ``` r
 set.seed(3301)
-fit.ameras.clogit <- ameras(Y="Y.clogit", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="clogit", deg=2, doseRRmod = "EXP", setnr="setnr",
-                            methods=c("RC", "ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
-                            nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit.ameras.clogit <- ameras(Y.clogit~dose(V1:V10, deg=2, model="EXP")+X1+X2+strata(setnr), data=data, 
+                            family="clogit", methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
+                            niter.BMA = 5000, nburnin.BMA = 1000)
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
@@ -1598,21 +1401,21 @@ fit.ameras.clogit <- ameras(Y="Y.clogit", dosevars=dosevars, X=c("X1","X2"), dat
 ``` r
 summary(fit.ameras.clogit)
 #> Call:
-#> ameras(data = data, family = "clogit", Y = "Y.clogit", dosevars = dosevars, 
-#>     X = c("X1", "X2"), setnr = "setnr", methods = c("RC", "ERC", 
-#>         "MCML", "FMA", "BMA"), deg = 2, doseRRmod = "EXP", nburnin.BMA = 1000, 
+#> ameras(formula = Y.clogit ~ dose(V1:V10, deg = 2, model = "EXP") + 
+#>     X1 + X2 + strata(setnr), data = data, family = "clogit", 
+#>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, 
 #>     niter.BMA = 5000)
 #> 
-#> Total run time: 854.8 seconds
+#> Total run time: 702 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.7
-#>     ERC   776.7
-#>    MCML     2.4
-#>     FMA     8.4
-#>     BMA    66.6
+#>      RC     0.5
+#>     ERC   623.0
+#>    MCML     1.8
+#>     FMA     6.5
+#>     BMA    70.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1654,22 +1457,18 @@ coef(fit.ameras.clogit)
 traceplot(fit.ameras.clogit)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-36-1.png)![](modelfitting_files/figure-html/unnamed-chunk-36-2.png)
+![](modelfitting_files/figure-html/unnamed-chunk-35-1.png)![](modelfitting_files/figure-html/unnamed-chunk-35-2.png)
 
 Without the quadratic term (`deg=1`):
 
 ``` r
 set.seed(4401)
-fit.ameras.clogit.lin <- ameras(Y="Y.clogit", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="clogit", deg=1, doseRRmod = "EXP", setnr="setnr",
-                            methods=c("RC","ERC", "MCML", "FMA", "BMA"), niter.BMA = 5000, 
-                            nburnin.BMA = 1000)
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit.ameras.clogit.lin <- ameras(Y.clogit~dose(V1:V10, deg=2, model="EXP")+X1+X2+strata(setnr), data=data, 
+                            family="clogit", methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
+                            niter.BMA = 5000, nburnin.BMA = 1000)
+#> Note: BMA may require extensive computation time
 #> Fitting RC
 #> Fitting ERC
-#> Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :
-#> WARNING: Hessian was not invertible or inverse was not positive definite,
-#> variance matrix could not be obtained
 #> Fitting MCML
 #> Fitting FMA
 #> Fitting BMA
@@ -1699,54 +1498,60 @@ fit.ameras.clogit.lin <- ameras(Y="Y.clogit", dosevars=dosevars, X=c("X1","X2"),
 ``` r
 summary(fit.ameras.clogit.lin)
 #> Call:
-#> ameras(data = data, family = "clogit", Y = "Y.clogit", dosevars = dosevars, 
-#>     X = c("X1", "X2"), setnr = "setnr", methods = c("RC", "ERC", 
-#>         "MCML", "FMA", "BMA"), deg = 1, doseRRmod = "EXP", nburnin.BMA = 1000, 
+#> ameras(formula = Y.clogit ~ dose(V1:V10, deg = 2, model = "EXP") + 
+#>     X1 + X2 + strata(setnr), data = data, family = "clogit", 
+#>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, 
 #>     niter.BMA = 5000)
 #> 
-#> Total run time: 421.8 seconds
+#> Total run time: 696.9 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.4
-#>     ERC   356.3
-#>    MCML     1.0
-#>     FMA     4.1
-#>     BMA    60.0
+#>      RC     0.5
+#>     ERC   617.8
+#>    MCML     1.8
+#>     FMA     7.3
+#>     BMA    69.5
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method Term Estimate      SE Rhat  n.eff
-#>      RC   X1   0.5463 0.08890   NA     NA
-#>      RC   X2  -0.5231 0.11692   NA     NA
-#>      RC dose   0.4725 0.04268   NA     NA
-#>     ERC   X1   0.6405      NA   NA     NA
-#>     ERC   X2  -0.4907      NA   NA     NA
-#>     ERC dose   0.3430      NA   NA     NA
-#>    MCML   X1   0.5514 0.08905   NA     NA
-#>    MCML   X2  -0.5191 0.11710   NA     NA
-#>    MCML dose   0.4575 0.04293   NA     NA
-#>     FMA   X1   0.5515 0.08918   NA     NA
-#>     FMA   X2  -0.5186 0.11723   NA     NA
-#>     FMA dose   0.4578 0.04287   NA     NA
-#>     BMA   X1   0.5468 0.08828 1.00 806.00
-#>     BMA   X2  -0.5265 0.11725 1.00 907.00
-#>     BMA dose   0.4578 0.04323 1.00 549.00
+#>  Method         Term Estimate      SE Rhat  n.eff
+#>      RC           X1  0.54553 0.08896   NA     NA
+#>      RC           X2 -0.53392 0.11711   NA     NA
+#>      RC         dose  0.68029 0.10131   NA     NA
+#>      RC dose_squared -0.05146 0.02242   NA     NA
+#>     ERC           X1  0.61917 0.09205   NA     NA
+#>     ERC           X2 -0.51784 0.11993   NA     NA
+#>     ERC         dose  0.35155 0.08030   NA     NA
+#>     ERC dose_squared  0.03687 0.01013   NA     NA
+#>    MCML           X1  0.55083 0.08923   NA     NA
+#>    MCML           X2 -0.53547 0.11712   NA     NA
+#>    MCML         dose  0.69334 0.09315   NA     NA
+#>    MCML dose_squared -0.05581 0.01950   NA     NA
+#>     FMA           X1  0.55012 0.08918   NA     NA
+#>     FMA           X2 -0.53457 0.11734   NA     NA
+#>     FMA         dose  0.69435 0.09622   NA     NA
+#>     FMA dose_squared -0.05607 0.02043   NA     NA
+#>     BMA           X1  0.55628 0.09059 1.00 800.00
+#>     BMA           X2 -0.53885 0.11829 1.00 776.00
+#>     BMA         dose  0.69524 0.09738 1.01 191.00
+#>     BMA dose_squared -0.05604 0.02093 1.01 159.00
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
 
 ``` r
 coef(fit.ameras.clogit.lin)
-#>              RC        ERC       MCML        FMA        BMA
-#> X1    0.5463374  0.6405011  0.5514108  0.5515131  0.5467938
-#> X2   -0.5230641 -0.4906780 -0.5190952 -0.5186443 -0.5265150
-#> dose  0.4724948  0.3429971  0.4575164  0.4578075  0.4577984
+#>                       RC         ERC        MCML         FMA         BMA
+#> X1            0.54552627  0.61917374  0.55082666  0.55011963  0.55627823
+#> X2           -0.53391889 -0.51784345 -0.53546549 -0.53456800 -0.53884618
+#> dose          0.68029437  0.35155174  0.69333718  0.69435478  0.69524184
+#> dose_squared -0.05145934  0.03687427 -0.05581249 -0.05606825 -0.05604098
 ```
 
 ``` r
 traceplot(fit.ameras.clogit.lin)
 ```
 
-![](modelfitting_files/figure-html/unnamed-chunk-39-1.png)![](modelfitting_files/figure-html/unnamed-chunk-39-2.png)
+![](modelfitting_files/figure-html/unnamed-chunk-38-1.png)![](modelfitting_files/figure-html/unnamed-chunk-38-2.png)

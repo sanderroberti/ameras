@@ -16,7 +16,6 @@ library(ameras)
 #>     declare
 library(ggplot2)
 data(data, package="ameras")
-dosevars <- paste0("V", 1:10)
 ```
 
 ## Introduction
@@ -38,16 +37,16 @@ The usual exponential relative risk model is given by
 $RR_{i} = \exp\left( \beta_{1}D_{i} + \beta_{2}D_{i}^{2} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m1}D_{i} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m2}D_{i}^{2} \right)$,
 where the quadratic and effect modification terms are optional (not fit
 by setting `deg=1` and not passing anything to `M`, respectively). This
-model is fit by setting `doseRRmod="EXP"` as follows:
+model is fit by setting `model="EXP"` as follows:
 
 ``` r
-fit.ameras.exp <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", deg=2, doseRRmod = "EXP", methods="RC")
+fit.ameras.exp <- ameras(Y.binomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
+                         data=data, family="binomial", methods="RC")
 #> Fitting RC
 summary(fit.ameras.exp)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "EXP")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "EXP") + 
+#>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
 #> Total run time: 0.3 seconds
 #> 
@@ -72,17 +71,18 @@ summary(fit.ameras.exp)
 
 The linear excess relative risk model is given by
 $RR_{i} = 1 + \beta_{1}D_{i} + \beta_{2}D_{i}^{2} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m1}D_{i} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m2}D_{i}^{2}$,
-where again the quadratic and effect modification terms are optional.
-This model is fit by setting `doseRRmod="ERR"` as follows:
+where again the quadratic and effect modification terms are optional. In
+this case, no degree needs to be specified. This model is fit by setting
+`model="ERR"` as follows:
 
 ``` r
-fit.ameras.err <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", deg=2, doseRRmod = "ERR", methods="RC")
+fit.ameras.err <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, 
+                         data=data, family="binomial", methods="RC")
 #> Fitting RC
 summary(fit.ameras.err)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
+#>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
 #> Total run time: 0.3 seconds
 #> 
@@ -108,23 +108,23 @@ summary(fit.ameras.err)
 The linear-exponential relative risk model is given by
 $RR_{i} = 1 + \left( \beta_{1} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m1} \right)D_{i}\exp\{\left( \beta_{2} + \mathbf{M}_{i}^{T}{\mathbf{β}}_{m2} \right)D_{i}\}$,
 where the effect modification terms are optional. This model is fit by
-setting `doseRRmod="LINEXP"` as follows:
+setting `model="LINEXP"` as follows:
 
 ``` r
-fit.ameras.linexp <- ameras(Y="Y.binomial", dosevars=dosevars, X=c("X1","X2"), data=data, 
-                            family="binomial", doseRRmod = "LINEXP", methods="RC")
+fit.ameras.linexp <- ameras(Y.binomial~dose(V1:V10, model="LINEXP")+X1+X2, 
+                         data=data, family="binomial", methods="RC")
 #> Fitting RC
 summary(fit.ameras.linexp)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     X = c("X1", "X2"), methods = "RC", doseRRmod = "LINEXP")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "LINEXP") + 
+#>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0.6 seconds
+#> Total run time: 0.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.6
+#>      RC     0.4
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -181,16 +181,16 @@ data("data", package = "ameras")
 dosevars <- paste0("V", 1:10)
 
 ## Fit the model
-fit <- ameras(data = data, family = "binomial", Y = "Y.binomial",
-              dosevars = dosevars, methods = "RC", doseRRmod = "ERR")
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+               methods = "RC")
 #> Fitting RC
 
 ## Wald intervals (fast)
 fit <- confint(fit, type = "wald.orig")
 summary(fit)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     methods = "RC", doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#>     family = "binomial", methods = "RC")
 #> 
 #> Total run time: 0 seconds
 #> 
@@ -211,8 +211,8 @@ fit <- confint(fit, type = "proflik", parm = "dose")
 #> Obtaining profile likelihood CI for dose
 summary(fit)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     methods = "RC", doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#>     family = "binomial", methods = "RC")
 #> 
 #> Total run time: 0 seconds
 #> 
@@ -230,9 +230,8 @@ summary(fit)
 
 ## With keep.data = FALSE, supply data explicitly for proflik
 # \donttest{
-fit2 <- ameras(data = data, family = "binomial", Y = "Y.binomial",
-               dosevars = dosevars, methods = "RC", doseRRmod = "ERR",
-               keep.data = FALSE)
+fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+               methods = "RC", keep.data = FALSE)
 #> Fitting RC
 fit2 <- confint(fit2, type = "proflik", data = data)
 #> Obtaining profile likelihood CI for dose
@@ -240,10 +239,9 @@ fit2 <- confint(fit2, type = "proflik", data = data)
 
 ## FMA and BMA with percentile intervals
 # \donttest{
-fit3 <- ameras(data = data, family = "binomial", Y = "Y.binomial",
-               dosevars = dosevars, methods = c("FMA", "BMA"),
-               doseRRmod = "ERR")
-#> Note: BMA may require extensive computation time in the order of multiple hours
+fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial", 
+               methods = c("FMA", "BMA"))
+#> Note: BMA may require extensive computation time
 #> Fitting FMA
 #> Fitting BMA
 #> Defining model
@@ -270,16 +268,16 @@ fit3 <- ameras(data = data, family = "binomial", Y = "Y.binomial",
 fit3 <- confint(fit3, type = "percentile")
 summary(fit3)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     methods = c("FMA", "BMA"), doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 95.7 seconds
+#> Total run time: 100.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     0.4
-#>     BMA    95.3
+#>     FMA     0.5
+#>     BMA   100.1
 #> 
 #> Summary of coefficients by method:
 #> 

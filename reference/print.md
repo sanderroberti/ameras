@@ -43,53 +43,52 @@ intervals if computed.
 ``` r
 # \donttest{
 data("data", package = "ameras")
-dosevars <- paste0("V", 1:10)
 
 ## Fit the model
-fit <- ameras(data = data, family = "binomial", Y = "Y.binomial",
-              dosevars = dosevars, methods = c("RC","ERC"), doseRRmod = "ERR")
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial", 
+              methods = c("RC","ERC"))
 #> Fitting RC
 #> Fitting ERC
 
 ## Default print
 fit
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     methods = c("RC", "ERC"), doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#>     family = "binomial", methods = c("RC", "ERC"))
 #> 
 #> Number of rows: 3000
 #> Number of dose replicates: 10
 #> 
-#> Total run time: 17.5 seconds
+#> Total run time: 14 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    17.5
+#>     ERC    14.0
 #> 
-#> Table of estimated model parameters:
+#> Estimated model parameters:
 #> 
 #>                  RC     ERC
 #> (Intercept) -0.8847 -0.8849
 #> dose         0.8020  0.8214
 print(fit)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     methods = c("RC", "ERC"), doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#>     family = "binomial", methods = c("RC", "ERC"))
 #> 
 #> Number of rows: 3000
 #> Number of dose replicates: 10
 #> 
-#> Total run time: 17.5 seconds
+#> Total run time: 14 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    17.5
+#>     ERC    14.0
 #> 
-#> Table of estimated model parameters:
+#> Estimated model parameters:
 #> 
 #>                  RC     ERC
 #> (Intercept) -0.8847 -0.8849
@@ -98,21 +97,21 @@ print(fit)
 ## More digits
 print(fit, digits=5)
 #> Call:
-#> ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, 
-#>     methods = c("RC", "ERC"), doseRRmod = "ERR")
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#>     family = "binomial", methods = c("RC", "ERC"))
 #> 
 #> Number of rows: 3000
 #> Number of dose replicates: 10
 #> 
-#> Total run time: 17.5 seconds
+#> Total run time: 14 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    17.5
+#>     ERC    14.0
 #> 
-#> Table of estimated model parameters:
+#> Estimated model parameters:
 #> 
 #>                   RC      ERC
 #> (Intercept) -0.88472 -0.88491

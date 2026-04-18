@@ -87,8 +87,7 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     declare</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span>
-<span><span class="va">dosevars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -111,15 +110,15 @@ other settings.</p>
 where the quadratic and effect modification terms are optional (not fit
 by setting <code>deg=1</code> and not passing anything to
 <code>M</code>, respectively). This model is fit by setting
-<code>doseRRmod="EXP"</code> as follows:</p>
+<code>model="EXP"</code> as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.ameras.exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
-<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, deg<span class="op">=</span><span class="fl">2</span>, doseRRmod <span class="op">=</span> <span class="st">"EXP"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit.ameras.exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
+<span>                         data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.exp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
-<span><span class="co">#&gt;     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "EXP")</span></span>
+<span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "EXP") + </span></span>
+<span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total run time: 0.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -144,17 +143,17 @@ by setting <code>deg=1</code> and not passing anything to
 </h2>
 <p>The linear excess relative risk model is given by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><msub><mi>R</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mi>D</mi><mi>i</mi></msub><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><msubsup><mi>D</mi><mi>i</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>𝐌</mi><mi>i</mi><mi>T</mi></msubsup><msub><mi>𝛃</mi><mrow><mi>m</mi><mn>1</mn></mrow></msub><msub><mi>D</mi><mi>i</mi></msub><mo>+</mo><msubsup><mi>𝐌</mi><mi>i</mi><mi>T</mi></msubsup><msub><mi>𝛃</mi><mrow><mi>m</mi><mn>2</mn></mrow></msub><msubsup><mi>D</mi><mi>i</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">RR_i=1+\beta_1 D_i+\beta_2 D_i^2+ \mathbf{M}_i^T \mathbf{\beta}_{m1}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2} D_i^2</annotation></semantics></math>,
-where again the quadratic and effect modification terms are optional.
-This model is fit by setting <code>doseRRmod="ERR"</code> as
-follows:</p>
+where again the quadratic and effect modification terms are optional. In
+this case, no degree needs to be specified. This model is fit by setting
+<code>model="ERR"</code> as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.ameras.err</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
-<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, deg<span class="op">=</span><span class="fl">2</span>, doseRRmod <span class="op">=</span> <span class="st">"ERR"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit.ameras.err</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
+<span>                         data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.err</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
-<span><span class="co">#&gt;     X = c("X1", "X2"), methods = "RC", deg = 2, doseRRmod = "ERR")</span></span>
+<span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + </span></span>
+<span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total run time: 0.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -180,22 +179,22 @@ follows:</p>
 <p>The linear-exponential relative risk model is given by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><msub><mi>R</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>β</mi><mn>1</mn></msub><mo>+</mo><msubsup><mi>𝐌</mi><mi>i</mi><mi>T</mi></msubsup><msub><mi>𝛃</mi><mrow><mi>m</mi><mn>1</mn></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>D</mi><mi>i</mi></msub><mo>exp</mo><mo stretchy="false" form="prefix">{</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>β</mi><mn>2</mn></msub><mo>+</mo><msubsup><mi>𝐌</mi><mi>i</mi><mi>T</mi></msubsup><msub><mi>𝛃</mi><mrow><mi>m</mi><mn>2</mn></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>D</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">RR_i= 1+(\beta_1 + \mathbf{M}_i^T \mathbf{\beta}_{m1}) D_i \exp\{(\beta_2+  \mathbf{M}_i^T \mathbf{\beta}_{m2})D_i\}</annotation></semantics></math>,
 where the effect modification terms are optional. This model is fit by
-setting <code>doseRRmod="LINEXP"</code> as follows:</p>
+setting <code>model="LINEXP"</code> as follows:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.ameras.linexp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span>Y<span class="op">=</span><span class="st">"Y.binomial"</span>, dosevars<span class="op">=</span><span class="va">dosevars</span>, X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X1"</span>,<span class="st">"X2"</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, </span>
-<span>                            family<span class="op">=</span><span class="st">"binomial"</span>, doseRRmod <span class="op">=</span> <span class="st">"LINEXP"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit.ameras.linexp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"LINEXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
+<span>                         data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.linexp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; ameras(data = data, family = "binomial", Y = "Y.binomial", dosevars = dosevars, </span></span>
-<span><span class="co">#&gt;     X = c("X1", "X2"), methods = "RC", doseRRmod = "LINEXP")</span></span>
+<span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "LINEXP") + </span></span>
+<span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.6</span></span>
+<span><span class="co">#&gt;      RC     0.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
