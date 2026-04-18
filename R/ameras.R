@@ -241,6 +241,7 @@ ameras <- function(formula, data, family="gaussian",
   )
   ret <- c(list(
     call               = match.call(),
+    formula            = formula,
     num.rows           = nrow(data),
     num.replicates     = length(parsed$dosevars),
     transform          = result$transform,

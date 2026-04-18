@@ -63,7 +63,7 @@ Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncat
 \item{\dots}{other arguments, passed to functions such as \code{transform}.}
 }
 \value{
-The output is an object of class \code{amerasfit}. General components are \code{call} (the function call to \code{ameras}), \code{num.rows} (the number of rows in \code{data}), \code{num.replicates} (the number of dose replicates provided), \code{transform} (the used transformation function, if applicable), \code{transform.jacobian} (the used Jacobian function for the transformation, if applicable), \code{other.args} (any other arguments passed to \dots), \code{model} (a list containing the specified model definition), and \code{CI.computed} (logical, whether confidence intervals have been attached by \code{\link[=confint.amerasfit]{confint}}).
+The output is an object of class \code{amerasfit}. General components are \code{call} (the function call to \code{ameras}), \code{formula} (the formula object specifying the model), \code{num.rows} (the number of rows in \code{data}), \code{num.replicates} (the number of dose replicates provided), \code{transform} (the used transformation function, if applicable), \code{transform.jacobian} (the used Jacobian function for the transformation, if applicable), \code{other.args} (any other arguments passed to \dots), \code{model} (a list containing the specified model components parsed from the formula), and \code{CI.computed} (logical, whether confidence intervals have been attached by \code{\link[=confint.amerasfit]{confint}}).
 
 For each method supplied to \code{methods}, the output contains a list with components:
   \item{coefficients}{named vector of model coefficients.}
