@@ -58,7 +58,8 @@ ecdfplot(data, paste0("V", 1:10))
 
 Next, we apply all available methods to the data:
 ```{r}
-fit <- ameras(Y.binomial~dose(V1:V10), data, family="binomial", methods=c("RC","ERC","MCML", "FMA", "BMA"))
+fit <- ameras(Y.binomial~dose(V1:V10), data, family="binomial", 
+              methods=c("RC","ERC","MCML", "FMA", "BMA"))
 summary(fit)
 ```
 
