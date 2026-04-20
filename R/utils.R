@@ -332,9 +332,9 @@ parse_dose_term <- function(tt, data) {
   sel_args   <- dose_args[!named_idx]
   
   dosevars  <- resolve_dose_selection(sel_args, data)
-  doseRRmod <- if (!is.null(named_args$model))    as.character(named_args$model) else "ERR"
-  deg       <- if (!is.null(named_args$deg))      as.integer(named_args$deg)     else 1
-  M         <- if (!is.null(named_args$modifier)) all.vars(named_args$modifier)  else NULL
+  doseRRmod <- if (!is.null(named_args$model))    as.character(named_args$model)       else "ERR"
+  deg       <- if (!is.null(named_args$deg))      as.integer(named_args$deg)           else 1
+  M         <- if (!is.null(named_args$modifier)) parse_modifier(named_args$modifier)  else NULL
   
   list(
     dosevars  = dosevars,
@@ -343,6 +343,25 @@ parse_dose_term <- function(tt, data) {
     M         = M
   )
 }
+
+
+parse_modifier <- function(expr) {
+  
+  if (is.null(expr)) return(NULL)
+  
+  fn <- as.character(expr[[1]])
+  if (fn %in% c("*", ":", "^")) {
+    stop(
+      "Interactions in modifier are not currently supported. ",
+      "Please create interaction terms manually as new columns in your ",
+      "data frame before calling ameras(). ",
+      "For example: data$M1M2 <- data$M1 * data$M2"
+    )
+  }
+  
+  all.vars(expr)
+}
+
 
 resolve_dose_selection <- function(sel_args, data) {
   
@@ -369,6 +388,14 @@ collect_X <- function(formula) {
     }
     if (is.call(expr)) {
       fn <- as.character(expr[[1]])
+      if (fn %in% c("*", ":", "^")) {
+        stop(
+          "Interactions in X are not currently supported in the formula ",
+          "interface. Please create interaction terms manually as new ",
+          "columns in your data frame before calling ameras(). ",
+          "For example: data$X1X2 <- data$X1 * data$X2"
+        )
+      }
       if (fn %in% c("+", "-")) {
         return(unlist(lapply(as.list(expr)[-1], collect)))
       }
