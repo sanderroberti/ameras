@@ -44,7 +44,8 @@ compute_wald_CI <- function(method_fit, level=.95, transform=NULL, other.args=NU
 compute_proflik_CI <- function(method_fit, object, method_name, data,
                                parm="dose", level=0.95,
                                maxit.profCI=20, tol.profCI=1e-2,
-                               optim.method="Nelder-Mead") {
+                               optim.method="Nelder-Mead",
+                               control=list(reltol=1e-10)) {
   
   alpha    <- 1 - level
   optval   <- -method_fit$loglik  # stored as positive log-likelihood
@@ -114,6 +115,7 @@ compute_proflik_CI <- function(method_fit, object, method_name, data,
       maxit.profCI = maxit.profCI,
       tol.profCI   = tol.profCI,
       optim.method = optim.method,
+      control      = control,
       parname      = parnames[myindex],
       transform    = object$transform,
       other.args   = object$other.args
@@ -153,6 +155,7 @@ compute_proflik_ci_one <- function(index, inpar, optval, loglik_fn,
                                    lowlim, uplim, alpha=0.05,
                                    maxit.profCI=20, tol.profCI=1e-2,
                                    optim.method="Nelder-Mead",
+                                   control=list(reltol=1e-10),
                                    parname="parameter", transform=NULL,
                                    other.args=NULL) {
   
@@ -163,7 +166,8 @@ compute_proflik_ci_one <- function(index, inpar, optval, loglik_fn,
                      index         = index,
                      fun           = loglik_fn,
                      inpar         = inpar,
-                     optim.method  = optim.method) - optval),
+                     optim.method  = optim.method,
+                     control       = control) - optval),
         df = 1
       ) - alpha
     })
@@ -247,7 +251,7 @@ compute_proflik_ci_one <- function(index, inpar, optval, loglik_fn,
   )
 }
 
-proflik <- memoise(function(parvalue, index, fun, inpar, optim.method=optim.method, ...){
+proflik <- memoise(function(parvalue, index, fun, inpar, optim.method=optim.method, control=list(reltol=1e-10), ...){
   
   if(length(inpar)==1){ # 1-parameter model -> just return likelihood itself
     
@@ -279,10 +283,10 @@ proflik <- memoise(function(parvalue, index, fun, inpar, optim.method=optim.meth
       
       fun(params=params, ... )
     }
-    innerfit <- optim(par=inpar[-index],fn=innerfun, method=optim.method, ...) 
+    innerfit <- optim(par=inpar[-index],fn=innerfun, method=optim.method, control=control, ...) 
     if(optim.method=="Nelder-Mead"){
       count0 <- innerfit$counts
-      innerfit <- optim(par=innerfit$par,fn=innerfun, method="BFGS", ...)
+      innerfit <- optim(par=innerfit$par,fn=innerfun, method="BFGS", control=control, ...)
       innerfit$counts <- replace(count0, is.na(count0), 0) + replace(innerfit$counts, is.na(innerfit$counts), 0)
     }
     return(innerfit$value)

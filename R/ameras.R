@@ -203,7 +203,8 @@ ameras <- function(formula, data, family="gaussian",
     deg       = deg,
     doseRRmod = parsed$doseRRmod,
     loglim    = loglim,
-    optim.method = optim.method
+    optim.method = optim.method,
+    control   = control
   )
   
   memoise::forget(proflik) # To avoid conflicts with existing cache when determining profile likelihood CI's

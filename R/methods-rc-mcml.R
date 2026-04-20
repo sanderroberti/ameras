@@ -1,5 +1,5 @@
 
-ameras.mcml <- function(family, dosevars, data, deg, transform=NULL,transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL,setnr=setnr, doseRRmod=NULL, loglim=1e-30, optim.method="Nelder-Mead", ...){
+ameras.mcml <- function(family, dosevars, data, deg, transform=NULL,transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL,setnr=setnr, doseRRmod=NULL, loglim=1e-30, optim.method="Nelder-Mead", control=list(reltol=1e-10), ...){
   # if(length(CI)==0) stop("No CI method specified")
   # CI <- CI[CI %in% c("wald.orig","wald.transformed", "proflik")]
   # if(length(CI)>1) stop("Provide one type of CI for MCML: one of wald.orig, wald.transformed, and proflik")
@@ -211,10 +211,10 @@ ameras.mcml <- function(family, dosevars, data, deg, transform=NULL,transform.ja
     fit0 <- optimize(f=loglik.mcml, lower=-20, upper=5, ...)
     fit <- list(par=fit0$minimum, value=fit0$objective, convergence=0, hessian=numDeriv::hessian(func=loglik.mcml, x=fit0$minimum, ...))
   } else{
-    fit <- optim(inpar, loglik.mcml, method=optim.method, ...)
+    fit <- optim(inpar, loglik.mcml, method=optim.method, control=control, ...)
     if(optim.method=="Nelder-Mead"){
       count0 <- fit$counts
-      fit <- optim(fit$par, loglik.mcml, method="BFGS", ...)
+      fit <- optim(fit$par, loglik.mcml, method="BFGS", control=control, ...)
       fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
     }
     fit$hessian <- numDeriv::hessian(func=loglik.mcml, x=fit$par, ...)
@@ -269,7 +269,7 @@ ameras.mcml <- function(family, dosevars, data, deg, transform=NULL,transform.ja
   return(out)
 }
 
-ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL, setnr=NULL, doseRRmod=NULL, loglim=1e-30, optim.method="Nelder-Mead", ...){
+ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, transform.jacobian=NULL, Y=NULL, M=NULL, X=NULL, offset=NULL, inpar=NULL, entry=NULL, exit=NULL, status=NULL, setnr=NULL, doseRRmod=NULL, loglim=1e-30, optim.method="Nelder-Mead", control=list(reltol=1e-10), ...){
  
   if(ERC & family!="poisson"){
     Kmat <- cov(t(data[,dosevars]))
@@ -285,10 +285,10 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
       inpar <- rep(0, 2+length(X)+length(M)*deg+deg)
     }
     
-    fit <- optim(inpar, loglik.gaussian, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+    fit <- optim(inpar, loglik.gaussian, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, control=control, ...)
     if(optim.method=="Nelder-Mead"){
       count0 <- fit$counts
-      fit <- optim(fit$par, loglik.gaussian, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+      fit <- optim(fit$par, loglik.gaussian, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", control=control, ...)
       fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
     }
     fit$hessian <- numDeriv::hessian(func=loglik.gaussian, x=fit$par, D="rcdose_ameras",X=X, Y=Y, M=M, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)
@@ -313,10 +313,10 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
       inpar <- rep(0, 1+length(X)+length(M)*deg+deg)
     }
     
-    fit <- optim(inpar, loglik.binomial, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+    fit <- optim(inpar, loglik.binomial, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, control=control, ...)
     if(optim.method=="Nelder-Mead"){
       count0 <- fit$counts
-      fit <- optim(fit$par, loglik.binomial, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+      fit <- optim(fit$par, loglik.binomial, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", control=control, ...)
       fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
     }
     
@@ -350,16 +350,16 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
       inpar <- rep(0, 1+length(X)+length(M)*deg+deg)
     }
     if(ERC){
-      fit <- optim(inpar, loglik.poisson.erc, D=dosevars,X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method=optim.method, ...)
+      fit <- optim(inpar, loglik.poisson.erc, D=dosevars,X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method=optim.method, control=control, ...)
     } else{
-      fit <- optim(inpar, loglik.poisson, D="rcdose_ameras",X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method=optim.method, ...)
+      fit <- optim(inpar, loglik.poisson, D="rcdose_ameras",X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method=optim.method,control=control, ...)
     }
     if(optim.method=="Nelder-Mead"){
       count0 <- fit$counts
       if(ERC){
-        fit <- optim(fit$par, loglik.poisson.erc, D=dosevars,X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method="BFGS", ...)
+        fit <- optim(fit$par, loglik.poisson.erc, D=dosevars,X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method="BFGS",control=control, ...)
       } else {
-        fit <- optim(fit$par, loglik.poisson, D="rcdose_ameras",X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method="BFGS", ...)
+        fit <- optim(fit$par, loglik.poisson, D="rcdose_ameras",X=X, Y=Y, offset=offset, M=M, doseRRmod=doseRRmod, data=data, deg=deg, loglim=loglim, transform=transform, method="BFGS", control=control, ...)
       }
       fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
     }
@@ -403,11 +403,11 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
       fit <- list(par=fit0$minimum, value=fit0$objective, convergence=0, hessian=numDeriv::hessian(func=loglik.clogit, x=fit0$minimum, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...))
     } else {
       
-      fit <- optim(inpar, loglik.clogit, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+      fit <- optim(inpar, loglik.clogit, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, control=control, ...)
       
       if(optim.method=="Nelder-Mead"){
         count0 <- fit$counts
-        fit <- optim(fit$par, loglik.clogit, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+        fit <- optim(fit$par, loglik.clogit, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, designmat=designmat,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", control=control, ...)
         fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
         
       }
@@ -445,11 +445,11 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
       fit <- list(par=fit0$minimum, value=fit0$objective, convergence=0, hessian=numDeriv::hessian(func=loglik.prophaz, x=fit0$minimum, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...))
     } else {
       
-      fit <- optim(inpar, loglik.prophaz, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+      fit <- optim(inpar, loglik.prophaz, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod,entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, control=control, ...)
       
       if(optim.method=="Nelder-Mead"){
         count0 <- fit$counts
-        fit <- optim(fit$par, loglik.prophaz, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+        fit <- optim(fit$par, loglik.prophaz, D="rcdose_ameras", status=status,X=X, M=M, doseRRmod=doseRRmod, entry=entry,exit=exit, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", control=control, ...)
         fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
         
       }
@@ -480,10 +480,10 @@ ameras.rc <- function(family, dosevars, data, deg, ERC=FALSE, transform=NULL, tr
       inpar <- rep(0, (length(unique(data[,Y]))-1)*(1+length(X)+length(M)*deg+deg))
     }
     
-    fit <- optim(inpar, loglik.multinomial, D="rcdose_ameras", X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, ...)
+    fit <- optim(inpar, loglik.multinomial, D="rcdose_ameras", X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method=optim.method, control=control, ...)
     if(optim.method=="Nelder-Mead"){
       count0 <- fit$counts
-      fit <- optim(fit$par, loglik.multinomial, D="rcdose_ameras", X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", ...)
+      fit <- optim(fit$par, loglik.multinomial, D="rcdose_ameras", X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, method="BFGS", control=control, ...)
       fit$counts <- replace(count0, is.na(count0), 0) + replace(fit$counts, is.na(fit$counts), 0)
     }
     fit$hessian <- numDeriv::hessian(func=loglik.multinomial, x=fit$par, D="rcdose_ameras",X=X, Y=Y, M=M, doseRRmod=doseRRmod, data=data, deg=deg, ERC=ERC, Kmat=Kmat, loglim=loglim, transform=transform, ...)

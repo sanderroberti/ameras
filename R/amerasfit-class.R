@@ -252,7 +252,8 @@ confint.amerasfit <- function(object, parm="dose", level=0.95,
           level        = level,
           maxit.profCI = maxit.profCI,
           tol.profCI   = tol.profCI,
-          optim.method = object$model$optim.method
+          optim.method = object$model$optim.method,
+          control      = object$model$control
         )
         rm(resolved_data)
       }
