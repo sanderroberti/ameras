@@ -205,7 +205,6 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="st">"data"</span>, package <span class="op">=</span> <span class="st">"ameras"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dosevars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Fit the model</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span>,</span></span>
@@ -298,13 +297,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("FMA", "BMA"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 95.8 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 107.5 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA     0.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA    95.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA     0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA   107.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

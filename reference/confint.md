@@ -178,7 +178,6 @@ function.
 
 ``` r
 data("data", package = "ameras")
-dosevars <- paste0("V", 1:10)
 
 ## Fit the model
 fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
@@ -271,13 +270,13 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 95.8 seconds
+#> Total run time: 107.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     0.4
-#>     BMA    95.4
+#>     FMA     0.5
+#>     BMA   107.0
 #> 
 #> Summary of coefficients by method:
 #> 
