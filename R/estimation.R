@@ -293,10 +293,3 @@ proflik <- memoise(function(parvalue, index, fun, inpar, optim.method=optim.meth
   }
   
 })
-
-
-profCIfun <- function(par,optval, index, fun, inpar, optim.method, ...){
-  sapply(par, function(mypar){
-    1-pchisq(2*(proflik(parvalue=mypar, index=index, fun=fun, inpar=inpar, optim.method=optim.method, ...)-optval),df=1)-.05
-  })
-}
