@@ -104,10 +104,19 @@ summary.amerasfit <- function(object, ...) {
       CI.lowerbound  <- CI.upperbound <- coef*NA
       CI.lowerbound[match(rownames(CI), names(coef))] <- CI$lower
       CI.upperbound[match(rownames(CI), names(coef))] <- CI$upper
+      
+
       res <- cbind(res,data.frame(
         CI.lowerbound = CI.lowerbound,
         CI.upperbound = CI.upperbound
       ))
+      
+      if("pval.lower" %in% names(CI) && "pval.upper" %in% names(CI)){
+        pval.lower  <- pval.upper <- coef*NA
+        pval.lower[match(rownames(CI), names(coef))] <- CI$pval.lower
+        pval.upper[match(rownames(CI), names(coef))] <- CI$pval.upper
+        res <- cbind(res, data.frame(pval.lower = pval.lower, pval.upper = pval.upper))
+      }
     }
     
     
