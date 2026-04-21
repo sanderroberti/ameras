@@ -270,13 +270,13 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 107.5 seconds
+#> Total run time: 98.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     0.5
-#>     BMA   107.0
+#>     FMA     0.4
+#>     BMA    97.9
 #> 
 #> Summary of coefficients by method:
 #> 
