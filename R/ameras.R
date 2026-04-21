@@ -140,6 +140,23 @@ ameras <- function(formula, data, family="gaussian",
   if("BMA" %in% methods) message("Note: BMA may require extensive computation time")
   
   parsed <- parse_ameras_formula(formula, data, family)
+
+  if (!is.null(parsed$X_formula)) {
+    X_matrix  <- model.matrix(parsed$X_formula, data=data)[, -1, drop=FALSE]
+    X_colnames <- colnames(X_matrix)
+    
+    # Add expanded columns to data, avoiding name conflicts
+    existing  <- intersect(X_colnames, colnames(data))
+    new_cols  <- setdiff(X_colnames, colnames(data))
+    
+    if (length(new_cols)) {
+      data[, new_cols] <- X_matrix[, new_cols, drop=FALSE]
+    }
+    
+    X <- X_colnames
+  } else {
+    X <- NULL
+  }
   
   if (family == "clogit") {
     Y      <- NULL
@@ -157,7 +174,7 @@ ameras <- function(formula, data, family="gaussian",
   check_Y(Y %||% status, data, family)
   check_D(parsed$dosevars, data, methods)
   check_M(parsed$M, data)
-  check_X(parsed$X, data)
+  check_X(X, data)
   
   if (family == "poisson")  check_offset(parsed$offset, data)
   if (family == "prophaz")  check_entry_exit(parsed$entry, parsed$exit, data)
@@ -182,7 +199,7 @@ ameras <- function(formula, data, family="gaussian",
 
 
   M <- getVarNumbers(parsed$M, data)
-  X <- getVarNumbers(parsed$X, data)
+  X <- getVarNumbers(X, data)
   
   # Add mean dose for RC and ERC to the data
   data$rcdose_ameras <- rowMeans(data[, parsed$dosevars, drop=FALSE])
@@ -194,6 +211,7 @@ ameras <- function(formula, data, family="gaussian",
     dosevars  = parsed$dosevars,
     Y         = Y,
     M         = M,
+    X_formula = parsed$X_formula,
     X         = X,
     offset    = parsed$offset,
     entry     = parsed$entry,
@@ -263,8 +281,8 @@ ameras <- function(formula, data, family="gaussian",
 parse_ameras_formula <- function(formula, data, family) {
   
   specials <- c("dose", "strata", "offset")
-  X        <- collect_X(formula)
-  
+  X_formula        <- collect_X(formula)
+
   if (family == "prophaz") {
     surv         <- parse_surv_term(formula)
     formula[[2]] <- quote(.response)
@@ -280,7 +298,7 @@ parse_ameras_formula <- function(formula, data, family) {
       doseRRmod = dose$doseRRmod,
       deg       = dose$deg,
       M         = dose$M,
-      X         = X,
+      X_formula = X_formula,
       offset    = NULL,
       setnr     = NULL
     ))
@@ -304,7 +322,7 @@ parse_ameras_formula <- function(formula, data, family) {
       doseRRmod = dose$doseRRmod,
       deg       = dose$deg,
       M         = dose$M,
-      X         = X,
+      X_formula = X_formula,
       offset    = NULL,
       setnr     = strata$setnr
     ))
@@ -324,7 +342,7 @@ parse_ameras_formula <- function(formula, data, family) {
       doseRRmod = dose$doseRRmod,
       deg       = dose$deg,
       M         = dose$M,
-      X         = X,
+      X_formula = X_formula,
       offset    = off$offset,
       setnr     = NULL
     ))
@@ -343,7 +361,7 @@ parse_ameras_formula <- function(formula, data, family) {
       doseRRmod = dose$doseRRmod,
       deg       = dose$deg,
       M         = dose$M,
-      X         = X,
+      X_formula = X_formula,
       offset    = NULL,
       setnr     = NULL
     ))

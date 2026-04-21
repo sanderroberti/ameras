@@ -176,15 +176,43 @@ resolve_data <- function(object, data=NULL) {
   
   check_df(data)
   
-  m            <- object$model
-  needed       <- required_vars(m)
-  missing_vars <- setdiff(needed, colnames(data))
+  m <- object$model
   
+  # Check dose columns separately for a clearer error message
+  missing_dose <- setdiff(m$dosevars, colnames(data))
+  if (length(missing_dose)) {
+    stop(
+      "Supplied data is missing dose columns present during fitting: ",
+      paste(missing_dose, collapse=", ")
+    )
+  }
+  
+  # Check remaining required variables excluding X and dose
+  # X is checked separately via X_formula, dose already checked above
+  needed       <- setdiff(required_vars(m), c(m$dosevars, m$X))
+  missing_vars <- setdiff(needed, colnames(data))
   if (length(missing_vars)) {
     stop(
       "Supplied data is missing columns present during fitting: ",
       paste(missing_vars, collapse=", ")
     )
+  }
+  
+  # Check raw X variables referenced in the X formula
+  if (!is.null(m$X_formula)) {
+    X_raw_vars <- all.vars(m$X_formula)
+    missing_X  <- setdiff(X_raw_vars, colnames(data))
+    if (length(missing_X)) {
+      stop(
+        "Supplied data is missing X variables present during fitting: ",
+        paste(missing_X, collapse=", ")
+      )
+    }
+  }
+  
+  # Check dose columns are numeric and finite
+  for (v in m$dosevars) {
+    check_num_vec(data[, v, drop=TRUE], nm=paste0("dosevars:", v))
   }
   
   if (nrow(data) != object$num.rows) {
@@ -194,13 +222,20 @@ resolve_data <- function(object, data=NULL) {
     )
   }
   
-  if (!"rcdose_ameras" %in% colnames(data)) {
-    data$rcdose_ameras <- rowMeans(data[, m$dosevars, drop=FALSE])
+  # Re-expand X formula on supplied data
+  if (!is.null(m$X_formula)) {
+    X_matrix   <- model.matrix(m$X_formula, data=data)[, -1, drop=FALSE]
+    X_colnames <- colnames(X_matrix)
+    new_cols   <- setdiff(X_colnames, colnames(data))
+    if (length(new_cols)) {
+      data[, new_cols] <- X_matrix[, new_cols, drop=FALSE]
+    }
   }
+  
+  data$rcdose_ameras <- rowMeans(data[, m$dosevars, drop=FALSE])
   
   data
 }
-
 
 
 
@@ -348,17 +383,17 @@ parse_dose_term <- function(tt, data) {
 parse_modifier <- function(expr) {
   
   if (is.null(expr)) return(NULL)
-  
-  fn <- as.character(expr[[1]])
-  if (fn %in% c("*", ":", "^")) {
-    stop(
-      "Interactions in modifier are not currently supported. ",
-      "Please create interaction terms manually as new columns in your ",
-      "data frame before calling ameras(). ",
-      "For example: data$M1M2 <- data$M1 * data$M2"
-    )
+  if (is.call(expr)) {
+    fn <- as.character(expr[[1]])
+    if (fn %in% c("*", ":", "^")) {
+      stop(
+        "Interactions in modifier are not currently supported. ",
+        "Please create interaction terms manually as new columns in your ",
+        "data frame before calling ameras(). ",
+        "For example: data$M1M2 <- data$M1 * data$M2"
+      )
+    }
   }
-  
   all.vars(expr)
 }
 
@@ -379,35 +414,27 @@ resolve_dose_selection <- function(sel_args, data) {
 collect_X <- function(formula) {
   
   specials <- c("dose", "strata", "offset", "Surv")
+  rhs      <- formula[[3]]
   
-  rhs <- formula[[3]]
-  
-  collect <- function(expr) {
-    if (is.symbol(expr)) {
-      return(as.character(expr))
-    }
+  remove_specials <- function(expr) {
+    if (is.symbol(expr)) return(expr)
     if (is.call(expr)) {
       fn <- as.character(expr[[1]])
-      if (fn %in% c("*", ":", "^")) {
-        stop(
-          "Interactions in X are not currently supported in the formula ",
-          "interface. Please create interaction terms manually as new ",
-          "columns in your data frame before calling ameras(). ",
-          "For example: data$X1X2 <- data$X1 * data$X2"
-        )
+      if (fn %in% specials) return(NULL)
+      if (fn %in% c("+", "-", "*", ":", "^")) {
+        args <- lapply(as.list(expr)[-1], remove_specials)
+        args <- Filter(Negate(is.null), args)
+        if (!length(args)) return(NULL)
+        if (length(args) == 1) return(args[[1]])
+        return(as.call(c(list(expr[[1]]), args)))
       }
-      if (fn %in% c("+", "-")) {
-        return(unlist(lapply(as.list(expr)[-1], collect)))
-      }
-      if (fn %in% specials) {
-        return(character(0))
-      }
-      return(as.character(expr[[1]]))
     }
-    character(0)
+    expr
   }
   
-  X <- collect(rhs)
-  X <- X[nzchar(X)]
-  if (length(X)) X else NULL
+  cleaned_rhs <- remove_specials(rhs)
+  if (is.null(cleaned_rhs)) return(NULL)
+  
+  # Return the cleaned RHS as a formula for later use by model.matrix
+  as.formula(paste("~", deparse(cleaned_rhs, width.cutoff=500L)))
 }

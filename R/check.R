@@ -65,7 +65,7 @@ check_M <- function(vars, data) {
 check_X <- function(vars, data) {
   
   nm <- "X"
-  check_vars(data, vars, nm, minlen=0, maxlen=0)
+  if (is.null(vars)) return(NULL)
   for (v in vars) {
     vec <- data[, v, drop=TRUE]
     nm2 <- paste0(nm, ":", v)
