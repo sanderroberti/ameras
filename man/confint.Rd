@@ -23,7 +23,7 @@
   \item{parm}{
     Either \code{"dose"} to compute intervals for dose-related parameters
     only, \code{"all"} for all parameters, or a character vector of specific
-    parameter names. Only used when \code{method = "proflik"} since Wald
+    parameter names. Only used when \code{type = "proflik"} since Wald
     intervals are cheap to compute for all parameters simultaneously.
     Defaults to \code{"dose"} since profile likelihood computation can be
     extensive.
@@ -32,7 +32,7 @@
     The confidence level. Defaults to \code{0.95}.
   }
   \item{type}{
-    The method for computing confidence intervals for frequentist methods. For
+    The type(s) of confidence intervals to determine. For
     RC, ERC, and MCML, this can be one of:
     \describe{
       \item{\code{"wald.orig"}}{
@@ -59,24 +59,24 @@
       }
       \item{\code{"hpd"}}{
         Highest posterior density intervals via
-        \code{\link[coda]{HPDinterval}}. Requires the \pkg{coda} package.
+        \code{\link[coda]{HPDinterval}} from the \pkg{coda} package.
       }
     }
     If \code{object} contains results for at least one of RC, ERC, and MCML and at least one of FMA and BMA, \code{type} must be length 2 and specify one method for RC, ERC, and MCML, and one for FMA and BMA.
   }
   \item{data}{
     The original data frame used for fitting. Only required when
-    \code{method = "proflik"} and the model was fitted with
-    \code{keep.data = FALSE}. Wald intervals never require the data.
+    \code{type = "proflik"} and the model was fitted with
+    \code{keep.data = FALSE}
   }
   \item{maxit.profCI}{
     Maximum number of iterations for the root-finding algorithm used to
     locate profile likelihood interval bounds. Only used when
-    \code{method = "proflik"}. Defaults to \code{20}.
+    \code{type = "proflik"}. Defaults to \code{20}.
   }
   \item{tol.profCI}{
     Tolerance for the root-finding algorithm. Only used when
-    \code{method = "proflik"}. Defaults to \code{1e-2}. Reduce for more
+    \code{type = "proflik"}. Defaults to \code{1e-2}. Reduce for more
     precise bounds at the cost of additional computation.
   }
   \item{\dots}{
@@ -92,7 +92,7 @@
     \item{\code{lower}}{Lower confidence bound.}
     \item{\code{upper}}{Upper confidence bound.}
   }
-  When \code{method = "proflik"}, four additional columns are included:
+  When \code{type = "proflik"}, four additional columns are included:
   \describe{
     \item{\code{pval.lower}}{
       P-value at the lower bound, should be close to \eqn{1 -}
@@ -134,14 +134,14 @@
   intervals using \code{HPDinterval} from the \code{coda} package, both using 
   the FMA samples or Bayesian posterior samples.
   
-  Profile likelihood intervals (\code{method = "proflik"}) require
+  Profile likelihood intervals (\code{type = "proflik"}) require
   re-evaluating the likelihood repeatedly and can be time-consuming.
   The \code{parm} argument can be used to restrict computation to dose
   parameters only (the default) when intervals for the other parameters are
   not of interest.
 
   When the model was fitted with \code{keep.data = FALSE} and
-  \code{method = "proflik"} is used for \code{confint}, the original data must be
+  \code{type = "proflik"} is used for \code{confint}, the original data must be
   supplied via the \code{data} argument. Wald intervals do not require the
   data and can always be computed from the stored Hessian and parameter
   estimates alone.
