@@ -416,6 +416,12 @@ collect_X <- function(formula) {
   specials <- c("dose", "strata", "offset", "Surv")
   rhs      <- formula[[3]]
   
+  if (has_no_intercept(rhs)) {
+    stop(
+      "Removing the intercept via -1 or +0 is not currently supported. "
+    )
+  }
+  
   remove_specials <- function(expr) {
     if (is.symbol(expr)) return(expr)
     if (is.call(expr)) {
@@ -437,4 +443,28 @@ collect_X <- function(formula) {
   
   # Return the cleaned RHS as a formula for later use by model.matrix
   as.formula(paste("~", deparse(cleaned_rhs, width.cutoff=500L)))
+}
+
+
+has_no_intercept <- function(expr) {
+  if (is.call(expr)) {
+    fn <- as.character(expr[[1]])
+    if (fn == "-") {
+      # Check for -1
+      args <- as.list(expr)[-1]
+      if (any(sapply(args, function(a) is.numeric(a) && a == 1))) {
+        return(TRUE)
+      }
+    }
+    if (fn == "+") {
+      # Check for +0
+      args <- as.list(expr)[-1]
+      if (any(sapply(args, function(a) is.numeric(a) && a == 0))) {
+        return(TRUE)
+      }
+    }
+    # Recurse into sub-expressions
+    return(any(sapply(as.list(expr)[-1], has_no_intercept)))
+  }
+  FALSE
 }
