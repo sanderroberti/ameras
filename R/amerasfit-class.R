@@ -110,12 +110,16 @@ summary.amerasfit <- function(object, ...) {
         CI.lowerbound = CI.lowerbound,
         CI.upperbound = CI.upperbound
       ))
+      # Add p-value columns for profile likelihood intervals. If not used, these will be removed after
+      res <- cbind(res, data.frame(pval.lower = NA, pval.upper = NA))
       
       if("pval.lower" %in% names(CI) && "pval.upper" %in% names(CI)){
         pval.lower  <- pval.upper <- coef*NA
         pval.lower[match(rownames(CI), names(coef))] <- CI$pval.lower
         pval.upper[match(rownames(CI), names(coef))] <- CI$pval.upper
-        res <- cbind(res, data.frame(pval.lower = pval.lower, pval.upper = pval.upper))
+        res$pval.lower <- pval.lower
+        res$pval.upper <- pval.upper
+        #res <- cbind(res, data.frame(pval.lower = pval.lower, pval.upper = pval.upper))
       }
     }
     
@@ -134,6 +138,11 @@ summary.amerasfit <- function(object, ...) {
     
   })
   )
+ 
+  # Remove p-value columns if not used
+  if(all(is.na(summary_table$pval.lower)) & all(is.na(summary_table$pval.upper))){
+    summary_table <- summary_table[, -which(names(summary_table) %in% c("pval.lower", "pval.upper"))]
+  }
   
   runtime_table <- do.call("rbind",lapply(1:length(object0), function(i){
     
