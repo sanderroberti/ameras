@@ -205,9 +205,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378            NA            NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751        0.5648         1.112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lowerbound CI.upperbound pval.lower</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378            NA            NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751        0.5648         1.112    0.05024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pval.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.04959</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Access the summary table directly</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
@@ -215,6 +218,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Method        Term   Estimate         SE CI.lowerbound CI.upperbound</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     RC (Intercept) -0.8847176 0.07378315            NA            NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     RC        dose  0.8019528 0.13750708     0.5647607      1.111609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pval.lower pval.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.05024383 0.04958787</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Multiple methods</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>

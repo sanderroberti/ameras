@@ -184,9 +184,11 @@ specifying the model), `num.rows` (the number of rows in `data`),
 (the used transformation function, if applicable), `transform.jacobian`
 (the used Jacobian function for the transformation, if applicable),
 `other.args` (any other arguments passed to ...), `model` (a list
-containing the specified model components parsed from the formula), and
+containing the specified model components parsed from the formula),
 `CI.computed` (logical, whether confidence intervals have been attached
-by [`confint`](https://ameras.sanderroberti.com/reference/confint.md)).
+by [`confint`](https://ameras.sanderroberti.com/reference/confint.md)),
+and `data` (either the data frame used for model fitting when
+`keep.data=TRUE` or `NULL` otherwise).
 
 For each method supplied to `methods`, the output contains a list with
 components:

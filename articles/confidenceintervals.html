@@ -210,11 +210,16 @@ transformations</a>).</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
-<span><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788       -1.2391       -0.8971</span></span>
-<span><span class="co">#&gt;      RC          X1   0.4409 0.07628        0.2908        0.5917</span></span>
-<span><span class="co">#&gt;      RC          X2  -0.3360 0.09544       -0.5256       -0.1490</span></span>
-<span><span class="co">#&gt;      RC        dose   0.8508 0.14517        0.6009        1.1784</span></span></code></pre></div>
+<span><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound pval.lower</span></span>
+<span><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788       -1.2391       -0.8971    0.05248</span></span>
+<span><span class="co">#&gt;      RC          X1   0.4409 0.07628        0.2908        0.5917    0.04878</span></span>
+<span><span class="co">#&gt;      RC          X2  -0.3360 0.09544       -0.5256       -0.1490    0.04822</span></span>
+<span><span class="co">#&gt;      RC        dose   0.8508 0.14517        0.6009        1.1784    0.05040</span></span>
+<span><span class="co">#&gt;  pval.upper</span></span>
+<span><span class="co">#&gt;     0.05153</span></span>
+<span><span class="co">#&gt;     0.04853</span></span>
+<span><span class="co">#&gt;     0.04902</span></span>
+<span><span class="co">#&gt;     0.04952</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="frequentist-and-bayesian-model-averaging">Frequentist and Bayesian model averaging<a class="anchor" aria-label="anchor" href="#frequentist-and-bayesian-model-averaging"></a>
@@ -238,12 +243,12 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("FMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 1.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 1.7 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;     FMA     1.6</span></span>
+<span><span class="co">#&gt;     FMA     1.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -257,12 +262,12 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("FMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 1.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 1.7 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;     FMA     1.6</span></span>
+<span><span class="co">#&gt;     FMA     1.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

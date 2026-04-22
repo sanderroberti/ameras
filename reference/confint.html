@@ -76,7 +76,7 @@
   <dt id="arg-parm">parm<a class="anchor" aria-label="anchor" href="#arg-parm"></a></dt>
 <dd><p>Either <code>"dose"</code> to compute intervals for dose-related parameters
     only, <code>"all"</code> for all parameters, or a character vector of specific
-    parameter names. Only used when <code>method = "proflik"</code> since Wald
+    parameter names. Only used when <code>type = "proflik"</code> since Wald
     intervals are cheap to compute for all parameters simultaneously.
     Defaults to <code>"dose"</code> since profile likelihood computation can be
     extensive.</p></dd>
@@ -85,7 +85,7 @@
 <dd><p>The confidence level. Defaults to <code>0.95</code>.</p></dd>
 
   <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>The method for computing confidence intervals for frequentist methods. For
+<dd><p>The type(s) of confidence intervals to determine. For
     RC, ERC, and MCML, this can be one of:</p><dl><dt><code>"wald.orig"</code></dt>
 <dd><p>Wald intervals on the original parameter scale using the delta
         method variance-covariance matrix.</p></dd>
@@ -108,24 +108,24 @@
 
       <dt><code>"hpd"</code></dt>
 <dd><p>Highest posterior density intervals via
-        <code><a href="https://rdrr.io/pkg/coda/man/HPDinterval.html" class="external-link">HPDinterval</a></code>. Requires the <span class="pkg">coda</span> package.</p></dd>
+        <code><a href="https://rdrr.io/pkg/coda/man/HPDinterval.html" class="external-link">HPDinterval</a></code> from the <span class="pkg">coda</span> package.</p></dd>
 
 
 </dl><p>If <code>object</code> contains results for at least one of RC, ERC, and MCML and at least one of FMA and BMA, <code>type</code> must be length 2 and specify one method for RC, ERC, and MCML, and one for FMA and BMA.</p></dd>
 
   <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>The original data frame used for fitting. Only required when
-    <code>method = "proflik"</code> and the model was fitted with
-    <code>keep.data = FALSE</code>. Wald intervals never require the data.</p></dd>
+    <code>type = "proflik"</code> and the model was fitted with
+    <code>keep.data = FALSE</code></p></dd>
 
   <dt id="arg-maxit-profci">maxit.profCI<a class="anchor" aria-label="anchor" href="#arg-maxit-profci"></a></dt>
 <dd><p>Maximum number of iterations for the root-finding algorithm used to
     locate profile likelihood interval bounds. Only used when
-    <code>method = "proflik"</code>. Defaults to <code>20</code>.</p></dd>
+    <code>type = "proflik"</code>. Defaults to <code>20</code>.</p></dd>
 
   <dt id="arg-tol-profci">tol.profCI<a class="anchor" aria-label="anchor" href="#arg-tol-profci"></a></dt>
 <dd><p>Tolerance for the root-finding algorithm. Only used when
-    <code>method = "proflik"</code>. Defaults to <code>1e-2</code>. Reduce for more
+    <code>type = "proflik"</code>. Defaults to <code>1e-2</code>. Reduce for more
     precise bounds at the cost of additional computation.</p></dd>
 
   <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -143,7 +143,7 @@
 <dd><p>Upper confidence bound.</p></dd>
 
 
-</dl><p>When <code>method = "proflik"</code>, four additional columns are included:</p><dl><dt><code>pval.lower</code></dt>
+</dl><p>When <code>type = "proflik"</code>, four additional columns are included:</p><dl><dt><code>pval.lower</code></dt>
 <dd><p>P-value at the lower bound, should be close to \(1 -\)
       <code>level</code>.</p></dd>
 
@@ -183,13 +183,13 @@
   percentiles, and <code>CI="hpd"</code> which computes highest posterior density
   intervals using <code>HPDinterval</code> from the <code>coda</code> package, both using
   the FMA samples or Bayesian posterior samples.</p>
-<p>Profile likelihood intervals (<code>method = "proflik"</code>) require
+<p>Profile likelihood intervals (<code>type = "proflik"</code>) require
   re-evaluating the likelihood repeatedly and can be time-consuming.
   The <code>parm</code> argument can be used to restrict computation to dose
   parameters only (the default) when intervals for the other parameters are
   not of interest.</p>
 <p>When the model was fitted with <code>keep.data = FALSE</code> and
-  <code>method = "proflik"</code> is used for <code>confint</code>, the original data must be
+  <code>type = "proflik"</code> is used for <code>confint</code>, the original data must be
   supplied via the <code>data</code> argument. Wald intervals do not require the
   data and can always be computed from the stored Hessian and parameter
   estimates alone.</p>
@@ -249,9 +249,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378            NA            NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751        0.5648         1.112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lowerbound CI.upperbound pval.lower</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378            NA            NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751        0.5648         1.112    0.05024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pval.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.04959</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## With keep.data = FALSE, supply data explicitly for proflik</span></span></span>
@@ -297,13 +300,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("FMA", "BMA"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 98.3 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 102.4 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA     0.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA    97.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA     0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA   101.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

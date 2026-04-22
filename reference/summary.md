@@ -175,9 +175,12 @@ summary(fit)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC (Intercept)  -0.8847 0.07378            NA            NA
-#>      RC        dose   0.8020 0.13751        0.5648         1.112
+#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound pval.lower
+#>      RC (Intercept)  -0.8847 0.07378            NA            NA         NA
+#>      RC        dose   0.8020 0.13751        0.5648         1.112    0.05024
+#>  pval.upper
+#>          NA
+#>     0.04959
 
 ## Access the summary table directly
 s <- summary(fit)
@@ -185,6 +188,9 @@ s$summary_table
 #>   Method        Term   Estimate         SE CI.lowerbound CI.upperbound
 #> 1     RC (Intercept) -0.8847176 0.07378315            NA            NA
 #> 2     RC        dose  0.8019528 0.13750708     0.5647607      1.111609
+#>   pval.lower pval.upper
+#> 1         NA         NA
+#> 2 0.05024383 0.04958787
 
 ## Multiple methods
 if (FALSE) { # \dontrun{

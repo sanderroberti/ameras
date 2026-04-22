@@ -122,11 +122,16 @@ summary(fit.ameras.proflik)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC (Intercept)  -1.0641 0.08788       -1.2391       -0.8971
-#>      RC          X1   0.4409 0.07628        0.2908        0.5917
-#>      RC          X2  -0.3360 0.09544       -0.5256       -0.1490
-#>      RC        dose   0.8508 0.14517        0.6009        1.1784
+#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound pval.lower
+#>      RC (Intercept)  -1.0641 0.08788       -1.2391       -0.8971    0.05248
+#>      RC          X1   0.4409 0.07628        0.2908        0.5917    0.04878
+#>      RC          X2  -0.3360 0.09544       -0.5256       -0.1490    0.04822
+#>      RC        dose   0.8508 0.14517        0.6009        1.1784    0.05040
+#>  pval.upper
+#>     0.05153
+#>     0.04853
+#>     0.04902
+#>     0.04952
 ```
 
 ## Frequentist and Bayesian model averaging
@@ -152,12 +157,12 @@ summary(fit.ameras.hpd)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.6 seconds
+#> Total run time: 1.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.6
+#>     FMA     1.7
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -171,12 +176,12 @@ summary(fit.ameras.percentile)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.6 seconds
+#> Total run time: 1.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.6
+#>     FMA     1.7
 #> 
 #> Summary of coefficients by method:
 #> 

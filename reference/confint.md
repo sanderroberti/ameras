@@ -26,7 +26,7 @@ confint(object, parm="dose", level=0.95,
 
   Either `"dose"` to compute intervals for dose-related parameters only,
   `"all"` for all parameters, or a character vector of specific
-  parameter names. Only used when `method = "proflik"` since Wald
+  parameter names. Only used when `type = "proflik"` since Wald
   intervals are cheap to compute for all parameters simultaneously.
   Defaults to `"dose"` since profile likelihood computation can be
   extensive.
@@ -37,8 +37,8 @@ confint(object, parm="dose", level=0.95,
 
 - type:
 
-  The method for computing confidence intervals for frequentist methods.
-  For RC, ERC, and MCML, this can be one of:
+  The type(s) of confidence intervals to determine. For RC, ERC, and
+  MCML, this can be one of:
 
   `"wald.orig"`
 
@@ -68,8 +68,8 @@ confint(object, parm="dose", level=0.95,
   `"hpd"`
 
   :   Highest posterior density intervals via
-      [`HPDinterval`](https://rdrr.io/pkg/coda/man/HPDinterval.html).
-      Requires the coda package.
+      [`HPDinterval`](https://rdrr.io/pkg/coda/man/HPDinterval.html)
+      from the coda package.
 
   If `object` contains results for at least one of RC, ERC, and MCML and
   at least one of FMA and BMA, `type` must be length 2 and specify one
@@ -78,20 +78,19 @@ confint(object, parm="dose", level=0.95,
 - data:
 
   The original data frame used for fitting. Only required when
-  `method = "proflik"` and the model was fitted with
-  `keep.data = FALSE`. Wald intervals never require the data.
+  `type = "proflik"` and the model was fitted with `keep.data = FALSE`
 
 - maxit.profCI:
 
   Maximum number of iterations for the root-finding algorithm used to
   locate profile likelihood interval bounds. Only used when
-  `method = "proflik"`. Defaults to `20`.
+  `type = "proflik"`. Defaults to `20`.
 
 - tol.profCI:
 
   Tolerance for the root-finding algorithm. Only used when
-  `method = "proflik"`. Defaults to `1e-2`. Reduce for more precise
-  bounds at the cost of additional computation.
+  `type = "proflik"`. Defaults to `1e-2`. Reduce for more precise bounds
+  at the cost of additional computation.
 
 - ...:
 
@@ -111,7 +110,7 @@ with columns:
 
   Upper confidence bound.
 
-When `method = "proflik"`, four additional columns are included:
+When `type = "proflik"`, four additional columns are included:
 
 - `pval.lower`:
 
@@ -153,14 +152,13 @@ which computes highest posterior density intervals using `HPDinterval`
 from the `coda` package, both using the FMA samples or Bayesian
 posterior samples.
 
-Profile likelihood intervals (`method = "proflik"`) require
-re-evaluating the likelihood repeatedly and can be time-consuming. The
-`parm` argument can be used to restrict computation to dose parameters
-only (the default) when intervals for the other parameters are not of
-interest.
+Profile likelihood intervals (`type = "proflik"`) require re-evaluating
+the likelihood repeatedly and can be time-consuming. The `parm` argument
+can be used to restrict computation to dose parameters only (the
+default) when intervals for the other parameters are not of interest.
 
 When the model was fitted with `keep.data = FALSE` and
-`method = "proflik"` is used for `confint`, the original data must be
+`type = "proflik"` is used for `confint`, the original data must be
 supplied via the `data` argument. Wald intervals do not require the data
 and can always be computed from the stored Hessian and parameter
 estimates alone.
@@ -222,9 +220,12 @@ summary(fit)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC (Intercept)  -0.8847 0.07378            NA            NA
-#>      RC        dose   0.8020 0.13751        0.5648         1.112
+#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound pval.lower
+#>      RC (Intercept)  -0.8847 0.07378            NA            NA         NA
+#>      RC        dose   0.8020 0.13751        0.5648         1.112    0.05024
+#>  pval.upper
+#>          NA
+#>     0.04959
 # }
 
 ## With keep.data = FALSE, supply data explicitly for proflik
@@ -270,13 +271,13 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 98.3 seconds
+#> Total run time: 102.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     0.4
-#>     BMA    97.9
+#>     FMA     0.5
+#>     BMA   101.9
 #> 
 #> Summary of coefficients by method:
 #> 
