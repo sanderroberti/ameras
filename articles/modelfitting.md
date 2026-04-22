@@ -152,7 +152,7 @@ str(fit.ameras.linreg)
 #>   ..$ Y           : chr "Y.gaussian"
 #>   ..$ M           : NULL
 #>   ..$ X_formula   :Class 'formula'  language ~X1 + X2
-#>   .. .. ..- attr(*, ".Environment")=<environment: 0x565268df7ad8> 
+#>   .. .. ..- attr(*, ".Environment")=<environment: 0x55c345c0fdc0> 
 #>   ..$ X           : int [1:2] 9 10
 #>   ..$ offset      : NULL
 #>   ..$ entry       : NULL
@@ -199,7 +199,7 @@ str(fit.ameras.linreg)
 #>   .. ..$ counts     : Named num [1:2] 546 9
 #>   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"
 #>   ..$ loglik      : num -4559
-#>   ..$ runtime     : chr "125.1 seconds"
+#>   ..$ runtime     : chr "124.8 seconds"
 #>   ..$ ERC         : logi TRUE
 #>  $ MCML              :List of 6
 #>   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138
@@ -250,7 +250,7 @@ str(fit.ameras.linreg)
 #>   .. .. .. ..$ : NULL
 #>   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...
 #>   ..$ included.replicates: int [1:10] 1 2 3 4 5 6 7 8 9 10
-#>   ..$ runtime            : chr "75 seconds"
+#>   ..$ runtime            : chr "74.9 seconds"
 #>  - attr(*, "class")= chr "amerasfit"
 ```
 
@@ -320,45 +320,20 @@ summary(fit.ameras.linreg)
 #>     family = "gaussian", methods = c("RC", "ERC", "MCML", "FMA", 
 #>         "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 202.3 seconds
+#> Total run time: 201.9 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.2
-#>     ERC   125.1
+#>     ERC   124.8
 #>    MCML     0.7
 #>     FMA     1.3
-#>     BMA    75.0
+#>     BMA    74.9
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE Rhat  n.eff
-#>      RC (Intercept)  -1.3622 0.03666   NA     NA
-#>      RC          X1   0.4807 0.04045   NA     NA
-#>      RC          X2  -0.5188 0.04972   NA     NA
-#>      RC        dose   1.1660 0.02040   NA     NA
-#>      RC       sigma   1.1076 0.01430   NA     NA
-#>     ERC (Intercept)  -1.3611 0.03660   NA     NA
-#>     ERC          X1   0.4795 0.04041   NA     NA
-#>     ERC          X2  -0.5188 0.04969   NA     NA
-#>     ERC        dose   1.1649 0.02038   NA     NA
-#>     ERC       sigma   1.1062 0.01425   NA     NA
-#>    MCML (Intercept)  -1.2803 0.03714   NA     NA
-#>    MCML          X1   0.4837 0.04156   NA     NA
-#>    MCML          X2  -0.5171 0.05108   NA     NA
-#>    MCML        dose   1.0790 0.01993   NA     NA
-#>    MCML       sigma   1.1378 0.01469   NA     NA
-#>     FMA (Intercept)  -1.2803 0.03732   NA     NA
-#>     FMA          X1   0.4837 0.04181   NA     NA
-#>     FMA          X2  -0.5173 0.05124   NA     NA
-#>     FMA        dose   1.0792 0.02015   NA     NA
-#>     FMA       sigma   1.1377 0.01467   NA     NA
-#>     BMA (Intercept)  -1.2796 0.03797 1.00 871.00
-#>     BMA          X1   0.4831 0.04240 1.01 822.00
-#>     BMA          X2  -0.5169 0.05254 1.00 800.00
-#>     BMA        dose   1.0788 0.02024 1.00 800.00
-#>     BMA       sigma   1.1391 0.01503 1.02 744.00
+#> data frame with 0 columns and 25 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -440,45 +415,20 @@ summary(fit.ameras.logreg)
 #>     X1 + X2, data = data, family = "binomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 142 seconds
+#> Total run time: 141 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC    79.8
+#>     ERC    79.1
 #>    MCML     1.0
 #>     FMA     2.8
-#>     BMA    58.1
+#>     BMA    57.8
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE Rhat   n.eff
-#>      RC  (Intercept) -0.94461 0.08409   NA      NA
-#>      RC           X1  0.44552 0.07667   NA      NA
-#>      RC           X2 -0.33376 0.09601   NA      NA
-#>      RC         dose  0.37904 0.10388   NA      NA
-#>      RC dose_squared  0.01943 0.02750   NA      NA
-#>     ERC  (Intercept) -0.93189 0.08533   NA      NA
-#>     ERC           X1  0.44998 0.07678   NA      NA
-#>     ERC           X2 -0.33924 0.09614   NA      NA
-#>     ERC         dose  0.33858 0.10745   NA      NA
-#>     ERC dose_squared  0.03528 0.02841   NA      NA
-#>    MCML  (Intercept) -0.91147 0.08356   NA      NA
-#>    MCML           X1  0.44619 0.07674   NA      NA
-#>    MCML           X2 -0.34431 0.09625   NA      NA
-#>    MCML         dose  0.31654 0.10412   NA      NA
-#>    MCML dose_squared  0.03800 0.02774   NA      NA
-#>     FMA  (Intercept) -0.91244 0.08386   NA      NA
-#>     FMA           X1  0.44619 0.07686   NA      NA
-#>     FMA           X2 -0.34400 0.09627   NA      NA
-#>     FMA         dose  0.31871 0.10523   NA      NA
-#>     FMA dose_squared  0.03735 0.02816   NA      NA
-#>     BMA  (Intercept) -0.90779 0.08101 1.03  214.00
-#>     BMA           X1  0.44552 0.07775 1.01  370.00
-#>     BMA           X2 -0.34361 0.09652 1.00 1242.00
-#>     BMA         dose  0.30658 0.09894 1.08   92.00
-#>     BMA dose_squared  0.04134 0.02564 1.11  105.00
+#> data frame with 0 columns and 25 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -543,40 +493,20 @@ summary(fit.ameras.logreg.lin)
 #>     X1 + X2, data = data, family = "binomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 123.3 seconds
+#> Total run time: 119.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.2
-#>     ERC    67.0
+#>     ERC    64.6
 #>    MCML     0.7
 #>     FMA     1.6
-#>     BMA    53.8
+#>     BMA    52.6
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE Rhat  n.eff
-#>      RC (Intercept)  -0.9760 0.07190   NA     NA
-#>      RC          X1   0.4460 0.07667   NA     NA
-#>      RC          X2  -0.3359 0.09596   NA     NA
-#>      RC        dose   0.4471 0.04101   NA     NA
-#>     ERC (Intercept)  -0.9898 0.07216   NA     NA
-#>     ERC          X1   0.4533 0.07667   NA     NA
-#>     ERC          X2  -0.3437 0.09609   NA     NA
-#>     ERC        dose   0.4632 0.04086   NA     NA
-#>    MCML (Intercept)  -0.9725 0.07154   NA     NA
-#>    MCML          X1   0.4469 0.07674   NA     NA
-#>    MCML          X2  -0.3467 0.09618   NA     NA
-#>    MCML        dose   0.4498 0.04105   NA     NA
-#>     FMA (Intercept)  -0.9725 0.07138   NA     NA
-#>     FMA          X1   0.4472 0.07664   NA     NA
-#>     FMA          X2  -0.3465 0.09602   NA     NA
-#>     FMA        dose   0.4497 0.04101   NA     NA
-#>     BMA (Intercept)  -0.9791 0.06869 1.03 386.00
-#>     BMA          X1   0.4555 0.07669 1.00 482.00
-#>     BMA          X2  -0.3486 0.09589 1.02 882.00
-#>     BMA        dose   0.4523 0.04042 1.03 518.00
+#> data frame with 0 columns and 20 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -649,45 +579,20 @@ summary(fit.ameras.poisson)
 #>     X1 + X2, data = data, family = "poisson", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 70 seconds
+#> Total run time: 69.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.3
-#>     ERC     1.7
-#>    MCML     1.3
+#>      RC     0.8
+#>     ERC     1.1
+#>    MCML     1.2
 #>     FMA     3.1
-#>     BMA    63.6
+#>     BMA    63.2
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate       SE Rhat  n.eff
-#>      RC  (Intercept) -1.09456 0.048655   NA     NA
-#>      RC           X1  0.49070 0.041922   NA     NA
-#>      RC           X2 -0.37625 0.055638   NA     NA
-#>      RC         dose  0.61976 0.040375   NA     NA
-#>      RC dose_squared -0.03849 0.007566   NA     NA
-#>     ERC  (Intercept) -1.09068 0.048474   NA     NA
-#>     ERC           X1  0.49180 0.042008   NA     NA
-#>     ERC           X2 -0.37855 0.055639   NA     NA
-#>     ERC         dose  0.61138 0.039328   NA     NA
-#>     ERC dose_squared -0.03626 0.007177   NA     NA
-#>    MCML  (Intercept) -1.07519 0.046954   NA     NA
-#>    MCML           X1  0.49897 0.041918   NA     NA
-#>    MCML           X2 -0.37711 0.055643   NA     NA
-#>    MCML         dose  0.60089 0.034218   NA     NA
-#>    MCML dose_squared -0.03644 0.005719   NA     NA
-#>     FMA  (Intercept) -1.07542 0.047056   NA     NA
-#>     FMA           X1  0.49896 0.041800   NA     NA
-#>     FMA           X2 -0.37716 0.055479   NA     NA
-#>     FMA         dose  0.60138 0.035163   NA     NA
-#>     FMA dose_squared -0.03656 0.005998   NA     NA
-#>     BMA  (Intercept) -1.07944 0.044741 1.02 215.00
-#>     BMA           X1  0.49801 0.039956 1.03 435.00
-#>     BMA           X2 -0.38167 0.055527 1.00 800.00
-#>     BMA         dose  0.60805 0.035663 1.03  87.00
-#>     BMA dose_squared -0.03798 0.006215 1.03  79.00
+#> data frame with 0 columns and 25 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -752,7 +657,7 @@ summary(fit.ameras.poisson.lin)
 #>     X1 + X2, data = data, family = "poisson", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 63.5 seconds
+#> Total run time: 64.2 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
@@ -761,31 +666,11 @@ summary(fit.ameras.poisson.lin)
 #>     ERC     0.6
 #>    MCML     0.6
 #>     FMA     1.9
-#>     BMA    60.2
+#>     BMA    60.9
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE Rhat  n.eff
-#>      RC (Intercept)  -0.9650 0.04127   NA     NA
-#>      RC          X1   0.5054 0.04195   NA     NA
-#>      RC          X2  -0.3640 0.05560   NA     NA
-#>      RC        dose   0.4204 0.01346   NA     NA
-#>     ERC (Intercept)  -0.9667 0.04134   NA     NA
-#>     ERC          X1   0.5049 0.04202   NA     NA
-#>     ERC          X2  -0.3667 0.05559   NA     NA
-#>     ERC        dose   0.4222 0.01361   NA     NA
-#>    MCML (Intercept)  -0.9173 0.04048   NA     NA
-#>    MCML          X1   0.5129 0.04231   NA     NA
-#>    MCML          X2  -0.3579 0.05582   NA     NA
-#>    MCML        dose   0.3823 0.01231   NA     NA
-#>     FMA (Intercept)  -0.9174 0.04044   NA     NA
-#>     FMA          X1   0.5121 0.04257   NA     NA
-#>     FMA          X2  -0.3584 0.05587   NA     NA
-#>     FMA        dose   0.3826 0.01255   NA     NA
-#>     BMA (Intercept)  -0.9180 0.04041 1.00 301.00
-#>     BMA          X1   0.5100 0.04121 1.01 364.00
-#>     BMA          X2  -0.3581 0.05584 1.00 800.00
-#>     BMA        dose   0.3833 0.01343 1.01 371.00
+#> data frame with 0 columns and 20 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -904,50 +789,20 @@ summary(fit.ameras.prophaz)
 #>     X1 + X2, data = data, family = "prophaz", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 685.2 seconds
+#> Total run time: 657.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC   569.4
+#>     ERC   547.4
 #>    MCML     0.7
 #>     FMA     2.1
-#>     BMA   112.7
+#>     BMA   107.1
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term  Estimate      SE Rhat  n.eff
-#>      RC           X1  0.629674 0.08485   NA     NA
-#>      RC           X2 -0.423116 0.11150   NA     NA
-#>      RC         dose  0.587614 0.08915   NA     NA
-#>      RC dose_squared -0.033682 0.01807   NA     NA
-#>     ERC           X1  0.636755      NA   NA     NA
-#>     ERC           X2 -0.422042      NA   NA     NA
-#>     ERC         dose  0.295488      NA   NA     NA
-#>     ERC dose_squared -0.003357      NA   NA     NA
-#>    MCML           X1  0.629162 0.08518   NA     NA
-#>    MCML           X2 -0.425156 0.11196   NA     NA
-#>    MCML         dose  0.590217 0.08046   NA     NA
-#>    MCML dose_squared -0.038038 0.01523   NA     NA
-#>     FMA           X1  0.624536 0.08542   NA     NA
-#>     FMA           X2 -0.433644 0.11160   NA     NA
-#>     FMA         dose  0.594196 0.07841   NA     NA
-#>     FMA dose_squared -0.038945 0.01454   NA     NA
-#>     BMA           X1  0.631447 0.08479 1.02 311.00
-#>     BMA           X2 -0.432579 0.11574 1.02 740.00
-#>     BMA         dose  0.579261 0.07815 1.00  89.00
-#>     BMA dose_squared -0.036336 0.01514 1.00  82.00
-#>     BMA        h0[1]  0.331844 0.05060 1.01 350.00
-#>     BMA        h0[2]  0.354968 0.05515 1.00 457.00
-#>     BMA        h0[3]  0.274038 0.04421 1.00 341.00
-#>     BMA        h0[4]  0.304833 0.04870 1.00 426.00
-#>     BMA        h0[5]  0.324187 0.05181 1.01 452.00
-#>     BMA        h0[6]  0.410268 0.06456 1.01 300.00
-#>     BMA        h0[7]  0.275961 0.04233 1.00 467.00
-#>     BMA        h0[8]  0.319488 0.04863 1.00 417.00
-#>     BMA        h0[9]  0.279575 0.04103 1.00 358.00
-#>     BMA       h0[10]  0.317120 0.04949 1.01 288.00
+#> data frame with 0 columns and 30 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -1033,45 +888,20 @@ summary(fit.ameras.prophaz.lin)
 #>     X1 + X2, data = data, family = "prophaz", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 384.6 seconds
+#> Total run time: 372 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.1
-#>     ERC   277.7
-#>    MCML     1.1
-#>     FMA     1.2
-#>     BMA   104.5
+#>     ERC   264.7
+#>    MCML     0.4
+#>     FMA     1.1
+#>     BMA   105.7
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method   Term Estimate      SE Rhat  n.eff
-#>      RC     X1   0.6358 0.08488   NA     NA
-#>      RC     X2  -0.4161 0.11144   NA     NA
-#>      RC   dose   0.4284 0.03004   NA     NA
-#>     ERC     X1   0.6416      NA   NA     NA
-#>     ERC     X2  -0.4220      NA   NA     NA
-#>     ERC   dose   0.2812      NA   NA     NA
-#>    MCML     X1   0.6462 0.08565   NA     NA
-#>    MCML     X2  -0.4125 0.11253   NA     NA
-#>    MCML   dose   0.4002 0.02908   NA     NA
-#>     FMA     X1   0.6457 0.08567   NA     NA
-#>     FMA     X2  -0.4125 0.11263   NA     NA
-#>     FMA   dose   0.4001 0.02901   NA     NA
-#>     BMA     X1   0.6474 0.08153 1.00 388.00
-#>     BMA     X2  -0.4248 0.11473 1.00 800.00
-#>     BMA   dose   0.3987 0.02884 1.01 478.00
-#>     BMA  h0[1]   0.3646 0.05506 1.00 644.00
-#>     BMA  h0[2]   0.3926 0.05694 1.01 540.00
-#>     BMA  h0[3]   0.3036 0.04541 1.00 549.00
-#>     BMA  h0[4]   0.3378 0.04899 1.00 692.00
-#>     BMA  h0[5]   0.3615 0.05340 1.00 720.00
-#>     BMA  h0[6]   0.4547 0.06635 1.00 546.00
-#>     BMA  h0[7]   0.3080 0.04573 1.01 690.00
-#>     BMA  h0[8]   0.3551 0.05105 1.00 589.00
-#>     BMA  h0[9]   0.3091 0.04455 1.00 907.00
-#>     BMA h0[10]   0.3496 0.05211 1.01 542.00
+#> data frame with 0 columns and 25 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -1151,70 +981,20 @@ summary(fit.ameras.multinomial)
 #>     X1 + X2, data = data, family = "multinomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 450 seconds
+#> Total run time: 461.1 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     1.1
-#>     ERC   157.0
-#>    MCML     8.0
-#>     FMA    10.6
-#>     BMA   273.3
+#>     ERC   157.7
+#>    MCML     7.9
+#>     FMA    10.7
+#>     BMA   283.7
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method             Term  Estimate      SE Rhat  n.eff
-#>      RC  (1)_(Intercept) -1.134879 0.11395   NA     NA
-#>      RC           (1)_X1  0.521885 0.10631   NA     NA
-#>      RC           (1)_X2 -0.347821 0.14935   NA     NA
-#>      RC         (1)_dose  0.541114 0.13250   NA     NA
-#>      RC (1)_dose_squared -0.028978 0.03377   NA     NA
-#>      RC  (2)_(Intercept) -0.007547 0.08795   NA     NA
-#>      RC           (2)_X1 -0.513675 0.08620   NA     NA
-#>      RC           (2)_X2  0.705782 0.10738   NA     NA
-#>      RC         (2)_dose  0.555006 0.11504   NA     NA
-#>      RC (2)_dose_squared -0.037842 0.03053   NA     NA
-#>     ERC  (1)_(Intercept) -1.139984 0.11278   NA     NA
-#>     ERC           (1)_X1  0.524098 0.10651   NA     NA
-#>     ERC           (1)_X2 -0.351142 0.14952   NA     NA
-#>     ERC         (1)_dose  0.561788 0.12424   NA     NA
-#>     ERC (1)_dose_squared -0.031891 0.02990   NA     NA
-#>     ERC  (2)_(Intercept) -0.008660 0.08626   NA     NA
-#>     ERC           (2)_X1 -0.511536 0.08638   NA     NA
-#>     ERC           (2)_X2  0.703688 0.10757   NA     NA
-#>     ERC         (2)_dose  0.563142 0.10587   NA     NA
-#>     ERC (2)_dose_squared -0.036409 0.02606   NA     NA
-#>    MCML  (1)_(Intercept) -1.121541 0.11214   NA     NA
-#>    MCML           (1)_X1  0.522503 0.10638   NA     NA
-#>    MCML           (1)_X2 -0.349944 0.14943   NA     NA
-#>    MCML         (1)_dose  0.526846 0.12549   NA     NA
-#>    MCML (1)_dose_squared -0.027194 0.03020   NA     NA
-#>    MCML  (2)_(Intercept) -0.001584 0.08614   NA     NA
-#>    MCML           (2)_X1 -0.513787 0.08621   NA     NA
-#>    MCML           (2)_X2  0.703779 0.10746   NA     NA
-#>    MCML         (2)_dose  0.559807 0.10680   NA     NA
-#>    MCML (2)_dose_squared -0.041118 0.02628   NA     NA
-#>     FMA  (1)_(Intercept) -1.125692 0.11269   NA     NA
-#>     FMA           (1)_X1  0.522203 0.10653   NA     NA
-#>     FMA           (1)_X2 -0.349524 0.14951   NA     NA
-#>     FMA         (1)_dose  0.536663 0.12823   NA     NA
-#>     FMA (1)_dose_squared -0.030264 0.03136   NA     NA
-#>     FMA  (2)_(Intercept) -0.001039 0.08607   NA     NA
-#>     FMA           (2)_X1 -0.513380 0.08602   NA     NA
-#>     FMA           (2)_X2  0.704601 0.10763   NA     NA
-#>     FMA         (2)_dose  0.557269 0.10747   NA     NA
-#>     FMA (2)_dose_squared -0.040745 0.02652   NA     NA
-#>     BMA  (1)_(Intercept) -1.120533 0.11510 1.02 173.00
-#>     BMA           (1)_X1  0.518102 0.11473 1.00 330.00
-#>     BMA           (1)_X2 -0.342415 0.14116 1.01 663.00
-#>     BMA         (1)_dose  0.522811 0.12793 1.04  73.00
-#>     BMA (1)_dose_squared -0.024286 0.03270 1.01  73.00
-#>     BMA  (2)_(Intercept)  0.003372 0.09478 1.00 101.00
-#>     BMA           (2)_X1 -0.522597 0.08709 1.00 364.00
-#>     BMA           (2)_X2  0.708877 0.10811 1.00 462.00
-#>     BMA         (2)_dose  0.554817 0.12798 1.01  47.00
-#>     BMA (2)_dose_squared -0.037946 0.03326 1.01  45.00
+#> data frame with 0 columns and 50 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -1296,60 +1076,20 @@ summary(fit.ameras.multinomial.lin)
 #>     X1 + X2, data = data, family = "multinomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 357.4 seconds
+#> Total run time: 356.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.8
-#>     ERC   114.6
-#>    MCML     6.0
-#>     FMA     8.3
-#>     BMA   227.7
+#>      RC     1.0
+#>     ERC   113.8
+#>    MCML     6.2
+#>     FMA     8.4
+#>     BMA   227.1
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method            Term Estimate      SE Rhat  n.eff
-#>      RC (1)_(Intercept) -1.10156 0.10093   NA     NA
-#>      RC          (1)_X1  0.52203 0.10628   NA     NA
-#>      RC          (1)_X2 -0.34710 0.14929   NA     NA
-#>      RC        (1)_dose  0.45264 0.05805   NA     NA
-#>      RC (2)_(Intercept)  0.04417 0.07667   NA     NA
-#>      RC          (2)_X1 -0.51312 0.08614   NA     NA
-#>      RC          (2)_X2  0.70793 0.10728   NA     NA
-#>      RC        (2)_dose  0.43049 0.05170   NA     NA
-#>     ERC (1)_(Intercept) -1.10285 0.10195   NA     NA
-#>     ERC          (1)_X1  0.52577 0.10650   NA     NA
-#>     ERC          (1)_X2 -0.35176 0.14953   NA     NA
-#>     ERC        (1)_dose  0.46441 0.06099   NA     NA
-#>     ERC (2)_(Intercept)  0.03947 0.07756   NA     NA
-#>     ERC          (2)_X1 -0.51003 0.08634   NA     NA
-#>     ERC          (2)_X2  0.70435 0.10749   NA     NA
-#>     ERC        (2)_dose  0.44543 0.05364   NA     NA
-#>    MCML (1)_(Intercept) -1.09147 0.10115   NA     NA
-#>    MCML          (1)_X1  0.52239 0.10633   NA     NA
-#>    MCML          (1)_X2 -0.34934 0.14941   NA     NA
-#>    MCML        (1)_dose  0.44410 0.05912   NA     NA
-#>    MCML (2)_(Intercept)  0.05917 0.07624   NA     NA
-#>    MCML          (2)_X1 -0.51290 0.08614   NA     NA
-#>    MCML          (2)_X2  0.70604 0.10735   NA     NA
-#>    MCML        (2)_dose  0.41753 0.05156   NA     NA
-#>     FMA (1)_(Intercept) -1.09114 0.10101   NA     NA
-#>     FMA          (1)_X1  0.52245 0.10612   NA     NA
-#>     FMA          (1)_X2 -0.34937 0.14960   NA     NA
-#>     FMA        (1)_dose  0.44381 0.05893   NA     NA
-#>     FMA (2)_(Intercept)  0.05869 0.07627   NA     NA
-#>     FMA          (2)_X1 -0.51272 0.08608   NA     NA
-#>     FMA          (2)_X2  0.70611 0.10708   NA     NA
-#>     FMA        (2)_dose  0.41769 0.05137   NA     NA
-#>     BMA (1)_(Intercept) -1.09319 0.09280 1.00 245.00
-#>     BMA          (1)_X1  0.52119 0.10307 1.02 390.00
-#>     BMA          (1)_X2 -0.34994 0.15277 1.01 447.00
-#>     BMA        (1)_dose  0.44801 0.05670 1.00 254.00
-#>     BMA (2)_(Intercept)  0.05267 0.07548 1.00 324.00
-#>     BMA          (2)_X1 -0.51037 0.08339 1.01 373.00
-#>     BMA          (2)_X2  0.70371 0.11185 1.01 650.00
-#>     BMA        (2)_dose  0.42386 0.05084 1.00 313.00
+#> data frame with 0 columns and 40 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -1422,40 +1162,20 @@ summary(fit.ameras.clogit)
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, 
 #>     niter.BMA = 5000)
 #> 
-#> Total run time: 710 seconds
+#> Total run time: 705.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.6
-#>     ERC   630.5
-#>    MCML     1.8
+#>     ERC   626.1
+#>    MCML     1.9
 #>     FMA     6.5
-#>     BMA    70.6
+#>     BMA    70.5
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE Rhat  n.eff
-#>      RC           X1  0.54553 0.08896   NA     NA
-#>      RC           X2 -0.53392 0.11711   NA     NA
-#>      RC         dose  0.68029 0.10131   NA     NA
-#>      RC dose_squared -0.05146 0.02242   NA     NA
-#>     ERC           X1  0.61917 0.09205   NA     NA
-#>     ERC           X2 -0.51784 0.11993   NA     NA
-#>     ERC         dose  0.35155 0.08030   NA     NA
-#>     ERC dose_squared  0.03687 0.01013   NA     NA
-#>    MCML           X1  0.55083 0.08923   NA     NA
-#>    MCML           X2 -0.53547 0.11712   NA     NA
-#>    MCML         dose  0.69334 0.09315   NA     NA
-#>    MCML dose_squared -0.05581 0.01950   NA     NA
-#>     FMA           X1  0.55052 0.08917   NA     NA
-#>     FMA           X2 -0.53471 0.11713   NA     NA
-#>     FMA         dose  0.69461 0.09617   NA     NA
-#>     FMA dose_squared -0.05610 0.02045   NA     NA
-#>     BMA           X1  0.54909 0.09212 1.00 800.00
-#>     BMA           X2 -0.53845 0.12233 1.00 800.00
-#>     BMA         dose  0.70058 0.10236 1.00 154.00
-#>     BMA dose_squared -0.05764 0.02212 1.00 131.00
+#> data frame with 0 columns and 20 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -1520,40 +1240,20 @@ summary(fit.ameras.clogit.lin)
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, 
 #>     niter.BMA = 5000)
 #> 
-#> Total run time: 706.4 seconds
+#> Total run time: 713.1 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.5
-#>     ERC   627.7
-#>    MCML     1.8
-#>     FMA     6.3
-#>     BMA    70.1
+#>      RC     0.6
+#>     ERC   634.0
+#>    MCML     1.9
+#>     FMA     6.4
+#>     BMA    70.2
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE Rhat  n.eff
-#>      RC           X1  0.54553 0.08896   NA     NA
-#>      RC           X2 -0.53392 0.11711   NA     NA
-#>      RC         dose  0.68029 0.10131   NA     NA
-#>      RC dose_squared -0.05146 0.02242   NA     NA
-#>     ERC           X1  0.61917 0.09205   NA     NA
-#>     ERC           X2 -0.51784 0.11993   NA     NA
-#>     ERC         dose  0.35155 0.08030   NA     NA
-#>     ERC dose_squared  0.03687 0.01013   NA     NA
-#>    MCML           X1  0.55083 0.08923   NA     NA
-#>    MCML           X2 -0.53547 0.11712   NA     NA
-#>    MCML         dose  0.69334 0.09315   NA     NA
-#>    MCML dose_squared -0.05581 0.01950   NA     NA
-#>     FMA           X1  0.55012 0.08918   NA     NA
-#>     FMA           X2 -0.53457 0.11734   NA     NA
-#>     FMA         dose  0.69435 0.09622   NA     NA
-#>     FMA dose_squared -0.05607 0.02043   NA     NA
-#>     BMA           X1  0.55628 0.09059 1.00 800.00
-#>     BMA           X2 -0.53885 0.11829 1.00 776.00
-#>     BMA         dose  0.69524 0.09738 1.01 191.00
-#>     BMA dose_squared -0.05604 0.02093 1.01 159.00
+#> data frame with 0 columns and 20 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```

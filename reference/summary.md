@@ -152,9 +152,7 @@ summary(fit)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE
-#>      RC (Intercept)  -0.8847 0.07378
-#>      RC        dose   0.8020 0.13751
+#> data frame with 0 columns and 2 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 

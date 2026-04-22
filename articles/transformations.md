@@ -196,12 +196,7 @@ summary(fit.ameras.sigmoid)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE
-#>      RC  (Intercept) -0.87358 0.09758
-#>      RC           X1  0.44587 0.07672
-#>      RC           X2 -0.33552 0.09610
-#>      RC         dose  0.04875 0.21281
-#>      RC dose_squared  0.28764 0.08100
+#> data frame with 0 columns and 5 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -226,12 +221,7 @@ summary(fit.ameras.transform1)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE
-#>      RC  (Intercept) -0.87359 0.09759
-#>      RC           X1  0.44587 0.07672
-#>      RC           X2 -0.33552 0.09610
-#>      RC         dose  0.04878 0.21283
-#>      RC dose_squared  0.28763 0.08100
+#> data frame with 0 columns and 5 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```

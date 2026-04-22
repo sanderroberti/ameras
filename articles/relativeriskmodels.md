@@ -59,12 +59,7 @@ summary(fit.ameras.exp)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE
-#>      RC  (Intercept) -0.94461 0.08409
-#>      RC           X1  0.44552 0.07667
-#>      RC           X2 -0.33376 0.09601
-#>      RC         dose  0.37904 0.10388
-#>      RC dose_squared  0.01943 0.02750
+#> data frame with 0 columns and 5 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -96,12 +91,7 @@ summary(fit.ameras.err)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method         Term Estimate      SE
-#>      RC  (Intercept) -0.87359 0.09759
-#>      RC           X1  0.44587 0.07672
-#>      RC           X2 -0.33552 0.09610
-#>      RC         dose  0.04878 0.21283
-#>      RC dose_squared  0.28763 0.08100
+#> data frame with 0 columns and 5 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -132,12 +122,7 @@ summary(fit.ameras.linexp)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method             Term Estimate      SE
-#>      RC      (Intercept)  -0.9326 0.08592
-#>      RC               X1   0.4456 0.07668
-#>      RC               X2  -0.3343 0.09603
-#>      RC      dose_linear   0.3255 0.11919
-#>      RC dose_exponential   0.3455 0.10814
+#> data frame with 0 columns and 5 rows
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
