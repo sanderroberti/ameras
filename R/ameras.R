@@ -126,11 +126,19 @@ ameras_main <- function(family="gaussian", methods="RC", dosevars, data, deg=1, 
   return(results)
 }
 
-ameras <- function(formula, data, family="gaussian",
-                   methods="RC", transform=NULL, transform.jacobian=NULL, inpar=NULL, loglim=1e-30, 
+ameras <- function(formula=NULL, data, family="gaussian", methods="RC", 
+                   # Old arguments kept temporarily for deprecation
+                   Y=NULL, dosevars=NULL, doseRRmod=NULL, deg=NULL,
+                   M=NULL, X=NULL, offset=NULL, entry=NULL, exit=NULL,
+                   setnr=NULL, CI=NULL, params.profCI=NULL,
+                   maxit.profCI=NULL, tol.profCI=NULL,
+                   # Current arguments
+                   transform=NULL, transform.jacobian=NULL, inpar=NULL, loglim=1e-30, 
                    MFMA=100000, prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, niter.BMA=20000, 
                    nchains.BMA=2, thin.BMA=10, included.replicates.BMA=NULL, 
                    optim.method="Nelder-Mead", control=NULL, keep.data=TRUE, ... ){
+  
+  old_interface <- is.null(formula) || !inherits(formula, "formula")
   
   # Check for errors
   check_df(data) 
@@ -139,7 +147,109 @@ ameras <- function(formula, data, family="gaussian",
   
   if("BMA" %in% methods) message("Note: BMA may require extensive computation time")
   
-  parsed <- parse_ameras_formula(formula, data, family)
+  
+  # Detect which interface is being used and resolve parsed arguments
+  if (!old_interface) {
+    
+    # New formula interface
+    # Error if old arguments are also supplied
+    old_supplied <- Filter(Negate(is.null), 
+                           list(Y=Y, dosevars=dosevars, doseRRmod=doseRRmod,
+                                deg=deg, M=M, X=X, offset=offset, 
+                                entry=entry, exit=exit, 
+                                setnr=setnr))
+    if (length(old_supplied)) {
+      stop(
+        "Old-style arguments cannot be combined with the formula interface: ",
+        paste(names(old_supplied), collapse=", "), ".\n",
+        "Please use the formula interface only. See ?ameras for details."
+      )
+    }
+    
+    # Warn for CI arguments moved to confint
+    if (!is.null(CI)) {
+      lifecycle::deprecate_warn(
+        when    = "0.2.0",
+        what    = "ameras(CI)",
+        details = paste0(
+          "CI is deprecated in ameras(). ",
+          "Use confint() after fitting instead, e.g.:\n",
+          "  fit <- ameras(...)\n",
+          "  fit <- confint(fit, type='wald.orig')"
+        )
+      )
+    }
+    
+    parsed <- parse_ameras_formula(formula, data, family)
+    
+  } else {
+    
+    # Old direct argument interface
+    lifecycle::deprecate_warn(
+      when    = "0.2.0",
+      what    = "ameras(Y)",
+      details = paste0(
+        "The direct argument interface is deprecated and will be removed ",
+        "in the next release. ",
+        "Please use the formula interface instead:\n",
+        "  ameras(Y ~ dose(D1:D10, model='ERR') + X1, ",
+        "data=data, family='binomial')\n",
+        "See ?ameras for details."
+      )
+    )
+    
+    if (!is.null(CI)) {
+      lifecycle::deprecate_warn(
+        when    = "0.2.0",
+        what    = "ameras(CI)",
+        details = paste0(
+          "CI is deprecated in ameras(). ",
+          "Use confint() after fitting instead, e.g.:\n",
+          "  fit <- ameras(...)\n",
+          "  fit <- confint(fit, method='wald.orig')"
+        )
+      )
+    }
+    
+    # Validate old-style arguments
+    if (is.null(dosevars)) stop("dosevars is required")
+    if (is.null(Y)) stop("Y is required")
+    
+    # Construct parsed list from direct arguments
+    # matching the structure returned by parse_ameras_formula
+    if (family == "prophaz") {
+      parsed_Y      <- NULL
+      parsed_status <- Y
+    } else {
+      parsed_Y      <- Y
+      parsed_status <- NULL
+    }
+    
+    parsed <- list(
+      Y         = parsed_Y,
+      status    = parsed_status,
+      entry     = entry,
+      exit      = exit,
+      dosevars  = dosevars,
+      doseRRmod = doseRRmod %||% if (family != "gaussian") "ERR" else NULL,
+      deg       = deg %||% 1,
+      M         = M,
+      X         = X,
+      X_formula = if (!is.null(X)) as.formula(paste("~", paste(X, collapse="+"))) else NULL,
+      offset    = offset,
+      setnr     = setnr
+    )
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
 
   if (!is.null(parsed$X_formula)) {
     X_matrix  <- model.matrix(parsed$X_formula, data=data)[, -1, drop=FALSE]
@@ -171,6 +281,7 @@ ameras <- function(formula, data, family="gaussian",
 
   # Checks that depend on parsed formula
   if (family != "gaussian") check_doseRRmod(parsed$doseRRmod)
+  
   check_Y(Y %||% status, data, family)
   check_D(parsed$dosevars, data, methods)
   check_M(parsed$M, data)
@@ -273,6 +384,20 @@ ameras <- function(formula, data, family="gaussian",
   )
   
   ret <- new_amerasfit(ret)
+  
+  # Compute CIs for old interface backwards compatibility
+  if (old_interface && !is.null(CI)) {
+    ret <- confint(
+      ret,
+      type       = CI,
+      parm         = params.profCI %||% "dose",
+      maxit.profCI = maxit.profCI  %||% 20,
+      tol.profCI   = tol.profCI    %||% 1e-2
+    )
+  }
+  
+  
+
   
   ret
 }

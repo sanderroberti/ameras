@@ -23,7 +23,13 @@ Methods include regression calibration (Carroll et al. 2006 \doi{10.1201/9781420
 }
 
 \usage{
-ameras(formula, data, family="gaussian", methods="RC", transform=NULL,
+ameras(formula=NULL, data, family="gaussian", methods="RC", 
+  Y=NULL, dosevars=NULL, doseRRmod=NULL, deg=NULL,
+  M=NULL, X=NULL, offset=NULL, entry=NULL, exit=NULL,
+  setnr=NULL,
+  CI=NULL, params.profCI=NULL,
+  maxit.profCI=NULL, tol.profCI=NULL,
+  transform=NULL,
   transform.jacobian=NULL, inpar=NULL, loglim=1e-30, MFMA=100000, 
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
   niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=NULL, 
@@ -33,17 +39,24 @@ ameras(formula, data, family="gaussian", methods="RC", transform=NULL,
 \item{formula}{an object of class \code{"formula"} containing the model specification. See Details.}
 \item{data}{input data frame.}
 \item{family}{outcome model family: \code{"gaussian"}, \code{"binomial"}, \code{"poisson"}, \code{"prophaz"}, \code{"multinomial"} or \code{"clogit"} (default \code{"gaussian"}).}
-%\item{Y}{name or column index of the outcome variable for linear, binomial, Poisson, multinomial and conditional logistic models, or event indicator variable for the proportional hazards model.}
-%\item{dosevars}{names or column indices of exposure replicate vectors.}
-%\item{M}{names or column indices of binary effect modifying variables (optional).}
-%\item{X}{names or column indices of other covariates (optional).}
-%\item{offset}{name or column index of offset variable for Poisson regression (optional).}
-%\item{entry}{name or column index of left truncation time variable for proportional hazards regression (optional).}
-%\item{exit}{name or column index of exit time variable, required when \code{family=prophaz}.}
-%\item{setnr}{name or column index of integer-valued matched set variable, required when \code{family="clogit"}.}
 \item{methods}{character vector of one or multiple methods to apply. Options: \code{"RC"}, \code{"ERC"}, \code{"MCML"}, \code{"FMA"}, \code{"BMA"} (default \code{"RC"}).}
-%\item{deg}{for \code{doseRRmod="ERR"} and \code{doseRRmod="EXP"}, whether to fit a linear (\code{deg=1}) or linear-quadratic (\code{deg=2}) dose-response model (default linear).}
-%\item{doseRRmod}{the functional form of the dose-response relationship; options are exponential RR (\code{"EXP"}), linear ERR (\code{"ERR"}), or linear-exponential RR (\code{"LINEXP"}) (default \code{"ERR"}).}
+\item{Y}{\strong{Deprecated}. Use the formula interface instead. Name or column index of the outcome variable for linear, binomial, Poisson, multinomial and conditional logistic models, or event indicator variable for the proportional hazards model.}
+\item{dosevars}{\strong{Deprecated}. Use the formula interface instead. Names or column indices of exposure replicate vectors.}
+\item{doseRRmod}{\strong{Deprecated}. Use the formula interface instead. The functional form of the dose-response relationship; options are exponential RR (\code{"EXP"}), linear ERR (\code{"ERR"}), or linear-exponential RR (\code{"LINEXP"}) (default \code{"ERR"}).}
+\item{deg}{\strong{Deprecated}. Use the formula interface instead. For \code{doseRRmod="ERR"} and \code{doseRRmod="EXP"}, whether to fit a linear (\code{deg=1}) or linear-quadratic (\code{deg=2}) dose-response model (default linear).}
+\item{M}{\strong{Deprecated}. Use the formula interface instead. Names or column indices of binary effect modifying variables (optional).}
+\item{X}{\strong{Deprecated}. Use the formula interface instead. Names or column indices of other covariates (optional).}
+\item{offset}{\strong{Deprecated}. Use the formula interface instead. Name or column index of offset variable for Poisson regression (optional).}
+\item{entry}{\strong{Deprecated}. Use the formula interface instead. Name or column index of left truncation time variable for proportional hazards regression (optional).}
+\item{exit}{\strong{Deprecated}. Use the formula interface instead. Name or column index of exit time variable, required when \code{family=prophaz}.}
+\item{setnr}{\strong{Deprecated}. Use the formula interface instead. Name or column index of integer-valued matched set variable, required when \code{family="clogit"}.}
+\item{CI}{\strong{Deprecated}. Use confint() to compute confidence intervals instead. Method for calculation of 95\% confidence or credible intervals (see Details).
+For RC, ERC, and MCML, options are \code{"wald.orig"}, \code{"wald.transformed"}, \code{"proflik"} (default \code{"proflik"}).
+For FMA and BMA, options are \code{"percentile"} and \code{"hpd"} (default \code{"percentile"}).
+If \code{methods} contains at least one of RC, ERC, and MCML and at least one of FMA and BMA, \code{CI} must be length 2 and specify one method for RC, ERC, and MCML, and one for FMA and BMA (see Details).}
+\item{params.profCI}{\strong{Deprecated}. Use confint() to compute confidence intervals instead. When \code{CI="proflik"}, whether to obtain profile-likelihood CIs for all parameters (\code{"all"}) or only dose-related parameters (\code{"dose"}, default).}
+\item{maxit.profCI}{\strong{Deprecated}. Use confint() to compute confidence intervals instead. Maximum iterations for determining profile-likelihood CIs; passed to \code{uniroot} (default 20).}
+\item{tol.profCI}{\strong{Deprecated}. Use confint() to compute confidence intervals instead. Tolerance for determining profile-likelihood CIs; passed to \code{uniroot} (default \code{1e-2}).}
 \item{transform}{function for internal parameter transformation (see Details).}
 \item{transform.jacobian}{Jacobian of the transformation function (see Details).}
 \item{inpar}{vector of initial values for log-likelihood optimization (optional).}
@@ -89,10 +102,12 @@ Finally, for FMA the output additionally contains:
   \item{included.samples}{the total number of samples included.}
   \item{included.replicates}{indices of replicate exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results. }
 
-The class \code{amerasfit} supports the methods \code{print}, \code{coef}, \code{\link[=confint.amerasfit]{confint}}, \code{summary}, and \code{\link{traceplot}}.
+The class \code{amerasfit} supports the methods \code{\link[=print.amerasfit]{print}}, \code{\link[=coef.amerasfit]{coef}}, \code{\link[=confint.amerasfit]{confint}}, \code{\link[=summary.amerasfit]{summary}}, and \code{\link{traceplot}}.
 }
 
 \details{
+Models are specified through formulas of the form \code{Y~dose(dose_expression, model="ERR", deg=1, modifier=M1+M2)+X1+X2}. Here \code{dose_expression} specifies the dose realization columns and is parsed by \code{eval_select} from the \pkg{tidyselect} package. Useful examples are \code{D1:D1000} if the doses are in a sequence of columns with sequential names such as \code{D1}-\code{D1000}, and \code{all_of(dosevars)} where \code{dosevars} is a vector with the names of all dose columns. Further, \code{model} specifies, for non-Gaussian families, whether to use the exponential dose-response model (\code{model="EXP"}), the linear-exponential model (\code{model="LINEXP"}) or the linear ERR model (\code{model="ERR"}). Next, \code{deg} is used to specify whether a quadratic dose term should (\code{deg=2}) or should not (\code{deg=1}) be estimated for the exponential or linear ERR dose-response model. The \code{modifier} term is optional and used to specify binary effect modification variables. Note that interactions in the modifier term are not allowed, e.g. \code{M1*M2}. When \code{deg}, \code{modifier}, and \code{model} are not supplied, the defaults are \code{deg=1}, no effect modifiers, and \code{model="ERR"}. Finally, \code{X1} and \code{X2} above represent optional additional covariates, which can include factor variables and interactions such as \code{X1*X2}. The matched set variable \code{setnr} required for conditional logistic regression is specified on the right-hand side of the formula through a term \code{strata(setnr)}, and an optional offset variable \code{offset} for Poisson regression similarly through a term \code{offset(offset)}. For proportional hazards regression, the left-hand side of the formula should have the form \code{Surv(exit, status)} or \code{Surv(entry, exit, status)}.
+
 A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at \code{transform(parameters)}, where \code{parameters} are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function \code{\link{transform1}} applies an exponential transformation to the desired parameters, see \code{?transform1}. When supplying a function to \code{transform}, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \eqn{\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma}, where \eqn{\bm \alpha}, \eqn{\bm\beta_{m1}} and \eqn{\bm \beta_{m2}} can be vectors, with lengths matching \eqn{\bm X} and \eqn{\bm M}, respectively. \eqn{\sigma} is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \eqn{Z-1} parameter vectors in the order as given above, where \eqn{Z} is the number of outcome categories, with the last category chosen as the referent category. See \code{vignette("transformations", package="ameras")} for an example of how to specify a custom transformation function. 
 
 When no transformation is specified and the linear ERR model is used, \code{transform1} is used for ERR parameters \eqn{\beta_1} and \eqn{\beta_2} by default, with lower limits \eqn{-1/max(D)} for \eqn{\beta_1} in the linear dose-response and \eqn{(0,-1/max(D^2))} for \eqn{(\beta_1,\beta_2)} in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \eqn{\beta_1}, and no transformation is used for \eqn{\beta_2}. If effect modifiers \code{M} are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (\code{transform.jacobian}) is required when using a transformation. For \code{\link{transform1}}, the Jacobian is given by \code{\link{transform1.jacobian}}. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given in above with variances obtained using the delta method with the provided Jacobian function.  
