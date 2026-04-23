@@ -372,23 +372,31 @@ and <code>MCML</code> and one for <code>FMA</code> and
 <h1>Regression calibration, extended regression calibration, and Monte
 Carlo maximum likelihood</h1>
 <p>For (extended) regression calibration and Monte Carlo maximum
-likelihood, there are two types of Wald intervals, obtained either
-before or after transformation. If no transformation is specified,
-<code>wald.orig</code> should be used to obtain the standard Wald
-intervals. When a transformation is used, <code>wald.transformed</code>
-is determined before transforming, and <code>wald.orig</code> is
-obtained after transforming using the delta method (using
-<code>transform.jacobian</code>). The third option is
-<code>proflik</code>, which uses the profile likelihood to compute
-confidence bounds. For this, the profile log (partial) likelihood for
-parameter <span class="math inline">\(\theta_p\)</span> is defined as
-<span class="math display">\[
+likelihood, Wald and profile likelihood intervals can be obtained. When
+a parameter transformation <span class="math inline">\(\mathbf\theta =
+h(\mathbf\eta)\)</span> is used, <code>type=&quot;wald.transformed&quot;</code>
+yields the CI at significance level <span class="math inline">\(\alpha\)</span> of <span class="math inline">\(h(\mathbf\eta \pm z_{1-\alpha/2} \mathbf
+V)\)</span> where <span class="math inline">\(z_{1-\alpha/2}\)</span> is
+the <span class="math inline">\(1-\alpha/2\)</span>-quantile of the
+standard normal distribution and <span class="math inline">\(\mathbf
+V\)</span> is the vector of standard deviations estimated using the
+inverse Hessian matrix (returned by <code>optim</code>), and
+<code>type=&quot;wald.orig&quot;</code> uses the delta method to obtain the CI
+<span class="math inline">\(h(\mathbf\eta)\pm z_{1-\alpha/2} \mathbf
+V_*\)</span> where <span class="math inline">\(\mathbf V_*\)</span> is
+the vector of standard deviations estimated using <span class="math inline">\(J H^{-1} J^T\)</span> with <span class="math inline">\(J\)</span> the Jacobian of the transformation
+(obtained with <code>transform.jacobian</code>) and <span class="math inline">\(H\)</span> is the Hessian. When no transformation
+is used, <code>type=&quot;wald.orig&quot;</code> should be used. The third option
+is <code>type=&quot;proflik&quot;</code>, which uses the profile likelihood to
+compute confidence bounds. For this, the profile log (partial)
+likelihood for parameter <span class="math inline">\(\theta_p\)</span>
+is defined as <span class="math display">\[
     PL_p (\theta_p^*) = \max_{\mathbf\theta: \theta_p = \theta_p^*} \ell
 (\mathbf \theta),
 \]</span> where <span class="math inline">\(\ell\)</span> is the log
 (partial) likelihood. Next, profile confidence intervals <span class="math inline">\((\theta_p^l, \theta_p^h)\)</span> are obtained for
 parameter <span class="math inline">\(\theta_p\)</span> at significance
-level <span class="math inline">\(\alpha=0.95\)</span> by solving <span class="math inline">\(-2 \{PL_p(\theta_p^*) -
+level <span class="math inline">\(\alpha\)</span> by solving <span class="math inline">\(-2 \{PL_p(\theta_p^*) -
 \ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}\)</span> using the
 bisection method, with <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> the maximum
 likelihood estimate. Note that profile likelihoods are more
@@ -468,16 +476,21 @@ transformations</a>).</p>
 <span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
-<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788       -1.2391       -0.8971</span></span>
-<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628        0.2908        0.5917</span></span>
-<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544       -0.5256       -0.1490</span></span>
-<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517        0.6009        1.1784</span></span></code></pre></div>
+<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound pval.lower</span></span>
+<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788       -1.2391       -0.8971    0.05248</span></span>
+<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628        0.2908        0.5917    0.04878</span></span>
+<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544       -0.5256       -0.1490    0.04822</span></span>
+<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517        0.6009        1.1784    0.05040</span></span>
+<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a><span class="co">#&gt;  pval.upper</span></span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a><span class="co">#&gt;     0.05153</span></span>
+<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a><span class="co">#&gt;     0.04853</span></span>
+<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a><span class="co">#&gt;     0.04902</span></span>
+<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a><span class="co">#&gt;     0.04952</span></span></code></pre></div>
 </div>
 <div id="frequentist-and-bayesian-model-averaging" class="section level1">
 <h1>Frequentist and Bayesian model averaging</h1>
 <p>For frequentist and Bayesian model averaging methods, the options are
-<code>percentile</code> which uses 2.5% and 97.5% percentiles, and
+<code>percentile</code> which uses equal-tailed quantiles, and
 <code>hpd</code> which computes highest posterior density intervals
 using <code>HPDinterval</code> from the <code>coda</code> package, using
 either the FMA samples or Bayesian posterior samples.</p>
@@ -504,10 +517,10 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt;     FMA (Intercept)  -1.0570 0.08767       -1.2294       -0.8855</span></span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt;     FMA          X1   0.4425 0.07621        0.2948        0.5923</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt;     FMA          X2  -0.3380 0.09556       -0.5263       -0.1519</span></span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt;     FMA        dose   0.8433 0.14482        0.5661        1.1336</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt;     FMA (Intercept)  -1.0575 0.08783       -1.2311       -0.8873</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt;     FMA          X1   0.4429 0.07636        0.2925        0.5906</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt;     FMA          X2  -0.3376 0.09565       -0.5251       -0.1513</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt;     FMA        dose   0.8447 0.14504        0.5624        1.1302</span></span>
 <span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.percentile)</span>
 <span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
 <span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
@@ -523,10 +536,10 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
-<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt;     FMA (Intercept)  -1.0570 0.08767       -1.2293       -0.8853</span></span>
-<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt;     FMA          X1   0.4425 0.07621        0.2939        0.5916</span></span>
-<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt;     FMA          X2  -0.3380 0.09556       -0.5252       -0.1506</span></span>
-<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt;     FMA        dose   0.8433 0.14482        0.5615        1.1292</span></span></code></pre></div>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt;     FMA (Intercept)  -1.0575 0.08783       -1.2296       -0.8856</span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt;     FMA          X1   0.4429 0.07636        0.2937        0.5922</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt;     FMA          X2  -0.3376 0.09565       -0.5244       -0.1501</span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt;     FMA        dose   0.8447 0.14504        0.5617        1.1296</span></span></code></pre></div>
 </div>
 
 
