@@ -23,7 +23,7 @@ vignette: >
 
 # Introduction
 
-All functionality of the package is included in the function `ameras`. This vignette demonstrates the basic functionality and the generated output.
+All functionality of the package is included in the function `ameras`. This vignette demonstrates the basic functionality and the generated output. For more information on obtaining confidence/credible intervals, see [Confidence intervals](confidenceintervals.html).
 
 ## Model specification
 
