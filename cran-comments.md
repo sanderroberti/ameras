@@ -1,22 +1,9 @@
-## Resubmission
-This is a resubmission. In this version I have:
-
-* Wrapped the example for the ameras function in \donttest as it was taking slightly too long
-
-## Comments
-
-* This is a new release.
-* Building the vignettes modelfitting and confidenceintervals takes a very long time. Code chunks of these vignettes are not evaluated on CRAN, and should therefore not be re-built.
-* The examples for ameras and traceplot take longer than 5 seconds, and are therefore wrapped in \donttest
-
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note
 
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: 'Sander Roberti <sander.roberti@nih.gov>'
-
-New submission
 
 Possibly misspelled words in DESCRIPTION:
   Kwon (29:91, 30:35)
@@ -26,3 +13,39 @@ Possibly misspelled words in DESCRIPTION:
   et (26:189, 27:65, 28:36, 29:25, 29:96, 30:40)
 
   These are not true misspellings.
+
+## Breaking changes and deprecations
+
+This release introduces deprecations that will become breaking changes
+in version 1.0.0:
+
+* The direct argument interface to `ameras()` has been deprecated in
+  favor of a new formula interface. The deprecated arguments (`Y`,
+  `dosevars`, `doseRRmod`, `deg`, `M`, `X`, `offset`, `entry`, `exit`, 
+  `setnr`) still work in this release but produce deprecation
+  warnings via the `lifecycle` package directing users to the new
+  interface.
+
+* The arguments `CI`, `params.profCI`, `maxit.profCI`, and `tol.profCI`
+  have been deprecated in `ameras()` in favor of the new
+  `confint.amerasfit()` method. These arguments still work in this
+  release but produce deprecation warnings.
+
+All deprecated functionality remains fully operational in this release.
+No existing user code will break. The breaking changes will be
+introduced in version 1.0.0 with sufficient advance notice.
+
+## New dependencies
+
+* `lifecycle` has been added to Imports for managing deprecation
+  warnings.
+* `tidyselect` has been added to Imports for the formula interface.
+
+## New suggested packages
+
+* `tidyr`, `dplyr`, `patchwork`, and `scales` have been added to Suggests for
+  `ecdfplot()`. They are loaded conditionally via `requireNamespace()`
+  and are not required for standard use.
+
+
+

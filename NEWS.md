@@ -1,22 +1,58 @@
 # ameras (development version)
 
-### New features
+## Breaking changes
 
-* Added function ecdfplot for descriptive data visualization.
+* Confidence intervals are no longer computed inside `ameras()`. The
+  arguments `CI`, `params.profCI`, `maxit.profCI`, and `tol.profCI` are
+  deprecated and will be removed in version 1.0.0. Use the new
+  `confint()` method instead. See `?confint.amerasfit` for details.
 
-### General improvements
+* The direct argument interface to `ameras()` is deprecated and will be
+  removed in version 1.0.0. The arguments `Y`, `dosevars`, `doseRRmod`,
+  `deg`, `M`, `X`, `offset`, `entry`, `exit`, and `setnr` are
+  deprecated. Please use the new formula interface instead.
+  See `?ameras` for details.
 
-* Removed the use of an N x N matrix for ERC for the Poisson family to better handle large data and speed up likelihood computation.
-* Removed duplication of data for RC and ERC for all families to better handle large data.
 
-### User interface changes
+## New features
 
-* Implemented a formula interface for ameras.
-* Added a print method for the amerasfit class.
-* Moved the computation of confidence intervals to a new method confint. The ameras function now returns an amerasfit object without confidence intervals. The method confint takes this object and returns the same object with confidence intervals added. Importantly, this means ameras no longer uses arguments related to confidence intervals.
-* Added additional components to the output of ameras for use by the new confint method.
-* Added the argument keep.data to ameras (default TRUE). If TRUE, the data object is included in the amerasfit object for future profile likelihood confidence interval computations.
-* The summary method for amerasfit now only prints confidence intervals after they have been computed using confint.
+* Implemented a formula interface for `ameras()`. The dose variable is
+  specified using the special `dose()` term, which supports tidyselect
+  syntax for selecting dose columns and allows specifying the
+  dose-response model and effect modifiers directly in the formula.
+  See `?ameras` for details and examples.
+  
+* Added `confint.amerasfit()` for computing confidence intervals
+  separately from model fitting. See `?confint.amerasfit` for details.
+  
+* Added function `ecdfplot()` for exploratory visualization of the dose 
+  realizations before model fitting.
+
+
+## General improvements
+
+* Reduced memory usage for large datasets.
+    - Removed the use of an N x N matrix for ERC for the Poisson family, improving both memory and computation speed.
+    - Removed internal duplication of data for RC and ERC for all families.
+
+* `summary.amerasfit()` now only includes confidence interval columns
+  after they have been computed via `confint()`. Before calling
+  `confint()`, a note is printed directing the user to compute
+  confidence intervals.
+
+* Profile likelihood confidence interval bounds now include p-values
+  in the summary table, making it easier to assess the accuracy of
+  the root-finding algorithm.
+  
+## New arguments
+
+* `keep.data` added to `ameras()` (default `TRUE`). When `TRUE`, the
+  data are stored on the returned `amerasfit` object, which is required
+  for profile likelihood confidence interval computation via `confint()`
+  without re-supplying the data. Set to `FALSE` to reduce memory usage
+  for large datasets, in which case the data must be supplied to
+  `confint()` explicitly. See `?ameras` and `?confint.amerasfit` for details.
+  
 
 # ameras 0.1.1
 
