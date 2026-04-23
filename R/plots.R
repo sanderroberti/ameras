@@ -2,7 +2,7 @@
 
 
 
-ecdfplot <- function(data, dosevars, xlab="Dose", ylab="Cumulative distribution"){
+ecdfplot <- function(data, dosevars, xlab="Dose", ylab="Cumulative distribution", log.xaxis = TRUE){
   
   check_pkgs(c("dplyr","ggplot2", "tidyr", "scales", "patchwork"))
   
@@ -26,8 +26,8 @@ ecdfplot <- function(data, dosevars, xlab="Dose", ylab="Cumulative distribution"
     ggplot2::theme_minimal(base_size = 15) +
     ggplot2::xlab(xlab) +
     ggplot2::ylab(ylab) +
-    ggplot2::scale_x_log10(labels = scales::comma) +
     ggplot2::ggtitle("Curves corresponding to replicates")
+  if(log.xaxis) p1 <- p1 + ggplot2::scale_x_log10(labels = scales::comma)
   
   p2 <- as.data.frame(t(dosemat)) |>
     dplyr::mutate(row_id = dplyr::row_number()) |>
@@ -45,9 +45,8 @@ ecdfplot <- function(data, dosevars, xlab="Dose", ylab="Cumulative distribution"
     ggplot2::theme_minimal(base_size = 15) +
     ggplot2::xlab(xlab) +
     ggplot2::ylab(ylab) +
-    ggplot2::scale_x_log10(labels = scales::comma) +
     ggplot2::ggtitle("Curves corresponding to individuals")
-  
+  if(log.xaxis) p2 <- p2 + ggplot2::scale_x_log10(labels = scales::comma)
   patchwork::wrap_plots(p1, p2)
 }
 
