@@ -105,16 +105,16 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 51.8 seconds
+#> Total run time: 52.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     8.3
+#>     ERC     8.0
 #>    MCML     0.1
 #>     FMA     0.2
-#>     BMA    43.2
+#>     BMA    44.0
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -125,10 +125,10 @@ summary(fit)
 #>     ERC        dose   0.8214 0.14304   NA      NA
 #>    MCML (Intercept)  -0.8758 0.07323   NA      NA
 #>    MCML        dose   0.7910 0.13644   NA      NA
-#>     FMA (Intercept)  -0.8755 0.07364   NA      NA
-#>     FMA        dose   0.7908 0.13658   NA      NA
-#>     BMA (Intercept)  -0.8778 0.07422 1.01  982.00
-#>     BMA        dose   0.7993 0.13884 1.01 1095.00
+#>     FMA (Intercept)  -0.8756 0.07307   NA      NA
+#>     FMA        dose   0.7910 0.13633   NA      NA
+#>     BMA (Intercept)  -0.8765 0.07369 1.00  972.00
+#>     BMA        dose   0.7969 0.13948 1.00 1076.00
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -142,16 +142,16 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 51.8 seconds
+#> Total run time: 52.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     8.3
+#>     ERC     8.0
 #>    MCML     0.1
 #>     FMA     0.2
-#>     BMA    43.2
+#>     BMA    44.0
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -162,10 +162,10 @@ summary(fit)
 #>     ERC        dose   0.8214 0.14304        0.5411        1.1018   NA      NA
 #>    MCML (Intercept)  -0.8758 0.07323       -1.0193       -0.7323   NA      NA
 #>    MCML        dose   0.7910 0.13644        0.5236        1.0584   NA      NA
-#>     FMA (Intercept)  -0.8755 0.07364       -1.0205       -0.7314   NA      NA
-#>     FMA        dose   0.7908 0.13658        0.5229        1.0587   NA      NA
-#>     BMA (Intercept)  -0.8778 0.07422       -1.0292       -0.7386 1.01  982.00
-#>     BMA        dose   0.7993 0.13884        0.5500        1.0985 1.01 1095.00
+#>     FMA (Intercept)  -0.8756 0.07307       -1.0187       -0.7331   NA      NA
+#>     FMA        dose   0.7910 0.13633        0.5241        1.0590   NA      NA
+#>     BMA (Intercept)  -0.8765 0.07369       -1.0265       -0.7410 1.00  972.00
+#>     BMA        dose   0.7969 0.13948        0.5502        1.0904 1.00 1076.00
 ```
 
 See the vignettes for additional details on model fitting, confidence
