@@ -12,7 +12,8 @@ vignette: >
 ```{r, include = FALSE}
   knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE
   )
 ```
   
@@ -26,7 +27,8 @@ All functionality of the package is included in the function `ameras`. This vign
 
 ## Model specification
 
-Models are specified through formulas. The data should contain the exposure replicates in an uninterrupted series of columns with sequential names, such as `D1, D2, ..., D1000`. Then the model is specified with formulas such as `Y~dose(D1:D1000, deg=2, modifier=M1+M2, model="ERR")+X1+X2`. Here the terms `M1` and `M2` are binary effect modifiers, and the specified model is a linear-quadratic (since `deg=2`) excess relative risk model. The other covariates are `X1` and `X2`. When `deg`, `modifier`, and `model` are not supplied, the defaults are `deg=1`, no effect modifiers, and `model="ERR"`.
+Models are specified through formulas of the form `Y~dose(dose_expression, model="ERR", deg=1, modifier=M1+M2)+X1+X2`. Here `dose_expression` specifies the dose realization columns and is parsed by `eval_select` from the `tidyselect` package. Useful examples are `D1:D1000` if the doses are in a sequence of columns with sequential names such as `D1`-`D1000`, and `all_of(dosevars)` where `dosevars` is a vector with the names of all dose columns. Further, `model` specifies, for non-Gaussian families, whether to use the exponential dose-response model (`model="EXP"`), the linear-exponential model (`model="LINEXP"`) or the linear ERR model (`model="ERR"`). Next, `deg` is used to specify whether a quadratic dose term should (`deg=2`) or should not (`deg=1`) be estimated for the exponential or linear ERR dose-response model. The `modifier` term is optional and used to specify binary effect modification variables. Finally, `X1` and `X2` above represent optional additional covariates, which can include factor variables and interactions such as `X1*X2`. Note that interactions in the modifier term are not allowed, e.g. `M1*M2`. When `deg`, `modifier`, and `model` are not supplied, the defaults are `deg=1`, no effect modifiers, and `model="ERR"`.
+
 
 ## Example data
 
@@ -98,9 +100,6 @@ summary(fit.ameras.logreg)
 coef(fit.ameras.logreg)
 ```
 
-```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
-traceplot(fit.ameras.logreg)
-```
 
 Without the quadratic term (`deg=1`):
 ```{r modelfit.logreg.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
@@ -118,9 +117,7 @@ summary(fit.ameras.logreg.lin)
 coef(fit.ameras.logreg.lin)
 ```
 
-```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
-traceplot(fit.ameras.logreg.lin)
-```
+
 
 # Poisson regression
 
@@ -142,9 +139,7 @@ summary(fit.ameras.poisson)
 coef(fit.ameras.poisson)
 ```
 
-```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
-traceplot(fit.ameras.poisson)
-```
+
 
 Without the quadratic term (`deg=1`):
 ```{r modelfit.poisson.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
@@ -162,9 +157,6 @@ summary(fit.ameras.poisson.lin)
 coef(fit.ameras.poisson.lin)
 ```
 
-```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
-traceplot(fit.ameras.poisson.lin)
-```
 
 # Proportional hazards regression
 Proportional hazards regression uses syntax similar to the `survival` package, with models specified using formulas with `Surv(exit, status)` or `Surv(entry, exit, status)` on the left hand side. Note that BMA fits a piecewise constant baseline hazard `h0` as the proportional hazards model is not directly supported. By default, the observed time interval is divided into 10 intervals using quantiles of the observed event times among cases. This number of such intervals can be specified through the `prophaz.numints.BMA` argument. The BMA output contains the `prophaz.numints.BMA+1` cutpoints defining the intervals in addition to `h0`.
@@ -193,9 +185,7 @@ The BMA output now contains the intervals with piecewise constant baseline hazar
 fit.ameras.prophaz$BMA$prophaz.timepoints
 ```
 
-```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
-traceplot(fit.ameras.prophaz)
-```
+
 
 Without the quadratic term (`deg=1`):
 ```{r modelfit.prophaz.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
@@ -214,10 +204,6 @@ summary(fit.ameras.prophaz.lin)
 coef(fit.ameras.prophaz.lin)
 ```
 
-```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
-traceplot(fit.ameras.prophaz.lin)
-
-```
 
 
 # Multinomial logistic regression
@@ -241,9 +227,7 @@ summary(fit.ameras.multinomial)
 coef(fit.ameras.multinomial)
 ```
 
-```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
-traceplot(fit.ameras.multinomial)
-```
+
 
 Without the quadratic term (`deg=1`):
 
@@ -263,9 +247,6 @@ summary(fit.ameras.multinomial.lin)
 coef(fit.ameras.multinomial.lin)
 ```
 
-```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
-traceplot(fit.ameras.multinomial.lin)
-```
 
 # Conditional logistic regression
 
@@ -285,9 +266,7 @@ summary(fit.ameras.clogit)
 coef(fit.ameras.clogit)
 ```
 
-```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
-traceplot(fit.ameras.clogit)
-```
+
 
 Without the quadratic term (`deg=1`):
 
@@ -306,6 +285,3 @@ summary(fit.ameras.clogit.lin)
 coef(fit.ameras.clogit.lin)
 ```
 
-```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
-traceplot(fit.ameras.clogit.lin)
-```
