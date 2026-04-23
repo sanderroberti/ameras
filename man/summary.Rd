@@ -52,21 +52,29 @@
         \item{\code{CI.lower}}{
           The lower confidence bound, if confidence intervals have been
           computed via \code{\link[=confint.amerasfit]{confint}}.
-          \code{NA} otherwise.
         }
         \item{\code{CI.upper}}{
           The upper confidence bound, if confidence intervals have been
           computed via \code{\link[=confint.amerasfit]{confint}}.
-          \code{NA} otherwise.
+        }
+        \item{\code{pval.lower}}{
+          p-value associated with the lower bound of the profile likelihood 
+          CI, the assess validity of the obtained bound. Only included if
+          profile likelihood confidence intervals were computed via
+          \code{\link[=confint.amerasfit]{confint}}.
+        }
+        \item{\code{pval.upper}}{
+          p-value associated with the upper bound of the profile likelihood 
+          CI, the assess validity of the obtained bound. Only included if
+          profile likelihood confidence intervals were computed via
+          \code{\link[=confint.amerasfit]{confint}}.
         }
         \item{\code{Rhat}}{
           The Gelman-Rubin convergence diagnostic, included only when
-          BMA results are present. Values substantially above 1.05
-          indicate potential convergence problems.
+          BMA results are present. Values above 1.05 indicate potential convergence problems.
         }
         \item{\code{n.eff}}{
-          The effective sample size, included only when BMA results are
-          present.
+          The effective sample size, included only when BMA results are present.
         }
       }
     }
@@ -77,7 +85,7 @@
     \item{\code{total_runtime_seconds}}{
       The total computation time in seconds across all methods.
     }
-    \item{\code{has_CI}}{
+    \item{\code{CI.computed}}{
       Logical. \code{TRUE} if confidence intervals have been computed
       via \code{\link[=confint.amerasfit]{confint}}, \code{FALSE}
       otherwise.

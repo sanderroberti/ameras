@@ -11,8 +11,8 @@
 
 \usage{
 \method{confint}{amerasfit}(object, parm="dose", level=0.95, 
-        type=c("proflik","percentile"), maxit.profCI=20, tol.profCI=1e-2, 
-        data=NULL, \dots)
+        type=c("proflik","percentile"), maxit.profCI=20, 
+        tol.profCI=1e-2, data=NULL, \dots)
 }
 
 \arguments{
@@ -29,7 +29,7 @@
     extensive.
   }
   \item{level}{
-    The confidence level. Defaults to \code{0.95}.
+    The confidence level (default \code{0.95}).
   }
   \item{type}{
     The type(s) of confidence intervals to determine. For
@@ -119,29 +119,32 @@
 
   For (extended) regression calibration and Monte Carlo maximum likelihood, 
   Wald and profile likelihood intervals can be obtained. When a parameter 
-  transformation \eqn{\bm\theta = h(\bm\eta)} is used, \code{CI="wald.transformed"} 
-  yields the CI \eqn{h(\bm\eta \pm 1.96 \bm V)} with \eqn{\bm V} the vector 
+  transformation \eqn{\bm\theta = h(\bm\eta)} is used, \code{type="wald.transformed"} 
+  yields the CI at significance level \eqn{\alpha} of \eqn{h(\bm\eta \pm z_{1-\alpha/2} \bm V)} 
+  where \eqn{z_{1-\alpha/2}} is the \eqn{1-\alpha/2}-quantile of the standard normal distribution and \eqn{\bm V} is the vector 
   of standard deviations estimated using the inverse Hessian matrix, 
-  and \code{CI="wald.orig"} uses the delta method to obtain the CI 
-  \eqn{h(\bm\eta)\pm 1.96 \bm V_*} where \eqn{\bm V_*} is the vector of 
+  and \code{type="wald.orig"} uses the delta method to obtain the CI 
+  \eqn{h(\bm\eta)\pm z_{1-\alpha/2} \bm V_*} where \eqn{\bm V_*} is the vector of 
   standard deviations estimated using \eqn{J H^{-1} J^T} with \eqn{J} the 
   Jacobian of the transformation and \eqn{H} is the Hessian. When no 
-  transformation is used, \code{CI="wald.orig"} should be used. 
+  transformation is used, \code{type="wald.orig"} should be used. 
   The third option is \code{proflik}, which uses the profile likelihood to 
-  compute confidence bounds. For FMA and BMA, the options for 
-  confidence/credible intervals are \code{CI="percentile"} which uses 
-  percentiles, and \code{CI="hpd"} which computes highest posterior density 
+  compute confidence bounds. 
+  
+  For FMA and BMA, the options for 
+  confidence/credible intervals are \code{type="percentile"} which uses 
+  percentiles, and \code{type="hpd"} which computes highest posterior density 
   intervals using \code{HPDinterval} from the \code{coda} package, both using 
   the FMA samples or Bayesian posterior samples.
   
-  Profile likelihood intervals (\code{type = "proflik"}) require
+  Profile likelihood intervals (\code{type="proflik"}) require
   re-evaluating the likelihood repeatedly and can be time-consuming.
   The \code{parm} argument can be used to restrict computation to dose
   parameters only (the default) when intervals for the other parameters are
   not of interest.
 
-  When the model was fitted with \code{keep.data = FALSE} and
-  \code{type = "proflik"} is used for \code{confint}, the original data must be
+  When the model was fitted with \code{keep.data=FALSE} and
+  \code{type="proflik"} is used for \code{confint}, the original data must be
   supplied via the \code{data} argument. Wald intervals do not require the
   data and can always be computed from the stored Hessian and parameter
   estimates alone.

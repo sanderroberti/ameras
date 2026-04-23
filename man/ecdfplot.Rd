@@ -6,7 +6,8 @@
 Create a descriptive figure to visualize the distribution of dose and its uncertainty.
 }
 \usage{
-ecdfplot(data, dosevars, xlab="Dose", ylab="Cumulative distribution", log.xaxis=TRUE)
+ecdfplot(data, dosevars, xlab="Dose", 
+  ylab="Cumulative distribution", log.xaxis=TRUE)
 }
 \arguments{
   \item{data}{data frame containing columns with dose vectors}
@@ -27,6 +28,7 @@ showing distributions within individuals. A wide spread within individual curves
 is indicative of large within-individual variation, while the spread between
 curves reflects between-individual variation.
 
+When using a log-scale for the x-axis, any zero dose values are excluded before plotting.
 }
 
 \examples{
