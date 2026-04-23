@@ -115,22 +115,30 @@ and <code>MCML</code> and one for <code>FMA</code> and
 Carlo maximum likelihood<a class="anchor" aria-label="anchor" href="#regression-calibration-extended-regression-calibration-and-monte-carlo-maximum-likelihood"></a>
 </h2>
 <p>For (extended) regression calibration and Monte Carlo maximum
-likelihood, there are two types of Wald intervals, obtained either
-before or after transformation. If no transformation is specified,
-<code>wald.orig</code> should be used to obtain the standard Wald
-intervals. When a transformation is used, <code>wald.transformed</code>
-is determined before transforming, and <code>wald.orig</code> is
-obtained after transforming using the delta method (using
-<code>transform.jacobian</code>). The third option is
-<code>proflik</code>, which uses the profile likelihood to compute
-confidence bounds. For this, the profile log (partial) likelihood for
-parameter <span class="math inline">\theta_p</span> is defined as <span class="math display">
+likelihood, Wald and profile likelihood intervals can be obtained. When
+a parameter transformation <span class="math inline">\mathbf\theta =
+h(\mathbf\eta)</span> is used, <code>type="wald.transformed"</code>
+yields the CI at significance level <span class="math inline">\alpha</span> of <span class="math inline">h(\mathbf\eta \pm z_{1-\alpha/2} \mathbf V)</span>
+where <span class="math inline">z_{1-\alpha/2}</span> is the <span class="math inline">1-\alpha/2</span>-quantile of the standard normal
+distribution and <span class="math inline">\mathbf V</span> is the
+vector of standard deviations estimated using the inverse Hessian
+matrix, and <code>type="wald.orig"</code> uses the delta method to
+obtain the CI <span class="math inline">h(\mathbf\eta)\pm z_{1-\alpha/2}
+\mathbf V_*</span> where <span class="math inline">\mathbf V_*</span> is
+the vector of standard deviations estimated using <span class="math inline">J H^{-1} J^T</span> with <span class="math inline">J</span> the Jacobian of the transformation
+(obtained with <code>transform.jacobian</code>) and <span class="math inline">H</span> is the Hessian (returned by
+<code>optim</code>). When no transformation is used,
+<code>type="wald.orig"</code> should be used. The third option is
+<code>type="proflik"</code>, which uses the profile likelihood to
+compute confidence bounds. For this, the profile log (partial)
+likelihood for parameter <span class="math inline">\theta_p</span> is
+defined as <span class="math display">
     PL_p (\theta_p^*) = \max_{\mathbf\theta: \theta_p = \theta_p^*} \ell
 (\mathbf \theta),
 </span> where <span class="math inline">\ell</span> is the log (partial)
 likelihood. Next, profile confidence intervals <span class="math inline">(\theta_p^l, \theta_p^h)</span> are obtained for
 parameter <span class="math inline">\theta_p</span> at significance
-level <span class="math inline">\alpha=0.95</span> by solving <span class="math inline">-2 \{PL_p(\theta_p^*) -
+level <span class="math inline">\alpha</span> by solving <span class="math inline">-2 \{PL_p(\theta_p^*) -
 \ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}</span> using the
 bisection method, with <span class="math inline">\hat{\mathbf{\theta}}</span> the maximum likelihood
 estimate. Note that profile likelihoods are more computationally
@@ -225,7 +233,7 @@ transformations</a>).</p>
 <h2 id="frequentist-and-bayesian-model-averaging">Frequentist and Bayesian model averaging<a class="anchor" aria-label="anchor" href="#frequentist-and-bayesian-model-averaging"></a>
 </h2>
 <p>For frequentist and Bayesian model averaging methods, the options are
-<code>percentile</code> which uses 2.5% and 97.5% percentiles, and
+<code>percentile</code> which uses equal-tailed quantiles, and
 <code>hpd</code> which computes highest posterior density intervals
 using <code>HPDinterval</code> from the <code>coda</code> package, using
 either the FMA samples or Bayesian posterior samples.</p>

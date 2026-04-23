@@ -19,8 +19,12 @@ proportional hazards, and conditional logistic.
 
 ## Details
 
-The main function is
-[`ameras`](https://ameras.sanderroberti.com/reference/ameras.md).
+The function used to fit models is
+[`ameras`](https://ameras.sanderroberti.com/reference/ameras.md). To
+attach confidence/credible intervals, use the method
+[`confint`](https://ameras.sanderroberti.com/reference/confint.md). To
+visualize the exposure uncertainty in the dose realizations, use
+[`ecdfplot`](https://ameras.sanderroberti.com/reference/ecdfplot.md).
 
 ## Author
 

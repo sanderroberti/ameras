@@ -6,7 +6,8 @@ its uncertainty.
 ## Usage
 
 ``` r
-ecdfplot(data, dosevars, xlab="Dose", ylab="Cumulative distribution")
+ecdfplot(data, dosevars, xlab="Dose", 
+  ylab="Cumulative distribution", log.xaxis=TRUE)
 ```
 
 ## Arguments
@@ -27,6 +28,12 @@ ecdfplot(data, dosevars, xlab="Dose", ylab="Cumulative distribution")
 
   label for the y-axis, default `"Cumulative distribution"`
 
+- log.xaxis:
+
+  logical, whether to use a log-scale for the dose axis (default
+  `TRUE`). When `log.xaxis=TRUE`, any zeros in the doses are excluded
+  while plotting.
+
 ## Details
 
 In the left panel, the empirical cumulative distribution function (ECDF)
@@ -41,11 +48,14 @@ distributions within individuals. A wide spread within individual curves
 is indicative of large within-individual variation, while the spread
 between curves reflects between-individual variation.
 
-Any zeros in the doses are excluded while plotting.
+When using a log-scale for the x-axis, any zero dose values are excluded
+before plotting.
 
 ## Examples
 
 ``` r
+if (FALSE) { # \dontrun{
    data(data, package="ameras")
    ecdfplot(data,  dosevars=paste0("V", 1:10))
+} # }
 ```

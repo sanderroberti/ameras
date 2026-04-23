@@ -51,7 +51,8 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ecdfplot</span><span class="op">(</span><span class="va">data</span>, <span class="va">dosevars</span>, xlab<span class="op">=</span><span class="st">"Dose"</span>, ylab<span class="op">=</span><span class="st">"Cumulative distribution"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ecdfplot</span><span class="op">(</span><span class="va">data</span>, <span class="va">dosevars</span>, xlab<span class="op">=</span><span class="st">"Dose"</span>, </span>
+<span>  ylab<span class="op">=</span><span class="st">"Cumulative distribution"</span>, log.xaxis<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,6 +70,9 @@
   <dt id="arg-ylab">ylab<a class="anchor" aria-label="anchor" href="#arg-ylab"></a></dt>
 <dd><p>label for the y-axis, default <code>"Cumulative distribution"</code></p></dd>
 
+  <dt id="arg-log-xaxis">log.xaxis<a class="anchor" aria-label="anchor" href="#arg-log-xaxis"></a></dt>
+<dd><p>logical, whether to use a log-scale for the dose axis (default <code>TRUE</code>). When <code>log.xaxis=TRUE</code>, any zeros in the doses are excluded while plotting.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -81,14 +85,15 @@ on the cohort level.</p>
 showing distributions within individuals. A wide spread within individual curves
 is indicative of large within-individual variation, while the spread between
 curves reflects between-individual variation.</p>
-<p>Any zeros in the doses are excluded while plotting.</p>
+<p>When using a log-scale for the x-axis, any zero dose values are excluded before plotting.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>   <span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>   <span class="fu">ecdfplot</span><span class="op">(</span><span class="va">data</span>,  dosevars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="ecdfplot-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

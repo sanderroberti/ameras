@@ -72,20 +72,32 @@ which is a list containing the following elements:
   :   The lower confidence bound, if confidence intervals have been
       computed via
       [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
-      `NA` otherwise.
 
   `CI.upper`
 
   :   The upper confidence bound, if confidence intervals have been
       computed via
       [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
-      `NA` otherwise.
+
+  `pval.lower`
+
+  :   p-value associated with the lower bound of the profile likelihood
+      CI, the assess validity of the obtained bound. Only included if
+      profile likelihood confidence intervals were computed via
+      [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
+
+  `pval.upper`
+
+  :   p-value associated with the upper bound of the profile likelihood
+      CI, the assess validity of the obtained bound. Only included if
+      profile likelihood confidence intervals were computed via
+      [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
 
   `Rhat`
 
   :   The Gelman-Rubin convergence diagnostic, included only when BMA
-      results are present. Values substantially above 1.05 indicate
-      potential convergence problems.
+      results are present. Values above 1.05 indicate potential
+      convergence problems.
 
   `n.eff`
 
@@ -101,7 +113,7 @@ which is a list containing the following elements:
 
   The total computation time in seconds across all methods.
 
-- `has_CI`:
+- `CI.computed`:
 
   Logical. `TRUE` if confidence intervals have been computed via
   [`confint`](https://ameras.sanderroberti.com/reference/confint.md),
@@ -152,7 +164,9 @@ summary(fit)
 #> 
 #> Summary of coefficients by method:
 #> 
-#> data frame with 0 columns and 2 rows
+#>  Method        Term Estimate      SE
+#>      RC (Intercept)  -0.8847 0.07378
+#>      RC        dose   0.8020 0.13751
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 

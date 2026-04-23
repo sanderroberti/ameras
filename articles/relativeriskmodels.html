@@ -139,7 +139,12 @@ to <code>M</code>, respectively). This model is fit by setting
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 5 rows</span></span>
+<span><span class="co">#&gt;  Method         Term Estimate      SE</span></span>
+<span><span class="co">#&gt;      RC  (Intercept) -0.94461 0.08409</span></span>
+<span><span class="co">#&gt;      RC           X1  0.44552 0.07667</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.33376 0.09601</span></span>
+<span><span class="co">#&gt;      RC         dose  0.37904 0.10388</span></span>
+<span><span class="co">#&gt;      RC dose_squared  0.01943 0.02750</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 </div>
@@ -169,7 +174,12 @@ is fit by setting <code>model="ERR"</code> as follows:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 5 rows</span></span>
+<span><span class="co">#&gt;  Method         Term Estimate      SE</span></span>
+<span><span class="co">#&gt;      RC  (Intercept) -0.87359 0.09759</span></span>
+<span><span class="co">#&gt;      RC           X1  0.44587 0.07672</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.33552 0.09610</span></span>
+<span><span class="co">#&gt;      RC         dose  0.04878 0.21283</span></span>
+<span><span class="co">#&gt;      RC dose_squared  0.28763 0.08100</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 </div>
@@ -190,16 +200,21 @@ as follows:</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "LINEXP") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.4 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 0.6 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.4</span></span>
+<span><span class="co">#&gt;      RC     0.6</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 5 rows</span></span>
+<span><span class="co">#&gt;  Method             Term Estimate      SE</span></span>
+<span><span class="co">#&gt;      RC      (Intercept)  -0.9326 0.08592</span></span>
+<span><span class="co">#&gt;      RC               X1   0.4456 0.07668</span></span>
+<span><span class="co">#&gt;      RC               X2  -0.3343 0.09603</span></span>
+<span><span class="co">#&gt;      RC      dose_linear   0.3255 0.11919</span></span>
+<span><span class="co">#&gt;      RC dose_exponential   0.3455 0.10814</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 </div>

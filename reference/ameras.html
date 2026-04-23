@@ -87,7 +87,13 @@ Methods include regression calibration (Carroll et al. 2006 doi:10.1201/97814200
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ameras</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span>, methods<span class="op">=</span><span class="st">"RC"</span>, transform<span class="op">=</span><span class="cn">NULL</span>,</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ameras</span><span class="op">(</span>formula<span class="op">=</span><span class="cn">NULL</span>, <span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span>, methods<span class="op">=</span><span class="st">"RC"</span>, </span>
+<span>  Y<span class="op">=</span><span class="cn">NULL</span>, dosevars<span class="op">=</span><span class="cn">NULL</span>, doseRRmod<span class="op">=</span><span class="cn">NULL</span>, deg<span class="op">=</span><span class="cn">NULL</span>,</span>
+<span>  M<span class="op">=</span><span class="cn">NULL</span>, X<span class="op">=</span><span class="cn">NULL</span>, offset<span class="op">=</span><span class="cn">NULL</span>, entry<span class="op">=</span><span class="cn">NULL</span>, exit<span class="op">=</span><span class="cn">NULL</span>,</span>
+<span>  setnr<span class="op">=</span><span class="cn">NULL</span>,</span>
+<span>  CI<span class="op">=</span><span class="cn">NULL</span>, params.profCI<span class="op">=</span><span class="cn">NULL</span>,</span>
+<span>  maxit.profCI<span class="op">=</span><span class="cn">NULL</span>, tol.profCI<span class="op">=</span><span class="cn">NULL</span>,</span>
+<span>  transform<span class="op">=</span><span class="cn">NULL</span>,</span>
 <span>  transform.jacobian<span class="op">=</span><span class="cn">NULL</span>, inpar<span class="op">=</span><span class="cn">NULL</span>, loglim<span class="op">=</span><span class="fl">1e-30</span>, MFMA<span class="op">=</span><span class="fl">100000</span>, </span>
 <span>  prophaz.numints.BMA<span class="op">=</span><span class="fl">10</span>, ERRprior.BMA<span class="op">=</span><span class="st">"doubleexponential"</span>, nburnin.BMA<span class="op">=</span><span class="fl">5000</span>, </span>
 <span>  niter.BMA<span class="op">=</span><span class="fl">20000</span>, nchains.BMA<span class="op">=</span><span class="fl">2</span>, thin.BMA<span class="op">=</span><span class="fl">10</span>, included.replicates.BMA<span class="op">=</span><span class="cn">NULL</span>, </span>
@@ -107,20 +113,55 @@ Methods include regression calibration (Carroll et al. 2006 doi:10.1201/97814200
 <dt id="arg-family">family<a class="anchor" aria-label="anchor" href="#arg-family"></a></dt>
 <dd><p>outcome model family: <code>"gaussian"</code>, <code>"binomial"</code>, <code>"poisson"</code>, <code>"prophaz"</code>, <code>"multinomial"</code> or <code>"clogit"</code> (default <code>"gaussian"</code>).</p></dd>
 
-</dl><p><!-- %\item{Y}{name or column index of the outcome variable for linear, binomial, Poisson, multinomial and conditional logistic models, or event indicator variable for the proportional hazards model.} -->
-<!-- %\item{dosevars}{names or column indices of exposure replicate vectors.} -->
-<!-- %\item{M}{names or column indices of binary effect modifying variables (optional).} -->
-<!-- %\item{X}{names or column indices of other covariates (optional).} -->
-<!-- %\item{offset}{name or column index of offset variable for Poisson regression (optional).} -->
-<!-- %\item{entry}{name or column index of left truncation time variable for proportional hazards regression (optional).} -->
-<!-- %\item{exit}{name or column index of exit time variable, required when \code{family=prophaz}.} -->
-<!-- %\item{setnr}{name or column index of integer-valued matched set variable, required when \code{family="clogit"}.} --></p>
-<dl><dt id="arg-methods">methods<a class="anchor" aria-label="anchor" href="#arg-methods"></a></dt>
+<dt id="arg-methods">methods<a class="anchor" aria-label="anchor" href="#arg-methods"></a></dt>
 <dd><p>character vector of one or multiple methods to apply. Options: <code>"RC"</code>, <code>"ERC"</code>, <code>"MCML"</code>, <code>"FMA"</code>, <code>"BMA"</code> (default <code>"RC"</code>).</p></dd>
 
-</dl><p><!-- %\item{deg}{for \code{doseRRmod="ERR"} and \code{doseRRmod="EXP"}, whether to fit a linear (\code{deg=1}) or linear-quadratic (\code{deg=2}) dose-response model (default linear).} -->
-<!-- %\item{doseRRmod}{the functional form of the dose-response relationship; options are exponential RR (\code{"EXP"}), linear ERR (\code{"ERR"}), or linear-exponential RR (\code{"LINEXP"}) (default \code{"ERR"}).} --></p>
-<dl><dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
+<dt id="arg-y">Y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Name or column index of the outcome variable for linear, binomial, Poisson, multinomial and conditional logistic models, or event indicator variable for the proportional hazards model.</p></dd>
+
+<dt id="arg-dosevars">dosevars<a class="anchor" aria-label="anchor" href="#arg-dosevars"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Names or column indices of exposure replicate vectors.</p></dd>
+
+<dt id="arg-doserrmod">doseRRmod<a class="anchor" aria-label="anchor" href="#arg-doserrmod"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use the formula interface instead. The functional form of the dose-response relationship; options are exponential RR (<code>"EXP"</code>), linear ERR (<code>"ERR"</code>), or linear-exponential RR (<code>"LINEXP"</code>) (default <code>"ERR"</code>).</p></dd>
+
+<dt id="arg-deg">deg<a class="anchor" aria-label="anchor" href="#arg-deg"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use the formula interface instead. For <code>doseRRmod="ERR"</code> and <code>doseRRmod="EXP"</code>, whether to fit a linear (<code>deg=1</code>) or linear-quadratic (<code>deg=2</code>) dose-response model (default linear).</p></dd>
+
+<dt id="arg-m">M<a class="anchor" aria-label="anchor" href="#arg-m"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Names or column indices of binary effect modifying variables (optional).</p></dd>
+
+<dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Names or column indices of other covariates (optional).</p></dd>
+
+<dt id="arg-offset">offset<a class="anchor" aria-label="anchor" href="#arg-offset"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Name or column index of offset variable for Poisson regression (optional).</p></dd>
+
+<dt id="arg-entry">entry<a class="anchor" aria-label="anchor" href="#arg-entry"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Name or column index of left truncation time variable for proportional hazards regression (optional).</p></dd>
+
+<dt id="arg-exit">exit<a class="anchor" aria-label="anchor" href="#arg-exit"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Name or column index of exit time variable, required when <code>family=prophaz</code>.</p></dd>
+
+<dt id="arg-setnr">setnr<a class="anchor" aria-label="anchor" href="#arg-setnr"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Name or column index of integer-valued matched set variable, required when <code>family="clogit"</code>.</p></dd>
+
+<dt id="arg-ci">CI<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use confint() to compute confidence intervals instead. Method for calculation of 95% confidence or credible intervals (see Details).
+For RC, ERC, and MCML, options are <code>"wald.orig"</code>, <code>"wald.transformed"</code>, <code>"proflik"</code> (default <code>"proflik"</code>).
+For FMA and BMA, options are <code>"percentile"</code> and <code>"hpd"</code> (default <code>"percentile"</code>).
+If <code>methods</code> contains at least one of RC, ERC, and MCML and at least one of FMA and BMA, <code>CI</code> must be length 2 and specify one method for RC, ERC, and MCML, and one for FMA and BMA (see Details).</p></dd>
+
+<dt id="arg-params-profci">params.profCI<a class="anchor" aria-label="anchor" href="#arg-params-profci"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use confint() to compute confidence intervals instead. When <code>CI="proflik"</code>, whether to obtain profile-likelihood CIs for all parameters (<code>"all"</code>) or only dose-related parameters (<code>"dose"</code>, default).</p></dd>
+
+<dt id="arg-maxit-profci">maxit.profCI<a class="anchor" aria-label="anchor" href="#arg-maxit-profci"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use confint() to compute confidence intervals instead. Maximum iterations for determining profile-likelihood CIs; passed to <code>uniroot</code> (default 20).</p></dd>
+
+<dt id="arg-tol-profci">tol.profCI<a class="anchor" aria-label="anchor" href="#arg-tol-profci"></a></dt>
+<dd><p><strong>Deprecated</strong>. Use confint() to compute confidence intervals instead. Tolerance for determining profile-likelihood CIs; passed to <code>uniroot</code> (default <code>1e-2</code>).</p></dd>
+
+<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
 <dd><p>function for internal parameter transformation (see Details).</p></dd>
 
 <dt id="arg-transform-jacobian">transform.jacobian<a class="anchor" aria-label="anchor" href="#arg-transform-jacobian"></a></dt>
@@ -225,11 +266,12 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 <dd><p>indices of replicate exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results.</p></dd>
 
 
-</dl><p>The class <code>amerasfit</code> supports the methods <code>print</code>, <code>coef</code>, <code><a href="confint.html">confint</a></code>, <code>summary</code>, and <code><a href="traceplot.html">traceplot</a></code>.</p>
+</dl><p>The class <code>amerasfit</code> supports the methods <code><a href="print.html">print</a></code>, <code><a href="coef.html">coef</a></code>, <code><a href="confint.html">confint</a></code>, <code><a href="summary.html">summary</a></code>, and <code><a href="traceplot.html">traceplot</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at <code>transform(parameters)</code>, where <code>parameters</code> are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function <code><a href="transform1.html">transform1</a></code> applies an exponential transformation to the desired parameters, see <code><a href="transform1.html">?transform1</a></code>. When supplying a function to <code>transform</code>, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \(\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma\), where \(\bm \alpha\), \(\bm\beta_{m1}\) and \(\bm \beta_{m2}\) can be vectors, with lengths matching \(\bm X\) and \(\bm M\), respectively. \(\sigma\) is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \(Z-1\) parameter vectors in the order as given above, where \(Z\) is the number of outcome categories, with the last category chosen as the referent category. See <code><a href="../articles/transformations.html">vignette("transformations", package="ameras")</a></code> for an example of how to specify a custom transformation function.</p>
+    <p>Models are specified through formulas of the form <code>Y~dose(dose_expression, model="ERR", deg=1, modifier=M1+M2)+X1+X2</code>. Here <code>dose_expression</code> specifies the dose realization columns and is parsed by <code>eval_select</code> from the <span class="pkg">tidyselect</span> package. Useful examples are <code>D1:D1000</code> if the doses are in a sequence of columns with sequential names such as <code>D1</code>-<code>D1000</code>, and <code>all_of(dosevars)</code> where <code>dosevars</code> is a vector with the names of all dose columns. Further, <code>model</code> specifies, for non-Gaussian families, whether to use the exponential dose-response model (<code>model="EXP"</code>), the linear-exponential model (<code>model="LINEXP"</code>) or the linear ERR model (<code>model="ERR"</code>). Next, <code>deg</code> is used to specify whether a quadratic dose term should (<code>deg=2</code>) or should not (<code>deg=1</code>) be estimated for the exponential or linear ERR dose-response model. The <code>modifier</code> term is optional and used to specify binary effect modification variables. Note that interactions in the modifier term are not allowed, e.g. <code>M1*M2</code>. When <code>deg</code>, <code>modifier</code>, and <code>model</code> are not supplied, the defaults are <code>deg=1</code>, no effect modifiers, and <code>model="ERR"</code>. Finally, <code>X1</code> and <code>X2</code> above represent optional additional covariates, which can include factor variables and interactions such as <code>X1*X2</code>. The matched set variable <code>setnr</code> required for conditional logistic regression is specified on the right-hand side of the formula through a term <code>strata(setnr)</code>, and an optional offset variable <code>offset</code> for Poisson regression similarly through a term <code>offset(offset)</code>. For proportional hazards regression, the left-hand side of the formula should have the form <code>Surv(exit, status)</code> or <code>Surv(entry, exit, status)</code>.</p>
+<p>A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at <code>transform(parameters)</code>, where <code>parameters</code> are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function <code><a href="transform1.html">transform1</a></code> applies an exponential transformation to the desired parameters, see <code><a href="transform1.html">?transform1</a></code>. When supplying a function to <code>transform</code>, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \(\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma\), where \(\bm \alpha\), \(\bm\beta_{m1}\) and \(\bm \beta_{m2}\) can be vectors, with lengths matching \(\bm X\) and \(\bm M\), respectively. \(\sigma\) is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \(Z-1\) parameter vectors in the order as given above, where \(Z\) is the number of outcome categories, with the last category chosen as the referent category. See <code><a href="../articles/transformations.html">vignette("transformations", package="ameras")</a></code> for an example of how to specify a custom transformation function.</p>
 <p>When no transformation is specified and the linear ERR model is used, <code>transform1</code> is used for ERR parameters \(\beta_1\) and \(\beta_2\) by default, with lower limits \(-1/max(D)\) for \(\beta_1\) in the linear dose-response and \((0,-1/max(D^2))\) for \((\beta_1,\beta_2)\) in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \(\beta_1\), and no transformation is used for \(\beta_2\). If effect modifiers <code>M</code> are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (<code>transform.jacobian</code>) is required when using a transformation. For <code><a href="transform1.html">transform1</a></code>, the Jacobian is given by <code><a href="transform1jacobian.html">transform1.jacobian</a></code>. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given in above with variances obtained using the delta method with the provided Jacobian function.</p>
 <p>For BMA, a prior distribution for exposure-response parameters can be chosen when using linear or linear-exponential exposure-response model. The options are normal, horshoe, and double exponential priors, and the same priors truncated at 0 to yield positive values. In particular:</p>
 <ul><li><p>Normal: \(\beta_j \sim N(0,1000)\) for all exposure-response parameters \(\beta_j\)</p></li>

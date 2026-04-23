@@ -29,19 +29,25 @@ one method for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
 ## Regression calibration, extended regression calibration, and Monte Carlo maximum likelihood
 
 For (extended) regression calibration and Monte Carlo maximum
-likelihood, there are two types of Wald intervals, obtained either
-before or after transformation. If no transformation is specified,
-`wald.orig` should be used to obtain the standard Wald intervals. When a
-transformation is used, `wald.transformed` is determined before
-transforming, and `wald.orig` is obtained after transforming using the
-delta method (using `transform.jacobian`). The third option is
-`proflik`, which uses the profile likelihood to compute confidence
-bounds. For this, the profile log (partial) likelihood for parameter
-\theta_p is defined as PL_p (\theta_p^\*) = \max\_{\mathbf\theta:
-\theta_p = \theta_p^\*} \ell (\mathbf \theta), where \ell is the log
-(partial) likelihood. Next, profile confidence intervals (\theta_p^l,
-\theta_p^h) are obtained for parameter \theta_p at significance level
-\alpha=0.95 by solving -2 \\PL_p(\theta_p^\*) -
+likelihood, Wald and profile likelihood intervals can be obtained. When
+a parameter transformation \mathbf\theta = h(\mathbf\eta) is used,
+`type="wald.transformed"` yields the CI at significance level \alpha of
+h(\mathbf\eta \pm z\_{1-\alpha/2} \mathbf V) where z\_{1-\alpha/2} is
+the 1-\alpha/2-quantile of the standard normal distribution and \mathbf
+V is the vector of standard deviations estimated using the inverse
+Hessian matrix, and `type="wald.orig"` uses the delta method to obtain
+the CI h(\mathbf\eta)\pm z\_{1-\alpha/2} \mathbf V\_\* where \mathbf
+V\_\* is the vector of standard deviations estimated using J H^{-1} J^T
+with J the Jacobian of the transformation (obtained with
+`transform.jacobian`) and H is the Hessian (returned by `optim`). When
+no transformation is used, `type="wald.orig"` should be used. The third
+option is `type="proflik"`, which uses the profile likelihood to compute
+confidence bounds. For this, the profile log (partial) likelihood for
+parameter \theta_p is defined as PL_p (\theta_p^\*) =
+\max\_{\mathbf\theta: \theta_p = \theta_p^\*} \ell (\mathbf \theta),
+where \ell is the log (partial) likelihood. Next, profile confidence
+intervals (\theta_p^l, \theta_p^h) are obtained for parameter \theta_p
+at significance level \alpha by solving -2 \\PL_p(\theta_p^\*) -
 \ell(\hat{\mathbf{\theta}})\\=\chi^2\_{1,1-\alpha} using the bisection
 method, with \hat{\mathbf{\theta}} the maximum likelihood estimate. Note
 that profile likelihoods are more computationally intensive to obtain.
@@ -137,10 +143,9 @@ summary(fit.ameras.proflik)
 ## Frequentist and Bayesian model averaging
 
 For frequentist and Bayesian model averaging methods, the options are
-`percentile` which uses 2.5% and 97.5% percentiles, and `hpd` which
-computes highest posterior density intervals using `HPDinterval` from
-the `coda` package, using either the FMA samples or Bayesian posterior
-samples.
+`percentile` which uses equal-tailed quantiles, and `hpd` which computes
+highest posterior density intervals using `HPDinterval` from the `coda`
+package, using either the FMA samples or Bayesian posterior samples.
 
 Again, we use the example data to illustrate.
 

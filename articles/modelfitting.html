@@ -82,37 +82,38 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ameras.sanderroberti.com">ameras</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: nimble</span></span>
-<span><span class="co">#&gt; nimble version 1.4.2 is loaded.</span></span>
-<span><span class="co">#&gt; For more information on NIMBLE and a User Manual,</span></span>
-<span><span class="co">#&gt; please visit https://R-nimble.org.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'nimble'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     simulate</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     declare</span></span></code></pre></div>
+<code class="sourceCode R"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ameras.sanderroberti.com">ameras</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>All functionality of the package is included in the function
 <code>ameras</code>. This vignette demonstrates the basic functionality
-and the generated output.</p>
+and the generated output. For more information on obtaining
+confidence/credible intervals, see <a href="confidenceintervals.html">Confidence intervals</a>.</p>
 <div class="section level3">
 <h3 id="model-specification">Model specification<a class="anchor" aria-label="anchor" href="#model-specification"></a>
 </h3>
-<p>Models are specified through formulas. The data should contain the
-exposure replicates in an uninterrupted series of columns with
-sequential names, such as <code>D1, D2, ..., D1000</code>. Then the
-model is specified with formulas such as
-<code>Y~dose(D1:D1000, deg=2, modifier=M1+M2, model="ERR")+X1+X2</code>.
-Here the terms <code>M1</code> and <code>M2</code> are binary effect
-modifiers, and the specified model is a linear-quadratic (since
-<code>deg=2</code>) excess relative risk model. The other covariates are
-<code>X1</code> and <code>X2</code>. When <code>deg</code>,
+<p>Models are specified through formulas of the form
+<code>Y~dose(dose_expression, model="ERR", deg=1, modifier=M1+M2)+X1+X2</code>.
+Here <code>dose_expression</code> specifies the dose realization columns
+and is parsed by <code>eval_select</code> from the
+<code>tidyselect</code> package. Useful examples are
+<code>D1:D1000</code> if the doses are in a sequence of columns with
+sequential names such as <code>D1</code>-<code>D1000</code>, and
+<code>all_of(dosevars)</code> where <code>dosevars</code> is a vector
+with the names of all dose columns. Further, <code>model</code>
+specifies, for non-Gaussian families, whether to use the exponential
+dose-response model (<code>model="EXP"</code>), the linear-exponential
+model (<code>model="LINEXP"</code>) or the linear ERR model
+(<code>model="ERR"</code>). Next, <code>deg</code> is used to specify
+whether a quadratic dose term should (<code>deg=2</code>) or should not
+(<code>deg=1</code>) be estimated for the exponential or linear ERR
+dose-response model. The <code>modifier</code> term is optional and used
+to specify binary effect modification variables. Finally,
+<code>X1</code> and <code>X2</code> above represent optional additional
+covariates, which can include factor variables and interactions such as
+<code>X1*X2</code>. Note that interactions in the modifier term are not
+allowed, e.g. <code>M1*M2</code>. When <code>deg</code>,
 <code>modifier</code>, and <code>model</code> are not supplied, the
 defaults are <code>deg=1</code>, no effect modifiers, and
 <code>model="ERR"</code>.</p>
@@ -162,31 +163,8 @@ and <code>setnr</code>).</p>
 <span><span class="va">fit.ameras.linreg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                            family<span class="op">=</span><span class="st">"gaussian"</span>, niter.BMA<span class="op">=</span><span class="fl">5000</span>, nburnin.BMA<span class="op">=</span><span class="fl">1000</span>,</span>
 <span>                            methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
 <p>The output is a list object with a <code>call</code> component, and
@@ -233,7 +211,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   ..$ Y           : chr "Y.gaussian"</span></span>
 <span><span class="co">#&gt;   ..$ M           : NULL</span></span>
 <span><span class="co">#&gt;   ..$ X_formula   :Class 'formula'  language ~X1 + X2</span></span>
-<span><span class="co">#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x55c345c0fdc0&gt; </span></span>
+<span><span class="co">#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x55e9eabe2f60&gt; </span></span>
 <span><span class="co">#&gt;   ..$ X           : int [1:2] 9 10</span></span>
 <span><span class="co">#&gt;   ..$ offset      : NULL</span></span>
 <span><span class="co">#&gt;   ..$ entry       : NULL</span></span>
@@ -280,7 +258,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   .. ..$ counts     : Named num [1:2] 546 9</span></span>
 <span><span class="co">#&gt;   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
 <span><span class="co">#&gt;   ..$ loglik      : num -4559</span></span>
-<span><span class="co">#&gt;   ..$ runtime     : chr "124.8 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ runtime     : chr "123.5 seconds"</span></span>
 <span><span class="co">#&gt;   ..$ ERC         : logi TRUE</span></span>
 <span><span class="co">#&gt;  $ MCML              :List of 6</span></span>
 <span><span class="co">#&gt;   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138</span></span>
@@ -331,7 +309,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   .. .. .. ..$ : NULL</span></span>
 <span><span class="co">#&gt;   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   ..$ included.replicates: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
-<span><span class="co">#&gt;   ..$ runtime            : chr "74.9 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ runtime            : chr "73.5 seconds"</span></span>
 <span><span class="co">#&gt;  - attr(*, "class")= chr "amerasfit"</span></span></code></pre></div>
 <p>Access the results for e.g. regression calibration as follows:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -395,20 +373,45 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;     family = "gaussian", methods = c("RC", "ERC", "MCML", "FMA", </span></span>
 <span><span class="co">#&gt;         "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 201.9 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 199.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC   124.8</span></span>
+<span><span class="co">#&gt;     ERC   123.5</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
 <span><span class="co">#&gt;     FMA     1.3</span></span>
-<span><span class="co">#&gt;     BMA    74.9</span></span>
+<span><span class="co">#&gt;     BMA    73.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 25 rows</span></span>
+<span><span class="co">#&gt;  Method        Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC (Intercept)  -1.3622 0.03666   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X1   0.4807 0.04045   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X2  -0.5188 0.04972   NA     NA</span></span>
+<span><span class="co">#&gt;      RC        dose   1.1660 0.02040   NA     NA</span></span>
+<span><span class="co">#&gt;      RC       sigma   1.1076 0.01430   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (Intercept)  -1.3611 0.03660   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X1   0.4795 0.04041   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X2  -0.5188 0.04969   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC        dose   1.1649 0.02038   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC       sigma   1.1062 0.01425   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (Intercept)  -1.2803 0.03714   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X1   0.4837 0.04156   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X2  -0.5171 0.05108   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML        dose   1.0790 0.01993   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML       sigma   1.1378 0.01469   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (Intercept)  -1.2803 0.03732   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X1   0.4837 0.04181   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X2  -0.5173 0.05124   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        dose   1.0792 0.02015   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA       sigma   1.1377 0.01467   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -1.2796 0.03797 1.00 871.00</span></span>
+<span><span class="co">#&gt;     BMA          X1   0.4831 0.04240 1.01 822.00</span></span>
+<span><span class="co">#&gt;     BMA          X2  -0.5169 0.05254 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   1.0788 0.02024 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA       sigma   1.1391 0.01503 1.02 744.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <p>To extract model coefficients and compare between methods, use
@@ -444,31 +447,8 @@ models</a>.</p>
 <span>                            data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, </span>
 <span>                            methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                            niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
 <span><span class="co">#&gt; Warning in ameras.bma(family = family, dosevars = dosevars, data = data, :</span></span>
@@ -480,20 +460,45 @@ models</a>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 141 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 138 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC    79.1</span></span>
+<span><span class="co">#&gt;     ERC    77.2</span></span>
 <span><span class="co">#&gt;    MCML     1.0</span></span>
 <span><span class="co">#&gt;     FMA     2.8</span></span>
-<span><span class="co">#&gt;     BMA    57.8</span></span>
+<span><span class="co">#&gt;     BMA    56.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 25 rows</span></span>
+<span><span class="co">#&gt;  Method         Term Estimate      SE Rhat   n.eff</span></span>
+<span><span class="co">#&gt;      RC  (Intercept) -0.94461 0.08409   NA      NA</span></span>
+<span><span class="co">#&gt;      RC           X1  0.44552 0.07667   NA      NA</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.33376 0.09601   NA      NA</span></span>
+<span><span class="co">#&gt;      RC         dose  0.37904 0.10388   NA      NA</span></span>
+<span><span class="co">#&gt;      RC dose_squared  0.01943 0.02750   NA      NA</span></span>
+<span><span class="co">#&gt;     ERC  (Intercept) -0.93189 0.08533   NA      NA</span></span>
+<span><span class="co">#&gt;     ERC           X1  0.44998 0.07678   NA      NA</span></span>
+<span><span class="co">#&gt;     ERC           X2 -0.33924 0.09614   NA      NA</span></span>
+<span><span class="co">#&gt;     ERC         dose  0.33858 0.10745   NA      NA</span></span>
+<span><span class="co">#&gt;     ERC dose_squared  0.03528 0.02841   NA      NA</span></span>
+<span><span class="co">#&gt;    MCML  (Intercept) -0.91147 0.08356   NA      NA</span></span>
+<span><span class="co">#&gt;    MCML           X1  0.44619 0.07674   NA      NA</span></span>
+<span><span class="co">#&gt;    MCML           X2 -0.34431 0.09625   NA      NA</span></span>
+<span><span class="co">#&gt;    MCML         dose  0.31654 0.10412   NA      NA</span></span>
+<span><span class="co">#&gt;    MCML dose_squared  0.03800 0.02774   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA  (Intercept) -0.91244 0.08386   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA           X1  0.44619 0.07686   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA           X2 -0.34400 0.09627   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA         dose  0.31871 0.10523   NA      NA</span></span>
+<span><span class="co">#&gt;     FMA dose_squared  0.03735 0.02816   NA      NA</span></span>
+<span><span class="co">#&gt;     BMA  (Intercept) -0.90779 0.08101 1.03  214.00</span></span>
+<span><span class="co">#&gt;     BMA           X1  0.44552 0.07775 1.01  370.00</span></span>
+<span><span class="co">#&gt;     BMA           X2 -0.34361 0.09652 1.00 1242.00</span></span>
+<span><span class="co">#&gt;     BMA         dose  0.30658 0.09894 1.08   92.00</span></span>
+<span><span class="co">#&gt;     BMA dose_squared  0.04134 0.02564 1.11  105.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -504,76 +509,67 @@ models</a>.</p>
 <span><span class="co">#&gt; X2           -0.33375991 -0.33923955 -0.34430935 -0.34400234 -0.34360534</span></span>
 <span><span class="co">#&gt; dose          0.37904346  0.33857980  0.31654277  0.31870705  0.30657532</span></span>
 <span><span class="co">#&gt; dose_squared  0.01943381  0.03528262  0.03799845  0.03735107  0.04134337</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">fit.ameras.logreg</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelfitting_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-10-2.png" class="r-plt" alt="" width="100%"></p>
 <p>Without the quadratic term (<code>deg=1</code>):</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">3521216</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.logreg.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">1</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>,  </span>
 <span>                                data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, </span>
 <span>                                methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                                niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.logreg.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 1, model = "EXP") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 119.7 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 119.8 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC    64.6</span></span>
+<span><span class="co">#&gt;     ERC    64.8</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
 <span><span class="co">#&gt;     FMA     1.6</span></span>
-<span><span class="co">#&gt;     BMA    52.6</span></span>
+<span><span class="co">#&gt;     BMA    52.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 20 rows</span></span>
+<span><span class="co">#&gt;  Method        Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC (Intercept)  -0.9760 0.07190   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X1   0.4460 0.07667   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X2  -0.3359 0.09596   NA     NA</span></span>
+<span><span class="co">#&gt;      RC        dose   0.4471 0.04101   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (Intercept)  -0.9898 0.07216   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X1   0.4533 0.07667   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X2  -0.3437 0.09609   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC        dose   0.4632 0.04086   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (Intercept)  -0.9725 0.07154   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X1   0.4469 0.07674   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X2  -0.3467 0.09618   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML        dose   0.4498 0.04105   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (Intercept)  -0.9725 0.07138   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X1   0.4472 0.07664   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X2  -0.3465 0.09602   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        dose   0.4497 0.04101   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -0.9791 0.06869 1.03 386.00</span></span>
+<span><span class="co">#&gt;     BMA          X1   0.4555 0.07669 1.00 482.00</span></span>
+<span><span class="co">#&gt;     BMA          X2  -0.3486 0.09589 1.02 882.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   0.4523 0.04042 1.03 518.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.logreg.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     RC        ERC       MCML        FMA        BMA</span></span>
 <span><span class="co">#&gt; (Intercept) -0.9759817 -0.9897555 -0.9724854 -0.9725462 -0.9791394</span></span>
 <span><span class="co">#&gt; X1           0.4459778  0.4533083  0.4468997  0.4471557  0.4555060</span></span>
 <span><span class="co">#&gt; X2          -0.3358992 -0.3436867 -0.3467298 -0.3465319 -0.3485601</span></span>
 <span><span class="co">#&gt; dose         0.4471346  0.4632116  0.4497526  0.4497072  0.4522620</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">fit.ameras.logreg.lin</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelfitting_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-13-2.png" class="r-plt" alt="" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="poisson-regression">Poisson regression<a class="anchor" aria-label="anchor" href="#poisson-regression"></a>
@@ -582,67 +578,69 @@ models</a>.</p>
 an <code>offset</code> term in the formula, e.g.,
 <code>Y~dose(V1:V10)~X1+offset(PYR)</code>. Here, we show models without
 using an offset, first including a quadratic exposure term:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">332101</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.poisson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.poisson</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
 <span>                             data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"poisson"</span>, </span>
 <span>                             methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                             niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; warning: logProb of data node Y[247]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node Y[676]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node Y[833]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node Y[1635]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.poisson</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.poisson ~ dose(V1:V10, deg = 2, model = "EXP") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "poisson", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 69.4 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 70.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.8</span></span>
-<span><span class="co">#&gt;     ERC     1.1</span></span>
-<span><span class="co">#&gt;    MCML     1.2</span></span>
+<span><span class="co">#&gt;     ERC     1.7</span></span>
+<span><span class="co">#&gt;    MCML     1.3</span></span>
 <span><span class="co">#&gt;     FMA     3.1</span></span>
 <span><span class="co">#&gt;     BMA    63.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 25 rows</span></span>
+<span><span class="co">#&gt;  Method         Term Estimate       SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC  (Intercept) -1.09456 0.048655   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           X1  0.49070 0.041922   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.37625 0.055638   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         dose  0.61976 0.040375   NA     NA</span></span>
+<span><span class="co">#&gt;      RC dose_squared -0.03849 0.007566   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC  (Intercept) -1.09068 0.048474   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X1  0.49180 0.042008   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X2 -0.37855 0.055639   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         dose  0.61138 0.039328   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC dose_squared -0.03626 0.007177   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML  (Intercept) -1.07519 0.046954   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X1  0.49897 0.041918   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X2 -0.37711 0.055643   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         dose  0.60089 0.034218   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML dose_squared -0.03644 0.005719   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA  (Intercept) -1.07542 0.047056   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X1  0.49896 0.041800   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X2 -0.37716 0.055479   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         dose  0.60138 0.035163   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA dose_squared -0.03656 0.005998   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA  (Intercept) -1.07944 0.044741 1.02 215.00</span></span>
+<span><span class="co">#&gt;     BMA           X1  0.49801 0.039956 1.03 435.00</span></span>
+<span><span class="co">#&gt;     BMA           X2 -0.38167 0.055527 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA         dose  0.60805 0.035663 1.03  87.00</span></span>
+<span><span class="co">#&gt;     BMA dose_squared -0.03798 0.006215 1.03  79.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.poisson</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                       RC         ERC        MCML         FMA        BMA</span></span>
 <span><span class="co">#&gt; (Intercept)  -1.09455980 -1.09068092 -1.07519346 -1.07541780 -1.0794372</span></span>
@@ -650,76 +648,67 @@ using an offset, first including a quadratic exposure term:</p>
 <span><span class="co">#&gt; X2           -0.37624508 -0.37854805 -0.37711401 -0.37715581 -0.3816682</span></span>
 <span><span class="co">#&gt; dose          0.61975742  0.61138406  0.60089474  0.60137955  0.6080481</span></span>
 <span><span class="co">#&gt; dose_squared -0.03849039 -0.03626348 -0.03643505 -0.03656317 -0.0379750</span></span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">fit.ameras.poisson</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelfitting_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-16-2.png" class="r-plt" alt="" width="100%"></p>
 <p>Without the quadratic term (<code>deg=1</code>):</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">24252</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.poisson.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.poisson</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">1</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
 <span>                                 data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"poisson"</span>, </span>
 <span>                                 methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                                 niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.poisson.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.poisson ~ dose(V1:V10, deg = 1, model = "EXP") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "poisson", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 64.2 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 63.5 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC     0.6</span></span>
-<span><span class="co">#&gt;    MCML     0.6</span></span>
+<span><span class="co">#&gt;     ERC     0.9</span></span>
+<span><span class="co">#&gt;    MCML     0.7</span></span>
 <span><span class="co">#&gt;     FMA     1.9</span></span>
-<span><span class="co">#&gt;     BMA    60.9</span></span>
+<span><span class="co">#&gt;     BMA    59.8</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 20 rows</span></span>
+<span><span class="co">#&gt;  Method        Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC (Intercept)  -0.9650 0.04127   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X1   0.5054 0.04195   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          X2  -0.3640 0.05560   NA     NA</span></span>
+<span><span class="co">#&gt;      RC        dose   0.4204 0.01346   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (Intercept)  -0.9667 0.04134   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X1   0.5049 0.04202   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          X2  -0.3667 0.05559   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC        dose   0.4222 0.01361   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (Intercept)  -0.9173 0.04048   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X1   0.5129 0.04231   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          X2  -0.3579 0.05582   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML        dose   0.3823 0.01231   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (Intercept)  -0.9174 0.04044   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X1   0.5121 0.04257   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          X2  -0.3584 0.05587   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        dose   0.3826 0.01255   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -0.9180 0.04041 1.00 301.00</span></span>
+<span><span class="co">#&gt;     BMA          X1   0.5100 0.04121 1.01 364.00</span></span>
+<span><span class="co">#&gt;     BMA          X2  -0.3581 0.05584 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   0.3833 0.01343 1.01 371.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.poisson.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     RC        ERC       MCML        FMA        BMA</span></span>
 <span><span class="co">#&gt; (Intercept) -0.9649529 -0.9666735 -0.9173445 -0.9173785 -0.9179930</span></span>
 <span><span class="co">#&gt; X1           0.5054270  0.5049256  0.5129102  0.5120519  0.5099994</span></span>
 <span><span class="co">#&gt; X2          -0.3639707 -0.3666592 -0.3579466 -0.3583942 -0.3581445</span></span>
 <span><span class="co">#&gt; dose         0.4204226  0.4222084  0.3822723  0.3826304  0.3833150</span></span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">fit.ameras.poisson.lin</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelfitting_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-19-2.png" class="r-plt" alt="" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="proportional-hazards-regression">Proportional hazards regression<a class="anchor" aria-label="anchor" href="#proportional-hazards-regression"></a>
@@ -737,38 +726,16 @@ BMA output contains the <code>prophaz.numints.BMA+1</code> cutpoints
 defining the intervals in addition to <code>h0</code>.</p>
 <p>Again, we first fit models including a quadratic exposure term by
 setting <code>deg=2</code>.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">332120000</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.prophaz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span><span class="op">~</span></span>
 <span>                               <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
 <span>                             data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"prophaz"</span>, </span>
 <span>                             methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                             niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
 <span><span class="co">#&gt; Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :</span></span>
 <span><span class="co">#&gt; WARNING: Hessian was not invertible or inverse was not positive definite,</span></span>
 <span><span class="co">#&gt; variance matrix could not be obtained</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[7]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[17]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[71]: logProb less than -1e12.</span></span>
@@ -806,35 +773,64 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2971]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[1635]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node zeros[2907]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.prophaz</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Surv(time, status) ~ dose(V1:V10, deg = 2, model = "EXP") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "prophaz", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 657.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 913.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC   547.4</span></span>
+<span><span class="co">#&gt;     ERC   803.0</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
 <span><span class="co">#&gt;     FMA     2.1</span></span>
-<span><span class="co">#&gt;     BMA   107.1</span></span>
+<span><span class="co">#&gt;     BMA   107.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 30 rows</span></span>
+<span><span class="co">#&gt;  Method         Term  Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC           X1  0.629674 0.08485   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.423116 0.11150   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         dose  0.587614 0.08915   NA     NA</span></span>
+<span><span class="co">#&gt;      RC dose_squared -0.033682 0.01807   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X1  0.636755      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X2 -0.422042      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         dose  0.295488      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC dose_squared -0.003357      NA   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X1  0.629162 0.08518   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X2 -0.425156 0.11196   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         dose  0.590217 0.08046   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML dose_squared -0.038038 0.01523   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X1  0.624536 0.08542   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X2 -0.433644 0.11160   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         dose  0.594196 0.07841   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA dose_squared -0.038945 0.01454   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA           X1  0.631447 0.08479 1.02 311.00</span></span>
+<span><span class="co">#&gt;     BMA           X2 -0.432579 0.11574 1.02 740.00</span></span>
+<span><span class="co">#&gt;     BMA         dose  0.579261 0.07815 1.00  89.00</span></span>
+<span><span class="co">#&gt;     BMA dose_squared -0.036336 0.01514 1.00  82.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[1]  0.331844 0.05060 1.01 350.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[2]  0.354968 0.05515 1.00 457.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[3]  0.274038 0.04421 1.00 341.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[4]  0.304833 0.04870 1.00 426.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[5]  0.324187 0.05181 1.01 452.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[6]  0.410268 0.06456 1.01 300.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[7]  0.275961 0.04233 1.00 467.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[8]  0.319488 0.04863 1.00 417.00</span></span>
+<span><span class="co">#&gt;     BMA        h0[9]  0.279575 0.04103 1.00 358.00</span></span>
+<span><span class="co">#&gt;     BMA       h0[10]  0.317120 0.04949 1.01 288.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.prophaz</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                       RC          ERC        MCML         FMA         BMA</span></span>
 <span><span class="co">#&gt; X1            0.62967434  0.636754979  0.62916199  0.62453646  0.63144657</span></span>
@@ -853,74 +849,73 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; h0[10]                NA           NA          NA          NA  0.31712022</span></span></code></pre></div>
 <p>The BMA output now contains the intervals with piecewise constant
 baseline hazards, corresponding to the estimates <code>h0</code>:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.ameras.prophaz</span><span class="op">$</span><span class="va">BMA</span><span class="op">$</span><span class="va">prophaz.timepoints</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">fit.ameras.prophaz</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelfitting_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-23-2.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-23-3.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-23-4.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-23-5.png" class="r-plt" alt="" width="100%"></p>
 <p>Without the quadratic term (<code>deg=1</code>):</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">24978252</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.prophaz.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span><span class="op">~</span></span>
 <span>                                   <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">1</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
 <span>                                 data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"prophaz"</span>, </span>
 <span>                                 methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                                 niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
 <span><span class="co">#&gt; Warning in ameras.rc(family = family, dosevars = dosevars, data = data, :</span></span>
 <span><span class="co">#&gt; WARNING: Hessian was not invertible or inverse was not positive definite,</span></span>
 <span><span class="co">#&gt; variance matrix could not be obtained</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.prophaz.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Surv(time, status) ~ dose(V1:V10, deg = 1, model = "EXP") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "prophaz", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 372 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 364.8 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.1</span></span>
-<span><span class="co">#&gt;     ERC   264.7</span></span>
+<span><span class="co">#&gt;     ERC   260.0</span></span>
 <span><span class="co">#&gt;    MCML     0.4</span></span>
-<span><span class="co">#&gt;     FMA     1.1</span></span>
-<span><span class="co">#&gt;     BMA   105.7</span></span>
+<span><span class="co">#&gt;     FMA     1.2</span></span>
+<span><span class="co">#&gt;     BMA   103.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 25 rows</span></span>
+<span><span class="co">#&gt;  Method   Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC     X1   0.6358 0.08488   NA     NA</span></span>
+<span><span class="co">#&gt;      RC     X2  -0.4161 0.11144   NA     NA</span></span>
+<span><span class="co">#&gt;      RC   dose   0.4284 0.03004   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC     X1   0.6416      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC     X2  -0.4220      NA   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC   dose   0.2812      NA   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML     X1   0.6462 0.08565   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML     X2  -0.4125 0.11253   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML   dose   0.4002 0.02908   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA     X1   0.6457 0.08567   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA     X2  -0.4125 0.11263   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA   dose   0.4001 0.02901   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA     X1   0.6474 0.08153 1.00 388.00</span></span>
+<span><span class="co">#&gt;     BMA     X2  -0.4248 0.11473 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA   dose   0.3987 0.02884 1.01 478.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[1]   0.3646 0.05506 1.00 644.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[2]   0.3926 0.05694 1.01 540.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[3]   0.3036 0.04541 1.00 549.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[4]   0.3378 0.04899 1.00 692.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[5]   0.3615 0.05340 1.00 720.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[6]   0.4547 0.06635 1.00 546.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[7]   0.3080 0.04573 1.01 690.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[8]   0.3551 0.05105 1.00 589.00</span></span>
+<span><span class="co">#&gt;     BMA  h0[9]   0.3091 0.04455 1.00 907.00</span></span>
+<span><span class="co">#&gt;     BMA h0[10]   0.3496 0.05211 1.01 542.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.prophaz.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                RC        ERC       MCML        FMA        BMA</span></span>
 <span><span class="co">#&gt; X1      0.6358422  0.6415799  0.6462073  0.6457466  0.6474031</span></span>
@@ -936,9 +931,6 @@ baseline hazards, corresponding to the estimates <code>h0</code>:</p>
 <span><span class="co">#&gt; h0[8]          NA         NA         NA         NA  0.3550875</span></span>
 <span><span class="co">#&gt; h0[9]          NA         NA         NA         NA  0.3091293</span></span>
 <span><span class="co">#&gt; h0[10]         NA         NA         NA         NA  0.3495984</span></span></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">fit.ameras.prophaz.lin</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelfitting_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-26-2.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-26-3.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-26-4.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-26-5.png" class="r-plt" alt="" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="multinomial-logistic-regression">Multinomial logistic regression<a class="anchor" aria-label="anchor" href="#multinomial-logistic-regression"></a>
@@ -948,64 +940,91 @@ of the example data, <code>Y.multinomial='3'</code>) is used as the
 referent category.</p>
 <p>Again, we first fit models including a quadratic exposure term by
 setting <code>deg=2</code>.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">33</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.multinomial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.multinomial</span><span class="op">~</span></span>
 <span>                                   <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
 <span>                                 data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"multinomial"</span>,</span>
 <span>                                 methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                                 niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.multinomial</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.multinomial ~ dose(V1:V10, deg = 2, model = "EXP") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "multinomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 461.1 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 442.5 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     1.1</span></span>
-<span><span class="co">#&gt;     ERC   157.7</span></span>
-<span><span class="co">#&gt;    MCML     7.9</span></span>
-<span><span class="co">#&gt;     FMA    10.7</span></span>
-<span><span class="co">#&gt;     BMA   283.7</span></span>
+<span><span class="co">#&gt;     ERC   160.1</span></span>
+<span><span class="co">#&gt;    MCML     7.8</span></span>
+<span><span class="co">#&gt;     FMA    10.5</span></span>
+<span><span class="co">#&gt;     BMA   263.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 50 rows</span></span>
+<span><span class="co">#&gt;  Method             Term  Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC  (1)_(Intercept) -1.134879 0.11395   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           (1)_X1  0.521885 0.10631   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           (1)_X2 -0.347821 0.14935   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         (1)_dose  0.541114 0.13250   NA     NA</span></span>
+<span><span class="co">#&gt;      RC (1)_dose_squared -0.028978 0.03377   NA     NA</span></span>
+<span><span class="co">#&gt;      RC  (2)_(Intercept) -0.007547 0.08795   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           (2)_X1 -0.513675 0.08620   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           (2)_X2  0.705782 0.10738   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         (2)_dose  0.555006 0.11504   NA     NA</span></span>
+<span><span class="co">#&gt;      RC (2)_dose_squared -0.037842 0.03053   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC  (1)_(Intercept) -1.139984 0.11278   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           (1)_X1  0.524098 0.10651   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           (1)_X2 -0.351142 0.14952   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         (1)_dose  0.561788 0.12424   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (1)_dose_squared -0.031891 0.02990   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC  (2)_(Intercept) -0.008660 0.08626   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           (2)_X1 -0.511536 0.08638   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           (2)_X2  0.703688 0.10757   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         (2)_dose  0.563142 0.10587   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (2)_dose_squared -0.036409 0.02606   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML  (1)_(Intercept) -1.121541 0.11214   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           (1)_X1  0.522503 0.10638   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           (1)_X2 -0.349944 0.14943   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         (1)_dose  0.526846 0.12549   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (1)_dose_squared -0.027194 0.03020   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML  (2)_(Intercept) -0.001584 0.08614   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           (2)_X1 -0.513787 0.08621   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           (2)_X2  0.703779 0.10746   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         (2)_dose  0.559807 0.10680   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (2)_dose_squared -0.041118 0.02628   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA  (1)_(Intercept) -1.125692 0.11269   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           (1)_X1  0.522203 0.10653   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           (1)_X2 -0.349524 0.14951   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         (1)_dose  0.536663 0.12823   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (1)_dose_squared -0.030264 0.03136   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA  (2)_(Intercept) -0.001039 0.08607   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           (2)_X1 -0.513380 0.08602   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           (2)_X2  0.704601 0.10763   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         (2)_dose  0.557269 0.10747   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (2)_dose_squared -0.040745 0.02652   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA  (1)_(Intercept) -1.120533 0.11510 1.02 173.00</span></span>
+<span><span class="co">#&gt;     BMA           (1)_X1  0.518102 0.11473 1.00 330.00</span></span>
+<span><span class="co">#&gt;     BMA           (1)_X2 -0.342415 0.14116 1.01 663.00</span></span>
+<span><span class="co">#&gt;     BMA         (1)_dose  0.522811 0.12793 1.04  73.00</span></span>
+<span><span class="co">#&gt;     BMA (1)_dose_squared -0.024286 0.03270 1.01  73.00</span></span>
+<span><span class="co">#&gt;     BMA  (2)_(Intercept)  0.003372 0.09478 1.00 101.00</span></span>
+<span><span class="co">#&gt;     BMA           (2)_X1 -0.522597 0.08709 1.00 364.00</span></span>
+<span><span class="co">#&gt;     BMA           (2)_X2  0.708877 0.10811 1.00 462.00</span></span>
+<span><span class="co">#&gt;     BMA         (2)_dose  0.554817 0.12798 1.01  47.00</span></span>
+<span><span class="co">#&gt;     BMA (2)_dose_squared -0.037946 0.03326 1.01  45.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.multinomial</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                            RC          ERC        MCML          FMA</span></span>
 <span><span class="co">#&gt; (1)_(Intercept)  -1.134879146 -1.139983536 -1.12154130 -1.125692410</span></span>
@@ -1029,68 +1048,82 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; (2)_X2            0.708876654</span></span>
 <span><span class="co">#&gt; (2)_dose          0.554817132</span></span>
 <span><span class="co">#&gt; (2)_dose_squared -0.037945537</span></span></code></pre></div>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">fit.ameras.multinomial</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelfitting_files/figure-html/unnamed-chunk-29-1.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-29-2.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-29-3.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-29-4.png" class="r-plt" alt="" width="100%"></p>
 <p>Without the quadratic term (<code>deg=1</code>):</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">44</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.multinomial.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.multinomial</span><span class="op">~</span></span>
 <span>                                       <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">1</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
 <span>                                     data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"multinomial"</span>,</span>
 <span>                                     methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                                     niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.multinomial.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.multinomial ~ dose(V1:V10, deg = 1, model = "EXP") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "multinomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 356.5 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 349.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     1.0</span></span>
-<span><span class="co">#&gt;     ERC   113.8</span></span>
-<span><span class="co">#&gt;    MCML     6.2</span></span>
-<span><span class="co">#&gt;     FMA     8.4</span></span>
-<span><span class="co">#&gt;     BMA   227.1</span></span>
+<span><span class="co">#&gt;     ERC   108.0</span></span>
+<span><span class="co">#&gt;    MCML     6.1</span></span>
+<span><span class="co">#&gt;     FMA     8.2</span></span>
+<span><span class="co">#&gt;     BMA   225.8</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 40 rows</span></span>
+<span><span class="co">#&gt;  Method            Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC (1)_(Intercept) -1.10156 0.10093   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          (1)_X1  0.52203 0.10628   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          (1)_X2 -0.34710 0.14929   NA     NA</span></span>
+<span><span class="co">#&gt;      RC        (1)_dose  0.45264 0.05805   NA     NA</span></span>
+<span><span class="co">#&gt;      RC (2)_(Intercept)  0.04417 0.07667   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          (2)_X1 -0.51312 0.08614   NA     NA</span></span>
+<span><span class="co">#&gt;      RC          (2)_X2  0.70793 0.10728   NA     NA</span></span>
+<span><span class="co">#&gt;      RC        (2)_dose  0.43049 0.05170   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (1)_(Intercept) -1.10285 0.10195   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          (1)_X1  0.52577 0.10650   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          (1)_X2 -0.35176 0.14953   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC        (1)_dose  0.46441 0.06099   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC (2)_(Intercept)  0.03947 0.07756   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          (2)_X1 -0.51003 0.08634   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC          (2)_X2  0.70435 0.10749   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC        (2)_dose  0.44543 0.05364   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (1)_(Intercept) -1.09147 0.10115   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          (1)_X1  0.52239 0.10633   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          (1)_X2 -0.34934 0.14941   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML        (1)_dose  0.44410 0.05912   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML (2)_(Intercept)  0.05917 0.07624   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          (2)_X1 -0.51290 0.08614   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML          (2)_X2  0.70604 0.10735   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML        (2)_dose  0.41753 0.05156   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (1)_(Intercept) -1.09114 0.10101   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          (1)_X1  0.52245 0.10612   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          (1)_X2 -0.34937 0.14960   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        (1)_dose  0.44381 0.05893   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA (2)_(Intercept)  0.05869 0.07627   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          (2)_X1 -0.51272 0.08608   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA          (2)_X2  0.70611 0.10708   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA        (2)_dose  0.41769 0.05137   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA (1)_(Intercept) -1.09319 0.09280 1.00 245.00</span></span>
+<span><span class="co">#&gt;     BMA          (1)_X1  0.52119 0.10307 1.02 390.00</span></span>
+<span><span class="co">#&gt;     BMA          (1)_X2 -0.34994 0.15277 1.01 447.00</span></span>
+<span><span class="co">#&gt;     BMA        (1)_dose  0.44801 0.05670 1.00 254.00</span></span>
+<span><span class="co">#&gt;     BMA (2)_(Intercept)  0.05267 0.07548 1.00 324.00</span></span>
+<span><span class="co">#&gt;     BMA          (2)_X1 -0.51037 0.08339 1.01 373.00</span></span>
+<span><span class="co">#&gt;     BMA          (2)_X2  0.70371 0.11185 1.01 650.00</span></span>
+<span><span class="co">#&gt;     BMA        (2)_dose  0.42386 0.05084 1.00 313.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.multinomial.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                          RC         ERC        MCML         FMA         BMA</span></span>
 <span><span class="co">#&gt; (1)_(Intercept) -1.10156112 -1.10285018 -1.09147154 -1.09114142 -1.09318983</span></span>
@@ -1101,9 +1134,6 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt; (2)_X1          -0.51311892 -0.51003494 -0.51290413 -0.51271584 -0.51036888</span></span>
 <span><span class="co">#&gt; (2)_X2           0.70793136  0.70434790  0.70604308  0.70611143  0.70370686</span></span>
 <span><span class="co">#&gt; (2)_dose         0.43049029  0.44543353  0.41753398  0.41768779  0.42386430</span></span></code></pre></div>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">fit.ameras.multinomial.lin</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelfitting_files/figure-html/unnamed-chunk-32-1.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-32-2.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-32-3.png" class="r-plt" alt="" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="conditional-logistic-regression">Conditional logistic regression<a class="anchor" aria-label="anchor" href="#conditional-logistic-regression"></a>
@@ -1112,40 +1142,17 @@ setting <code>deg=2</code>.</p>
 specified through a <code>strata</code> term in the formula. Again, we
 first fit models including a quadratic exposure term by setting
 <code>deg=2</code>.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">3301</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.clogit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.clogit</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span><span class="op">+</span></span>
 <span>                              <span class="fu">strata</span><span class="op">(</span><span class="va">setnr</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"clogit"</span>, </span>
 <span>                            methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                            niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.clogit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.clogit ~ dose(V1:V10, deg = 2, model = "EXP") + </span></span>
@@ -1153,67 +1160,61 @@ first fit models including a quadratic exposure term by setting
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, </span></span>
 <span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 705.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 694.9 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.6</span></span>
-<span><span class="co">#&gt;     ERC   626.1</span></span>
-<span><span class="co">#&gt;    MCML     1.9</span></span>
-<span><span class="co">#&gt;     FMA     6.5</span></span>
-<span><span class="co">#&gt;     BMA    70.5</span></span>
+<span><span class="co">#&gt;      RC     0.5</span></span>
+<span><span class="co">#&gt;     ERC   612.9</span></span>
+<span><span class="co">#&gt;    MCML     2.0</span></span>
+<span><span class="co">#&gt;     FMA     7.3</span></span>
+<span><span class="co">#&gt;     BMA    72.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 20 rows</span></span>
+<span><span class="co">#&gt;  Method         Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC           X1  0.54553 0.08896   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.53392 0.11711   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         dose  0.68029 0.10131   NA     NA</span></span>
+<span><span class="co">#&gt;      RC dose_squared -0.05146 0.02242   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X1  0.61917 0.09205   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X2 -0.51784 0.11993   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         dose  0.35155 0.08030   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC dose_squared  0.03687 0.01013   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X1  0.55083 0.08923   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X2 -0.53547 0.11712   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         dose  0.69334 0.09315   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML dose_squared -0.05581 0.01950   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X1  0.55052 0.08917   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X2 -0.53471 0.11713   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         dose  0.69461 0.09617   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA dose_squared -0.05610 0.02045   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA           X1  0.54909 0.09212 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA           X2 -0.53845 0.12233 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA         dose  0.70058 0.10236 1.00 154.00</span></span>
+<span><span class="co">#&gt;     BMA dose_squared -0.05764 0.02212 1.00 131.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.clogit</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                       RC         ERC        MCML         FMA         BMA</span></span>
 <span><span class="co">#&gt; X1            0.54552627  0.61917374  0.55082666  0.55052070  0.54908986</span></span>
 <span><span class="co">#&gt; X2           -0.53391889 -0.51784345 -0.53546549 -0.53471237 -0.53844738</span></span>
 <span><span class="co">#&gt; dose          0.68029437  0.35155174  0.69333718  0.69461086  0.70058151</span></span>
 <span><span class="co">#&gt; dose_squared -0.05145934  0.03687427 -0.05581249 -0.05609925 -0.05764133</span></span></code></pre></div>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">fit.ameras.clogit</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelfitting_files/figure-html/unnamed-chunk-35-1.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-35-2.png" class="r-plt" alt="" width="100%"></p>
 <p>Without the quadratic term (<code>deg=1</code>):</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">4401</span><span class="op">)</span></span>
 <span><span class="va">fit.ameras.clogit.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.clogit</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span><span class="op">+</span></span>
 <span>                                  <span class="fu">strata</span><span class="op">(</span><span class="va">setnr</span><span class="op">)</span>, data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"clogit"</span>, </span>
 <span>                                methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                                niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note: BMA may require extensive computation time</span></span>
-<span><span class="co">#&gt; Fitting RC</span></span>
-<span><span class="co">#&gt; Fitting ERC</span></span>
-<span><span class="co">#&gt; Fitting MCML</span></span>
-<span><span class="co">#&gt; Fitting FMA</span></span>
-<span><span class="co">#&gt; Fitting BMA</span></span>
-<span><span class="co">#&gt; Defining model</span></span>
-<span><span class="co">#&gt; Building model</span></span>
-<span><span class="co">#&gt; Setting data and initial values</span></span>
-<span><span class="co">#&gt; Running calculate on model</span></span>
-<span><span class="co">#&gt;   [Note] Any error reports that follow may simply reflect missing values in model variables.</span></span>
-<span><span class="co">#&gt; Checking model sizes and dimensions</span></span>
-<span><span class="co">#&gt;   [Note] This model is not fully initialized. This is not an error.</span></span>
-<span><span class="co">#&gt;          To see which variables are not initialized, use model$initializeInfo().</span></span>
-<span><span class="co">#&gt;          For more information on model initialization, see help(modelInitialization).</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; Compiling</span></span>
-<span><span class="co">#&gt;   [Note] This may take a minute.</span></span>
-<span><span class="co">#&gt;   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span></span>
-<span><span class="co">#&gt; running chain 1...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; running chain 2...</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.clogit.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.clogit ~ dose(V1:V10, deg = 2, model = "EXP") + </span></span>
@@ -1221,32 +1222,49 @@ first fit models including a quadratic exposure term by setting
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, </span></span>
 <span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 713.1 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 702.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.6</span></span>
-<span><span class="co">#&gt;     ERC   634.0</span></span>
+<span><span class="co">#&gt;     ERC   622.9</span></span>
 <span><span class="co">#&gt;    MCML     1.9</span></span>
-<span><span class="co">#&gt;     FMA     6.4</span></span>
+<span><span class="co">#&gt;     FMA     6.6</span></span>
 <span><span class="co">#&gt;     BMA    70.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; data frame with 0 columns and 20 rows</span></span>
+<span><span class="co">#&gt;  Method         Term Estimate      SE Rhat  n.eff</span></span>
+<span><span class="co">#&gt;      RC           X1  0.54553 0.08896   NA     NA</span></span>
+<span><span class="co">#&gt;      RC           X2 -0.53392 0.11711   NA     NA</span></span>
+<span><span class="co">#&gt;      RC         dose  0.68029 0.10131   NA     NA</span></span>
+<span><span class="co">#&gt;      RC dose_squared -0.05146 0.02242   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X1  0.61917 0.09205   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC           X2 -0.51784 0.11993   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC         dose  0.35155 0.08030   NA     NA</span></span>
+<span><span class="co">#&gt;     ERC dose_squared  0.03687 0.01013   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X1  0.55083 0.08923   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML           X2 -0.53547 0.11712   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML         dose  0.69334 0.09315   NA     NA</span></span>
+<span><span class="co">#&gt;    MCML dose_squared -0.05581 0.01950   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X1  0.55012 0.08918   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X2 -0.53457 0.11734   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA         dose  0.69435 0.09622   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA dose_squared -0.05607 0.02043   NA     NA</span></span>
+<span><span class="co">#&gt;     BMA           X1  0.55628 0.09059 1.00 800.00</span></span>
+<span><span class="co">#&gt;     BMA           X2 -0.53885 0.11829 1.00 776.00</span></span>
+<span><span class="co">#&gt;     BMA         dose  0.69524 0.09738 1.01 191.00</span></span>
+<span><span class="co">#&gt;     BMA dose_squared -0.05604 0.02093 1.01 159.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.clogit.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                       RC         ERC        MCML         FMA         BMA</span></span>
 <span><span class="co">#&gt; X1            0.54552627  0.61917374  0.55082666  0.55011963  0.55627823</span></span>
 <span><span class="co">#&gt; X2           -0.53391889 -0.51784345 -0.53546549 -0.53456800 -0.53884618</span></span>
 <span><span class="co">#&gt; dose          0.68029437  0.35155174  0.69333718  0.69435478  0.69524184</span></span>
 <span><span class="co">#&gt; dose_squared -0.05145934  0.03687427 -0.05581249 -0.05606825 -0.05604098</span></span></code></pre></div>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/traceplot.html">traceplot</a></span><span class="op">(</span><span class="va">fit.ameras.clogit.lin</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelfitting_files/figure-html/unnamed-chunk-38-1.png" class="r-plt" alt="" width="100%"><img src="modelfitting_files/figure-html/unnamed-chunk-38-2.png" class="r-plt" alt="" width="100%"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

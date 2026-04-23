@@ -61,7 +61,13 @@ model averaging (Kwon et al. 2023
 ## Usage
 
 ``` r
-ameras(formula, data, family="gaussian", methods="RC", transform=NULL,
+ameras(formula=NULL, data, family="gaussian", methods="RC", 
+  Y=NULL, dosevars=NULL, doseRRmod=NULL, deg=NULL,
+  M=NULL, X=NULL, offset=NULL, entry=NULL, exit=NULL,
+  setnr=NULL,
+  CI=NULL, params.profCI=NULL,
+  maxit.profCI=NULL, tol.profCI=NULL,
+  transform=NULL,
   transform.jacobian=NULL, inpar=NULL, loglim=1e-30, MFMA=100000, 
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
   niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=NULL, 
@@ -84,14 +90,98 @@ ameras(formula, data, family="gaussian", methods="RC", transform=NULL,
   outcome model family: `"gaussian"`, `"binomial"`, `"poisson"`,
   `"prophaz"`, `"multinomial"` or `"clogit"` (default `"gaussian"`).
 
-&nbsp;
-
 - methods:
 
   character vector of one or multiple methods to apply. Options: `"RC"`,
   `"ERC"`, `"MCML"`, `"FMA"`, `"BMA"` (default `"RC"`).
 
-&nbsp;
+- Y:
+
+  **Deprecated**. Use the formula interface instead. Name or column
+  index of the outcome variable for linear, binomial, Poisson,
+  multinomial and conditional logistic models, or event indicator
+  variable for the proportional hazards model.
+
+- dosevars:
+
+  **Deprecated**. Use the formula interface instead. Names or column
+  indices of exposure replicate vectors.
+
+- doseRRmod:
+
+  **Deprecated**. Use the formula interface instead. The functional form
+  of the dose-response relationship; options are exponential RR
+  (`"EXP"`), linear ERR (`"ERR"`), or linear-exponential RR (`"LINEXP"`)
+  (default `"ERR"`).
+
+- deg:
+
+  **Deprecated**. Use the formula interface instead. For
+  `doseRRmod="ERR"` and `doseRRmod="EXP"`, whether to fit a linear
+  (`deg=1`) or linear-quadratic (`deg=2`) dose-response model (default
+  linear).
+
+- M:
+
+  **Deprecated**. Use the formula interface instead. Names or column
+  indices of binary effect modifying variables (optional).
+
+- X:
+
+  **Deprecated**. Use the formula interface instead. Names or column
+  indices of other covariates (optional).
+
+- offset:
+
+  **Deprecated**. Use the formula interface instead. Name or column
+  index of offset variable for Poisson regression (optional).
+
+- entry:
+
+  **Deprecated**. Use the formula interface instead. Name or column
+  index of left truncation time variable for proportional hazards
+  regression (optional).
+
+- exit:
+
+  **Deprecated**. Use the formula interface instead. Name or column
+  index of exit time variable, required when `family=prophaz`.
+
+- setnr:
+
+  **Deprecated**. Use the formula interface instead. Name or column
+  index of integer-valued matched set variable, required when
+  `family="clogit"`.
+
+- CI:
+
+  **Deprecated**. Use confint() to compute confidence intervals instead.
+  Method for calculation of 95% confidence or credible intervals (see
+  Details). For RC, ERC, and MCML, options are `"wald.orig"`,
+  `"wald.transformed"`, `"proflik"` (default `"proflik"`). For FMA and
+  BMA, options are `"percentile"` and `"hpd"` (default `"percentile"`).
+  If `methods` contains at least one of RC, ERC, and MCML and at least
+  one of FMA and BMA, `CI` must be length 2 and specify one method for
+  RC, ERC, and MCML, and one for FMA and BMA (see Details).
+
+- params.profCI:
+
+  **Deprecated**. Use confint() to compute confidence intervals instead.
+  When `CI="proflik"`, whether to obtain profile-likelihood CIs for all
+  parameters (`"all"`) or only dose-related parameters (`"dose"`,
+  default).
+
+- maxit.profCI:
+
+  **Deprecated**. Use confint() to compute confidence intervals instead.
+  Maximum iterations for determining profile-likelihood CIs; passed to
+  `uniroot` (default 20).
+
+- tol.profCI:
+
+  **Deprecated**. Use confint() to compute confidence intervals instead.
+  Tolerance for determining profile-likelihood CIs; passed to `uniroot`
+  (default `1e-2`).
 
 - transform:
 
@@ -282,12 +372,40 @@ Finally, for FMA the output additionally contains:
   number of iterations without convergence are filtered out and not used
   to obtain results.
 
-The class `amerasfit` supports the methods `print`, `coef`,
+The class `amerasfit` supports the methods
+[`print`](https://ameras.sanderroberti.com/reference/print.md),
+[`coef`](https://ameras.sanderroberti.com/reference/coef.md),
 [`confint`](https://ameras.sanderroberti.com/reference/confint.md),
-`summary`, and
+[`summary`](https://ameras.sanderroberti.com/reference/summary.md), and
 [`traceplot`](https://ameras.sanderroberti.com/reference/traceplot.md).
 
 ## Details
+
+Models are specified through formulas of the form
+`Y~dose(dose_expression, model="ERR", deg=1, modifier=M1+M2)+X1+X2`.
+Here `dose_expression` specifies the dose realization columns and is
+parsed by `eval_select` from the tidyselect package. Useful examples are
+`D1:D1000` if the doses are in a sequence of columns with sequential
+names such as `D1`-`D1000`, and `all_of(dosevars)` where `dosevars` is a
+vector with the names of all dose columns. Further, `model` specifies,
+for non-Gaussian families, whether to use the exponential dose-response
+model (`model="EXP"`), the linear-exponential model (`model="LINEXP"`)
+or the linear ERR model (`model="ERR"`). Next, `deg` is used to specify
+whether a quadratic dose term should (`deg=2`) or should not (`deg=1`)
+be estimated for the exponential or linear ERR dose-response model. The
+`modifier` term is optional and used to specify binary effect
+modification variables. Note that interactions in the modifier term are
+not allowed, e.g. `M1*M2`. When `deg`, `modifier`, and `model` are not
+supplied, the defaults are `deg=1`, no effect modifiers, and
+`model="ERR"`. Finally, `X1` and `X2` above represent optional
+additional covariates, which can include factor variables and
+interactions such as `X1*X2`. The matched set variable `setnr` required
+for conditional logistic regression is specified on the right-hand side
+of the formula through a term `strata(setnr)`, and an optional offset
+variable `offset` for Poisson regression similarly through a term
+`offset(offset)`. For proportional hazards regression, the left-hand
+side of the formula should have the form `Surv(exit, status)` or
+`Surv(entry, exit, status)`.
 
 A transformation can be used to reparametrize parameters internally
 (i.e., such that the likelihoods are evaluated at

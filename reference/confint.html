@@ -62,8 +62,8 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'amerasfit'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">object</span>, parm<span class="op">=</span><span class="st">"dose"</span>, level<span class="op">=</span><span class="fl">0.95</span>, </span>
-<span>        type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proflik"</span>,<span class="st">"percentile"</span><span class="op">)</span>, maxit.profCI<span class="op">=</span><span class="fl">20</span>, tol.profCI<span class="op">=</span><span class="fl">1e-2</span>, </span>
-<span>        data<span class="op">=</span><span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span>        type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"proflik"</span>,<span class="st">"percentile"</span><span class="op">)</span>, maxit.profCI<span class="op">=</span><span class="fl">20</span>, </span>
+<span>        tol.profCI<span class="op">=</span><span class="fl">1e-2</span>, data<span class="op">=</span><span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -82,7 +82,7 @@
     extensive.</p></dd>
 
   <dt id="arg-level">level<a class="anchor" aria-label="anchor" href="#arg-level"></a></dt>
-<dd><p>The confidence level. Defaults to <code>0.95</code>.</p></dd>
+<dd><p>The confidence level (default <code>0.95</code>).</p></dd>
 
   <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>The type(s) of confidence intervals to determine. For
@@ -169,27 +169,29 @@
 
 <p>For (extended) regression calibration and Monte Carlo maximum likelihood,
   Wald and profile likelihood intervals can be obtained. When a parameter
-  transformation \(\bm\theta = h(\bm\eta)\) is used, <code>CI="wald.transformed"</code>
-  yields the CI \(h(\bm\eta \pm 1.96 \bm V)\) with \(\bm V\) the vector
+  transformation \(\bm\theta = h(\bm\eta)\) is used, <code>type="wald.transformed"</code>
+  yields the CI at significance level \(\alpha\) of \(h(\bm\eta \pm z_{1-\alpha/2} \bm V)\)
+  where \(z_{1-\alpha/2}\) is the \(1-\alpha/2\)-quantile of the standard normal distribution and \(\bm V\) is the vector
   of standard deviations estimated using the inverse Hessian matrix,
-  and <code>CI="wald.orig"</code> uses the delta method to obtain the CI
-  \(h(\bm\eta)\pm 1.96 \bm V_*\) where \(\bm V_*\) is the vector of
+  and <code>type="wald.orig"</code> uses the delta method to obtain the CI
+  \(h(\bm\eta)\pm z_{1-\alpha/2} \bm V_*\) where \(\bm V_*\) is the vector of
   standard deviations estimated using \(J H^{-1} J^T\) with \(J\) the
   Jacobian of the transformation and \(H\) is the Hessian. When no
-  transformation is used, <code>CI="wald.orig"</code> should be used.
+  transformation is used, <code>type="wald.orig"</code> should be used.
   The third option is <code>proflik</code>, which uses the profile likelihood to
-  compute confidence bounds. For FMA and BMA, the options for
-  confidence/credible intervals are <code>CI="percentile"</code> which uses
-  percentiles, and <code>CI="hpd"</code> which computes highest posterior density
+  compute confidence bounds.</p>
+<p>For FMA and BMA, the options for
+  confidence/credible intervals are <code>type="percentile"</code> which uses
+  percentiles, and <code>type="hpd"</code> which computes highest posterior density
   intervals using <code>HPDinterval</code> from the <code>coda</code> package, both using
   the FMA samples or Bayesian posterior samples.</p>
-<p>Profile likelihood intervals (<code>type = "proflik"</code>) require
+<p>Profile likelihood intervals (<code>type="proflik"</code>) require
   re-evaluating the likelihood repeatedly and can be time-consuming.
   The <code>parm</code> argument can be used to restrict computation to dose
   parameters only (the default) when intervals for the other parameters are
   not of interest.</p>
-<p>When the model was fitted with <code>keep.data = FALSE</code> and
-  <code>type = "proflik"</code> is used for <code>confint</code>, the original data must be
+<p>When the model was fitted with <code>keep.data=FALSE</code> and
+  <code>type="proflik"</code> is used for <code>confint</code>, the original data must be
   supplied via the <code>data</code> argument. Wald intervals do not require the
   data and can always be computed from the stored Hessian and parameter
   estimates alone.</p>
@@ -300,13 +302,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("FMA", "BMA"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 102.2 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 101.3 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     FMA     0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA   101.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA   100.8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

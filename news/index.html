@@ -46,23 +46,31 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ameras-development-version">ameras (development version)<a class="anchor" aria-label="anchor" href="#ameras-development-version"></a></h2>
-<div class="section level4">
-<h4 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h4>
-<ul><li>Added function ecdfplot for descriptive data visualization.</li>
+<div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li><p>Confidence intervals are no longer computed inside <code><a href="../reference/ameras.html">ameras()</a></code>. The arguments <code>CI</code>, <code>params.profCI</code>, <code>maxit.profCI</code>, and <code>tol.profCI</code> are deprecated and will be removed in version 1.0.0. Use the new <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> method instead. See <code><a href="../reference/confint.html">?confint.amerasfit</a></code> for details.</p></li>
+<li><p>The direct argument interface to <code><a href="../reference/ameras.html">ameras()</a></code> is deprecated and will be removed in version 1.0.0. The arguments <code>Y</code>, <code>dosevars</code>, <code>doseRRmod</code>, <code>deg</code>, <code>M</code>, <code>X</code>, <code>offset</code>, <code>entry</code>, <code>exit</code>, and <code>setnr</code> are deprecated. Please use the new formula interface instead. See <code><a href="../reference/ameras.html">?ameras</a></code> for details.</p></li>
 </ul></div>
-<div class="section level4">
-<h4 id="general-improvements-development-version">General improvements<a class="anchor" aria-label="anchor" href="#general-improvements-development-version"></a></h4>
-<ul><li>Removed the use of an N x N matrix for ERC for the Poisson family to better handle large data and speed up likelihood computation.</li>
-<li>Removed duplication of data for RC and ERC for all families to better handle large data.</li>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li><p>Implemented a formula interface for <code><a href="../reference/ameras.html">ameras()</a></code>. The dose variable is specified using the special <code>dose()</code> term, which supports tidyselect syntax for selecting dose columns and allows specifying the dose-response model and effect modifiers directly in the formula. See <code><a href="../reference/ameras.html">?ameras</a></code> for details and examples.</p></li>
+<li><p>Added <code><a href="../reference/confint.html">confint.amerasfit()</a></code> for computing confidence intervals separately from model fitting. See <code><a href="../reference/confint.html">?confint.amerasfit</a></code> for details.</p></li>
+<li><p>Added function <code><a href="../reference/ecdfplot.html">ecdfplot()</a></code> for exploratory visualization of the dose realizations before model fitting.</p></li>
 </ul></div>
-<div class="section level4">
-<h4 id="user-interface-changes-development-version">User interface changes<a class="anchor" aria-label="anchor" href="#user-interface-changes-development-version"></a></h4>
-<ul><li>Implemented a formula interface for ameras.</li>
-<li>Added a print method for the amerasfit class.</li>
-<li>Moved the computation of confidence intervals to a new method confint. The ameras function now returns an amerasfit object without confidence intervals. The method confint takes this object and returns the same object with confidence intervals added. Importantly, this means ameras no longer uses arguments related to confidence intervals.</li>
-<li>Added additional components to the output of ameras for use by the new confint method.</li>
-<li>Added the argument keep.data to ameras (default TRUE). If TRUE, the data object is included in the amerasfit object for future profile likelihood confidence interval computations.</li>
-<li>The summary method for amerasfit now only prints confidence intervals after they have been computed using confint.</li>
+<div class="section level3">
+<h3 id="general-improvements-development-version">General improvements<a class="anchor" aria-label="anchor" href="#general-improvements-development-version"></a></h3>
+<ul><li>
+<p>Reduced memory usage for large datasets.</p>
+<ul><li>Removed the use of an N x N matrix for ERC for the Poisson family, improving both memory and computation speed.</li>
+<li>Removed internal duplication of data for RC and ERC for all families.</li>
+</ul></li>
+<li><p><code><a href="../reference/summary.html">summary.amerasfit()</a></code> now only includes confidence interval columns after they have been computed via <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>. Before calling <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>, a note is printed directing the user to compute confidence intervals.</p></li>
+<li><p>Profile likelihood confidence interval bounds now include p-values in the summary table, making it easier to assess the accuracy of the root-finding algorithm.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-arguments-development-version">New arguments<a class="anchor" aria-label="anchor" href="#new-arguments-development-version"></a></h3>
+<ul><li>
+<code>keep.data</code> added to <code><a href="../reference/ameras.html">ameras()</a></code> (default <code>TRUE</code>). When <code>TRUE</code>, the data are stored on the returned <code>amerasfit</code> object, which is required for profile likelihood confidence interval computation via <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> without re-supplying the data. Set to <code>FALSE</code> to reduce memory usage for large datasets, in which case the data must be supplied to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> explicitly. See <code><a href="../reference/ameras.html">?ameras</a></code> and <code><a href="../reference/confint.html">?confint.amerasfit</a></code> for details.</li>
 </ul></div>
 </div>
     <div class="section level2">

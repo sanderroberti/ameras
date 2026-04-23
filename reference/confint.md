@@ -11,8 +11,8 @@ fitted object.
 ``` r
 # S3 method for class 'amerasfit'
 confint(object, parm="dose", level=0.95, 
-        type=c("proflik","percentile"), maxit.profCI=20, tol.profCI=1e-2, 
-        data=NULL, ...)
+        type=c("proflik","percentile"), maxit.profCI=20, 
+        tol.profCI=1e-2, data=NULL, ...)
 ```
 
 ## Arguments
@@ -33,7 +33,7 @@ confint(object, parm="dose", level=0.95,
 
 - level:
 
-  The confidence level. Defaults to `0.95`.
+  The confidence level (default `0.95`).
 
 - type:
 
@@ -138,30 +138,33 @@ and `upper`.
 For (extended) regression calibration and Monte Carlo maximum
 likelihood, Wald and profile likelihood intervals can be obtained. When
 a parameter transformation \\\bm\theta = h(\bm\eta)\\ is used,
-`CI="wald.transformed"` yields the CI \\h(\bm\eta \pm 1.96 \bm V)\\ with
-\\\bm V\\ the vector of standard deviations estimated using the inverse
-Hessian matrix, and `CI="wald.orig"` uses the delta method to obtain the
-CI \\h(\bm\eta)\pm 1.96 \bm V\_\*\\ where \\\bm V\_\*\\ is the vector of
-standard deviations estimated using \\J H^{-1} J^T\\ with \\J\\ the
-Jacobian of the transformation and \\H\\ is the Hessian. When no
-transformation is used, `CI="wald.orig"` should be used. The third
-option is `proflik`, which uses the profile likelihood to compute
-confidence bounds. For FMA and BMA, the options for confidence/credible
-intervals are `CI="percentile"` which uses percentiles, and `CI="hpd"`
-which computes highest posterior density intervals using `HPDinterval`
-from the `coda` package, both using the FMA samples or Bayesian
-posterior samples.
+`type="wald.transformed"` yields the CI at significance level \\\alpha\\
+of \\h(\bm\eta \pm z\_{1-\alpha/2} \bm V)\\ where \\z\_{1-\alpha/2}\\ is
+the \\1-\alpha/2\\-quantile of the standard normal distribution and
+\\\bm V\\ is the vector of standard deviations estimated using the
+inverse Hessian matrix, and `type="wald.orig"` uses the delta method to
+obtain the CI \\h(\bm\eta)\pm z\_{1-\alpha/2} \bm V\_\*\\ where \\\bm
+V\_\*\\ is the vector of standard deviations estimated using \\J H^{-1}
+J^T\\ with \\J\\ the Jacobian of the transformation and \\H\\ is the
+Hessian. When no transformation is used, `type="wald.orig"` should be
+used. The third option is `proflik`, which uses the profile likelihood
+to compute confidence bounds.
 
-Profile likelihood intervals (`type = "proflik"`) require re-evaluating
+For FMA and BMA, the options for confidence/credible intervals are
+`type="percentile"` which uses percentiles, and `type="hpd"` which
+computes highest posterior density intervals using `HPDinterval` from
+the `coda` package, both using the FMA samples or Bayesian posterior
+samples.
+
+Profile likelihood intervals (`type="proflik"`) require re-evaluating
 the likelihood repeatedly and can be time-consuming. The `parm` argument
 can be used to restrict computation to dose parameters only (the
 default) when intervals for the other parameters are not of interest.
 
-When the model was fitted with `keep.data = FALSE` and
-`type = "proflik"` is used for `confint`, the original data must be
-supplied via the `data` argument. Wald intervals do not require the data
-and can always be computed from the stored Hessian and parameter
-estimates alone.
+When the model was fitted with `keep.data=FALSE` and `type="proflik"` is
+used for `confint`, the original data must be supplied via the `data`
+argument. Wald intervals do not require the data and can always be
+computed from the stored Hessian and parameter estimates alone.
 
 ## See also
 
@@ -271,13 +274,13 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 102.2 seconds
+#> Total run time: 101.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>     FMA     0.5
-#>     BMA   101.7
+#>     BMA   100.8
 #> 
 #> Summary of coefficients by method:
 #> 

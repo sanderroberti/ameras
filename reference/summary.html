@@ -106,22 +106,30 @@
 
         <dt><code>CI.lower</code></dt>
 <dd><p>The lower confidence bound, if confidence intervals have been
-          computed via <code><a href="confint.html">confint</a></code>.
-          <code>NA</code> otherwise.</p></dd>
+          computed via <code><a href="confint.html">confint</a></code>.</p></dd>
 
         <dt><code>CI.upper</code></dt>
 <dd><p>The upper confidence bound, if confidence intervals have been
-          computed via <code><a href="confint.html">confint</a></code>.
-          <code>NA</code> otherwise.</p></dd>
+          computed via <code><a href="confint.html">confint</a></code>.</p></dd>
+
+        <dt><code>pval.lower</code></dt>
+<dd><p>p-value associated with the lower bound of the profile likelihood
+          CI, the assess validity of the obtained bound. Only included if
+          profile likelihood confidence intervals were computed via
+          <code><a href="confint.html">confint</a></code>.</p></dd>
+
+        <dt><code>pval.upper</code></dt>
+<dd><p>p-value associated with the upper bound of the profile likelihood
+          CI, the assess validity of the obtained bound. Only included if
+          profile likelihood confidence intervals were computed via
+          <code><a href="confint.html">confint</a></code>.</p></dd>
 
         <dt><code>Rhat</code></dt>
 <dd><p>The Gelman-Rubin convergence diagnostic, included only when
-          BMA results are present. Values substantially above 1.05
-          indicate potential convergence problems.</p></dd>
+          BMA results are present. Values above 1.05 indicate potential convergence problems.</p></dd>
 
         <dt><code>n.eff</code></dt>
-<dd><p>The effective sample size, included only when BMA results are
-          present.</p></dd>
+<dd><p>The effective sample size, included only when BMA results are present.</p></dd>
 
 
 </dl><p></p></dd>
@@ -133,7 +141,7 @@
     <dt><code>total_runtime_seconds</code></dt>
 <dd><p>The total computation time in seconds across all methods.</p></dd>
 
-    <dt><code>has_CI</code></dt>
+    <dt><code>CI.computed</code></dt>
 <dd><p>Logical. <code>TRUE</code> if confidence intervals have been computed
       via <code><a href="confint.html">confint</a></code>, <code>FALSE</code>
       otherwise.</p></dd>
@@ -182,7 +190,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data frame with 0 columns and 2 rows</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note: confidence intervals not yet computed. Use confint() to add them.</span>
 <span class="r-in"><span></span></span>
