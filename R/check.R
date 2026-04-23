@@ -288,3 +288,37 @@ check_string <- function(obj, valid, parm) {
   
 } # END: check.string
 
+getVarNumbers <- function(vars, data) {
+  
+  if (!length(vars)) return(NULL)
+  if (is.numeric(vars)) return(vars)
+  cx  <- colnames(data)
+  ret <- match(vars, cx)
+  ret
+}
+
+
+
+
+
+getCharVecStr <- function(x, sep=",") {
+  
+  ret <- paste0("'", x, "'")
+  ret <- paste0(ret, collapse=sep)
+  ret
+  
+}
+
+
+# Function to check that an object is a string
+isString <- function(obj) {
+  
+  if ((length(obj) == 1) && is.character(obj)) {
+    ret <- TRUE
+  } else {
+    ret <- FALSE
+  }
+  
+  ret
+  
+} # END: isString

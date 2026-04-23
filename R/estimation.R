@@ -183,7 +183,7 @@ compute_proflik_ci_one <- function(index, inpar, optval, loglik_fn,
       )
     } else{
       warning(
-        "Lower bound for ", parname, " is > ",round(do.call(transform, c(list(params=rep(15, length(inpar))), other.args))[index], 1), " and may not exist. ",
+        "Upper bound for ", parname, " is > ",round(do.call(transform, c(list(params=rep(15, length(inpar))), other.args))[index], 1), " and may not exist. ",
         "Consider rescaling the variable."
       )
     }
@@ -251,7 +251,7 @@ compute_proflik_ci_one <- function(index, inpar, optval, loglik_fn,
   )
 }
 
-proflik <- memoise(function(parvalue, index, fun, inpar, optim.method=optim.method, control=list(reltol=1e-10), ...){
+proflik <- function(parvalue, index, fun, inpar, optim.method=optim.method, control=list(reltol=1e-10), ...){
   
   if(length(inpar)==1){ # 1-parameter model -> just return likelihood itself
     
@@ -292,4 +292,4 @@ proflik <- memoise(function(parvalue, index, fun, inpar, optim.method=optim.meth
     return(innerfit$value)
   }
   
-})
+}

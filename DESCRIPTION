@@ -38,7 +38,7 @@ Description: Analyze association studies with multiple realizations of a noisy o
     and Bayesian model averaging (Kwon et al. 2016 <doi:10.1002/sim.6635>). Supported model families are
     Gaussian, binomial, multinomial, Poisson, proportional hazards, and conditional logistic.
 License: MIT + file LICENSE
-Imports: Rcpp (>= 1.0.10), RcppEigen, coda, numDeriv, mvtnorm, memoise, methods, MCMCvis, tidyselect, lifecycle
+Imports: Rcpp (>= 1.0.10), RcppEigen, coda, numDeriv, mvtnorm, methods, MCMCvis, tidyselect, lifecycle
 LinkingTo: Rcpp, RcppEigen
 NeedsCompilation: yes
 VignetteBuilder: knitr

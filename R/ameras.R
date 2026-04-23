@@ -336,8 +336,6 @@ ameras <- function(formula=NULL, data, family="gaussian", methods="RC",
     control   = control
   )
   
-  memoise::forget(proflik) # To avoid conflicts with existing cache when determining profile likelihood CI's
-  
   result <- ameras_main(
     family     = family,
     methods    = methods,
@@ -403,93 +401,4 @@ ameras <- function(formula=NULL, data, family="gaussian", methods="RC",
 }
 
 
-parse_ameras_formula <- function(formula, data, family) {
-  
-  specials <- c("dose", "strata", "offset")
-  X_formula        <- collect_X(formula)
-
-  if (family == "prophaz") {
-    surv         <- parse_surv_term(formula)
-    formula[[2]] <- quote(.response)
-    tt           <- terms(formula, specials=specials)
-    dose         <- parse_dose_term(tt, data)
-    
-    return(list(
-      Y         = NULL,
-      status    = surv$status,
-      entry     = surv$entry,
-      exit      = surv$exit,
-      dosevars  = dose$dosevars,
-      doseRRmod = dose$doseRRmod,
-      deg       = dose$deg,
-      M         = dose$M,
-      X_formula = X_formula,
-      offset    = NULL,
-      setnr     = NULL
-    ))
-    
-  } else if (family == "clogit") {
-    
-    tt     <- terms(formula, specials=specials)
-    dose   <- parse_dose_term(tt, data)
-    strata <- parse_strata_term(tt)
-    
-    if (is.null(strata$setnr)) {
-      stop("Formula for family='clogit' must contain a strata() term")
-    }
-    
-    return(list(
-      Y         = as.character(formula[[2]]),
-      status    = NULL,
-      entry     = NULL,
-      exit      = NULL,
-      dosevars  = dose$dosevars,
-      doseRRmod = dose$doseRRmod,
-      deg       = dose$deg,
-      M         = dose$M,
-      X_formula = X_formula,
-      offset    = NULL,
-      setnr     = strata$setnr
-    ))
-    
-  } else if (family == "poisson") {
-    
-    tt   <- terms(formula, specials=specials)
-    dose <- parse_dose_term(tt, data)
-    off  <- parse_offset_term(tt)
-    
-    return(list(
-      Y         = as.character(formula[[2]]),
-      status    = NULL,
-      entry     = NULL,
-      exit      = NULL,
-      dosevars  = dose$dosevars,
-      doseRRmod = dose$doseRRmod,
-      deg       = dose$deg,
-      M         = dose$M,
-      X_formula = X_formula,
-      offset    = off$offset,
-      setnr     = NULL
-    ))
-    
-  } else {
-    
-    tt   <- terms(formula, specials=specials)
-    dose <- parse_dose_term(tt, data)
-    
-    return(list(
-      Y         = as.character(formula[[2]]),
-      status    = NULL,
-      entry     = NULL,
-      exit      = NULL,
-      dosevars  = dose$dosevars,
-      doseRRmod = dose$doseRRmod,
-      deg       = dose$deg,
-      M         = dose$M,
-      X_formula = X_formula,
-      offset    = NULL,
-      setnr     = NULL
-    ))
-  }
-}
 

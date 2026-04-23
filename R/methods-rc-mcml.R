@@ -99,8 +99,8 @@ ameras.mcml <- function(family, dosevars, data, deg, transform=NULL,transform.ja
   } else if(family=="clogit"){
     
     
-    if(is.null(doseRRmod)) stop("doseRRmod is required for family=prophaz")
-    if(is.null(status)) stop("status is required for family=prophaz")
+    if(is.null(doseRRmod)) stop("doseRRmod is required for family=clogit")
+    if(is.null(status)) stop("status is required for family=clogit")
     
     designmat <- t(model.matrix(~as.factor(data[,setnr])-1))
     

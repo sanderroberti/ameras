@@ -30,11 +30,11 @@ Wald and profile likelihood intervals can be obtained. When a parameter
 transformation $\mathbf\theta = h(\mathbf\eta)$ is used, `type="wald.transformed"`
 yields the CI at significance level $\alpha$ of $h(\mathbf\eta \pm z_{1-\alpha/2} \mathbf V)$
 where $z_{1-\alpha/2}$ is the $1-\alpha/2$-quantile of the standard normal distribution and $\mathbf V$ is the vector 
-of standard deviations estimated using the inverse Hessian matrix, 
+of standard deviations estimated using the inverse Hessian matrix (returned by `optim`), 
 and `type="wald.orig"` uses the delta method to obtain the CI 
 $h(\mathbf\eta)\pm z_{1-\alpha/2} \mathbf V_*$ where $\mathbf V_*$ is the vector of 
 standard deviations estimated using $J H^{-1} J^T$ with $J$ the 
-Jacobian of the transformation (obtained with `transform.jacobian`) and $H$ is the Hessian (returned by `optim`). When no 
+Jacobian of the transformation (obtained with `transform.jacobian`) and $H$ is the Hessian. When no 
 transformation is used, `type="wald.orig"` should be used. 
 The third option is `type="proflik"`, which uses the profile likelihood to 
 compute confidence bounds. For this, the profile log (partial) likelihood for parameter $\theta_p$ is defined as

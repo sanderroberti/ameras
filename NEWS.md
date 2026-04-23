@@ -43,6 +43,8 @@
 * Profile likelihood confidence interval bounds now include p-values
   in the summary table, making it easier to assess the accuracy of
   the root-finding algorithm.
+
+* Removed memoization of the profile likelihood function as it was causing issues and likely not providing much benefit.
   
 ## New arguments
 

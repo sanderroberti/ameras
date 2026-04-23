@@ -35,11 +35,12 @@ All deprecated functionality remains fully operational in this release.
 No existing user code will break. The breaking changes will be
 introduced in version 1.0.0 with sufficient advance notice.
 
-## New dependencies
+## Updated dependencies
 
 * `lifecycle` has been added to Imports for managing deprecation
   warnings.
 * `tidyselect` has been added to Imports for the formula interface.
+* `memoize` has been removed from Imports as it is no longer being used.
 
 ## New suggested packages
 

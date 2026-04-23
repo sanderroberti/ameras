@@ -6,7 +6,6 @@ importFrom("stats", "cov", "optim", "pchisq", "quantile", "rexp","qnorm",
            "rnorm", "runif", "uniroot", "optimize", "model.matrix", "terms",
            "as.formula", "confint")
 importFrom("mvtnorm", "rmvnorm")
-importFrom("memoise", "memoise")
 importFrom("nimble", "nimbleCode", "nimbleFunction", "getNimbleOption", "nf_preProcessMemberDataObject", "nimbleModel", "compileNimble", "configureMCMC", "buildMCMC", "runMCMC")
 importFrom("coda","HPDinterval",  "as.mcmc")
 importFrom("numDeriv", "hessian")
