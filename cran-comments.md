@@ -47,5 +47,12 @@ introduced in version 1.0.0 with sufficient advance notice.
   `ecdfplot()`. They are loaded conditionally via `requireNamespace()`
   and are not required for standard use.
 
+## Comments
+
+* Building the vignettes modelfitting and confidenceintervals takes a very long time.
+  Code chunks of these vignettes are not evaluated on CRAN, and should therefore 
+  not be re-built.
+
+* Examples for `ameras()` `traceplot()` are wrapped in \donttest as they take longer than 5 seconds
 
 
