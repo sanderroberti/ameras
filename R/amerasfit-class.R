@@ -105,7 +105,7 @@ summary.amerasfit <- function(object, ...) {
       CI.lowerbound[match(rownames(CI), names(coef))] <- CI$lower
       CI.upperbound[match(rownames(CI), names(coef))] <- CI$upper
       
-
+      
       res <- cbind(res,data.frame(
         CI.lowerbound = CI.lowerbound,
         CI.upperbound = CI.upperbound
@@ -138,12 +138,13 @@ summary.amerasfit <- function(object, ...) {
     
   })
   )
- 
+
   # Remove p-value columns if not used
-  if(all(is.na(summary_table$pval.lower)) & all(is.na(summary_table$pval.upper))){
-    summary_table <- summary_table[, -which(names(summary_table) %in% c("pval.lower", "pval.upper"))]
+  if(object$CI.computed){
+    if(all(is.na(summary_table$pval.lower)) & all(is.na(summary_table$pval.upper))){
+      summary_table <- summary_table[, -which(names(summary_table) %in% c("pval.lower", "pval.upper"))]
+    }
   }
-  
   runtime_table <- do.call("rbind",lapply(1:length(object0), function(i){
     
     y <- object0[[i]]
