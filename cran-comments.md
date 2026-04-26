@@ -1,18 +1,14 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 notes
 
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Sander Roberti <sander.roberti@nih.gov>'
 
-Possibly misspelled words in DESCRIPTION:
-  Kwon (29:91, 30:35)
-  Stayner (29:17)
-  al (26:192, 27:68, 28:39, 29:28, 29:99, 30:43)
-  dosimetry (26:165)
-  et (26:189, 27:65, 28:36, 29:25, 29:96, 30:40)
+## revdepcheck results
 
-  These are not true misspellings.
+We checked 0 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
 
 ## Breaking changes and deprecations
 
@@ -37,6 +33,7 @@ introduced in version 1.0.0 with sufficient advance notice.
 
 ## Updated dependencies
 
+* R version dependency was changed to version 4.1.0 and higher.
 * `lifecycle` has been added to Imports for managing deprecation
   warnings.
 * `tidyselect` has been added to Imports for the formula interface.
@@ -56,4 +53,5 @@ introduced in version 1.0.0 with sufficient advance notice.
 
 * Examples for `ameras()` `traceplot()` are wrapped in \donttest as they take longer than 5 seconds
 
+* Documentation and vignettes were updated with the new formula interface and confint method, and new documentation has been added for methods that previously were not documented
 
