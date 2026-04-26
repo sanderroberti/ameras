@@ -68,6 +68,7 @@ For frequentist and Bayesian model averaging methods, the options are `percentil
 Again, we use the example data to illustrate.
 
 ```{r fits2, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
+set.seed(123)
 fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
                             family="binomial", methods=c("FMA"))
 
