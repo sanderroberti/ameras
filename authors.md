@@ -20,13 +20,13 @@ Source:
 [`DESCRIPTION`](https://github.com/sanderroberti/ameras/blob/main/DESCRIPTION)
 
 Roberti S, Wheeler W, Kwon D (2026). *ameras: Analyze Multiple Exposure
-Realizations in Association Studies*. R package version 0.2.0,
+Realizations in Association Studies*. R package version 0.2.0.9000,
 <https://ameras.sanderroberti.com>.
 
     @Manual{,
       title = {ameras: Analyze Multiple Exposure Realizations in Association Studies},
       author = {Sander Roberti and William Wheeler and Deukwoo Kwon},
       year = {2026},
-      note = {R package version 0.2.0},
+      note = {R package version 0.2.0.9000},
       url = {https://ameras.sanderroberti.com},
     }
