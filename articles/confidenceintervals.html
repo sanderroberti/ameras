@@ -121,14 +121,14 @@ h(\mathbf\eta)</span> is used, <code>type="wald.transformed"</code>
 yields the CI at significance level <span class="math inline">\alpha</span> of <span class="math inline">h(\mathbf\eta \pm z_{1-\alpha/2} \mathbf V)</span>
 where <span class="math inline">z_{1-\alpha/2}</span> is the <span class="math inline">1-\alpha/2</span>-quantile of the standard normal
 distribution and <span class="math inline">\mathbf V</span> is the
-vector of standard deviations estimated using the inverse Hessian
-matrix, and <code>type="wald.orig"</code> uses the delta method to
-obtain the CI <span class="math inline">h(\mathbf\eta)\pm z_{1-\alpha/2}
-\mathbf V_*</span> where <span class="math inline">\mathbf V_*</span> is
-the vector of standard deviations estimated using <span class="math inline">J H^{-1} J^T</span> with <span class="math inline">J</span> the Jacobian of the transformation
-(obtained with <code>transform.jacobian</code>) and <span class="math inline">H</span> is the Hessian (returned by
-<code>optim</code>). When no transformation is used,
-<code>type="wald.orig"</code> should be used. The third option is
+vector of standard deviations estimated using the inverse Hessian matrix
+(returned by <code>optim</code>), and <code>type="wald.orig"</code> uses
+the delta method to obtain the CI <span class="math inline">h(\mathbf\eta)\pm z_{1-\alpha/2} \mathbf V_*</span>
+where <span class="math inline">\mathbf V_*</span> is the vector of
+standard deviations estimated using <span class="math inline">J H^{-1}
+J^T</span> with <span class="math inline">J</span> the Jacobian of the
+transformation (obtained with <code>transform.jacobian</code>) and <span class="math inline">H</span> is the Hessian. When no transformation is
+used, <code>type="wald.orig"</code> should be used. The third option is
 <code>type="proflik"</code>, which uses the profile likelihood to
 compute confidence bounds. For this, the profile log (partial)
 likelihood for parameter <span class="math inline">\theta_p</span> is
@@ -239,7 +239,8 @@ using <code>HPDinterval</code> from the <code>coda</code> package, using
 either the FMA samples or Bayesian posterior samples.</p>
 <p>Again, we use the example data to illustrate.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.ameras2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data<span class="op">=</span><span class="va">data</span>, </span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">fit.ameras2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                            family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FMA"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting FMA</span></span>
 <span></span>
@@ -261,10 +262,10 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
-<span><span class="co">#&gt;     FMA (Intercept)  -1.0571 0.08777       -1.2290       -0.8842</span></span>
-<span><span class="co">#&gt;     FMA          X1   0.4426 0.07638        0.2922        0.5916</span></span>
-<span><span class="co">#&gt;     FMA          X2  -0.3380 0.09564       -0.5255       -0.1492</span></span>
-<span><span class="co">#&gt;     FMA        dose   0.8442 0.14511        0.5604        1.1301</span></span>
+<span><span class="co">#&gt;     FMA (Intercept)  -1.0576 0.08770       -1.2284       -0.8856</span></span>
+<span><span class="co">#&gt;     FMA          X1   0.4429 0.07652        0.2939        0.5937</span></span>
+<span><span class="co">#&gt;     FMA          X2  -0.3378 0.09572       -0.5260       -0.1530</span></span>
+<span><span class="co">#&gt;     FMA        dose   0.8447 0.14494        0.5640        1.1317</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.percentile</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
@@ -280,10 +281,10 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span></span>
-<span><span class="co">#&gt;     FMA (Intercept)  -1.0571 0.08777       -1.2290       -0.8843</span></span>
-<span><span class="co">#&gt;     FMA          X1   0.4426 0.07638        0.2929        0.5925</span></span>
-<span><span class="co">#&gt;     FMA          X2  -0.3380 0.09564       -0.5270       -0.1503</span></span>
-<span><span class="co">#&gt;     FMA        dose   0.8442 0.14511        0.5600        1.1299</span></span></code></pre></div>
+<span><span class="co">#&gt;     FMA (Intercept)  -1.0576 0.08770       -1.2290       -0.8860</span></span>
+<span><span class="co">#&gt;     FMA          X1   0.4429 0.07652        0.2938        0.5935</span></span>
+<span><span class="co">#&gt;     FMA          X2  -0.3378 0.09572       -0.5250       -0.1518</span></span>
+<span><span class="co">#&gt;     FMA        dose   0.8447 0.14494        0.5616        1.1298</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

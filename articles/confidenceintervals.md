@@ -35,13 +35,13 @@ a parameter transformation \mathbf\theta = h(\mathbf\eta) is used,
 h(\mathbf\eta \pm z\_{1-\alpha/2} \mathbf V) where z\_{1-\alpha/2} is
 the 1-\alpha/2-quantile of the standard normal distribution and \mathbf
 V is the vector of standard deviations estimated using the inverse
-Hessian matrix, and `type="wald.orig"` uses the delta method to obtain
-the CI h(\mathbf\eta)\pm z\_{1-\alpha/2} \mathbf V\_\* where \mathbf
-V\_\* is the vector of standard deviations estimated using J H^{-1} J^T
-with J the Jacobian of the transformation (obtained with
-`transform.jacobian`) and H is the Hessian (returned by `optim`). When
-no transformation is used, `type="wald.orig"` should be used. The third
-option is `type="proflik"`, which uses the profile likelihood to compute
+Hessian matrix (returned by `optim`), and `type="wald.orig"` uses the
+delta method to obtain the CI h(\mathbf\eta)\pm z\_{1-\alpha/2} \mathbf
+V\_\* where \mathbf V\_\* is the vector of standard deviations estimated
+using J H^{-1} J^T with J the Jacobian of the transformation (obtained
+with `transform.jacobian`) and H is the Hessian. When no transformation
+is used, `type="wald.orig"` should be used. The third option is
+`type="proflik"`, which uses the profile likelihood to compute
 confidence bounds. For this, the profile log (partial) likelihood for
 parameter \theta_p is defined as PL_p (\theta_p^\*) =
 \max\_{\mathbf\theta: \theta_p = \theta_p^\*} \ell (\mathbf \theta),
@@ -150,6 +150,7 @@ package, using either the FMA samples or Bayesian posterior samples.
 Again, we use the example data to illustrate.
 
 ``` r
+set.seed(123)
 fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
                             family="binomial", methods=c("FMA"))
 #> Fitting FMA
@@ -172,10 +173,10 @@ summary(fit.ameras.hpd)
 #> Summary of coefficients by method:
 #> 
 #>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>     FMA (Intercept)  -1.0571 0.08777       -1.2290       -0.8842
-#>     FMA          X1   0.4426 0.07638        0.2922        0.5916
-#>     FMA          X2  -0.3380 0.09564       -0.5255       -0.1492
-#>     FMA        dose   0.8442 0.14511        0.5604        1.1301
+#>     FMA (Intercept)  -1.0576 0.08770       -1.2284       -0.8856
+#>     FMA          X1   0.4429 0.07652        0.2939        0.5937
+#>     FMA          X2  -0.3378 0.09572       -0.5260       -0.1530
+#>     FMA        dose   0.8447 0.14494        0.5640        1.1317
 summary(fit.ameras.percentile)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
@@ -191,8 +192,8 @@ summary(fit.ameras.percentile)
 #> Summary of coefficients by method:
 #> 
 #>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>     FMA (Intercept)  -1.0571 0.08777       -1.2290       -0.8843
-#>     FMA          X1   0.4426 0.07638        0.2929        0.5925
-#>     FMA          X2  -0.3380 0.09564       -0.5270       -0.1503
-#>     FMA        dose   0.8442 0.14511        0.5600        1.1299
+#>     FMA (Intercept)  -1.0576 0.08770       -1.2290       -0.8860
+#>     FMA          X1   0.4429 0.07652        0.2938        0.5935
+#>     FMA          X2  -0.3378 0.09572       -0.5250       -0.1518
+#>     FMA        dose   0.8447 0.14494        0.5616        1.1298
 ```
