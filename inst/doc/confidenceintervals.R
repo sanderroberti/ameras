@@ -23,6 +23,7 @@ summary(fit.ameras.waldtransformed)
 summary(fit.ameras.proflik)
 
 ## ----fits2, eval = identical(Sys.getenv("NOT_CRAN"), "true")------------------
+set.seed(123)
 fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
                             family="binomial", methods=c("FMA"))
 
