@@ -128,7 +128,7 @@ str(fit.ameras.linreg)
 #>   ..$ Y           : chr "Y.gaussian"
 #>   ..$ M           : NULL
 #>   ..$ X_formula   :Class 'formula'  language ~X1 + X2
-#>   .. .. ..- attr(*, ".Environment")=<environment: 0x564a24f4b138> 
+#>   .. .. ..- attr(*, ".Environment")=<environment: 0x55ec3a1c9268> 
 #>   ..$ X           : int [1:2] 9 10
 #>   ..$ offset      : NULL
 #>   ..$ entry       : NULL
@@ -157,7 +157,7 @@ str(fit.ameras.linreg)
 #>   .. ..$ counts     : Named num [1:2] 509 1
 #>   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"
 #>   ..$ loglik      : num -4563
-#>   ..$ runtime     : chr "0.1 seconds"
+#>   ..$ runtime     : chr "0.2 seconds"
 #>   ..$ ERC         : logi FALSE
 #>  $ ERC               :List of 7
 #>   ..$ coefficients: Named num [1:5] -1.361 0.48 -0.519 1.165 1.106
@@ -175,7 +175,7 @@ str(fit.ameras.linreg)
 #>   .. ..$ counts     : Named num [1:2] 546 9
 #>   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"
 #>   ..$ loglik      : num -4559
-#>   ..$ runtime     : chr "133.9 seconds"
+#>   ..$ runtime     : chr "107.7 seconds"
 #>   ..$ ERC         : logi TRUE
 #>  $ MCML              :List of 6
 #>   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138
@@ -207,7 +207,7 @@ str(fit.ameras.linreg)
 #>   .. ..$ X2         : num [1:100006] -0.525 -0.535 -0.49 -0.529 -0.538 ...
 #>   .. ..$ dose       : num [1:100006] 1.08 1.09 1.1 1.11 1.03 ...
 #>   .. ..$ sigma      : num [1:100006] 1.17 1.14 1.13 1.15 1.12 ...
-#>   ..$ runtime            : chr "1.2 seconds"
+#>   ..$ runtime            : chr "1.3 seconds"
 #>  $ BMA               :List of 6
 #>   ..$ coefficients       : Named num [1:5] -1.28 0.483 -0.517 1.079 1.139
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
@@ -226,7 +226,7 @@ str(fit.ameras.linreg)
 #>   .. .. .. ..$ : NULL
 #>   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...
 #>   ..$ included.replicates: int [1:10] 1 2 3 4 5 6 7 8 9 10
-#>   ..$ runtime            : chr "71 seconds"
+#>   ..$ runtime            : chr "76.9 seconds"
 #>  - attr(*, "class")= chr "amerasfit"
 ```
 
@@ -280,7 +280,7 @@ fit.ameras.linreg$RC
 #> [1] -4563.325
 #> 
 #> $runtime
-#> [1] "0.1 seconds"
+#> [1] "0.2 seconds"
 #> 
 #> $ERC
 #> [1] FALSE
@@ -296,16 +296,16 @@ summary(fit.ameras.linreg)
 #>     family = "gaussian", methods = c("RC", "ERC", "MCML", "FMA", 
 #>         "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 206.9 seconds
+#> Total run time: 186.8 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.1
-#>     ERC   133.9
+#>      RC     0.2
+#>     ERC   107.7
 #>    MCML     0.7
-#>     FMA     1.2
-#>     BMA    71.0
+#>     FMA     1.3
+#>     BMA    76.9
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -393,16 +393,16 @@ summary(fit.ameras.logreg)
 #>     X1 + X2, data = data, family = "binomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 153.5 seconds
+#> Total run time: 136.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC    92.8
+#>     ERC    72.4
 #>    MCML     1.1
-#>     FMA     2.7
-#>     BMA    56.6
+#>     FMA     2.8
+#>     BMA    59.8
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -467,16 +467,16 @@ summary(fit.ameras.logreg.lin)
 #>     X1 + X2, data = data, family = "binomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 131.4 seconds
+#> Total run time: 118.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.2
-#>     ERC    77.4
+#>     ERC    60.8
 #>    MCML     0.7
 #>     FMA     1.6
-#>     BMA    51.5
+#>     BMA    55.3
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -544,16 +544,16 @@ summary(fit.ameras.poisson)
 #>     X1 + X2, data = data, family = "poisson", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 71 seconds
+#> Total run time: 72.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC     2.0
-#>    MCML     1.4
-#>     FMA     3.2
-#>     BMA    64.1
+#>     ERC     1.8
+#>    MCML     1.3
+#>     FMA     3.1
+#>     BMA    65.8
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -618,16 +618,16 @@ summary(fit.ameras.poisson.lin)
 #>     X1 + X2, data = data, family = "poisson", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 64.9 seconds
+#> Total run time: 67 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.2
-#>     ERC     1.1
+#>     ERC     1.0
 #>    MCML     0.7
 #>     FMA     1.9
-#>     BMA    61.0
+#>     BMA    63.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -693,234 +693,43 @@ fit.ameras.prophaz <- ameras(Surv(time, status)~
 #> variance matrix could not be obtained
 #> warning: logProb of data node zeros[7]: logProb less than -1e12.
 #> warning: logProb of data node zeros[17]: logProb less than -1e12.
-#> warning: logProb of data node zeros[41]: logProb less than -1e12.
-#> warning: logProb of data node zeros[46]: logProb less than -1e12.
-#> warning: logProb of data node zeros[52]: logProb less than -1e12.
-#> warning: logProb of data node zeros[58]: logProb less than -1e12.
 #> warning: logProb of data node zeros[71]: logProb less than -1e12.
-#> warning: logProb of data node zeros[157]: logProb less than -1e12.
-#> warning: logProb of data node zeros[166]: logProb less than -1e12.
-#> warning: logProb of data node zeros[175]: logProb less than -1e12.
-#> warning: logProb of data node zeros[178]: logProb less than -1e12.
-#> warning: logProb of data node zeros[212]: logProb less than -1e12.
-#> warning: logProb of data node zeros[238]: logProb less than -1e12.
-#> warning: logProb of data node zeros[243]: logProb less than -1e12.
-#> warning: logProb of data node zeros[246]: logProb less than -1e12.
 #> warning: logProb of data node zeros[247]: logProb less than -1e12.
-#> warning: logProb of data node zeros[260]: logProb less than -1e12.
-#> warning: logProb of data node zeros[261]: logProb less than -1e12.
-#> warning: logProb of data node zeros[263]: logProb less than -1e12.
 #> warning: logProb of data node zeros[267]: logProb less than -1e12.
 #> warning: logProb of data node zeros[270]: logProb less than -1e12.
-#> warning: logProb of data node zeros[278]: logProb less than -1e12.
-#> warning: logProb of data node zeros[311]: logProb less than -1e12.
-#> warning: logProb of data node zeros[335]: logProb less than -1e12.
-#> warning: logProb of data node zeros[341]: logProb less than -1e12.
-#> warning: logProb of data node zeros[348]: logProb less than -1e12.
-#> warning: logProb of data node zeros[352]: logProb less than -1e12.
-#> warning: logProb of data node zeros[370]: logProb less than -1e12.
-#> warning: logProb of data node zeros[372]: logProb less than -1e12.
-#> warning: logProb of data node zeros[378]: logProb less than -1e12.
-#> warning: logProb of data node zeros[386]: logProb less than -1e12.
-#> warning: logProb of data node zeros[420]: logProb less than -1e12.
-#> warning: logProb of data node zeros[432]: logProb less than -1e12.
 #> warning: logProb of data node zeros[433]: logProb less than -1e12.
-#> warning: logProb of data node zeros[438]: logProb less than -1e12.
-#> warning: logProb of data node zeros[440]: logProb less than -1e12.
-#> warning: logProb of data node zeros[449]: logProb less than -1e12.
-#> warning: logProb of data node zeros[450]: logProb less than -1e12.
-#> warning: logProb of data node zeros[458]: logProb less than -1e12.
-#> warning: logProb of data node zeros[508]: logProb less than -1e12.
 #> warning: logProb of data node zeros[509]: logProb less than -1e12.
-#> warning: logProb of data node zeros[528]: logProb less than -1e12.
-#> warning: logProb of data node zeros[535]: logProb less than -1e12.
-#> warning: logProb of data node zeros[546]: logProb less than -1e12.
-#> warning: logProb of data node zeros[547]: logProb less than -1e12.
-#> warning: logProb of data node zeros[552]: logProb less than -1e12.
-#> warning: logProb of data node zeros[554]: logProb less than -1e12.
-#> warning: logProb of data node zeros[577]: logProb less than -1e12.
-#> warning: logProb of data node zeros[608]: logProb less than -1e12.
-#> warning: logProb of data node zeros[611]: logProb less than -1e12.
 #> warning: logProb of data node zeros[620]: logProb less than -1e12.
-#> warning: logProb of data node zeros[627]: logProb less than -1e12.
-#> warning: logProb of data node zeros[631]: logProb less than -1e12.
-#> warning: logProb of data node zeros[656]: logProb less than -1e12.
-#> warning: logProb of data node zeros[661]: logProb less than -1e12.
 #> warning: logProb of data node zeros[676]: logProb less than -1e12.
-#> warning: logProb of data node zeros[684]: logProb less than -1e12.
-#> warning: logProb of data node zeros[698]: logProb less than -1e12.
-#> warning: logProb of data node zeros[714]: logProb less than -1e12.
 #> warning: logProb of data node zeros[716]: logProb less than -1e12.
-#> warning: logProb of data node zeros[727]: logProb less than -1e12.
-#> warning: logProb of data node zeros[749]: logProb less than -1e12.
-#> warning: logProb of data node zeros[806]: logProb less than -1e12.
-#> warning: logProb of data node zeros[809]: logProb less than -1e12.
-#> warning: logProb of data node zeros[821]: logProb less than -1e12.
 #> warning: logProb of data node zeros[833]: logProb less than -1e12.
-#> warning: logProb of data node zeros[839]: logProb less than -1e12.
-#> warning: logProb of data node zeros[864]: logProb less than -1e12.
-#> warning: logProb of data node zeros[873]: logProb less than -1e12.
-#> warning: logProb of data node zeros[910]: logProb less than -1e12.
-#> warning: logProb of data node zeros[962]: logProb less than -1e12.
-#> warning: logProb of data node zeros[971]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1002]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1004]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1009]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1014]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1036]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1040]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1052]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1070]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1074]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1076]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1081]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1116]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1122]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1137]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1151]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1179]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1187]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1208]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1214]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1245]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1247]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1282]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1296]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1300]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1319]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1322]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1327]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1340]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1354]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1357]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1368]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1373]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1375]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1406]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1425]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1449]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1464]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1470]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1475]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1480]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1492]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1496]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1517]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1524]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1527]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1541]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1553]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1566]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1569]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1572]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1588]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1603]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1617]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1635]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1661]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1663]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1664]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1693]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1716]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1755]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1768]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1783]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1796]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1807]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1818]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1836]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1838]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1851]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1888]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1900]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1921]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1930]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1948]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1968]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1971]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1972]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1979]: logProb less than -1e12.
-#> warning: logProb of data node zeros[1983]: logProb less than -1e12.
+#> warning: logProb of data node zeros[1827]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1991]: logProb less than -1e12.
 #> warning: logProb of data node zeros[1997]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2021]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2035]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2054]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2087]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2089]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2101]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2112]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2129]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2131]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2134]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2156]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2198]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2208]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2216]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2227]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2237]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2239]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2255]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2294]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2312]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2338]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2339]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2360]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2368]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2373]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2395]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2398]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2407]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2409]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2413]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2422]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2444]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2452]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2463]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2475]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2478]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2490]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2495]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2524]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2530]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2559]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2562]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2573]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2605]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2617]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2655]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2665]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2671]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2684]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2686]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2688]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2694]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2715]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2723]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2728]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2733]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2743]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2747]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2757]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2771]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2774]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2787]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2807]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2813]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2824]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2838]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2839]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2907]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2909]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2915]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2937]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2945]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2968]: logProb less than -1e12.
 #> warning: logProb of data node zeros[2971]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2993]: logProb less than -1e12.
-#> warning: logProb of data node zeros[2998]: logProb less than -1e12.
 #> |-------------|-------------|-------------|-------------|
 #> |-------------------------------------------------------|
+#> warning: logProb of data node zeros[1635]: logProb less than -1e12.
+#> warning: logProb of data node zeros[2907]: logProb less than -1e12.
 #> |-------------|-------------|-------------|-------------|
 #> |-------------------------------------------------------|
 ```
@@ -932,16 +741,16 @@ summary(fit.ameras.prophaz)
 #>     X1 + X2, data = data, family = "prophaz", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 810.5 seconds
+#> Total run time: 659.8 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC   706.0
+#>     ERC   546.5
 #>    MCML     0.7
-#>     FMA     2.3
-#>     BMA   101.2
+#>     FMA     2.1
+#>     BMA   110.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -958,24 +767,24 @@ summary(fit.ameras.prophaz)
 #>    MCML           X2 -0.425156 0.11196   NA     NA
 #>    MCML         dose  0.590217 0.08046   NA     NA
 #>    MCML dose_squared -0.038038 0.01523   NA     NA
-#>     FMA           X1  0.629250 0.08557   NA     NA
-#>     FMA           X2 -0.425507 0.11190   NA     NA
-#>     FMA         dose  0.589537 0.08127   NA     NA
-#>     FMA dose_squared -0.037872 0.01546   NA     NA
-#>     BMA           X1  0.635157 0.08523 1.00 397.00
-#>     BMA           X2 -0.423897 0.11063 1.01 747.00
-#>     BMA         dose  0.617073 0.08181 1.01 101.00
-#>     BMA dose_squared -0.042851 0.01554 1.01 116.00
-#>     BMA        h0[1]  0.316373 0.05147 1.00 384.00
-#>     BMA        h0[2]  0.343831 0.05275 1.00 394.00
-#>     BMA        h0[3]  0.262707 0.04153 1.00 281.00
-#>     BMA        h0[4]  0.294011 0.04621 1.00 410.00
-#>     BMA        h0[5]  0.314660 0.04963 1.01 362.00
-#>     BMA        h0[6]  0.396503 0.06335 1.00 411.00
-#>     BMA        h0[7]  0.269226 0.03952 1.00 373.00
-#>     BMA        h0[8]  0.309864 0.04606 1.00 326.00
-#>     BMA        h0[9]  0.268182 0.04019 1.00 398.00
-#>     BMA       h0[10]  0.304145 0.04624 1.01 367.00
+#>     FMA           X1  0.624536 0.08542   NA     NA
+#>     FMA           X2 -0.433644 0.11160   NA     NA
+#>     FMA         dose  0.594196 0.07841   NA     NA
+#>     FMA dose_squared -0.038945 0.01454   NA     NA
+#>     BMA           X1  0.631447 0.08479 1.02 311.00
+#>     BMA           X2 -0.432579 0.11574 1.02 740.00
+#>     BMA         dose  0.579261 0.07815 1.00  89.00
+#>     BMA dose_squared -0.036336 0.01514 1.00  82.00
+#>     BMA        h0[1]  0.331844 0.05060 1.01 350.00
+#>     BMA        h0[2]  0.354968 0.05515 1.00 457.00
+#>     BMA        h0[3]  0.274038 0.04421 1.00 341.00
+#>     BMA        h0[4]  0.304833 0.04870 1.00 426.00
+#>     BMA        h0[5]  0.324187 0.05181 1.01 452.00
+#>     BMA        h0[6]  0.410268 0.06456 1.01 300.00
+#>     BMA        h0[7]  0.275961 0.04233 1.00 467.00
+#>     BMA        h0[8]  0.319488 0.04863 1.00 417.00
+#>     BMA        h0[9]  0.279575 0.04103 1.00 358.00
+#>     BMA       h0[10]  0.317120 0.04949 1.01 288.00
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -983,20 +792,20 @@ summary(fit.ameras.prophaz)
 ``` r
 coef(fit.ameras.prophaz)
 #>                       RC          ERC        MCML         FMA         BMA
-#> X1            0.62967434  0.636754979  0.62916199  0.62925032  0.63515662
-#> X2           -0.42311583 -0.422041734 -0.42515576 -0.42550683 -0.42389658
-#> dose          0.58761408  0.295487972  0.59021691  0.58953694  0.61707317
-#> dose_squared -0.03368205 -0.003356734 -0.03803829 -0.03787174 -0.04285062
-#> h0[1]                 NA           NA          NA          NA  0.31637277
-#> h0[2]                 NA           NA          NA          NA  0.34383087
-#> h0[3]                 NA           NA          NA          NA  0.26270690
-#> h0[4]                 NA           NA          NA          NA  0.29401059
-#> h0[5]                 NA           NA          NA          NA  0.31466013
-#> h0[6]                 NA           NA          NA          NA  0.39650271
-#> h0[7]                 NA           NA          NA          NA  0.26922630
-#> h0[8]                 NA           NA          NA          NA  0.30986447
-#> h0[9]                 NA           NA          NA          NA  0.26818217
-#> h0[10]                NA           NA          NA          NA  0.30414532
+#> X1            0.62967434  0.636754979  0.62916199  0.62453646  0.63144657
+#> X2           -0.42311583 -0.422041734 -0.42515576 -0.43364414 -0.43257946
+#> dose          0.58761408  0.295487972  0.59021691  0.59419590  0.57926053
+#> dose_squared -0.03368205 -0.003356734 -0.03803829 -0.03894528 -0.03633593
+#> h0[1]                 NA           NA          NA          NA  0.33184446
+#> h0[2]                 NA           NA          NA          NA  0.35496760
+#> h0[3]                 NA           NA          NA          NA  0.27403811
+#> h0[4]                 NA           NA          NA          NA  0.30483271
+#> h0[5]                 NA           NA          NA          NA  0.32418664
+#> h0[6]                 NA           NA          NA          NA  0.41026813
+#> h0[7]                 NA           NA          NA          NA  0.27596111
+#> h0[8]                 NA           NA          NA          NA  0.31948789
+#> h0[9]                 NA           NA          NA          NA  0.27957458
+#> h0[10]                NA           NA          NA          NA  0.31712022
 ```
 
 The BMA output now contains the intervals with piecewise constant
@@ -1032,16 +841,16 @@ summary(fit.ameras.prophaz.lin)
 #>     X1 + X2, data = data, family = "prophaz", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 416.2 seconds
+#> Total run time: 372.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.1
-#>     ERC   318.4
+#>     ERC   263.1
 #>    MCML     0.4
 #>     FMA     1.2
-#>     BMA    96.1
+#>     BMA   107.6
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1121,16 +930,16 @@ summary(fit.ameras.multinomial)
 #>     X1 + X2, data = data, family = "multinomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 473.8 seconds
+#> Total run time: 446.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     1.1
-#>     ERC   181.2
-#>    MCML     8.3
-#>     FMA    10.1
-#>     BMA   273.1
+#>     ERC   148.5
+#>    MCML     8.9
+#>     FMA    10.5
+#>     BMA   277.3
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1237,16 +1046,16 @@ summary(fit.ameras.multinomial.lin)
 #>     X1 + X2, data = data, family = "multinomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 365 seconds
+#> Total run time: 364.8 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.9
-#>     ERC   119.1
+#>     ERC   112.6
 #>    MCML     6.3
-#>     FMA     8.0
-#>     BMA   230.7
+#>     FMA     8.2
+#>     BMA   236.8
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1334,16 +1143,16 @@ summary(fit.ameras.clogit)
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, 
 #>     niter.BMA = 5000)
 #> 
-#> Total run time: 844.7 seconds
+#> Total run time: 713.9 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.7
-#>     ERC   762.6
-#>    MCML     2.4
-#>     FMA     8.5
-#>     BMA    70.5
+#>      RC     0.5
+#>     ERC   631.0
+#>    MCML     1.9
+#>     FMA     6.3
+#>     BMA    74.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1403,16 +1212,16 @@ summary(fit.ameras.clogit.lin)
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, 
 #>     niter.BMA = 5000)
 #> 
-#> Total run time: 847.1 seconds
+#> Total run time: 709 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.7
-#>     ERC   765.7
-#>    MCML     2.4
-#>     FMA     8.3
-#>     BMA    70.0
+#>      RC     0.6
+#>     ERC   625.1
+#>    MCML     1.9
+#>     FMA     6.3
+#>     BMA    75.1
 #> 
 #> Summary of coefficients by method:
 #> 

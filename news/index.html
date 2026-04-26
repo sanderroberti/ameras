@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ameras</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,20 +45,20 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="ameras-development-version">ameras (development version)<a class="anchor" aria-label="anchor" href="#ameras-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="ameras-020">ameras 0.2.0<a class="anchor" aria-label="anchor" href="#ameras-020"></a></h2><p class="text-muted">CRAN release: 2026-04-26</p>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<h3 id="breaking-changes-0-2-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-2-0"></a></h3>
 <ul><li><p>Confidence intervals are no longer computed inside <code><a href="../reference/ameras.html">ameras()</a></code>. The arguments <code>CI</code>, <code>params.profCI</code>, <code>maxit.profCI</code>, and <code>tol.profCI</code> are deprecated and will be removed in version 1.0.0. Use the new <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> method instead. See <code><a href="../reference/confint.html">?confint.amerasfit</a></code> for details.</p></li>
 <li><p>The direct argument interface to <code><a href="../reference/ameras.html">ameras()</a></code> is deprecated and will be removed in version 1.0.0. The arguments <code>Y</code>, <code>dosevars</code>, <code>doseRRmod</code>, <code>deg</code>, <code>M</code>, <code>X</code>, <code>offset</code>, <code>entry</code>, <code>exit</code>, and <code>setnr</code> are deprecated. Please use the new formula interface instead. See <code><a href="../reference/ameras.html">?ameras</a></code> for details.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
 <ul><li><p>Implemented a formula interface for <code><a href="../reference/ameras.html">ameras()</a></code>. The dose variable is specified using the special <code>dose()</code> term, which supports tidyselect syntax for selecting dose columns and allows specifying the dose-response model and effect modifiers directly in the formula. See <code><a href="../reference/ameras.html">?ameras</a></code> for details and examples.</p></li>
 <li><p>Added <code><a href="../reference/confint.html">confint.amerasfit()</a></code> for computing confidence intervals separately from model fitting. See <code><a href="../reference/confint.html">?confint.amerasfit</a></code> for details.</p></li>
 <li><p>Added function <code><a href="../reference/ecdfplot.html">ecdfplot()</a></code> for exploratory visualization of the dose realizations before model fitting.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="general-improvements-development-version">General improvements<a class="anchor" aria-label="anchor" href="#general-improvements-development-version"></a></h3>
+<h3 id="general-improvements-0-2-0">General improvements<a class="anchor" aria-label="anchor" href="#general-improvements-0-2-0"></a></h3>
 <ul><li>
 <p>Reduced memory usage for large datasets.</p>
 <ul><li>Removed the use of an N x N matrix for ERC for the Poisson family, improving both memory and computation speed.</li>
@@ -69,7 +69,7 @@
 <li><p>Removed memoization of the profile likelihood function as it was causing issues and likely not providing much benefit.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-arguments-development-version">New arguments<a class="anchor" aria-label="anchor" href="#new-arguments-development-version"></a></h3>
+<h3 id="new-arguments-0-2-0">New arguments<a class="anchor" aria-label="anchor" href="#new-arguments-0-2-0"></a></h3>
 <ul><li>
 <code>keep.data</code> added to <code><a href="../reference/ameras.html">ameras()</a></code> (default <code>TRUE</code>). When <code>TRUE</code>, the data are stored on the returned <code>amerasfit</code> object, which is required for profile likelihood confidence interval computation via <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> without re-supplying the data. Set to <code>FALSE</code> to reduce memory usage for large datasets, in which case the data must be supplied to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> explicitly. See <code><a href="../reference/ameras.html">?ameras</a></code> and <code><a href="../reference/confint.html">?confint.amerasfit</a></code> for details.</li>
 </ul></div>
