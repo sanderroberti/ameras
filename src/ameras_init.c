@@ -1,4 +1,5 @@
 #include <stdlib.h> // for NULL
+#include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 
 /* FIXME:
@@ -22,9 +23,24 @@ static const R_CMethodDef CEntries[] = {
   {NULL, NULL, 0}
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern SEXP _ameras_compute_ERCsum_clogit(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+
+#ifdef __cplusplus
+}
+#endif
+
+static const R_CallMethodDef CallEntries[] = {
+  {"_ameras_compute_ERCsum_clogit", (DL_FUNC) &_ameras_compute_ERCsum_clogit, 6},
+  {NULL, NULL, 0}
+};
+
 void R_init_ameras(DllInfo *dll)
 {
-  R_registerRoutines(dll, CEntries, NULL, NULL, NULL);
+  R_registerRoutines(dll, CEntries, CallEntries, NULL, NULL);
   R_useDynamicSymbols(dll, FALSE);
 }
 

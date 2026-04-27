@@ -910,6 +910,9 @@ ameras.rc <- function(
     }
 
     designmat <- t(model.matrix(~ as.factor(data[, setnr]) - 1))
+    set_members <- lapply(sort(unique(data[, "setnr"])), function(s) {
+      which(data[, setnr] == s) - 1L # zero-indexed for C++
+    })
 
     if (is.null(inpar)) {
       inpar <- rep(0, length(X) + length(M) * deg + deg)
@@ -928,6 +931,7 @@ ameras.rc <- function(
         M = M,
         doseRRmod = doseRRmod,
         designmat = designmat,
+        set_members = set_members,
         entry = entry,
         exit = exit,
         data = data,
@@ -952,6 +956,7 @@ ameras.rc <- function(
           M = M,
           doseRRmod = doseRRmod,
           designmat = designmat,
+          set_members = set_members,
           entry = entry,
           exit = exit,
           data = data,
@@ -973,6 +978,7 @@ ameras.rc <- function(
         M = M,
         doseRRmod = doseRRmod,
         designmat = designmat,
+        set_members = set_members,
         entry = entry,
         exit = exit,
         data = data,
@@ -997,6 +1003,7 @@ ameras.rc <- function(
           M = M,
           doseRRmod = doseRRmod,
           designmat = designmat,
+          set_members = set_members,
           entry = entry,
           exit = exit,
           data = data,
@@ -1021,6 +1028,7 @@ ameras.rc <- function(
         M = M,
         doseRRmod = doseRRmod,
         designmat = designmat,
+        set_members = set_members,
         entry = entry,
         exit = exit,
         data = data,

@@ -84,3 +84,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// compute_ERCsum_clogit
+double compute_ERCsum_clogit(Rcpp::List& set_members, Eigen::Map<Eigen::VectorXd>& RRs, Eigen::Map<Eigen::VectorXd>& drdd, Eigen::Map<Eigen::VectorXd>& drdd2, Eigen::Map<Eigen::VectorXi>& status, Eigen::Map<Eigen::MatrixXd>& Kmat);
+RcppExport SEXP _ameras_compute_ERCsum_clogit(SEXP set_membersSEXP, SEXP RRsSEXP, SEXP drddSEXP, SEXP drdd2SEXP, SEXP statusSEXP, SEXP KmatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List& >::type set_members(set_membersSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type RRs(RRsSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type drdd(drddSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type drdd2(drdd2SEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXi>& >::type status(statusSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type Kmat(KmatSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_ERCsum_clogit(set_members, RRs, drdd, drdd2, status, Kmat));
+    return rcpp_result_gen;
+END_RCPP
+}

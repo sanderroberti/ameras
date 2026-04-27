@@ -137,3 +137,17 @@ loglik_prophaz_rcpp <- function(
 
   tmp$ret
 }
+
+
+compute_ERCsum_clogit <- function(set_members, RRs, drdd, drdd2, status, Kmat) {
+  .Call(
+    "_ameras_compute_ERCsum_clogit",
+    set_members,
+    RRs,
+    drdd,
+    drdd2,
+    status,
+    Kmat,
+    PACKAGE = "ameras"
+  )
+}

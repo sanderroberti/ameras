@@ -281,7 +281,86 @@ Eigen::VectorXd loglik_prophaz_rcpp(
   return loglik;
 }
 
-
+// [[Rcpp::export]]
+double compute_ERCsum_clogit(
+    Rcpp::List                  &set_members,
+    Eigen::Map<Eigen::VectorXd> &RRs,
+    Eigen::Map<Eigen::VectorXd> &drdd,
+    Eigen::Map<Eigen::VectorXd> &drdd2,
+    Eigen::Map<Eigen::VectorXi> &status,
+    Eigen::Map<Eigen::MatrixXd> &Kmat) {
+  
+  int nsets = set_members.size();
+  int ncol  = RRs.size();
+  
+  // Compute set_RR_sums inside C++
+  Eigen::VectorXd set_RR_sums(nsets);
+  for (int s = 0; s < nsets; s++) {
+    Rcpp::IntegerVector members = set_members[s];
+    double sum = 0.0;
+    for (int i = 0; i < members.size(); i++) {
+      sum += RRs(members[i]);
+    }
+    set_RR_sums(s) = sum;
+  }
+  
+  Eigen::VectorXd inv_set_RR  = set_RR_sums.cwiseInverse();
+  Eigen::VectorXd inv_set_RR2 = inv_set_RR.cwiseProduct(inv_set_RR);
+  Eigen::VectorXd inv_RRs     = RRs.cwiseInverse();
+  Eigen::VectorXd inv_RRs2    = inv_RRs.cwiseProduct(inv_RRs);
+  Eigen::VectorXd status_d    = status.cast<double>();
+  
+  // Per-individual quantities
+  Eigen::VectorXd ind_inv_RR  = Eigen::VectorXd::Zero(ncol);
+  Eigen::VectorXd ind_inv_RR2 = Eigen::VectorXd::Zero(ncol);
+  
+  for (int s = 0; s < nsets; s++) {
+    Rcpp::IntegerVector members = set_members[s];
+    for (int i = 0; i < members.size(); i++) {
+      ind_inv_RR(members[i])  = inv_set_RR(s);
+      ind_inv_RR2(members[i]) = inv_set_RR2(s);
+    }
+  }
+  
+  // Compute dldd
+  Eigen::VectorXd dldd = drdd.cwiseProduct(
+    status_d.cwiseProduct(inv_RRs) - ind_inv_RR
+  );
+  
+  // Accumulate sum(mymat * Kmat) over sets
+  double sum_mymat_Kmat = 0.0;
+  
+  for (int s = 0; s < nsets; s++) {
+    Rcpp::IntegerVector members = set_members[s];
+    double inv2     = inv_set_RR2(s);
+    int    set_size = members.size();
+    
+    for (int a = 0; a < set_size; a++) {
+      int ia = members[a];
+      for (int b = 0; b < set_size; b++) {
+        int ib = members[b];
+        sum_mymat_Kmat += inv2 * drdd(ia) * drdd(ib) * Kmat(ia, ib);
+      }
+    }
+  }
+  
+  // Diagonal contribution
+  Eigen::VectorXd diag_update = status_d.cwiseProduct(
+    drdd2.cwiseProduct(inv_RRs) -
+    drdd.cwiseProduct(drdd).cwiseProduct(inv_RRs2)
+  );
+  Eigen::VectorXd last_term  = drdd2.cwiseProduct(ind_inv_RR);
+  Eigen::VectorXd diag_total = diag_update - last_term;
+  
+  for (int i = 0; i < ncol; i++) {
+    sum_mymat_Kmat += diag_total(i) * Kmat(i, i);
+  }
+  
+  // sum(tcrossprod(dldd) * Kmat) = dldd^T * Kmat * dldd
+  double sum_dldd_Kmat = dldd.transpose() * Kmat * dldd;
+  
+  return sum_mymat_Kmat + sum_dldd_Kmat;
+}
 
 
 
@@ -427,7 +506,3 @@ extern "C" {
   }
   
 }
-
-
-
-

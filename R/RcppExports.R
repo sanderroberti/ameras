@@ -21,3 +21,7 @@ loglik_prophaz_rcpp <- function(exit_t, entry_t, RR_entry, RR_exit, status_ord, 
     .Call(`_ameras_loglik_prophaz_rcpp`, exit_t, entry_t, RR_entry, RR_exit, status_ord, loglim)
 }
 
+compute_ERCsum_clogit <- function(set_members, RRs, drdd, drdd2, status, Kmat) {
+    .Call(`_ameras_compute_ERCsum_clogit`, set_members, RRs, drdd, drdd2, status, Kmat)
+}
+
