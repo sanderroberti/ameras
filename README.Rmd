@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/sanderroberti/ameras/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sanderroberti/ameras/actions/workflows/R-CMD-check.yaml)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/ameras)](https://CRAN.R-project.org/package=ameras)
+[![Codecov test coverage](https://codecov.io/gh/sanderroberti/ameras/graph/badge.svg)](https://app.codecov.io/gh/sanderroberti/ameras)
 <!-- badges: end -->
 
 
