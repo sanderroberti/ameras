@@ -8,7 +8,6 @@ for (method in all_methods) {
   test_that(paste("gaussian snapshot:", method), {
     if (method == "BMA") {
       skip_on_cran()
-      skip_on_covr()
     }
 
     fit <- fit_combination(

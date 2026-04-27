@@ -8,9 +8,10 @@ for (method in all_methods) {
   test_that(paste("clogit snapshot:", method), {
     if (method %in% c("ERC", "MCML", "BMA")) {
       skip_on_cran()
+    }
+    if (method == "ERC") {
       skip_on_covr()
     }
-
     fit <- fit_combination(
       family = "clogit",
       Y = "Y.clogit",

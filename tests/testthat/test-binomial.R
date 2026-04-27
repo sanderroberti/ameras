@@ -39,7 +39,6 @@ for (method in setdiff(all_methods, "RC")) {
   test_that(paste("binomial snapshot:", method), {
     if (method %in% c("ERC", "MCML", "BMA")) {
       skip_on_cran()
-      skip_on_covr()
     }
 
     fit <- fit_combination(

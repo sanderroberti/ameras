@@ -6,7 +6,6 @@ for (method in c("RC", "ERC", "MCML")) {
   test_that(paste("proflik/wald.transformed snapshot:", method), {
     if (method %in% c("ERC", "MCML")) {
       skip_on_cran()
-      skip_on_covr()
     }
 
     fit <- fit_combination(
@@ -59,7 +58,6 @@ for (method in c("RC", "ERC", "MCML")) {
 for (method in c("FMA", "BMA")) {
   test_that(paste("percentile/hpd snapshot:", method), {
     skip_on_cran()
-    skip_on_covr()
 
     fit <- fit_combination(
       family = "binomial",
