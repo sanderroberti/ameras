@@ -1,5 +1,7 @@
 # ameras (development version)
 
+* Shortened column names `CI.lowerbound` and `CI.upperbound` in the `summary()` output to `CI.lower` and `CI.upper`, respectively.
+
 # ameras 0.2.0
 
 ## Breaking changes
