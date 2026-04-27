@@ -1,135 +1,88 @@
 # gaussian snapshot: RC
 
-    Code
-      fit[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared        sigma 
-        -0.8596448    0.4123961    0.1923798    1.1007480 
+    c("(Intercept)" = -0.859644829141104, dose = 0.412396141643607, 
+    dose_squared = 0.192379759719246, sigma = 1.10074804303578)
 
 ---
 
-    Code
-      fit[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared        sigma 
-        0.03544423   0.04824560   0.01132056   0.01421045 
+    c("(Intercept)" = 0.0354442346838672, dose = 0.0482456043446934, 
+    dose_squared = 0.011320561162419, sigma = 0.0142104511465155)
 
 ---
 
-    Code
-      fit[[method]]$CI
-    Output
-                        lower      upper
-      (Intercept)  -0.9291143 -0.7901754
-      dose          0.3178365  0.5069558
-      dose_squared  0.1701919  0.2145677
-      sigma         1.0728961  1.1286000
+    structure(list(lower = c(-0.929114252581069, 0.317836494715639, 
+    0.170191867556122, 1.07289607058454), upper = c(-0.790175405701139, 
+    0.506955788571575, 0.214567651882371, 1.12860001548701)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared", "sigma"))
 
 # gaussian snapshot: ERC
 
-    Code
-      fit[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared        sigma 
-        -0.8575908    0.4073724    0.1937510    1.0998647 
+    c("(Intercept)" = -0.857590768586508, dose = 0.407372444065381, 
+    dose_squared = 0.19375103179669, sigma = 1.09986471318972)
 
 ---
 
-    Code
-      fit[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared        sigma 
-        0.03542220   0.04824927   0.01135011   0.01418433 
+    c("(Intercept)" = 0.0354221950080613, dose = 0.0482492720914936, 
+    dose_squared = 0.0113501136639654, sigma = 0.0141843297477061
+    )
 
 ---
 
-    Code
-      fit[[method]]$CI
-    Output
-                        lower      upper
-      (Intercept)  -0.9270170 -0.7881645
-      dose          0.3128056  0.5019393
-      dose_squared  0.1715052  0.2159968
-      sigma         1.0720639  1.1276655
+    structure(list(lower = c(-0.927016995055663, 0.31280560848578, 
+    0.171505217794882, 1.07206393773938), upper = c(-0.788164542117354, 
+    0.501939279644982, 0.215996845798498, 1.12766548864006)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared", "sigma"))
 
 # gaussian snapshot: MCML
 
-    Code
-      fit[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared        sigma 
-        -0.8632862    0.4879678    0.1482892    1.1510453 
+    c("(Intercept)" = -0.863286201325093, dose = 0.48796776533509, 
+    dose_squared = 0.148289235834366, sigma = 1.15104527636048)
 
 ---
 
-    Code
-      fit[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared        sigma 
-        0.03670882   0.04979688   0.01130102   0.01485994 
+    c("(Intercept)" = 0.0367088203386334, dose = 0.0497968776967233, 
+    dose_squared = 0.0113010207378352, sigma = 0.014859941178711)
 
 ---
 
-    Code
-      fit[[method]]$CI
-    Output
-                        lower      upper
-      (Intercept)  -0.9352342 -0.7913382
-      dose          0.3903677  0.5855679
-      dose_squared  0.1261396  0.1704388
-      sigma         1.1219203  1.1801702
+    structure(list(lower = c(-0.935234167103766, 0.390367678506966, 
+    0.126139642199668, 1.12192032683783), upper = c(-0.79133823554642, 
+    0.585567852163213, 0.170438829469063, 1.18017022588314)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared", "sigma"))
 
 # gaussian snapshot: FMA
 
-    Code
-      fit[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared        sigma 
-        -0.8637789    0.4907493    0.1469475    1.1511773 
+    c("(Intercept)" = -0.863778905799158, dose = 0.490749307581192, 
+    dose_squared = 0.146947464269109, sigma = 1.1511772699684)
 
 ---
 
-    Code
-      fit[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared        sigma 
-        0.03702730   0.05193649   0.01291181   0.01488525 
+    c("(Intercept)" = 0.0370273042047476, dose = 0.0519364859403298, 
+    dose_squared = 0.0129118107700265, sigma = 0.0148852541053793
+    )
 
 ---
 
-    Code
-      fit[[method]]$CI
-    Output
-                        lower      upper
-      (Intercept)  -0.9365178 -0.7910689
-      dose          0.3902604  0.5940566
-      dose_squared  0.1183053  0.1707397
-      sigma         1.1219463  1.1803065
+    structure(list(lower = c(-0.936517795605244, 0.390260380881284, 
+    0.118305280366457, 1.12194626692474), upper = c(-0.791068923763542, 
+    0.594056623308337, 0.170739665607116, 1.18030645823)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared", "sigma"))
 
 # gaussian snapshot: BMA
 
-    Code
-      fit[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared        sigma 
-        -0.8607539    0.4838584    0.1478250    1.1509975 
+    c("(Intercept)" = -0.86075388734466, dose = 0.483858407793307, 
+    dose_squared = 0.147825002240133, sigma = 1.15099747564059)
 
 ---
 
-    Code
-      fit[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared        sigma 
-        0.03752324   0.04523186   0.01112508   0.01398801 
+    c("(Intercept)" = 0.0375232386622422, dose = 0.0452318592245169, 
+    dose_squared = 0.0111250825137037, sigma = 0.0139880095194784
+    )
 
 ---
 
-    Code
-      fit[[method]]$CI
-    Output
-                        lower      upper
-      (Intercept)  -0.9371247 -0.7902548
-      dose          0.3954455  0.5666915
-      dose_squared  0.1226427  0.1660678
-      sigma         1.1228915  1.1756466
+    structure(list(lower = c(-0.937124709210879, 0.395445532983898, 
+    0.122642690868872, 1.12289146189322), upper = c(-0.790254797080576, 
+    0.566691532270053, 0.16606777228885, 1.17564663726968)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared", "sigma"))
 

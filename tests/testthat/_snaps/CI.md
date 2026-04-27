@@ -1,257 +1,172 @@
 # proflik/wald.transformed snapshot: RC
 
-    Code
-      fit1[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared 
-       -0.69566358   0.03583481   0.27352443 
+    c("(Intercept)" = -0.695663582187652, dose = 0.0358348096332653, 
+    dose_squared = 0.273524431388668)
 
 ---
 
-    Code
-      fit1[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared 
-        0.08531710   0.20479501   0.07751758 
+    c("(Intercept)" = 0.0853170991392384, dose = 0.204795009277685, 
+    dose_squared = 0.077517578544823)
 
 ---
 
-    Code
-      fit1[[method]]$CI
-    Output
-                       lower     upper pval.lower pval.upper iter.lower iter.upper
-      dose         0.0000000 0.4819361 0.86103023 0.05005070         NA         11
-      dose_squared 0.1248245 0.3885281 0.04978527 0.04932973          7          7
+    structure(list(lower = c(0, 0.124824485619196), upper = c(0.481936149545829, 
+    0.388528138266399), pval.lower = c(0.86103023251831, 0.049785273193913
+    ), pval.upper = c(0.0500507010332296, 0.0493297310517574), iter.lower = c(NA, 
+    7L), iter.upper = c(11L, 7L)), row.names = c("dose", "dose_squared"
+    ), class = "data.frame")
 
 ---
 
-    Code
-      fit2[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared 
-       -0.69566358   0.03583481   0.27352443 
+    c("(Intercept)" = -0.695663582187652, dose = 0.0358348096332653, 
+    dose_squared = 0.273524431388668)
 
 ---
 
-    Code
-      fit2[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared 
-        0.08531710   0.20479501   0.07751758 
+    c("(Intercept)" = 0.0853170991392384, dose = 0.204795009277685, 
+    dose_squared = 0.077517578544823)
 
 ---
 
-    Code
-      fit2[[method]]$CI
-    Output
-                           lower        upper
-      (Intercept)  -8.628820e-01   -0.5284451
-      dose          4.894522e-07 2623.6136590
-      dose_squared  1.559819e-01    0.4746758
+    structure(list(lower = c(-0.862882023765993, 4.89452239688687e-07, 
+    0.155981926298724), upper = c(-0.528445140609312, 2623.61365895298, 
+    0.474675836352198)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared"))
 
 # proflik/wald.transformed snapshot: ERC
 
-    Code
-      fit1[[method]]$coefficients
-    Output
-        (Intercept)          dose  dose_squared 
-      -6.934349e-01  5.339510e-08  3.150004e-01 
+    c("(Intercept)" = -0.693434923733658, dose = 5.33950999146791e-08, 
+    dose_squared = 0.315000416519103)
 
 ---
 
-    Code
-      fit1[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared 
-      0.0525498471 0.0002282538 0.0469447230 
+    c("(Intercept)" = 0.0525498471312224, dose = 0.000228253766612278, 
+    dose_squared = 0.0469447229554221)
 
 ---
 
-    Code
-      fit1[[method]]$CI
-    Output
-                       lower     upper pval.lower pval.upper iter.lower iter.upper
-      dose         0.0000000        NA 0.99231556         NA         NA         NA
-      dose_squared 0.2316689 0.4201524 0.04930966 0.04946522          6          4
+    structure(list(lower = c(0, 0.23166893036439), upper = c(NA, 
+    0.420152375346261), pval.lower = c(0.992315558085395, 0.0493096605911812
+    ), pval.upper = c(NA, 0.0494652222864629), iter.lower = c(NA, 
+    6L), iter.upper = c(NA, 4L)), row.names = c("dose", "dose_squared"
+    ), class = "data.frame")
 
 ---
 
-    Code
-      fit2[[method]]$coefficients
-    Output
-        (Intercept)          dose  dose_squared 
-      -6.934349e-01  5.339510e-08  3.150004e-01 
+    c("(Intercept)" = -0.693434923733658, dose = 5.33950999146791e-08, 
+    dose_squared = 0.315000416519103)
 
 ---
 
-    Code
-      fit2[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared 
-      0.0525498471 0.0002282538 0.0469447230 
+    c("(Intercept)" = 0.0525498471312224, dose = 0.000228253766612278, 
+    dose_squared = 0.0469447229554221)
 
 ---
 
-    Code
-      fit2[[method]]$CI
-    Output
-                        lower      upper
-      (Intercept)  -0.7964307 -0.5904391
-      dose          0.0000000        Inf
-      dose_squared  0.2348924  0.4213916
+    structure(list(lower = c(-0.79643073150394, 0, 0.234892430905717
+    ), upper = c(-0.590439115963377, Inf, 0.421391646834024)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared"))
 
 # proflik/wald.transformed snapshot: MCML
 
-    Code
-      fit1[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared 
-      -0.678139870  0.008365397  0.275598584 
+    c("(Intercept)" = -0.678139870284149, dose = 0.0083653968680493, 
+    dose_squared = 0.275598584484292)
 
 ---
 
-    Code
-      fit1[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared 
-        0.08413263   0.19771678   0.07481774 
+    c("(Intercept)" = 0.0841326277237695, dose = 0.197716781910587, 
+    dose_squared = 0.0748177402132151)
 
 ---
 
-    Code
-      fit1[[method]]$CI
-    Output
-                       lower     upper pval.lower pval.upper iter.lower iter.upper
-      dose         0.0000000 0.4419211 0.96622836 0.05007639         NA         14
-      dose_squared 0.1314272 0.3809827 0.04983462 0.04945301          7          7
+    structure(list(lower = c(0, 0.131427164024257), upper = c(0.441921125360596, 
+    0.38098269776637), pval.lower = c(0.966228359151512, 0.0498346194362645
+    ), pval.upper = c(0.0500763939116691, 0.0494530130996915), iter.lower = c(NA, 
+    7L), iter.upper = c(14L, 7L)), row.names = c("dose", "dose_squared"
+    ), class = "data.frame")
 
 ---
 
-    Code
-      fit2[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared 
-      -0.678139870  0.008365397  0.275598584 
+    c("(Intercept)" = -0.678139870284149, dose = 0.0083653968680493, 
+    dose_squared = 0.275598584484292)
 
 ---
 
-    Code
-      fit2[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared 
-        0.08413263   0.19771678   0.07481774 
+    c("(Intercept)" = 0.0841326277237695, dose = 0.197716781910587, 
+    dose_squared = 0.0748177402132151)
 
 ---
 
-    Code
-      fit2[[method]]$CI
-    Output
-                           lower         upper
-      (Intercept)  -8.430368e-01 -5.132430e-01
-      dose          6.371978e-23  1.098244e+18
-      dose_squared  1.609797e-01  4.673852e-01
+    structure(list(lower = c(-0.843036790547453, 6.37197822923014e-23, 
+    0.160979662105735), upper = c(-0.513242950020845, 1098243939989482624, 
+    0.467385155968411)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared"))
 
 # percentile/hpd snapshot: FMA
 
-    Code
-      fit1[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared 
-       -0.67942038   0.01295819   0.27406256 
+    c("(Intercept)" = -0.679420383964918, dose = 0.0129581869892215, 
+    dose_squared = 0.274062556829787)
 
 ---
 
-    Code
-      fit1[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared 
-        0.08348567   0.19530387   0.07436304 
+    c("(Intercept)" = 0.0834856681317757, dose = 0.195303870223553, 
+    dose_squared = 0.0743630356097565)
 
 ---
 
-    Code
-      fit1[[method]]$CI
-    Output
-                        lower      upper
-      (Intercept)  -0.8447126 -0.5159928
-      dose         -0.3644905  0.4016076
-      dose_squared  0.1266253  0.4193271
+    structure(list(lower = c(-0.844712598991456, -0.364490456842211, 
+    0.126625280646566), upper = c(-0.515992835789905, 0.401607615396295, 
+    0.419327076449348)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared"))
 
 ---
 
-    Code
-      fit2[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared 
-       -0.67942038   0.01295819   0.27406256 
+    c("(Intercept)" = -0.679420383964918, dose = 0.0129581869892215, 
+    dose_squared = 0.274062556829787)
 
 ---
 
-    Code
-      fit2[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared 
-        0.08348567   0.19530387   0.07436304 
+    c("(Intercept)" = 0.0834856681317757, dose = 0.195303870223553, 
+    dose_squared = 0.0743630356097565)
 
 ---
 
-    Code
-      fit2[[method]]$CI
-    Output
-                        lower      upper
-      (Intercept)  -0.8477902 -0.5195303
-      dose         -0.3662872  0.3992981
-      dose_squared  0.1237895  0.4162422
+    structure(list(lower = c(-0.847790185835778, -0.366287150520233, 
+    0.123789499311631), upper = c(-0.519530340551063, 0.399298136536058, 
+    0.416242200399084)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared"))
 
 # percentile/hpd snapshot: BMA
 
-    Code
-      fit1[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared 
-        -0.7233563    0.1343364    0.2481227 
+    c("(Intercept)" = -0.72335627769738, dose = 0.134336359543895, 
+    dose_squared = 0.248122664727861)
 
 ---
 
-    Code
-      fit1[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared 
-        0.10837398   0.24208244   0.06946021 
+    c("(Intercept)" = 0.108373977815855, dose = 0.242082441719764, 
+    dose_squared = 0.0694602084341149)
 
 ---
 
-    Code
-      fit1[[method]]$CI
-    Output
-                        lower      upper
-      (Intercept)  -0.9958492 -0.5341520
-      dose         -0.2427882  0.6850701
-      dose_squared  0.1285954  0.3998694
+    structure(list(lower = c(-0.99584915733811, -0.242788192084572, 
+    0.128595431717399), upper = c(-0.53415204288286, 0.685070077998039, 
+    0.399869448439078)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared"))
 
 ---
 
-    Code
-      fit2[[method]]$coefficients
-    Output
-       (Intercept)         dose dose_squared 
-        -0.7233563    0.1343364    0.2481227 
+    c("(Intercept)" = -0.72335627769738, dose = 0.134336359543895, 
+    dose_squared = 0.248122664727861)
 
 ---
 
-    Code
-      fit2[[method]]$sd
-    Output
-       (Intercept)         dose dose_squared 
-        0.10837398   0.24208244   0.06946021 
+    c("(Intercept)" = 0.108373977815855, dose = 0.242082441719764, 
+    dose_squared = 0.0694602084341149)
 
 ---
 
-    Code
-      fit2[[method]]$CI
-    Output
-                        lower      upper
-      (Intercept)  -0.9129171 -0.5102140
-      dose         -0.2420483  0.6938121
-      dose_squared  0.1054921  0.3744100
+    structure(list(lower = c(-0.912917097932078, -0.242048264480045, 
+    0.105492052659696), upper = c(-0.510214024881486, 0.693812077832168, 
+    0.374409980934656)), class = "data.frame", row.names = c("(Intercept)", 
+    "dose", "dose_squared"))
 

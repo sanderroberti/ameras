@@ -1,165 +1,116 @@
 # multinomial snapshot: RC
 
-    Code
-      fit[[method]]$coefficients
-    Output
-       (1)_(Intercept)         (1)_dose (1)_dose_squared  (2)_(Intercept) 
-           -0.87253225       0.54423183      -0.03134998      -0.10936867 
-              (2)_dose (2)_dose_squared 
-            0.57635409      -0.04164160 
+    c("(1)_(Intercept)" = -0.872532246181349, "(1)_dose" = 0.544231834982583, 
+    "(1)_dose_squared" = -0.0313499823285036, "(2)_(Intercept)" = -0.109368671249109, 
+    "(2)_dose" = 0.57635409412743, "(2)_dose_squared" = -0.041641603047693
+    )
 
 ---
 
-    Code
-      fit[[method]]$sd
-    Output
-       (1)_(Intercept)         (1)_dose (1)_dose_squared  (2)_(Intercept) 
-            0.09106217       0.13076127       0.03320674       0.07450445 
-              (2)_dose (2)_dose_squared 
-            0.11360057       0.03018016 
+    c("(1)_(Intercept)" = 0.0910621676999024, "(1)_dose" = 0.130761271583389, 
+    "(1)_dose_squared" = 0.0332067423567577, "(2)_(Intercept)" = 0.0745044468806468, 
+    "(2)_dose" = 0.113600566594363, "(2)_dose_squared" = 0.0301801567232621
+    )
 
 ---
 
-    Code
-      fit[[method]]$CI
-    Output
-                            lower       upper
-      (1)_(Intercept)  -1.0510108 -0.69405368
-      (1)_dose          0.2879445  0.80051922
-      (1)_dose_squared -0.0964340  0.03373404
-      (2)_(Intercept)  -0.2553947  0.03665736
-      (2)_dose          0.3537011  0.79900711
-      (2)_dose_squared -0.1007936  0.01751042
+    structure(list(lower = c(-1.0510108152273, 0.287944452106479, 
+    -0.0964340013916494, -0.255394703823254, 0.353701074979134, -0.100793623273061
+    ), upper = c(-0.694053677135394, 0.800519217858686, 0.0337340367346422, 
+    0.0366573613250359, 0.799007113275726, 0.0175104171776751)), class = "data.frame", row.names = c("(1)_(Intercept)", 
+    "(1)_dose", "(1)_dose_squared", "(2)_(Intercept)", "(2)_dose", 
+    "(2)_dose_squared"))
 
 # multinomial snapshot: ERC
 
-    Code
-      fit[[method]]$coefficients
-    Output
-       (1)_(Intercept)         (1)_dose (1)_dose_squared  (2)_(Intercept) 
-           -0.87440059       0.55760160      -0.03225197      -0.11026756 
-              (2)_dose (2)_dose_squared 
-            0.58240071      -0.03918754 
+    c("(1)_(Intercept)" = -0.874400585060071, "(1)_dose" = 0.557601599677255, 
+    "(1)_dose_squared" = -0.0322519686441131, "(2)_(Intercept)" = -0.110267556601327, 
+    "(2)_dose" = 0.582400710001095, "(2)_dose_squared" = -0.0391875439518789
+    )
 
 ---
 
-    Code
-      fit[[method]]$sd
-    Output
-       (1)_(Intercept)         (1)_dose (1)_dose_squared  (2)_(Intercept) 
-            0.08913714       0.12343241       0.02979925       0.07259424 
-              (2)_dose (2)_dose_squared 
-            0.10548091       0.02633062 
+    c("(1)_(Intercept)" = 0.0891371445468678, "(1)_dose" = 0.123432405861906, 
+    "(1)_dose_squared" = 0.029799250545539, "(2)_(Intercept)" = 0.0725942435845731, 
+    "(2)_dose" = 0.105480906960947, "(2)_dose_squared" = 0.0263306217704128
+    )
 
 ---
 
-    Code
-      fit[[method]]$CI
-    Output
-                             lower       upper
-      (1)_(Intercept)  -1.04910618 -0.69969499
-      (1)_dose          0.31567853  0.79952467
-      (1)_dose_squared -0.09065743  0.02615349
-      (2)_(Intercept)  -0.25254966  0.03201455
-      (2)_dose          0.37566193  0.78913949
-      (2)_dose_squared -0.09079461  0.01241953
+    structure(list(lower = c(-1.04910617805667, 0.315678529662789, 
+    -0.090657426479655, -0.252549659512018, 0.375661931301018, -0.0907946143124343
+    ), upper = c(-0.699694992063469, 0.79952466969172, 0.0261534891914288, 
+    0.0320145463093646, 0.789139488701172, 0.0124195264086766)), class = "data.frame", row.names = c("(1)_(Intercept)", 
+    "(1)_dose", "(1)_dose_squared", "(2)_(Intercept)", "(2)_dose", 
+    "(2)_dose_squared"))
 
 # multinomial snapshot: MCML
 
-    Code
-      fit[[method]]$coefficients
-    Output
-       (1)_(Intercept)         (1)_dose (1)_dose_squared  (2)_(Intercept) 
-           -0.85880486       0.52789110      -0.02846769      -0.10406191 
-              (2)_dose (2)_dose_squared 
-            0.58076748      -0.04432679 
+    c("(1)_(Intercept)" = -0.858804858198922, "(1)_dose" = 0.52789110098132, 
+    "(1)_dose_squared" = -0.0284676930064826, "(2)_(Intercept)" = -0.104061905992065, 
+    "(2)_dose" = 0.580767475654764, "(2)_dose_squared" = -0.0443267873734486
+    )
 
 ---
 
-    Code
-      fit[[method]]$sd
-    Output
-       (1)_(Intercept)         (1)_dose (1)_dose_squared  (2)_(Intercept) 
-            0.08907608       0.12462130       0.03012937       0.07278874 
-              (2)_dose (2)_dose_squared 
-            0.10711494       0.02666827 
+    c("(1)_(Intercept)" = 0.0890760787896232, "(1)_dose" = 0.124621303806615, 
+    "(1)_dose_squared" = 0.0301293702372263, "(2)_(Intercept)" = 0.0727887409089817, 
+    "(2)_dose" = 0.10711493856028, "(2)_dose_squared" = 0.0266682668222654
+    )
 
 ---
 
-    Code
-      fit[[method]]$CI
-    Output
-                             lower        upper
-      (1)_(Intercept)  -1.03339076 -0.684218952
-      (1)_dose          0.28363783  0.772144368
-      (1)_dose_squared -0.08752017  0.030584788
-      (2)_(Intercept)  -0.24672522  0.038601405
-      (2)_dose          0.37082605  0.790708897
-      (2)_dose_squared -0.09659563  0.007942055
+    structure(list(lower = c(-1.03339076451064, 0.283637833813931, 
+    -0.0875201735483191, -0.246725216653687, 0.370826053870395, -0.0965956298751931
+    ), upper = c(-0.684218951887208, 0.772144368148709, 0.030584787535354, 
+    0.0386014046695559, 0.790708897439134, 0.00794205512829594)), class = "data.frame", row.names = c("(1)_(Intercept)", 
+    "(1)_dose", "(1)_dose_squared", "(2)_(Intercept)", "(2)_dose", 
+    "(2)_dose_squared"))
 
 # multinomial snapshot: FMA
 
-    Code
-      fit[[method]]$coefficients
-    Output
-       (1)_(Intercept)         (1)_dose (1)_dose_squared  (2)_(Intercept) 
-           -0.86073456       0.53238334      -0.02990742      -0.10362634 
-              (2)_dose (2)_dose_squared 
-            0.58000441      -0.04428247 
+    c("(1)_(Intercept)" = -0.860734562162769, "(1)_dose" = 0.532383338057357, 
+    "(1)_dose_squared" = -0.0299074150772933, "(2)_(Intercept)" = -0.103626336376565, 
+    "(2)_dose" = 0.580004407582068, "(2)_dose_squared" = -0.0442824724335984
+    )
 
 ---
 
-    Code
-      fit[[method]]$sd
-    Output
-       (1)_(Intercept)         (1)_dose (1)_dose_squared  (2)_(Intercept) 
-            0.08957351       0.12722277       0.03112336       0.07297248 
-              (2)_dose (2)_dose_squared 
-            0.10793323       0.02703650 
+    c("(1)_(Intercept)" = 0.0895735088513275, "(1)_dose" = 0.127222774539065, 
+    "(1)_dose_squared" = 0.0311233594341049, "(2)_(Intercept)" = 0.0729724815016855, 
+    "(2)_dose" = 0.107933226214456, "(2)_dose_squared" = 0.0270365031956162
+    )
 
 ---
 
-    Code
-      fit[[method]]$CI
-    Output
-                             lower        upper
-      (1)_(Intercept)  -1.03623345 -0.686453470
-      (1)_dose          0.28328821  0.782562546
-      (1)_dose_squared -0.09105283  0.031407527
-      (2)_(Intercept)  -0.24704247  0.039526462
-      (2)_dose          0.36976944  0.793582523
-      (2)_dose_squared -0.09808623  0.008266578
+    structure(list(lower = c(-1.03623344740624, 0.2832882096991, 
+    -0.0910528321303053, -0.247042472166993, 0.369769439674991, -0.0980862262304044
+    ), upper = c(-0.686453470307389, 0.782562545619539, 0.031407527453333, 
+    0.0395264618081422, 0.793582522875995, 0.00826657847150827)), class = "data.frame", row.names = c("(1)_(Intercept)", 
+    "(1)_dose", "(1)_dose_squared", "(2)_(Intercept)", "(2)_dose", 
+    "(2)_dose_squared"))
 
 # multinomial snapshot: BMA
 
-    Code
-      fit[[method]]$coefficients
-    Output
-       (1)_(Intercept)         (1)_dose (1)_dose_squared  (2)_(Intercept) 
-          -0.587718745     -0.122836686      0.177646763      0.137220660 
-              (2)_dose (2)_dose_squared 
-          -0.009839935      0.147174985 
+    c("(1)_(Intercept)" = -0.587718745014249, "(1)_dose" = -0.122836686034902, 
+    "(1)_dose_squared" = 0.177646762797876, "(2)_(Intercept)" = 0.137220659635992, 
+    "(2)_dose" = -0.00983993483463549, "(2)_dose_squared" = 0.147174985137446
+    )
 
 ---
 
-    Code
-      fit[[method]]$sd
-    Output
-       (1)_(Intercept)         (1)_dose (1)_dose_squared  (2)_(Intercept) 
-             0.1688474        0.4273070        0.1550923        0.1531390 
-              (2)_dose (2)_dose_squared 
-             0.3906711        0.1466459 
+    c("(1)_(Intercept)" = 0.16884744034517, "(1)_dose" = 0.427307016088735, 
+    "(1)_dose_squared" = 0.155092265686904, "(2)_(Intercept)" = 0.153138980744979, 
+    "(2)_dose" = 0.39067109573887, "(2)_dose_squared" = 0.146645948536132
+    )
 
 ---
 
-    Code
-      fit[[method]]$CI
-    Output
-                             lower      upper
-      (1)_(Intercept)  -0.89931461 -0.2677159
-      (1)_dose         -0.84122941  0.4761220
-      (1)_dose_squared -0.02336266  0.4846269
-      (2)_(Intercept)  -0.13199079  0.4229598
-      (2)_dose         -0.71395171  0.5796955
-      (2)_dose_squared -0.05189108  0.4328045
+    structure(list(lower = c(-0.899314610991756, -0.841229407356729, 
+    -0.0233626602065779, -0.131990787086232, -0.713951712373224, 
+    -0.0518910784512704), upper = c(-0.267715870383468, 0.476122000646149, 
+    0.484626926664673, 0.422959754764158, 0.579695497596276, 0.43280446623031
+    )), class = "data.frame", row.names = c("(1)_(Intercept)", "(1)_dose", 
+    "(1)_dose_squared", "(2)_(Intercept)", "(2)_dose", "(2)_dose_squared"
+    ))
 

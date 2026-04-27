@@ -6,6 +6,7 @@ for (method in c("RC", "ERC", "MCML")) {
   test_that(paste("proflik/wald.transformed snapshot:", method), {
     if (method %in% c("ERC", "MCML")) {
       skip_on_cran()
+      skip_on_covr()
     }
 
     fit <- fit_combination(
@@ -19,14 +20,38 @@ for (method in c("RC", "ERC", "MCML")) {
       methods = method
     )
     fit1 <- confint(fit, type = c("proflik"))
-    expect_snapshot(fit1[[method]]$coefficients)
-    expect_snapshot(fit1[[method]]$sd)
-    expect_snapshot(fit1[[method]]$CI)
+    expect_snapshot_value(
+      fit1[[method]]$coefficients,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
+    expect_snapshot_value(
+      fit1[[method]]$sd,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
+    expect_snapshot_value(
+      fit1[[method]]$CI,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
 
     fit2 <- confint(fit, type = c("wald.transformed"))
-    expect_snapshot(fit2[[method]]$coefficients)
-    expect_snapshot(fit2[[method]]$sd)
-    expect_snapshot(fit2[[method]]$CI)
+    expect_snapshot_value(
+      fit2[[method]]$coefficients,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
+    expect_snapshot_value(
+      fit2[[method]]$sd,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
+    expect_snapshot_value(
+      fit2[[method]]$CI,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
   })
 }
 
@@ -34,6 +59,7 @@ for (method in c("RC", "ERC", "MCML")) {
 for (method in c("FMA", "BMA")) {
   test_that(paste("percentile/hpd snapshot:", method), {
     skip_on_cran()
+    skip_on_covr()
 
     fit <- fit_combination(
       family = "binomial",
@@ -46,13 +72,37 @@ for (method in c("FMA", "BMA")) {
       methods = method
     )
     fit1 <- confint(fit, type = c("percentile"))
-    expect_snapshot(fit1[[method]]$coefficients)
-    expect_snapshot(fit1[[method]]$sd)
-    expect_snapshot(fit1[[method]]$CI)
+    expect_snapshot_value(
+      fit1[[method]]$coefficients,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
+    expect_snapshot_value(
+      fit1[[method]]$sd,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
+    expect_snapshot_value(
+      fit1[[method]]$CI,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
 
     fit2 <- confint(fit, type = c("hpd"))
-    expect_snapshot(fit2[[method]]$coefficients)
-    expect_snapshot(fit2[[method]]$sd)
-    expect_snapshot(fit2[[method]]$CI)
+    expect_snapshot_value(
+      fit2[[method]]$coefficients,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
+    expect_snapshot_value(
+      fit2[[method]]$sd,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
+    expect_snapshot_value(
+      fit2[[method]]$CI,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
   })
 }

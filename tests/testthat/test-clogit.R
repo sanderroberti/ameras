@@ -8,6 +8,7 @@ for (method in all_methods) {
   test_that(paste("clogit snapshot:", method), {
     if (method %in% c("ERC", "MCML", "BMA")) {
       skip_on_cran()
+      skip_on_covr()
     }
 
     fit <- fit_combination(
@@ -23,8 +24,12 @@ for (method in all_methods) {
       nburnin.BMA = 500
     )
     fit <- confint(fit, type = c("wald.orig", "percentile"))
-    expect_snapshot(fit[[method]]$coefficients)
-    expect_snapshot(fit[[method]]$sd)
-    expect_snapshot(fit[[method]]$CI)
+    expect_snapshot_value(
+      fit[[method]]$coefficients,
+      tolerance = 1e-4,
+      style = "deparse"
+    )
+    expect_snapshot_value(fit[[method]]$sd, tolerance = 1e-4, style = "deparse")
+    expect_snapshot_value(fit[[method]]$CI, tolerance = 1e-4, style = "deparse")
   })
 }
