@@ -1,7 +1,7 @@
 # prophaz snapshot: RC
 
-    c(dose = 0.57628615469363, dose_squared = -0.0339913365375492
-    )
+    structure(list(RC = c(0.57628615469363, -0.0339913365375492)), class = "data.frame", row.names = c("dose", 
+    "dose_squared"))
 
 ---
 
@@ -14,10 +14,20 @@
     ), upper = c(0.747078666409446, 5.40855949875754e-05)), class = "data.frame", row.names = c("dose", 
     "dose_squared"))
 
+---
+
+    Code
+      print(summary(fit)$summary_table, digits = 4)
+    Output
+        Method         Term Estimate      SE CI.lower  CI.upper
+      1     RC         dose  0.57629 0.08714  0.40549 7.471e-01
+      2     RC dose_squared -0.03399 0.01737 -0.06804 5.409e-05
+
 # prophaz snapshot: ERC
 
-    c(dose = 0.329438692494966, dose_squared = -0.0111115564109217
-    )
+    structure(list(ERC = c(0.329438692494966, -0.0111115564109217
+    )), class = "data.frame", row.names = c("dose", "dose_squared"
+    ))
 
 ---
 
@@ -29,10 +39,20 @@
     NA_real_)), class = "data.frame", row.names = c("dose", "dose_squared"
     ))
 
+---
+
+    Code
+      print(summary(fit)$summary_table, digits = 4)
+    Output
+        Method         Term Estimate SE CI.lower CI.upper
+      1    ERC         dose  0.32944 NA       NA       NA
+      2    ERC dose_squared -0.01111 NA       NA       NA
+
 # prophaz snapshot: MCML
 
-    c(dose = 0.581318732120769, dose_squared = -0.038895795621568
-    )
+    structure(list(MCML = c(0.581318732120769, -0.038895795621568
+    )), class = "data.frame", row.names = c("dose", "dose_squared"
+    ))
 
 ---
 
@@ -45,10 +65,20 @@
     ), upper = c(0.734954281532314, -0.0105644714970222)), class = "data.frame", row.names = c("dose", 
     "dose_squared"))
 
+---
+
+    Code
+      print(summary(fit)$summary_table, digits = 4)
+    Output
+        Method         Term Estimate      SE CI.lower CI.upper
+      1   MCML         dose   0.5813 0.07839  0.42768  0.73495
+      2   MCML dose_squared  -0.0389 0.01446 -0.06723 -0.01056
+
 # prophaz snapshot: FMA
 
-    c(dose = 0.582119594670597, dose_squared = -0.0390576222751472
-    )
+    structure(list(FMA = c(0.582119594670597, -0.0390576222751472
+    )), class = "data.frame", row.names = c("dose", "dose_squared"
+    ))
 
 ---
 
@@ -61,13 +91,23 @@
     ), upper = c(0.738624278475251, -0.0103135694046743)), class = "data.frame", row.names = c("dose", 
     "dose_squared"))
 
+---
+
+    Code
+      print(summary(fit)$summary_table, digits = 4)
+    Output
+        Method         Term Estimate      SE CI.lower CI.upper
+      1    FMA         dose  0.58212 0.07933   0.4272  0.73862
+      2    FMA dose_squared -0.03906 0.01472  -0.0683 -0.01031
+
 # prophaz snapshot: BMA
 
-    c(dose = 0.520579799976228, dose_squared = -0.0285484884309152, 
-    "h0[1]" = 0.463482885760436, "h0[2]" = 0.498404740623583, "h0[3]" = 0.370229311923104, 
-    "h0[4]" = 0.417225072243013, "h0[5]" = 0.449181764399242, "h0[6]" = 0.577391390177076, 
-    "h0[7]" = 0.386764497528575, "h0[8]" = 0.446891063673647, "h0[9]" = 0.38199629571387, 
-    "h0[10]" = 0.437090166634038)
+    structure(list(BMA = c(0.520579799976228, -0.0285484884309152, 
+    0.463482885760436, 0.498404740623583, 0.370229311923104, 0.417225072243013, 
+    0.449181764399242, 0.577391390177076, 0.386764497528575, 0.446891063673647, 
+    0.38199629571387, 0.437090166634038)), class = "data.frame", row.names = c("dose", 
+    "dose_squared", "h0[1]", "h0[2]", "h0[3]", "h0[4]", "h0[5]", 
+    "h0[6]", "h0[7]", "h0[8]", "h0[9]", "h0[10]"))
 
 ---
 
@@ -88,4 +128,23 @@
     0.592503154462393, 0.51234606744854, 0.608480393401336)), class = "data.frame", row.names = c("dose", 
     "dose_squared", "h0[1]", "h0[2]", "h0[3]", "h0[4]", "h0[5]", 
     "h0[6]", "h0[7]", "h0[8]", "h0[9]", "h0[10]"))
+
+---
+
+    Code
+      print(summary(fit)$summary_table, digits = 4)
+    Output
+         Method         Term Estimate      SE CI.lower CI.upper Rhat n.eff
+      1     BMA         dose  0.52058 0.09487  0.26925  0.64210 1.50     7
+      2     BMA dose_squared -0.02855 0.01617 -0.04923  0.01321 1.55    12
+      3     BMA        h0[1]  0.46348 0.06362  0.35268  0.61754 1.06    43
+      4     BMA        h0[2]  0.49840 0.07447  0.37881  0.67068 1.04    55
+      5     BMA        h0[3]  0.37023 0.05334  0.27319  0.47641 1.22    47
+      6     BMA        h0[4]  0.41723 0.05671  0.32782  0.54359 1.13    42
+      7     BMA        h0[5]  0.44918 0.06637  0.32608  0.58135 1.01    64
+      8     BMA        h0[6]  0.57739 0.08783  0.44831  0.76970 1.10    41
+      9     BMA        h0[7]  0.38676 0.05733  0.28530  0.49805 1.26    63
+      10    BMA        h0[8]  0.44689 0.06251  0.33355  0.59250 1.04   107
+      11    BMA        h0[9]  0.38200 0.05896  0.29187  0.51235 1.29    35
+      12    BMA       h0[10]  0.43709 0.06998  0.30774  0.60848 1.05    71
 

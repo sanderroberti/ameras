@@ -24,12 +24,13 @@ for (combo in binomial_combos) {
     )
     fit <- confint(fit, type = c("wald.orig", "percentile"))
     expect_snapshot_value(
-      fit$RC$coefficients,
+      coef(fit),
       tolerance = 1e-4,
       style = "deparse"
     )
     expect_snapshot_value(fit$RC$sd, tolerance = 1e-4, style = "deparse")
     expect_snapshot_value(fit$RC$CI, tolerance = 1e-4, style = "deparse")
+    expect_snapshot(print(summary(fit)$summary_table, digits = 4))
   })
 }
 
@@ -55,12 +56,13 @@ for (method in setdiff(all_methods, "RC")) {
     )
     fit <- confint(fit, type = c("wald.orig", "percentile"))
     expect_snapshot_value(
-      fit[[method]]$coefficients,
+      coef(fit),
       tolerance = 1e-4,
       style = "deparse"
     )
     expect_snapshot_value(fit[[method]]$sd, tolerance = 1e-4, style = "deparse")
     expect_snapshot_value(fit[[method]]$CI, tolerance = 1e-4, style = "deparse")
+    expect_snapshot(print(summary(fit)$summary_table, digits = 4))
   })
 }
 

@@ -20,7 +20,7 @@ for (method in c("RC", "ERC", "MCML")) {
     )
     fit1 <- confint(fit, type = c("proflik"))
     expect_snapshot_value(
-      fit1[[method]]$coefficients,
+      coef(fit1),
       tolerance = 1e-4,
       style = "deparse"
     )
@@ -34,10 +34,11 @@ for (method in c("RC", "ERC", "MCML")) {
       tolerance = 1e-4,
       style = "deparse"
     )
+    expect_snapshot(print(summary(fit1)$summary_table, digits = 4))
 
     fit2 <- confint(fit, type = c("wald.transformed"))
     expect_snapshot_value(
-      fit2[[method]]$coefficients,
+      coef(fit2),
       tolerance = 1e-4,
       style = "deparse"
     )
@@ -51,6 +52,7 @@ for (method in c("RC", "ERC", "MCML")) {
       tolerance = 1e-4,
       style = "deparse"
     )
+    expect_snapshot(print(summary(fit2)$summary_table, digits = 4))
   })
 }
 
@@ -71,7 +73,7 @@ for (method in c("FMA", "BMA")) {
     )
     fit1 <- confint(fit, type = c("percentile"))
     expect_snapshot_value(
-      fit1[[method]]$coefficients,
+      coef(fit1),
       tolerance = 1e-4,
       style = "deparse"
     )
@@ -85,10 +87,10 @@ for (method in c("FMA", "BMA")) {
       tolerance = 1e-4,
       style = "deparse"
     )
-
+    expect_snapshot(print(summary(fit1)$summary_table, digits = 4))
     fit2 <- confint(fit, type = c("hpd"))
     expect_snapshot_value(
-      fit2[[method]]$coefficients,
+      coef(fit2),
       tolerance = 1e-4,
       style = "deparse"
     )
@@ -102,5 +104,6 @@ for (method in c("FMA", "BMA")) {
       tolerance = 1e-4,
       style = "deparse"
     )
+    expect_snapshot(print(summary(fit2)$summary_table, digits = 4))
   })
 }
