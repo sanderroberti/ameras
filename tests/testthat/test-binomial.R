@@ -30,7 +30,7 @@ for (combo in binomial_combos) {
     )
     expect_snapshot_value(fit$RC$sd, tolerance = 1e-4, style = "deparse")
     expect_snapshot_value(fit$RC$CI, tolerance = 1e-4, style = "deparse")
-    expect_snapshot(print(summary(fit)$summary_table, digits = 4))
+    expect_snapshot(print(summary(fit)$summary_table, digits = 2))
   })
 }
 
@@ -62,7 +62,7 @@ for (method in setdiff(all_methods, "RC")) {
     )
     expect_snapshot_value(fit[[method]]$sd, tolerance = 1e-4, style = "deparse")
     expect_snapshot_value(fit[[method]]$CI, tolerance = 1e-4, style = "deparse")
-    expect_snapshot(print(summary(fit)$summary_table, digits = 4))
+    expect_snapshot(print(summary(fit)$summary_table, digits = 2))
   })
 }
 

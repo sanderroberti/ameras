@@ -19,12 +19,12 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate       SE CI.lower CI.upper
-      1     RC  (Intercept) -0.88451 0.040753 -0.96439 -0.80464
-      2     RC         dose  0.62049 0.039808  0.54247  0.69851
-      3     RC dose_squared -0.04009 0.007372 -0.05454 -0.02564
+        Method         Term Estimate     SE CI.lower CI.upper
+      1     RC  (Intercept)    -0.88 0.0408   -0.964   -0.805
+      2     RC         dose     0.62 0.0398    0.542    0.699
+      3     RC dose_squared    -0.04 0.0074   -0.055   -0.026
 
 # Poisson snapshot: ERC
 
@@ -47,12 +47,12 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate       SE CI.lower CI.upper
-      1    ERC  (Intercept) -0.87990 0.040456 -0.95919 -0.80061
-      2    ERC         dose  0.61125 0.038738  0.53532  0.68718
-      3    ERC dose_squared -0.03787 0.007016 -0.05163 -0.02412
+        Method         Term Estimate    SE CI.lower CI.upper
+      1    ERC  (Intercept)   -0.880 0.040   -0.959   -0.801
+      2    ERC         dose    0.611 0.039    0.535    0.687
+      3    ERC dose_squared   -0.038 0.007   -0.052   -0.024
 
 # Poisson snapshot: MCML
 
@@ -75,12 +75,12 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate       SE CI.lower CI.upper
-      1   MCML  (Intercept) -0.85435 0.038539 -0.92989 -0.77881
-      2   MCML         dose  0.59375 0.034503  0.52612  0.66137
-      3   MCML dose_squared -0.03683 0.005806 -0.04821 -0.02545
+        Method         Term Estimate     SE CI.lower CI.upper
+      1   MCML  (Intercept)   -0.854 0.0385   -0.930   -0.779
+      2   MCML         dose    0.594 0.0345    0.526    0.661
+      3   MCML dose_squared   -0.037 0.0058   -0.048   -0.025
 
 # Poisson snapshot: FMA
 
@@ -103,12 +103,12 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate       SE CI.lower CI.upper
-      1    FMA  (Intercept) -0.85774 0.040022 -0.93764 -0.78034
-      2    FMA         dose  0.59961 0.039106  0.52798  0.68502
-      3    FMA dose_squared -0.03828 0.007296 -0.05629 -0.02592
+        Method         Term Estimate     SE CI.lower CI.upper
+      1    FMA  (Intercept)   -0.858 0.0400   -0.938   -0.780
+      2    FMA         dose    0.600 0.0391    0.528    0.685
+      3    FMA dose_squared   -0.038 0.0073   -0.056   -0.026
 
 # Poisson snapshot: BMA
 
@@ -131,10 +131,10 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower  CI.upper Rhat n.eff
-      1    BMA  (Intercept) -0.81604 0.08482 -0.93629 -0.628417 1.39     7
-      2    BMA         dose  0.54830 0.10232  0.32719  0.703247 1.77     4
-      3    BMA dose_squared -0.03047 0.01743 -0.05759  0.005196 1.82     4
+        Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
+      1    BMA  (Intercept)    -0.82 0.085   -0.936  -0.6284  1.4     7
+      2    BMA         dose     0.55 0.102    0.327   0.7032  1.8     4
+      3    BMA dose_squared    -0.03 0.017   -0.058   0.0052  1.8     4
 

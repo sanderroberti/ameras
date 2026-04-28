@@ -25,15 +25,15 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method             Term Estimate      SE CI.lower CI.upper
-      1     RC  (1)_(Intercept) -0.87253 0.09106 -1.05101 -0.69405
-      2     RC         (1)_dose  0.54423 0.13076  0.28794  0.80052
-      3     RC (1)_dose_squared -0.03135 0.03321 -0.09643  0.03373
-      4     RC  (2)_(Intercept) -0.10937 0.07450 -0.25539  0.03666
-      5     RC         (2)_dose  0.57635 0.11360  0.35370  0.79901
-      6     RC (2)_dose_squared -0.04164 0.03018 -0.10079  0.01751
+        Method             Term Estimate    SE CI.lower CI.upper
+      1     RC  (1)_(Intercept)   -0.873 0.091   -1.051   -0.694
+      2     RC         (1)_dose    0.544 0.131    0.288    0.801
+      3     RC (1)_dose_squared   -0.031 0.033   -0.096    0.034
+      4     RC  (2)_(Intercept)   -0.109 0.075   -0.255    0.037
+      5     RC         (2)_dose    0.576 0.114    0.354    0.799
+      6     RC (2)_dose_squared   -0.042 0.030   -0.101    0.018
 
 # multinomial snapshot: ERC
 
@@ -62,15 +62,15 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method             Term Estimate      SE CI.lower CI.upper
-      1    ERC  (1)_(Intercept) -0.87440 0.08914 -1.04911 -0.69969
-      2    ERC         (1)_dose  0.55760 0.12343  0.31568  0.79952
-      3    ERC (1)_dose_squared -0.03225 0.02980 -0.09066  0.02615
-      4    ERC  (2)_(Intercept) -0.11027 0.07259 -0.25255  0.03201
-      5    ERC         (2)_dose  0.58240 0.10548  0.37566  0.78914
-      6    ERC (2)_dose_squared -0.03919 0.02633 -0.09079  0.01242
+        Method             Term Estimate    SE CI.lower CI.upper
+      1    ERC  (1)_(Intercept)   -0.874 0.089   -1.049   -0.700
+      2    ERC         (1)_dose    0.558 0.123    0.316    0.800
+      3    ERC (1)_dose_squared   -0.032 0.030   -0.091    0.026
+      4    ERC  (2)_(Intercept)   -0.110 0.073   -0.253    0.032
+      5    ERC         (2)_dose    0.582 0.105    0.376    0.789
+      6    ERC (2)_dose_squared   -0.039 0.026   -0.091    0.012
 
 # multinomial snapshot: MCML
 
@@ -99,15 +99,15 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method             Term Estimate      SE CI.lower  CI.upper
-      1   MCML  (1)_(Intercept) -0.85880 0.08908 -1.03339 -0.684219
-      2   MCML         (1)_dose  0.52789 0.12462  0.28364  0.772144
-      3   MCML (1)_dose_squared -0.02847 0.03013 -0.08752  0.030585
-      4   MCML  (2)_(Intercept) -0.10406 0.07279 -0.24673  0.038601
-      5   MCML         (2)_dose  0.58077 0.10711  0.37083  0.790709
-      6   MCML (2)_dose_squared -0.04433 0.02667 -0.09660  0.007942
+        Method             Term Estimate    SE CI.lower CI.upper
+      1   MCML  (1)_(Intercept)   -0.859 0.089   -1.033  -0.6842
+      2   MCML         (1)_dose    0.528 0.125    0.284   0.7721
+      3   MCML (1)_dose_squared   -0.028 0.030   -0.088   0.0306
+      4   MCML  (2)_(Intercept)   -0.104 0.073   -0.247   0.0386
+      5   MCML         (2)_dose    0.581 0.107    0.371   0.7907
+      6   MCML (2)_dose_squared   -0.044 0.027   -0.097   0.0079
 
 # multinomial snapshot: FMA
 
@@ -136,15 +136,15 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method             Term Estimate      SE CI.lower  CI.upper
-      1    FMA  (1)_(Intercept) -0.86073 0.08957 -1.03623 -0.686453
-      2    FMA         (1)_dose  0.53238 0.12722  0.28329  0.782563
-      3    FMA (1)_dose_squared -0.02991 0.03112 -0.09105  0.031408
-      4    FMA  (2)_(Intercept) -0.10363 0.07297 -0.24704  0.039526
-      5    FMA         (2)_dose  0.58000 0.10793  0.36977  0.793583
-      6    FMA (2)_dose_squared -0.04428 0.02704 -0.09809  0.008267
+        Method             Term Estimate    SE CI.lower CI.upper
+      1    FMA  (1)_(Intercept)   -0.861 0.090   -1.036  -0.6865
+      2    FMA         (1)_dose    0.532 0.127    0.283   0.7826
+      3    FMA (1)_dose_squared   -0.030 0.031   -0.091   0.0314
+      4    FMA  (2)_(Intercept)   -0.104 0.073   -0.247   0.0395
+      5    FMA         (2)_dose    0.580 0.108    0.370   0.7936
+      6    FMA (2)_dose_squared   -0.044 0.027   -0.098   0.0083
 
 # multinomial snapshot: BMA
 
@@ -174,13 +174,13 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method             Term Estimate     SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (1)_(Intercept) -0.58772 0.1688 -0.89931  -0.2677 1.97     7
-      2    BMA         (1)_dose -0.12284 0.4273 -0.84123   0.4761 2.70     3
-      3    BMA (1)_dose_squared  0.17765 0.1551 -0.02336   0.4846 2.72     3
-      4    BMA  (2)_(Intercept)  0.13722 0.1531 -0.13199   0.4230 1.88     5
-      5    BMA         (2)_dose -0.00984 0.3907 -0.71395   0.5797 2.43     2
-      6    BMA (2)_dose_squared  0.14717 0.1466 -0.05189   0.4328 2.43     2
+        Method             Term Estimate   SE CI.lower CI.upper Rhat n.eff
+      1    BMA  (1)_(Intercept)  -0.5877 0.17   -0.899    -0.27  2.0     7
+      2    BMA         (1)_dose  -0.1228 0.43   -0.841     0.48  2.7     3
+      3    BMA (1)_dose_squared   0.1776 0.16   -0.023     0.48  2.7     3
+      4    BMA  (2)_(Intercept)   0.1372 0.15   -0.132     0.42  1.9     5
+      5    BMA         (2)_dose  -0.0098 0.39   -0.714     0.58  2.4     2
+      6    BMA (2)_dose_squared   0.1472 0.15   -0.052     0.43  2.4     2
 

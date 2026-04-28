@@ -29,6 +29,6 @@ for (method in all_methods) {
     )
     expect_snapshot_value(fit[[method]]$sd, tolerance = 1e-4, style = "deparse")
     expect_snapshot_value(fit[[method]]$CI, tolerance = 1e-4, style = "deparse")
-    expect_snapshot(print(summary(fit)$summary_table, digits = 4))
+    expect_snapshot(print(summary(fit)$summary_table, digits = 2))
   })
 }

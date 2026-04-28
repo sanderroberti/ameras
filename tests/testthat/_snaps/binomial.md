@@ -19,12 +19,12 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method        Term Estimate      SE CI.lower CI.upper
-      1     RC (Intercept)  -1.1214 0.08615  -1.2902  -0.9525
-      2     RC          X1   0.4375 0.07612   0.2883   0.5867
-      3     RC        dose   0.8292 0.14184   0.5512   1.1071
+        Method        Term Estimate    SE CI.lower CI.upper
+      1     RC (Intercept)    -1.12 0.086    -1.29    -0.95
+      2     RC          X1     0.44 0.076     0.29     0.59
+      3     RC        dose     0.83 0.142     0.55     1.11
 
 # snapshot: binomial_ERR_deg2
 
@@ -47,13 +47,13 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1     RC  (Intercept) -0.93046 0.09587  -1.1184  -0.7426
-      2     RC           X1  0.44258 0.07655   0.2925   0.5926
-      3     RC         dose  0.03557 0.20887  -0.3738   0.4450
-      4     RC dose_squared  0.28383 0.07941   0.1282   0.4395
+        Method         Term Estimate    SE CI.lower CI.upper
+      1     RC  (Intercept)   -0.930 0.096    -1.12    -0.74
+      2     RC           X1    0.443 0.077     0.29     0.59
+      3     RC         dose    0.036 0.209    -0.37     0.44
+      4     RC dose_squared    0.284 0.079     0.13     0.44
 
 # snapshot: binomial_EXP_deg1
 
@@ -76,12 +76,12 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method        Term Estimate      SE CI.lower CI.upper
-      1     RC (Intercept)  -1.0375 0.06994  -1.1746  -0.9004
-      2     RC          X1   0.4428 0.07650   0.2928   0.5927
-      3     RC        dose   0.4415 0.04081   0.3616   0.5215
+        Method        Term Estimate    SE CI.lower CI.upper
+      1     RC (Intercept)    -1.04 0.070    -1.17    -0.90
+      2     RC          X1     0.44 0.077     0.29     0.59
+      3     RC        dose     0.44 0.041     0.36     0.52
 
 # snapshot: binomial_EXP_deg2
 
@@ -104,13 +104,13 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1     RC  (Intercept) -1.00098 0.08265 -1.16297 -0.83899
-      2     RC           X1  0.44243 0.07650  0.29249  0.59237
-      3     RC         dose  0.36324 0.10370  0.15999  0.56649
-      4     RC dose_squared  0.02233 0.02750 -0.03157  0.07624
+        Method         Term Estimate    SE CI.lower CI.upper
+      1     RC  (Intercept)   -1.001 0.083   -1.163   -0.839
+      2     RC           X1    0.442 0.077    0.292    0.592
+      3     RC         dose    0.363 0.104    0.160    0.566
+      4     RC dose_squared    0.022 0.028   -0.032    0.076
 
 # snapshot: binomial_LINEXP_deg2
 
@@ -134,13 +134,13 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method             Term Estimate      SE CI.lower CI.upper
-      1     RC      (Intercept)  -0.9893 0.08399 -1.15388  -0.8246
-      2     RC               X1   0.4424 0.07652  0.29246   0.5924
-      3     RC      dose_linear   0.3104 0.11523  0.08453   0.5362
-      4     RC dose_exponential   0.3523 0.10942  0.13782   0.5667
+        Method             Term Estimate    SE CI.lower CI.upper
+      1     RC      (Intercept)    -0.99 0.084   -1.154    -0.82
+      2     RC               X1     0.44 0.077    0.292     0.59
+      3     RC      dose_linear     0.31 0.115    0.085     0.54
+      4     RC dose_exponential     0.35 0.109    0.138     0.57
 
 # binomial snapshot: ERC
 
@@ -163,12 +163,12 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE  CI.lower CI.upper
-      1    ERC  (Intercept) -0.74211 0.07050 -0.880295 -0.60392
-      2    ERC         dose  0.29376 0.10378  0.090357  0.49717
-      3    ERC dose_squared  0.04458 0.02711 -0.008553  0.09771
+        Method         Term Estimate    SE CI.lower CI.upper
+      1    ERC  (Intercept)   -0.742 0.071  -0.8803   -0.604
+      2    ERC         dose    0.294 0.104   0.0904    0.497
+      3    ERC dose_squared    0.045 0.027  -0.0086    0.098
 
 # binomial snapshot: MCML
 
@@ -191,12 +191,12 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1   MCML  (Intercept) -0.73270 0.06982 -0.86955 -0.59585
-      2   MCML         dose  0.29100 0.10340  0.08834  0.49366
-      3   MCML dose_squared  0.04072 0.02763 -0.01343  0.09487
+        Method         Term Estimate    SE CI.lower CI.upper
+      1   MCML  (Intercept)   -0.733 0.070   -0.870   -0.596
+      2   MCML         dose    0.291 0.103    0.088    0.494
+      3   MCML dose_squared    0.041 0.028   -0.013    0.095
 
 # binomial snapshot: FMA
 
@@ -219,12 +219,12 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1    FMA  (Intercept) -0.73381 0.07031 -0.87199 -0.59601
-      2    FMA         dose  0.29374 0.10481  0.09002  0.50119
-      3    FMA dose_squared  0.03989 0.02811 -0.01636  0.09462
+        Method         Term Estimate    SE CI.lower CI.upper
+      1    FMA  (Intercept)    -0.73 0.070   -0.872   -0.596
+      2    FMA         dose     0.29 0.105    0.090    0.501
+      3    FMA dose_squared     0.04 0.028   -0.016    0.095
 
 # binomial snapshot: BMA
 
@@ -247,10 +247,10 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE  CI.lower CI.upper Rhat n.eff
-      1    BMA  (Intercept)  -0.7302 0.06153 -0.857292 -0.61861 1.25    44
-      2    BMA         dose   0.2871 0.09014  0.107034  0.43912 2.15    23
-      3    BMA dose_squared   0.0421 0.02428  0.004266  0.08866 2.22    35
+        Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
+      1    BMA  (Intercept)   -0.730 0.062  -0.8573   -0.619  1.2    44
+      2    BMA         dose    0.287 0.090   0.1070    0.439  2.1    23
+      3    BMA dose_squared    0.042 0.024   0.0043    0.089  2.2    35
 

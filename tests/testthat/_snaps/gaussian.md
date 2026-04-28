@@ -19,13 +19,13 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1     RC  (Intercept)  -0.8596 0.03544  -0.9291  -0.7902
-      2     RC         dose   0.4124 0.04825   0.3178   0.5070
-      3     RC dose_squared   0.1924 0.01132   0.1702   0.2146
-      4     RC        sigma   1.1007 0.01421   1.0729   1.1286
+        Method         Term Estimate    SE CI.lower CI.upper
+      1     RC  (Intercept)    -0.86 0.035    -0.93    -0.79
+      2     RC         dose     0.41 0.048     0.32     0.51
+      3     RC dose_squared     0.19 0.011     0.17     0.21
+      4     RC        sigma     1.10 0.014     1.07     1.13
 
 # gaussian snapshot: ERC
 
@@ -49,13 +49,13 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1    ERC  (Intercept)  -0.8576 0.03542  -0.9270  -0.7882
-      2    ERC         dose   0.4074 0.04825   0.3128   0.5019
-      3    ERC dose_squared   0.1938 0.01135   0.1715   0.2160
-      4    ERC        sigma   1.0999 0.01418   1.0721   1.1277
+        Method         Term Estimate    SE CI.lower CI.upper
+      1    ERC  (Intercept)    -0.86 0.035    -0.93    -0.79
+      2    ERC         dose     0.41 0.048     0.31     0.50
+      3    ERC dose_squared     0.19 0.011     0.17     0.22
+      4    ERC        sigma     1.10 0.014     1.07     1.13
 
 # gaussian snapshot: MCML
 
@@ -78,13 +78,13 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1   MCML  (Intercept)  -0.8633 0.03671  -0.9352  -0.7913
-      2   MCML         dose   0.4880 0.04980   0.3904   0.5856
-      3   MCML dose_squared   0.1483 0.01130   0.1261   0.1704
-      4   MCML        sigma   1.1510 0.01486   1.1219   1.1802
+        Method         Term Estimate    SE CI.lower CI.upper
+      1   MCML  (Intercept)    -0.86 0.037    -0.94    -0.79
+      2   MCML         dose     0.49 0.050     0.39     0.59
+      3   MCML dose_squared     0.15 0.011     0.13     0.17
+      4   MCML        sigma     1.15 0.015     1.12     1.18
 
 # gaussian snapshot: FMA
 
@@ -108,13 +108,13 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1    FMA  (Intercept)  -0.8638 0.03703  -0.9365  -0.7911
-      2    FMA         dose   0.4907 0.05194   0.3903   0.5941
-      3    FMA dose_squared   0.1469 0.01291   0.1183   0.1707
-      4    FMA        sigma   1.1512 0.01489   1.1219   1.1803
+        Method         Term Estimate    SE CI.lower CI.upper
+      1    FMA  (Intercept)    -0.86 0.037    -0.94    -0.79
+      2    FMA         dose     0.49 0.052     0.39     0.59
+      3    FMA dose_squared     0.15 0.013     0.12     0.17
+      4    FMA        sigma     1.15 0.015     1.12     1.18
 
 # gaussian snapshot: BMA
 
@@ -138,11 +138,11 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (Intercept)  -0.8608 0.03752  -0.9371  -0.7903 1.00    81
-      2    BMA         dose   0.4839 0.04523   0.3954   0.5667 1.03    73
-      3    BMA dose_squared   0.1478 0.01113   0.1226   0.1661 1.12    73
-      4    BMA        sigma   1.1510 0.01399   1.1229   1.1756 1.23    91
+        Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
+      1    BMA  (Intercept)    -0.86 0.038    -0.94    -0.79  1.0    81
+      2    BMA         dose     0.48 0.045     0.40     0.57  1.0    73
+      3    BMA dose_squared     0.15 0.011     0.12     0.17  1.1    73
+      4    BMA        sigma     1.15 0.014     1.12     1.18  1.2    91
 

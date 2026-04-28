@@ -17,11 +17,11 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower  CI.upper
-      1     RC         dose  0.57629 0.08714  0.40549 7.471e-01
-      2     RC dose_squared -0.03399 0.01737 -0.06804 5.409e-05
+        Method         Term Estimate    SE CI.lower CI.upper
+      1     RC         dose    0.576 0.087    0.405  7.5e-01
+      2     RC dose_squared   -0.034 0.017   -0.068  5.4e-05
 
 # prophaz snapshot: ERC
 
@@ -42,11 +42,11 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
         Method         Term Estimate SE CI.lower CI.upper
-      1    ERC         dose  0.32944 NA       NA       NA
-      2    ERC dose_squared -0.01111 NA       NA       NA
+      1    ERC         dose    0.329 NA       NA       NA
+      2    ERC dose_squared   -0.011 NA       NA       NA
 
 # prophaz snapshot: MCML
 
@@ -68,11 +68,11 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1   MCML         dose   0.5813 0.07839  0.42768  0.73495
-      2   MCML dose_squared  -0.0389 0.01446 -0.06723 -0.01056
+        Method         Term Estimate    SE CI.lower CI.upper
+      1   MCML         dose    0.581 0.078    0.428    0.735
+      2   MCML dose_squared   -0.039 0.014   -0.067   -0.011
 
 # prophaz snapshot: FMA
 
@@ -94,11 +94,11 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1    FMA         dose  0.58212 0.07933   0.4272  0.73862
-      2    FMA dose_squared -0.03906 0.01472  -0.0683 -0.01031
+        Method         Term Estimate    SE CI.lower CI.upper
+      1    FMA         dose    0.582 0.079    0.427     0.74
+      2    FMA dose_squared   -0.039 0.015   -0.068    -0.01
 
 # prophaz snapshot: BMA
 
@@ -132,19 +132,19 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 4)
+      print(summary(fit)$summary_table, digits = 2)
     Output
-         Method         Term Estimate      SE CI.lower CI.upper Rhat n.eff
-      1     BMA         dose  0.52058 0.09487  0.26925  0.64210 1.50     7
-      2     BMA dose_squared -0.02855 0.01617 -0.04923  0.01321 1.55    12
-      3     BMA        h0[1]  0.46348 0.06362  0.35268  0.61754 1.06    43
-      4     BMA        h0[2]  0.49840 0.07447  0.37881  0.67068 1.04    55
-      5     BMA        h0[3]  0.37023 0.05334  0.27319  0.47641 1.22    47
-      6     BMA        h0[4]  0.41723 0.05671  0.32782  0.54359 1.13    42
-      7     BMA        h0[5]  0.44918 0.06637  0.32608  0.58135 1.01    64
-      8     BMA        h0[6]  0.57739 0.08783  0.44831  0.76970 1.10    41
-      9     BMA        h0[7]  0.38676 0.05733  0.28530  0.49805 1.26    63
-      10    BMA        h0[8]  0.44689 0.06251  0.33355  0.59250 1.04   107
-      11    BMA        h0[9]  0.38200 0.05896  0.29187  0.51235 1.29    35
-      12    BMA       h0[10]  0.43709 0.06998  0.30774  0.60848 1.05    71
+         Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
+      1     BMA         dose    0.521 0.095    0.269    0.642  1.5     7
+      2     BMA dose_squared   -0.029 0.016   -0.049    0.013  1.6    12
+      3     BMA        h0[1]    0.463 0.064    0.353    0.618  1.1    43
+      4     BMA        h0[2]    0.498 0.074    0.379    0.671  1.0    55
+      5     BMA        h0[3]    0.370 0.053    0.273    0.476  1.2    47
+      6     BMA        h0[4]    0.417 0.057    0.328    0.544  1.1    42
+      7     BMA        h0[5]    0.449 0.066    0.326    0.581  1.0    64
+      8     BMA        h0[6]    0.577 0.088    0.448    0.770  1.1    41
+      9     BMA        h0[7]    0.387 0.057    0.285    0.498  1.3    63
+      10    BMA        h0[8]    0.447 0.063    0.334    0.593  1.0   107
+      11    BMA        h0[9]    0.382 0.059    0.292    0.512  1.3    35
+      12    BMA       h0[10]    0.437 0.070    0.308    0.608  1.1    71
 

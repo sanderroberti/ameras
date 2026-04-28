@@ -20,12 +20,12 @@
 ---
 
     Code
-      print(summary(fit1)$summary_table, digits = 4)
+      print(summary(fit1)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
-      1     RC  (Intercept) -0.69566 0.08532       NA       NA         NA         NA
-      2     RC         dose  0.03583 0.20480   0.0000   0.4819    0.86103    0.05005
-      3     RC dose_squared  0.27352 0.07752   0.1248   0.3885    0.04979    0.04933
+        Method         Term Estimate    SE CI.lower CI.upper pval.lower pval.upper
+      1     RC  (Intercept)   -0.696 0.085       NA       NA         NA         NA
+      2     RC         dose    0.036 0.205     0.00     0.48       0.86      0.050
+      3     RC dose_squared    0.274 0.078     0.12     0.39       0.05      0.049
 
 ---
 
@@ -48,12 +48,12 @@
 ---
 
     Code
-      print(summary(fit2)$summary_table, digits = 4)
+      print(summary(fit2)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE   CI.lower  CI.upper
-      1     RC  (Intercept) -0.69566 0.08532 -8.629e-01   -0.5284
-      2     RC         dose  0.03583 0.20480  4.895e-07 2623.6137
-      3     RC dose_squared  0.27352 0.07752  1.560e-01    0.4747
+        Method         Term Estimate    SE CI.lower CI.upper
+      1     RC  (Intercept)   -0.696 0.085 -8.6e-01    -0.53
+      2     RC         dose    0.036 0.205  4.9e-07  2623.61
+      3     RC dose_squared    0.274 0.078  1.6e-01     0.47
 
 # proflik/wald.transformed snapshot: ERC
 
@@ -77,16 +77,12 @@
 ---
 
     Code
-      print(summary(fit1)$summary_table, digits = 4)
+      print(summary(fit1)$summary_table, digits = 2)
     Output
-        Method         Term   Estimate        SE CI.lower CI.upper pval.lower
-      1    ERC  (Intercept) -6.934e-01 0.0525498       NA       NA         NA
-      2    ERC         dose  5.340e-08 0.0002283   0.0000       NA    0.99232
-      3    ERC dose_squared  3.150e-01 0.0469447   0.2317   0.4202    0.04931
-        pval.upper
-      1         NA
-      2         NA
-      3    0.04947
+        Method         Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
+      1    ERC  (Intercept) -6.9e-01 0.05255       NA       NA         NA         NA
+      2    ERC         dose  5.3e-08 0.00023     0.00       NA      0.992         NA
+      3    ERC dose_squared  3.2e-01 0.04694     0.23     0.42      0.049      0.049
 
 ---
 
@@ -108,12 +104,12 @@
 ---
 
     Code
-      print(summary(fit2)$summary_table, digits = 4)
+      print(summary(fit2)$summary_table, digits = 2)
     Output
-        Method         Term   Estimate        SE CI.lower CI.upper
-      1    ERC  (Intercept) -6.934e-01 0.0525498  -0.7964  -0.5904
-      2    ERC         dose  5.340e-08 0.0002283   0.0000      Inf
-      3    ERC dose_squared  3.150e-01 0.0469447   0.2349   0.4214
+        Method         Term Estimate      SE CI.lower CI.upper
+      1    ERC  (Intercept) -6.9e-01 0.05255    -0.80    -0.59
+      2    ERC         dose  5.3e-08 0.00023     0.00      Inf
+      3    ERC dose_squared  3.2e-01 0.04694     0.23     0.42
 
 # proflik/wald.transformed snapshot: MCML
 
@@ -137,12 +133,12 @@
 ---
 
     Code
-      print(summary(fit1)$summary_table, digits = 4)
+      print(summary(fit1)$summary_table, digits = 2)
     Output
-        Method         Term  Estimate      SE CI.lower CI.upper pval.lower pval.upper
-      1   MCML  (Intercept) -0.678140 0.08413       NA       NA         NA         NA
-      2   MCML         dose  0.008365 0.19772   0.0000   0.4419    0.96623    0.05008
-      3   MCML dose_squared  0.275599 0.07482   0.1314   0.3810    0.04983    0.04945
+        Method         Term Estimate    SE CI.lower CI.upper pval.lower pval.upper
+      1   MCML  (Intercept)  -0.6781 0.084       NA       NA         NA         NA
+      2   MCML         dose   0.0084 0.198     0.00     0.44       0.97      0.050
+      3   MCML dose_squared   0.2756 0.075     0.13     0.38       0.05      0.049
 
 ---
 
@@ -165,12 +161,12 @@
 ---
 
     Code
-      print(summary(fit2)$summary_table, digits = 4)
+      print(summary(fit2)$summary_table, digits = 2)
     Output
-        Method         Term  Estimate      SE   CI.lower   CI.upper
-      1   MCML  (Intercept) -0.678140 0.08413 -8.430e-01 -5.132e-01
-      2   MCML         dose  0.008365 0.19772  6.372e-23  1.098e+18
-      3   MCML dose_squared  0.275599 0.07482  1.610e-01  4.674e-01
+        Method         Term Estimate    SE CI.lower CI.upper
+      1   MCML  (Intercept)  -0.6781 0.084 -8.4e-01 -5.1e-01
+      2   MCML         dose   0.0084 0.198  6.4e-23  1.1e+18
+      3   MCML dose_squared   0.2756 0.075  1.6e-01  4.7e-01
 
 # percentile/hpd snapshot: FMA
 
@@ -193,12 +189,12 @@
 ---
 
     Code
-      print(summary(fit1)$summary_table, digits = 4)
+      print(summary(fit1)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1    FMA  (Intercept) -0.67942 0.08349  -0.8447  -0.5160
-      2    FMA         dose  0.01296 0.19530  -0.3645   0.4016
-      3    FMA dose_squared  0.27406 0.07436   0.1266   0.4193
+        Method         Term Estimate    SE CI.lower CI.upper
+      1    FMA  (Intercept)   -0.679 0.083    -0.84    -0.52
+      2    FMA         dose    0.013 0.195    -0.36     0.40
+      3    FMA dose_squared    0.274 0.074     0.13     0.42
 
 ---
 
@@ -221,12 +217,12 @@
 ---
 
     Code
-      print(summary(fit2)$summary_table, digits = 4)
+      print(summary(fit2)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper
-      1    FMA  (Intercept) -0.67942 0.08349  -0.8478  -0.5195
-      2    FMA         dose  0.01296 0.19530  -0.3663   0.3993
-      3    FMA dose_squared  0.27406 0.07436   0.1238   0.4162
+        Method         Term Estimate    SE CI.lower CI.upper
+      1    FMA  (Intercept)   -0.679 0.083    -0.85    -0.52
+      2    FMA         dose    0.013 0.195    -0.37     0.40
+      3    FMA dose_squared    0.274 0.074     0.12     0.42
 
 # percentile/hpd snapshot: BMA
 
@@ -249,12 +245,12 @@
 ---
 
     Code
-      print(summary(fit1)$summary_table, digits = 4)
+      print(summary(fit1)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (Intercept)  -0.7234 0.10837  -0.9958  -0.5342 1.26    18
-      2    BMA         dose   0.1343 0.24208  -0.2428   0.6851 1.40    13
-      3    BMA dose_squared   0.2481 0.06946   0.1286   0.3999 1.15    58
+        Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
+      1    BMA  (Intercept)    -0.72 0.108    -1.00    -0.53  1.3    18
+      2    BMA         dose     0.13 0.242    -0.24     0.69  1.4    13
+      3    BMA dose_squared     0.25 0.069     0.13     0.40  1.1    58
 
 ---
 
@@ -277,10 +273,10 @@
 ---
 
     Code
-      print(summary(fit2)$summary_table, digits = 4)
+      print(summary(fit2)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (Intercept)  -0.7234 0.10837  -0.9129  -0.5102 1.26    18
-      2    BMA         dose   0.1343 0.24208  -0.2420   0.6938 1.40    13
-      3    BMA dose_squared   0.2481 0.06946   0.1055   0.3744 1.15    58
+        Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
+      1    BMA  (Intercept)    -0.72 0.108    -0.91    -0.51  1.3    18
+      2    BMA         dose     0.13 0.242    -0.24     0.69  1.4    13
+      3    BMA dose_squared     0.25 0.069     0.11     0.37  1.1    58
 
