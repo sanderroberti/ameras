@@ -4,7 +4,7 @@ Data includes outcomes of all six supported types in the appropriately
 named columns. For proportional hazards regression, the observed exit
 time is `time` and event status is `event`. For conditional logistic
 regression, the matched set variable is `setnr`. The data has 10
-exposure replicates in columns `V1`-`V10`.
+exposure realizations in columns `V1`-`V10`.
 
 ## Examples
 

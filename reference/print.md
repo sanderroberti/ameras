@@ -27,7 +27,7 @@ print(x, digits = max(3, getOption("digits") - 3), ...)
 
 ## Value
 
-Prints the \`ameras\` call, number of rows and dose replicates in the
+Prints the \`ameras\` call, number of rows and dose realizations in the
 data, runtime, and model coefficients.
 
 ## See also
@@ -57,15 +57,15 @@ fit
 #>     family = "binomial", methods = c("RC", "ERC"))
 #> 
 #> Number of rows: 3000
-#> Number of dose replicates: 10
+#> Number of dose realizations: 10
 #> 
-#> Total run time: 18.9 seconds
+#> Total run time: 22.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    18.9
+#>     ERC    22.5
 #> 
 #> Estimated model parameters:
 #> 
@@ -78,15 +78,15 @@ print(fit)
 #>     family = "binomial", methods = c("RC", "ERC"))
 #> 
 #> Number of rows: 3000
-#> Number of dose replicates: 10
+#> Number of dose realizations: 10
 #> 
-#> Total run time: 18.9 seconds
+#> Total run time: 22.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    18.9
+#>     ERC    22.5
 #> 
 #> Estimated model parameters:
 #> 
@@ -101,15 +101,15 @@ print(fit, digits=5)
 #>     family = "binomial", methods = c("RC", "ERC"))
 #> 
 #> Number of rows: 3000
-#> Number of dose replicates: 10
+#> Number of dose realizations: 10
 #> 
-#> Total run time: 18.9 seconds
+#> Total run time: 22.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    18.9
+#>     ERC    22.5
 #> 
 #> Estimated model parameters:
 #> 

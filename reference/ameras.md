@@ -70,8 +70,9 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
   transform=NULL,
   transform.jacobian=NULL, inpar=NULL, loglim=1e-30, MFMA=100000, 
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
-  niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.replicates.BMA=NULL, 
-  optim.method="Nelder-Mead", control=NULL, keep.data=TRUE, ... )
+  niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.realizations.BMA=NULL, 
+  included.replicates.BMA=NULL, optim.method="Nelder-Mead", control=NULL, 
+  keep.data=TRUE, ... )
 ```
 
 ## Arguments
@@ -105,7 +106,7 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 - dosevars:
 
   **Deprecated**. Use the formula interface instead. Names or column
-  indices of exposure replicate vectors.
+  indices of exposure realization vectors.
 
 - doseRRmod:
 
@@ -237,10 +238,15 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 
   thinning rate for BMA (default 10).
 
+- included.realizations.BMA:
+
+  indices of exposure realizations used in BMA (defaults to all
+  realizations).
+
 - included.replicates.BMA:
 
-  indices of exposure replicates used in BMA (defaults to all
-  replicates).
+  **Deprecated**. Use `included.realizations.BMA` instead. Indices of
+  exposure realizations used in BMA (defaults to all realizations).
 
 - optim.method:
 
@@ -270,14 +276,15 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 The output is an object of class `amerasfit`. General components are
 `call` (the function call to `ameras`), `formula` (the formula object
 specifying the model), `num.rows` (the number of rows in `data`),
-`num.replicates` (the number of dose replicates provided), `transform`
-(the used transformation function, if applicable), `transform.jacobian`
-(the used Jacobian function for the transformation, if applicable),
-`other.args` (any other arguments passed to ...), `model` (a list
-containing the specified model components parsed from the formula),
-`CI.computed` (logical, whether confidence intervals have been attached
-by [`confint`](https://ameras.sanderroberti.com/reference/confint.md)),
-and `data` (either the data frame used for model fitting when
+`num.realizations` (the number of dose realizations provided),
+`transform` (the used transformation function, if applicable),
+`transform.jacobian` (the used Jacobian function for the transformation,
+if applicable), `other.args` (any other arguments passed to ...),
+`model` (a list containing the specified model components parsed from
+the formula), `CI.computed` (logical, whether confidence intervals have
+been attached by
+[`confint`](https://ameras.sanderroberti.com/reference/confint.md)), and
+`data` (either the data frame used for model fitting when
 `keep.data=TRUE` or `NULL` otherwise).
 
 For each method supplied to `methods`, the output contains a list with
@@ -340,9 +347,9 @@ For BMA the output additionally contains:
   samples the auto-correlated MCMC samples correspond to. A low
   effective sample size indicates high correlations and/or poor mixing.
 
-- included.replicates:
+- included.realizations:
 
-  indices of replicate exposures that were included to obtain the
+  indices of realization exposures that were included to obtain the
   results.
 
 - prophaz.timepoints:
@@ -358,15 +365,15 @@ Finally, for FMA the output additionally contains:
 - samples:
 
   the samples generated from the normal distributions associated with
-  each dose replicate.
+  each dose realization.
 
 - included.samples:
 
   the total number of samples included.
 
-- included.replicates:
+- included.realizations:
 
-  indices of replicate exposures that were included to obtain results.
+  indices of realization exposures that were included to obtain results.
   Fits without a valid variance estimate (i.e., non-invertible Hessian
   or inverse that is not positive definite) or that reach the maximal
   number of iterations without convergence are filtered out and not used
@@ -506,7 +513,7 @@ Studies
 #>     X1 + X2, data = data, family = "gaussian")
 #> 
 #> Number of rows: 3000
-#> Number of dose replicates: 10
+#> Number of dose realizations: 10
 #> 
 #> Total run time: 0.3 seconds
 #> 
