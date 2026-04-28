@@ -9,9 +9,6 @@ for (method in all_methods) {
     if (method %in% c("ERC", "MCML", "BMA")) {
       skip_on_cran()
     }
-    if (method == "ERC") {
-      skip_on_covr()
-    }
 
     fit <- fit_combination(
       family = "prophaz",
