@@ -2,6 +2,10 @@
 
 ## ameras (development version)
 
+- Shortened column names `CI.lowerbound` and `CI.upperbound` in the
+  [`summary()`](https://rdrr.io/r/base/summary.html) output to
+  `CI.lower` and `CI.upper`, respectively.
+
 ## ameras 0.2.0
 
 CRAN release: 2026-04-26

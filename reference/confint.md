@@ -201,9 +201,9 @@ summary(fit)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC (Intercept)  -0.8847 0.07378       -1.0293       -0.7401
-#>      RC        dose   0.8020 0.13751        0.5324        1.0715
+#>  Method        Term Estimate      SE CI.lower CI.upper
+#>      RC (Intercept)  -0.8847 0.07378  -1.0293  -0.7401
+#>      RC        dose   0.8020 0.13751   0.5324   1.0715
 
 ## Profile likelihood intervals for dose parameters only (slower)
 # \donttest{
@@ -223,12 +223,9 @@ summary(fit)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound pval.lower
-#>      RC (Intercept)  -0.8847 0.07378            NA            NA         NA
-#>      RC        dose   0.8020 0.13751        0.5648         1.112    0.05024
-#>  pval.upper
-#>          NA
-#>     0.04959
+#>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
+#>      RC (Intercept)  -0.8847 0.07378       NA       NA         NA         NA
+#>      RC        dose   0.8020 0.13751   0.5648    1.112    0.05024    0.04959
 # }
 
 ## With keep.data = FALSE, supply data explicitly for proflik
@@ -274,20 +271,20 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 105.2 seconds
+#> Total run time: 105.9 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>     FMA     0.4
-#>     BMA   104.8
+#>     BMA   105.5
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound Rhat   n.eff
-#>     FMA (Intercept)  -0.8762 0.07336       -1.0194       -0.7315   NA      NA
-#>     FMA        dose   0.7916 0.13661        0.5241        1.0595   NA      NA
-#>     BMA (Intercept)  -0.8733 0.07569       -1.0266       -0.7309 1.00 1024.00
-#>     BMA        dose   0.7923 0.14167        0.5401        1.0977 1.00 1001.00
+#>  Method        Term Estimate      SE CI.lower CI.upper Rhat   n.eff
+#>     FMA (Intercept)  -0.8762 0.07336  -1.0194  -0.7315   NA      NA
+#>     FMA        dose   0.7916 0.13661   0.5241   1.0595   NA      NA
+#>     BMA (Intercept)  -0.8733 0.07569  -1.0266  -0.7309 1.00 1024.00
+#>     BMA        dose   0.7923 0.14167   0.5401   1.0977 1.00 1001.00
 # }
 ```

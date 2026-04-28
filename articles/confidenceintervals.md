@@ -90,11 +90,11 @@ summary(fit.ameras.waldorig)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC (Intercept)  -1.0641 0.08788       -1.2363       -0.8918
-#>      RC          X1   0.4409 0.07628        0.2914        0.5904
-#>      RC          X2  -0.3360 0.09544       -0.5230       -0.1489
-#>      RC        dose   0.8508 0.14517        0.5663        1.1353
+#>  Method        Term Estimate      SE CI.lower CI.upper
+#>      RC (Intercept)  -1.0641 0.08788  -1.2363  -0.8918
+#>      RC          X1   0.4409 0.07628   0.2914   0.5904
+#>      RC          X2  -0.3360 0.09544  -0.5230  -0.1489
+#>      RC        dose   0.8508 0.14517   0.5663   1.1353
 summary(fit.ameras.waldtransformed)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
@@ -109,11 +109,11 @@ summary(fit.ameras.waldtransformed)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>      RC (Intercept)  -1.0641 0.08788       -1.2363       -0.8918
-#>      RC          X1   0.4409 0.07628        0.2914        0.5904
-#>      RC          X2  -0.3360 0.09544       -0.5230       -0.1489
-#>      RC        dose   0.8508 0.14517        0.6050        1.1827
+#>  Method        Term Estimate      SE CI.lower CI.upper
+#>      RC (Intercept)  -1.0641 0.08788  -1.2363  -0.8918
+#>      RC          X1   0.4409 0.07628   0.2914   0.5904
+#>      RC          X2  -0.3360 0.09544  -0.5230  -0.1489
+#>      RC        dose   0.8508 0.14517   0.6050   1.1827
 summary(fit.ameras.proflik)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
@@ -128,16 +128,11 @@ summary(fit.ameras.proflik)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound pval.lower
-#>      RC (Intercept)  -1.0641 0.08788       -1.2391       -0.8971    0.05248
-#>      RC          X1   0.4409 0.07628        0.2908        0.5917    0.04878
-#>      RC          X2  -0.3360 0.09544       -0.5256       -0.1490    0.04822
-#>      RC        dose   0.8508 0.14517        0.6009        1.1784    0.05040
-#>  pval.upper
-#>     0.05153
-#>     0.04853
-#>     0.04902
-#>     0.04952
+#>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
+#>      RC (Intercept)  -1.0641 0.08788  -1.2391  -0.8971    0.05248    0.05153
+#>      RC          X1   0.4409 0.07628   0.2908   0.5917    0.04878    0.04853
+#>      RC          X2  -0.3360 0.09544  -0.5256  -0.1490    0.04822    0.04902
+#>      RC        dose   0.8508 0.14517   0.6009   1.1784    0.05040    0.04952
 ```
 
 ## Frequentist and Bayesian model averaging
@@ -163,37 +158,37 @@ summary(fit.ameras.hpd)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.6 seconds
+#> Total run time: 1.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.6
+#>     FMA     1.7
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>     FMA (Intercept)  -1.0576 0.08770       -1.2284       -0.8856
-#>     FMA          X1   0.4429 0.07652        0.2939        0.5937
-#>     FMA          X2  -0.3378 0.09572       -0.5260       -0.1530
-#>     FMA        dose   0.8447 0.14494        0.5640        1.1317
+#>  Method        Term Estimate      SE CI.lower CI.upper
+#>     FMA (Intercept)  -1.0576 0.08770  -1.2284  -0.8856
+#>     FMA          X1   0.4429 0.07652   0.2939   0.5937
+#>     FMA          X2  -0.3378 0.09572  -0.5260  -0.1530
+#>     FMA        dose   0.8447 0.14494   0.5640   1.1317
 summary(fit.ameras.percentile)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.6 seconds
+#> Total run time: 1.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.6
+#>     FMA     1.7
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lowerbound CI.upperbound
-#>     FMA (Intercept)  -1.0576 0.08770       -1.2290       -0.8860
-#>     FMA          X1   0.4429 0.07652        0.2938        0.5935
-#>     FMA          X2  -0.3378 0.09572       -0.5250       -0.1518
-#>     FMA        dose   0.8447 0.14494        0.5616        1.1298
+#>  Method        Term Estimate      SE CI.lower CI.upper
+#>     FMA (Intercept)  -1.0576 0.08770  -1.2290  -0.8860
+#>     FMA          X1   0.4429 0.07652   0.2938   0.5935
+#>     FMA          X2  -0.3378 0.09572  -0.5250  -0.1518
+#>     FMA        dose   0.8447 0.14494   0.5616   1.1298
 ```

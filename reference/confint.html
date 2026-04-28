@@ -229,9 +229,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lowerbound CI.upperbound</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378       -1.0293       -0.7401</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751        0.5324        1.0715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lower CI.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378  -1.0293  -0.7401</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751   0.5324   1.0715</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Profile likelihood intervals for dose parameters only (slower)</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
@@ -251,12 +251,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lowerbound CI.upperbound pval.lower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378            NA            NA         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751        0.5648         1.112    0.05024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  pval.upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.04959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378       NA       NA         NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751   0.5648    1.112    0.05024    0.04959</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## With keep.data = FALSE, supply data explicitly for proflik</span></span></span>
@@ -302,21 +299,21 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("FMA", "BMA"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 105.2 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 105.9 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     FMA     0.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA   104.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA   105.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lowerbound CI.upperbound Rhat   n.eff</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA (Intercept)  -0.8762 0.07336       -1.0194       -0.7315   NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA        dose   0.7916 0.13661        0.5241        1.0595   NA      NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA (Intercept)  -0.8733 0.07569       -1.0266       -0.7309 1.00 1024.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA        dose   0.7923 0.14167        0.5401        1.0977 1.00 1001.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lower CI.upper Rhat   n.eff</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA (Intercept)  -0.8762 0.07336  -1.0194  -0.7315   NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA        dose   0.7916 0.13661   0.5241   1.0595   NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA (Intercept)  -0.8733 0.07569  -1.0266  -0.7309 1.00 1024.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA        dose   0.7923 0.14167   0.5401   1.0977 1.00 1001.00</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
