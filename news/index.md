@@ -6,6 +6,8 @@
   [`summary()`](https://rdrr.io/r/base/summary.html) output to
   `CI.lower` and `CI.upper`, respectively.
 
+- Substantially increased ERC computation speed for the `clogit` family.
+
 ## ameras 0.2.0
 
 CRAN release: 2026-04-26
