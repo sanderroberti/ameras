@@ -27,7 +27,7 @@ ecdfplot <- function(
     ggplot2::theme_minimal(base_size = 15) +
     ggplot2::xlab(xlab) +
     ggplot2::ylab(ylab) +
-    ggplot2::ggtitle("Curves corresponding to replicates")
+    ggplot2::ggtitle("Curves corresponding to realizations")
   if (log.xaxis) {
     p1 <- p1 + ggplot2::scale_x_log10(labels = scales::comma)
   }

@@ -59,7 +59,7 @@ check_D <- function(vars, data, methods) {
   }
   if (length(vars) == 1 & any(c("ERC", "MCML", "FMA", "BMA") %in% methods)) {
     stop(
-      "Multiple exposure replicates required for ERC, MCML, FMA, and BMA. With a single exposure vector, use RC"
+      "Multiple exposure realizations required for ERC, MCML, FMA, and BMA. With a single exposure vector, use RC"
     )
   }
   NULL

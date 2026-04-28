@@ -25,7 +25,7 @@ ameras_main <- function(
   niter.BMA = 20000,
   nchains.BMA = 2,
   thin.BMA = 10,
-  included.replicates.BMA = 1:length(dosevars),
+  included.realizations.BMA = 1:length(dosevars),
   optim.method = "Nelder-Mead",
   control = NULL,
   ...
@@ -45,7 +45,7 @@ ameras_main <- function(
   # prophaz requires status and exit and can use entry, X and M
 
   # Method in ("MCML", "RC", "ERC", "FMA", "BMA")
-  # If both FMA and BMA are to be run, run FMA first to determine the included replicates and skip that step in BMA
+  # If both FMA and BMA are to be run, run FMA first to determine the included realizations and skip that step in BMA
   if ("FMA" %in% methods & "BMA" %in% methods) {
     methods[methods %in% c("FMA", "BMA")] <- c("FMA", "BMA")
   }
@@ -322,10 +322,10 @@ ameras_main <- function(
       results <- c(results, list(FMA = fit))
     } else if (method == "BMA") {
       message("Fitting BMA")
-      if (!is.null(included.replicates.BMA)) {
-        increps <- included.replicates.BMA
-      } else if (!is.null(results$FMA$included.replicates)) {
-        increps <- results$FMA$included.replicates
+      if (!is.null(included.realizations.BMA)) {
+        increps <- included.realizations.BMA
+      } else if (!is.null(results$FMA$included.realizations)) {
+        increps <- results$FMA$included.realizations
       } else {
         increps <- NULL
       }
@@ -352,7 +352,7 @@ ameras_main <- function(
         nchains = nchains.BMA,
         thin = thin.BMA,
         control = control,
-        included.replicates = increps,
+        included.realizations = increps,
         optim.method = optim.method,
         ...
       )
@@ -395,6 +395,7 @@ ameras <- function(
   niter.BMA = 20000,
   nchains.BMA = 2,
   thin.BMA = 10,
+  included.realizations.BMA = NULL,
   included.replicates.BMA = NULL,
   optim.method = "Nelder-Mead",
   control = NULL,
@@ -402,6 +403,16 @@ ameras <- function(
   ...
 ) {
   old_interface <- is.null(formula) || !inherits(formula, "formula")
+  if (!is.null(included.replicates.BMA)) {
+    included.realizations.BMA <- included.replicates.BMA
+    lifecycle::deprecate_warn(
+      when = "0.3.0",
+      what = "ameras(included.replicates.BMA)",
+      details = paste0(
+        "Use included.realizations.BMA instead."
+      )
+    )
+  }
 
   # Check for errors
   check_df(data)
@@ -641,7 +652,7 @@ ameras <- function(
     niter.BMA = niter.BMA,
     nchains.BMA = nchains.BMA,
     thin.BMA = thin.BMA,
-    included.replicates.BMA = included.replicates.BMA %||%
+    included.realizations.BMA = included.realizations.BMA %||%
       seq_along(parsed$dosevars),
     control = control,
     optim.method = optim.method,
@@ -652,7 +663,7 @@ ameras <- function(
       call = match.call(),
       formula = formula,
       num.rows = nrow(data),
-      num.replicates = length(parsed$dosevars),
+      num.realizations = length(parsed$dosevars),
       transform = result$transform,
       transform.jacobian = result$transform.jacobian,
       other.args = list(...),

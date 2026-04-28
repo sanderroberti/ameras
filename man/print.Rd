@@ -24,7 +24,7 @@
 }
 
 \value{
-  Prints the `ameras` call, number of rows and dose replicates in the data, runtime,
+  Prints the `ameras` call, number of rows and dose realizations in the data, runtime,
   and model coefficients.
 }
 

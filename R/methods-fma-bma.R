@@ -809,9 +809,9 @@ ameras.fma <- function(
   }
 
   #allfits <- FMAfits
-  included.replicates <- which(sapply(FMAfits, function(x) x$include))
+  included.realizations <- which(sapply(FMAfits, function(x) x$include))
 
-  if (length(included.replicates) > 0) {
+  if (length(included.realizations) > 0) {
     FMAfits <- FMAfits[sapply(FMAfits, function(x) x$include)]
 
     meanAIC <- mean(sapply(FMAfits, function(x) x$AIC))
@@ -883,21 +883,21 @@ ameras.fma <- function(
   )
 
   prc_excluded <- round(
-    100 * (1 - length(included.replicates) / length(dosevars)),
+    100 * (1 - length(included.realizations) / length(dosevars)),
     1
   )
-  if (length(included.replicates) / length(dosevars) < .8) {
+  if (length(included.realizations) / length(dosevars) < .8) {
     warning(paste0(
       "WARNING: ",
       prc_excluded,
-      "% of replicates excluded from model averaging. Try different bounds or starting values."
+      "% of realizations excluded from model averaging. Try different bounds or starting values."
     ))
   }
 
   out <- list(
     coefficients = coefs,
     sd = sd,
-    included.replicates = included.replicates,
+    included.realizations = included.realizations,
     included.samples = included.samples,
     samples = FMAsamples,
     #includedfits=FMAfits,
@@ -929,7 +929,7 @@ ameras.bma <- function(
   prophaz_numints = 10,
   nburnin = 1000,
   niter = 5000,
-  included.replicates = 1:length(dosevars),
+  included.realizations = 1:length(dosevars),
   nchains = 2,
   thin = 10,
   optim.method = "Nelder-Mead",
@@ -973,7 +973,7 @@ ameras.bma <- function(
       stop("Y is required for family=gaussian")
     }
 
-    if (is.null(included.replicates)) {
+    if (is.null(included.realizations)) {
       if (is.null(inpar)) {
         inpar <- rep(0, 2 + length(X) + length(M) * deg + deg)
       }
@@ -1038,9 +1038,9 @@ ameras.bma <- function(
 
         return(include)
       })
-      included.replicates <- which(toInclude == TRUE)
+      included.realizations <- which(toInclude == TRUE)
     }
-    dosevars <- dosevars[included.replicates]
+    dosevars <- dosevars[included.realizations]
 
     nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars])
 
@@ -1073,7 +1073,7 @@ ameras.bma <- function(
       stop("doseRRmod is required for family=binomial")
     }
 
-    if (is.null(included.replicates)) {
+    if (is.null(included.realizations)) {
       if (is.null(inpar)) {
         inpar <- rep(0, 1 + length(X) + length(M) * deg + deg)
       }
@@ -1141,10 +1141,10 @@ ameras.bma <- function(
 
         return(include)
       })
-      included.replicates <- which(toInclude == TRUE)
+      included.realizations <- which(toInclude == TRUE)
     }
 
-    dosevars <- dosevars[included.replicates]
+    dosevars <- dosevars[included.realizations]
 
     nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars])
 
@@ -1182,7 +1182,7 @@ ameras.bma <- function(
       P <- data[, offset]
     }
 
-    if (is.null(included.replicates)) {
+    if (is.null(included.realizations)) {
       if (is.null(inpar)) {
         inpar <- rep(0, 1 + length(X) + length(M) * deg + deg)
       }
@@ -1250,9 +1250,9 @@ ameras.bma <- function(
 
         return(include)
       })
-      included.replicates <- which(toInclude == TRUE)
+      included.realizations <- which(toInclude == TRUE)
     }
-    dosevars <- dosevars[included.replicates]
+    dosevars <- dosevars[included.realizations]
 
     nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars])
 
@@ -1287,7 +1287,7 @@ ameras.bma <- function(
       stop("status is required for family=prophaz")
     }
 
-    if (is.null(included.replicates)) {
+    if (is.null(included.realizations)) {
       if (is.null(inpar)) {
         inpar <- rep(0, length(X) + length(M) * deg + deg)
       }
@@ -1403,10 +1403,10 @@ ameras.bma <- function(
 
         return(include)
       })
-      included.replicates <- which(toInclude == TRUE)
+      included.realizations <- which(toInclude == TRUE)
     }
 
-    dosevars <- dosevars[included.replicates]
+    dosevars <- dosevars[included.realizations]
 
     prophaz_timepoints <- as.numeric(quantile(
       data[data[, status] == 1, exit],
@@ -1485,7 +1485,7 @@ ameras.bma <- function(
     set_start <- cumsum(c(1, head(set_sizes, -1)))
     set_end <- cumsum(set_sizes)
 
-    if (is.null(included.replicates)) {
+    if (is.null(included.realizations)) {
       designmat <- t(model.matrix(~ as.factor(data[, setnr]) - 1))
 
       if (is.null(inpar)) {
@@ -1598,10 +1598,10 @@ ameras.bma <- function(
 
         return(include)
       })
-      included.replicates <- which(toInclude == TRUE)
+      included.realizations <- which(toInclude == TRUE)
     }
 
-    dosevars <- dosevars[included.replicates]
+    dosevars <- dosevars[included.realizations]
 
     nimbledata <- list(
       Y = as.numeric(data[, status]),
@@ -1633,7 +1633,7 @@ ameras.bma <- function(
     }
 
     Z <- nlevels(data[, Y])
-    if (is.null(included.replicates)) {
+    if (is.null(included.realizations)) {
       if (is.null(inpar)) {
         inpar <- rep(0, (Z - 1) * (1 + length(X) + length(M) * deg + deg))
       }
@@ -1701,10 +1701,10 @@ ameras.bma <- function(
 
         return(include)
       })
-      included.replicates <- which(toInclude == TRUE)
+      included.realizations <- which(toInclude == TRUE)
     }
 
-    dosevars <- dosevars[included.replicates]
+    dosevars <- dosevars[included.realizations]
 
     nimbledata <- list(
       Y = model.matrix(~ data[, Y] - 1),
@@ -2043,12 +2043,12 @@ ameras.bma <- function(
     "seconds"
   )
 
-  prc_excluded <- round(100 * (1 - length(included.replicates) / ndoses), 1)
-  if (length(included.replicates) / ndoses < .8) {
+  prc_excluded <- round(100 * (1 - length(included.realizations) / ndoses), 1)
+  if (length(included.realizations) / ndoses < .8) {
     warning(paste0(
       "WARNING: ",
       prc_excluded,
-      "% of replicates excluded from model averaging. Try different bounds or starting values."
+      "% of realizations excluded from model averaging. Try different bounds or starting values."
     ))
   }
 
@@ -2058,7 +2058,7 @@ ameras.bma <- function(
     #CI=CIresult,
     Rhat = Rhat,
     samples = nimblesamples,
-    included.replicates = included.replicates,
+    included.realizations = included.realizations,
     runtime = runtime
   )
   if (family == "prophaz") {

@@ -34,7 +34,7 @@ print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   print(x$call)
 
   cat(paste0("\nNumber of rows: ", x$num.rows, "\n"))
-  cat(paste0("Number of dose replicates: ", x$num.replicates, "\n"))
+  cat(paste0("Number of dose realizations: ", x$num.realizations, "\n"))
 
   cat(paste0("\nTotal run time: ", total_runtime_seconds, " seconds\n\n"))
 

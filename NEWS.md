@@ -4,6 +4,8 @@
 
 * Substantially increased ERC computation speed for the `clogit` family.
 
+* Replaced all occurrences of `replicate` with `realization`, including in names of arguments and output. As a result, the argument `included.replicates.BMA` is now deprecated and will be removed in version 1.0.0. Use `included.realizations.BMA` instead.
+
 
 # ameras 0.2.0
 

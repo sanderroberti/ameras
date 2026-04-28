@@ -16,7 +16,7 @@
 
 \keyword{measurement error}
 \keyword{exposure uncertainty}
-\keyword{exposure replicates}
+\keyword{exposure realizations}
 \keyword{regression calibration} 
 \keyword{Monte Carlo Maximum Likelihood}
 \keyword{Bayesian model averaging} 

@@ -32,7 +32,7 @@ Models are specified through formulas of the form `Y~dose(dose_expression, model
 
 ## Example data
 
-The included example dataset contains 3,000 individuals with 10 exposure replicates `V1`-`V10`, binary covariates `X1` and `X2` and effect modifiers `M1` and `M2`, and outcomes of all types (`Y.gaussian`, `Y.binomial`, `Y.poisson`, `status`, `time`, `Y.multinomial`, `Y.clogit`, and `setnr`).
+The included example dataset contains 3,000 individuals with 10 exposure realizations `V1`-`V10`, binary covariates `X1` and `X2` and effect modifiers `M1` and `M2`, and outcomes of all types (`Y.gaussian`, `Y.binomial`, `Y.poisson`, `status`, `time`, `Y.multinomial`, `Y.clogit`, and `setnr`).
 
 ```{r}
 data(data, package="ameras")
