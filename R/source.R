@@ -45,60 +45,6 @@ dldd_prophaz <- function(entry, exit, status, RRs) {
 }
 
 
-compute_ERCmatrix_clogit <- function(designmat, RRs, drdd, drdd2, status) {
-  nr <- nrow(designmat)
-  nc <- ncol(designmat)
-  ret <- as.numeric(rep(-9999, nc * nc))
-
-  tmp <- .C(
-    "C_compute_ERCmatrix_clogit",
-    as.numeric(designmat),
-    as.integer(nr),
-    as.integer(nc),
-    as.numeric(RRs),
-    as.numeric(drdd),
-    as.numeric(drdd2),
-    as.integer(status),
-    ret = ret,
-    PACKAGE = "ameras"
-  )
-  ret <- matrix(tmp$ret, nrow = nc, ncol = nc, byrow = FALSE)
-  ret
-}
-
-
-compute_ERCmatrix_prophaz <- function(entry, exit, status, RRs, drdd, drdd2) {
-  n <- length(entry) # Number of individuals
-  ret <- as.numeric(rep(-9999, n * n)) # Initialize return vector with placeholders
-
-  # Ensure all inputs are numeric vectors (entry, exit, status, RRs)
-  entry <- as.numeric(entry)
-  exit <- as.numeric(exit)
-  status <- as.integer(status)
-  RRs <- as.numeric(RRs)
-  drdd <- as.numeric(drdd)
-  drdd2 <- as.numeric(drdd2)
-
-  # Call the C function using .C
-  tmp <- .C(
-    "C_compute_ERCmatrix_prophaz",
-    as.numeric(entry),
-    as.numeric(exit),
-    as.integer(status),
-    as.numeric(RRs),
-    as.numeric(drdd),
-    as.numeric(drdd2),
-    as.integer(n),
-    ret = ret,
-    PACKAGE = "ameras"
-  )
-
-  # Return the result as a numeric vector
-  ret <- matrix(tmp$ret, nrow = n, ncol = n, byrow = FALSE)
-  ret
-  return(ret)
-}
-
 loglik_prophaz_rcpp <- function(
   exit_t,
   entry_t,
@@ -136,18 +82,4 @@ loglik_prophaz_rcpp <- function(
   )
 
   tmp$ret
-}
-
-
-compute_ERCsum_clogit <- function(set_members, RRs, drdd, drdd2, status, Kmat) {
-  .Call(
-    "_ameras_compute_ERCsum_clogit",
-    set_members,
-    RRs,
-    drdd,
-    drdd2,
-    status,
-    Kmat,
-    PACKAGE = "ameras"
-  )
 }

@@ -757,18 +757,20 @@ loglik.prophaz <- function(
     tmp <- c(dldd_prophaz(entry_t2, exit_t, status_ord, RR_exit))
     dldd <- drdd / RR_exit * (status_ord == 1) - tmp * drdd
 
-    mymat <- compute_ERCmatrix_prophaz(
-      entry_t2,
-      exit_t,
-      status_ord,
-      RR_exit,
-      drdd,
-      drdd2
+    erc_sum <- compute_ERCsum_prophaz(
+      entry_t = as.double(entry_t2),
+      exit_t = as.double(exit_t),
+      status_ord = as.integer(status_ord),
+      RRs = as.double(RR_exit),
+      drdd = as.double(drdd),
+      drdd2 = as.double(drdd2),
+      Kmat = Kmat,
+      dldd = as.double(dldd)
     )
 
     return(
       -1 *
-        (ls + log(max(1 + .5 * sum((tcrossprod(dldd) + mymat) * Kmat), loglim)))
+        (ls + log(max(1 + .5 * erc_sum, loglim)))
     )
   } else {
     return(-1 * ls)

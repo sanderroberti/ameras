@@ -9,19 +9,15 @@ dldd_prophaz <- function(entry_t, exit_t, status_ord, RRs) {
     .Call(`_ameras_dldd_prophaz`, entry_t, exit_t, status_ord, RRs)
 }
 
-compute_ERCmatrix_prophaz <- function(entry_t, exit_t, status_ord, RRs, drdd, drdd2) {
-    .Call(`_ameras_compute_ERCmatrix_prophaz`, entry_t, exit_t, status_ord, RRs, drdd, drdd2)
-}
-
-compute_ERCmatrix_clogit <- function(designmat, RRs, drdd, drdd2, status) {
-    .Call(`_ameras_compute_ERCmatrix_clogit`, designmat, RRs, drdd, drdd2, status)
-}
-
 loglik_prophaz_rcpp <- function(exit_t, entry_t, RR_entry, RR_exit, status_ord, loglim) {
     .Call(`_ameras_loglik_prophaz_rcpp`, exit_t, entry_t, RR_entry, RR_exit, status_ord, loglim)
 }
 
 compute_ERCsum_clogit <- function(set_members, RRs, drdd, drdd2, status, Kmat) {
     .Call(`_ameras_compute_ERCsum_clogit`, set_members, RRs, drdd, drdd2, status, Kmat)
+}
+
+compute_ERCsum_prophaz <- function(entry_t, exit_t, status_ord, RRs, drdd, drdd2, Kmat, dldd) {
+    .Call(`_ameras_compute_ERCsum_prophaz`, entry_t, exit_t, status_ord, RRs, drdd, drdd2, Kmat, dldd)
 }
 

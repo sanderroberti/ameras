@@ -22,7 +22,7 @@ for (method in all_methods) {
       M = NULL,
       data = data,
       methods = method,
-      niter.BMA = 2000,
+      niter.BMA = 5000,
       nburnin.BMA = 500
     )
     fit <- confint(fit, type = c("wald.orig", "percentile"))

@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <numeric>
 
 
 // [[Rcpp::export]]
@@ -60,168 +61,6 @@ Eigen::RowVectorXd dldd_prophaz(Eigen::Map<Eigen::VectorXd> &entry_t,
   }
   
   return result;
-}
-
-
-// [[Rcpp::export]]
-Eigen::MatrixXd compute_ERCmatrix_prophaz(Eigen::Map<Eigen::VectorXd> &entry_t,
-                                       Eigen::Map<Eigen::VectorXd> &exit_t,
-                                       Eigen::Map<Eigen::VectorXi> &status_ord,
-                                       Eigen::Map<Eigen::VectorXd> &RRs,
-                                       Eigen::Map<Eigen::VectorXd> &drdd,
-                                       Eigen::Map<Eigen::VectorXd> &drdd2) {
-  int n = entry_t.size();
-  
-  // Collect all event indices
-  std::vector<int> event_indices;
-  event_indices.reserve(n);
-  for (int i = 0; i < n; ++i) {
-    if (status_ord(i) == 1) {
-      event_indices.push_back(i);
-    }
-  }
-  
-  int n_events = event_indices.size();
-  if (n_events == 0) return Eigen::MatrixXd::Zero(n, n);
-  
-  // Diagonal update terms
-  Eigen::VectorXd status_d = status_ord.cast<double>();
-  Eigen::VectorXd diag_update = (drdd2.array() / RRs.array()) * status_d.array() -
-    (drdd.array().square() / RRs.array().square()) * status_d.array();
-  
-  Eigen::MatrixXd result = Eigen::MatrixXd::Zero(n, n);
-  
-  // Decide whether to pre-compute outer_drdd based on n
-  // Threshold: if n*n*8 bytes > 500 MB, use blocking
-  bool use_blocking = (n > 8000);  // ~500 MB threshold
-  
-  Eigen::MatrixXd outer_drdd;
-  if (!use_blocking) {
-    outer_drdd = drdd * drdd.transpose();
-  }
-  
-  // Process events in batches
-  int event_batch_size = 1000;
-  
-  for (int batch_start = 0; batch_start < n_events; batch_start += event_batch_size) {
-    int batch_end = std::min(batch_start + event_batch_size, n_events);
-    int current_batch_size = batch_end - batch_start;
-    
-    // Build atriskmat for this batch
-    Eigen::MatrixXd atriskmat(current_batch_size, n);
-    
-    for (int row = 0; row < current_batch_size; ++row) {
-      int event_idx = event_indices[batch_start + row];
-      double exit_event = exit_t(event_idx);
-      
-      for (int col = 0; col < n; ++col) {
-        atriskmat(row, col) = (exit_t(col) >= exit_event && entry_t(col) < exit_event) ? 1.0 : 0.0;
-      }
-    }
-    
-    // Compute atriskmat_prod_RRs
-    Eigen::VectorXd atriskmat_prod_RRs = atriskmat * RRs;
-    Eigen::VectorXd inv_sq = atriskmat_prod_RRs.array().square().inverse();
-    
-    // Scale rows
-    Eigen::MatrixXd scaled_atrisk(current_batch_size, n);
-    for (int row = 0; row < current_batch_size; ++row) {
-      scaled_atrisk.row(row) = atriskmat.row(row) * inv_sq(row);
-    }
-    
-    // Compute inner
-    Eigen::MatrixXd inner = atriskmat.transpose() * scaled_atrisk;
-    
-    if (use_blocking) {
-      // Use blocking for large n
-      int block_size = 1000;
-      for (int i_start = 0; i_start < n; i_start += block_size) {
-        int i_end = std::min(i_start + block_size, n);
-        for (int j_start = 0; j_start < n; j_start += block_size) {
-          int j_end = std::min(j_start + block_size, n);
-          
-          Eigen::MatrixXd inner_block = inner.block(i_start, j_start, i_end - i_start, j_end - j_start);
-          Eigen::VectorXd drdd_i = drdd.segment(i_start, i_end - i_start);
-          Eigen::VectorXd drdd_j = drdd.segment(j_start, j_end - j_start);
-          Eigen::MatrixXd outer_block = drdd_i * drdd_j.transpose();
-          
-          result.block(i_start, j_start, i_end - i_start, j_end - j_start).array() += 
-            inner_block.array() * outer_block.array();
-        }
-      }
-    } else {
-      // Use pre-computed outer product for small n
-      result.array() += inner.array() * outer_drdd.array();
-    }
-    
-    // atriskmat scaled by drdd2
-    Eigen::MatrixXd atrisk_drdd2(current_batch_size, n);
-    for (int row = 0; row < current_batch_size; ++row) {
-      for (int col = 0; col < n; ++col) {
-        atrisk_drdd2(row, col) = atriskmat(row, col) * drdd2(col);
-      }
-    }
-    
-    // last_term
-    Eigen::VectorXd inv_atriskmat_prod_RRs = atriskmat_prod_RRs.array().inverse();
-    Eigen::RowVectorXd last_term = inv_atriskmat_prod_RRs.transpose() * atrisk_drdd2;
-    
-    result.diagonal().array() -= last_term.transpose().array();
-  }
-  
-  result.diagonal() += diag_update;
-  
-  return result;
-}
-
-
-
-
-// [[Rcpp::export]]
-Eigen::MatrixXd compute_ERCmatrix_clogit(Eigen::Map<Eigen::MatrixXd> &designmat,
-                                      Eigen::Map<Eigen::VectorXd> &RRs,
-                                      Eigen::Map<Eigen::VectorXd> &drdd,
-                                      Eigen::Map<Eigen::VectorXd> &drdd2,
-                                      Eigen::Map<Eigen::VectorXi> &status) {
-  
-  int ncol = designmat.cols();
-  
-  // Compute designmat_prod_RRs = designmat * RRs
-  Eigen::VectorXd designmat_prod_RRs = designmat * RRs;
-  
-  // Compute inv_sq vector
-  Eigen::VectorXd inv_sq = designmat_prod_RRs.array().square().inverse();
-  
-  // Scale rows of designmat by inv_sq
-  Eigen::MatrixXd scaled_atrisk = designmat.array().colwise() * inv_sq.array();
-  
-  // Compute inner matrix
-  Eigen::MatrixXd inner = designmat.transpose() * scaled_atrisk;
-  
-  // Outer product drdd * drdd.transpose()
-  Eigen::MatrixXd outer_drdd = drdd * drdd.transpose();
-  
-  // Compute mymat before diag update
-  Eigen::MatrixXd mymat = inner.array() * outer_drdd.array();
-  
-  // Diagonal update terms
-  Eigen::VectorXd status_d = status.cast<double>();
-  
-  Eigen::VectorXd diag_update = (drdd2.array() / RRs.array()) * status_d.array() -
-    (drdd.array().square() / RRs.array().square()) * status_d.array();
-  
-  // designmat scaled columns by drdd2
-  Eigen::MatrixXd atrisk_drdd2 = designmat.array().rowwise() * drdd2.transpose().array();
-  
-  // last_term
-  Eigen::RowVectorXd last_term = (designmat_prod_RRs.array().inverse().matrix().transpose()) * atrisk_drdd2;
-  
-  // Update diagonal elements
-  for (int i = 0; i < ncol; i++) {
-    mymat(i, i) += diag_update(i) - last_term(i);
-  }
-
-  return mymat;
 }
 
 
@@ -364,6 +203,110 @@ double compute_ERCsum_clogit(
 
 
 
+// [[Rcpp::export]]
+double compute_ERCsum_prophaz(
+    Eigen::Map<Eigen::VectorXd> &entry_t,
+    Eigen::Map<Eigen::VectorXd> &exit_t,
+    Eigen::Map<Eigen::VectorXi> &status_ord,
+    Eigen::Map<Eigen::VectorXd> &RRs,
+    Eigen::Map<Eigen::VectorXd> &drdd,
+    Eigen::Map<Eigen::VectorXd> &drdd2,
+    Eigen::Map<Eigen::MatrixXd> &Kmat,
+    Eigen::Map<Eigen::VectorXd> &dldd) {
+  
+  int n = entry_t.size();
+  
+  // Precompute diagonal update terms
+  Eigen::VectorXd status_d = status_ord.cast<double>();
+  Eigen::VectorXd inv_RRs  = RRs.cwiseInverse();
+  Eigen::VectorXd inv_RRs2 = inv_RRs.cwiseProduct(inv_RRs);
+  
+  Eigen::VectorXd diag_total =
+    status_d.cwiseProduct(
+      drdd2.cwiseProduct(inv_RRs) -
+      drdd.cwiseProduct(drdd).cwiseProduct(inv_RRs2)
+    );
+  
+  // Diagonal contribution to sum(mymat * Kmat)
+  double sum_mymat_Kmat = 0.0;
+  for (int i = 0; i < n; i++) {
+    sum_mymat_Kmat += diag_total(i) * Kmat(i, i);
+  }
+  
+  // Sort entry indices by entry time for incremental risk set maintenance
+  std::vector<int> entry_order(n);
+  std::iota(entry_order.begin(), entry_order.end(), 0);
+  std::sort(entry_order.begin(), entry_order.end(),
+            [&](int a, int b) { return entry_t(a) < entry_t(b); });
+  
+  // Risk set state
+  std::vector<bool> at_risk(n, false);
+  double            risk_RR_sum = 0.0;
+  
+  // Running sum: sum_{j in risk set} drdd(j) * Kmat(:, j)
+  // Updated incrementally as risk set changes
+  Eigen::VectorXd sum_drdd_Kmat_col = Eigen::VectorXd::Zero(n);
+  
+  int entry_ptr = 0;
+  int exit_ptr  = 0;
+  
+  // Data is already sorted by exit_t in loglik.prophaz
+  for (int i = 0; i < n; ++i) {
+    double t = exit_t(i);
+
+    // Breslow's approximation for ties:
+    // Risk set at event time t includes all individuals with
+    // entry_t < t and exit_t >= t, i.e. individuals who tie
+    // at the event time are included in each other's risk sets.
+    // The strict inequality exit_t < t in the removal condition
+    // and exit_ptr < i guard ensure this is correctly handled.
+
+    // Remove individuals with exit_t < t from risk set
+    while (exit_ptr < i && exit_t(exit_ptr) < t) {
+      int j = exit_ptr;
+      if (at_risk[j]) {
+        at_risk[j]          = false;
+        risk_RR_sum        -= RRs(j);
+        sum_drdd_Kmat_col  -= drdd(j) * Kmat.col(j);
+      }
+      exit_ptr++;
+    }
+    
+    // Add individuals with entry_t < t to risk set
+    while (entry_ptr < n && entry_t(entry_order[entry_ptr]) < t) {
+      int j = entry_order[entry_ptr];
+      if (!at_risk[j]) {
+        at_risk[j]          = true;
+        risk_RR_sum        += RRs(j);
+        sum_drdd_Kmat_col  += drdd(j) * Kmat.col(j);
+      }
+      entry_ptr++;
+    }
+    
+    // Accumulate contribution for this event
+    if (status_ord(i) == 1 && risk_RR_sum > 0.0) {
+      double inv2        = 1.0 / (risk_RR_sum * risk_RR_sum);
+      double inv_risk_RR = 1.0 / risk_RR_sum;
+      
+      for (int j = 0; j < n; ++j) {
+        if (at_risk[j]) {
+          // Contribution from off-diagonal mymat terms
+          sum_mymat_Kmat += inv2 * drdd(j) * sum_drdd_Kmat_col(j);
+          // Contribution from last_term diagonal correction
+          sum_mymat_Kmat -= drdd2(j) * inv_risk_RR * Kmat(j, j);
+        }
+      }
+    }
+  }
+  
+  // sum(tcrossprod(dldd) * Kmat) = dldd^T * Kmat * dldd
+  double sum_dldd_Kmat = (dldd.transpose() * Kmat * dldd)(0);
+  
+  return sum_mymat_Kmat + sum_dldd_Kmat;
+}
+
+
+
 
 
 
@@ -411,59 +354,6 @@ extern "C" {
 }
 
 
-
-
-extern "C" {
-  void C_compute_ERCmatrix_clogit(double *R_atriskColVec, int *R_nr, int *R_nc, double *R_RR, 
-                               double *R_drdd, double *R_drdd2, int *R_status, double *ret) {
-    
-    int nr = *R_nr;
-    int nc = *R_nc;
-    
-    Eigen::Map<Eigen::VectorXd> RRs(R_RR, nc);
-    Eigen::Map<Eigen::VectorXd> drdd(R_drdd, nc);
-    Eigen::Map<Eigen::VectorXd> drdd2(R_drdd2, nc);
-    Eigen::Map<Eigen::VectorXi> status(R_status, nc);
-    Eigen::Map<Eigen::MatrixXd> designmat(R_atriskColVec, nr, nc);
-    
-    Eigen::MatrixXd mymat = compute_ERCmatrix_clogit(designmat, RRs, drdd, drdd2, status); //nc x nc
-    
-    // Return column vector
-    double *ptr = ret;
-    for (int j=0; j<nc; j++) {
-      for (int i=0; i<nc; i++) *ptr++ = mymat(i, j);
-    }
-    
-    return;
-  }
-}
-
-
-extern "C" {
-  void C_compute_ERCmatrix_prophaz(double *R_entry, double *R_exit, int *R_status, double *R_RR,
-                                double *R_drdd, double*R_drdd2,  int *R_n, double *ret) {
-    
-    int n = *R_n;  // Number of individuals
-    
-    // Map the input data from R to Eigen vectors/matrices
-    Eigen::Map<Eigen::VectorXd> entry_t(R_entry, n);
-    Eigen::Map<Eigen::VectorXd> exit_t(R_exit, n);
-    Eigen::Map<Eigen::VectorXi> status_ord(R_status, n);
-    Eigen::Map<Eigen::VectorXd> RRs(R_RR, n);
-    Eigen::Map<Eigen::VectorXd> drdd(R_drdd, n);
-    Eigen::Map<Eigen::VectorXd> drdd2(R_drdd2, n);
-    
-    // Call the C++ function to compute the result
-    Eigen::MatrixXd mymat = compute_ERCmatrix_prophaz(entry_t, exit_t, status_ord, RRs, drdd, drdd2);
-    
-    double *ptr = ret;
-    for (int j=0; j<n; j++) {
-      for (int i=0; i<n; i++) *ptr++ = mymat(i, j);
-    }
-    
-    return;
-  }
-}
 
 
 
