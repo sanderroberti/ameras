@@ -65,10 +65,13 @@
 <dd><p>names or column indices of dose vectors.</p></dd>
 
   <dt id="arg-xlab">xlab<a class="anchor" aria-label="anchor" href="#arg-xlab"></a></dt>
-<dd><p>label for the x-axis, default <code>"Dose"</code></p></dd>
+<dd><p>label for the x-axis, default <code>"Dose"</code>.</p></dd>
 
   <dt id="arg-ylab">ylab<a class="anchor" aria-label="anchor" href="#arg-ylab"></a></dt>
-<dd><p>label for the y-axis, default <code>"Cumulative distribution"</code></p></dd>
+<dd><p>label for the y-axis, default <code>"Cumulative distribution"</code>.</p></dd>
+
+  <dt id="arg-show-mean">show.mean<a class="anchor" aria-label="anchor" href="#arg-show-mean"></a></dt>
+<dd><p>logical, whether to plot the cumulative distribution of the mean dose across realizations and across individuals, default <code>TRUE</code>.</p></dd>
 
   <dt id="arg-log-xaxis">log.xaxis<a class="anchor" aria-label="anchor" href="#arg-log-xaxis"></a></dt>
 <dd><p>logical, whether to use a log-scale for the dose axis (default <code>TRUE</code>). When <code>log.xaxis=TRUE</code>, any zeros in the doses are excluded while plotting.</p></dd>
@@ -80,11 +83,13 @@
 plotted for each dose realization. In other words, each curve shows one distribution
 of dose across individuals. The spread within individual curves reflects the dose range
 across individuals, while the spread between curves reflects between-realization variation
-on the cohort level.</p>
+on the cohort level. If <code>show.mean=TRUE</code>, the solid black curve is the cumulative
+distribution of the mean dose for each individual.</p>
 <p>In the right panel, ECDFs are plotted for each individual,
 showing distributions within individuals. A wide spread within individual curves
 is indicative of large within-individual variation, while the spread between
-curves reflects between-individual variation.</p>
+curves reflects between-individual variation. If <code>show.mean=TRUE</code>, the solid
+black curve is the cumulative distribution of the mean for each dose realization.</p>
 <p>When using a log-scale for the x-axis, any zero dose values are excluded before plotting.</p>
     </div>
 

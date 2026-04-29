@@ -22,11 +22,16 @@ ecdfplot(data, dosevars, xlab="Dose",
 
 - xlab:
 
-  label for the x-axis, default `"Dose"`
+  label for the x-axis, default `"Dose"`.
 
 - ylab:
 
-  label for the y-axis, default `"Cumulative distribution"`
+  label for the y-axis, default `"Cumulative distribution"`.
+
+- show.mean:
+
+  logical, whether to plot the cumulative distribution of the mean dose
+  across realizations and across individuals, default `TRUE`.
 
 - log.xaxis:
 
@@ -41,12 +46,15 @@ is plotted for each dose realization. In other words, each curve shows
 one distribution of dose across individuals. The spread within
 individual curves reflects the dose range across individuals, while the
 spread between curves reflects between-realization variation on the
-cohort level.
+cohort level. If `show.mean=TRUE`, the solid black curve is the
+cumulative distribution of the mean dose for each individual.
 
 In the right panel, ECDFs are plotted for each individual, showing
 distributions within individuals. A wide spread within individual curves
 is indicative of large within-individual variation, while the spread
-between curves reflects between-individual variation.
+between curves reflects between-individual variation. If
+`show.mean=TRUE`, the solid black curve is the cumulative distribution
+of the mean for each dose realization.
 
 When using a log-scale for the x-axis, any zero dose values are excluded
 before plotting.
