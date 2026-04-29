@@ -3,6 +3,7 @@ ecdfplot <- function(
   dosevars,
   xlab = "Dose",
   ylab = "Cumulative distribution",
+  show.mean = TRUE,
   log.xaxis = TRUE
 ) {
   check_pkgs(c("dplyr", "ggplot2", "tidyr", "scales", "patchwork"))
@@ -28,6 +29,19 @@ ecdfplot <- function(
     ggplot2::xlab(xlab) +
     ggplot2::ylab(ylab) +
     ggplot2::ggtitle("Curves corresponding to realizations")
+  if (show.mean) {
+    means1 <- dosemat |>
+      dplyr::mutate(
+        row_mean = rowMeans(dplyr::across(dplyr::everything()), na.rm = TRUE)
+      )
+    p1 <- p1 +
+      ggplot2::stat_ecdf(
+        data = means1,
+        ggplot2::aes(x = row_mean),
+        color = "black",
+        linewidth = 1.2
+      )
+  }
   if (log.xaxis) {
     p1 <- p1 + ggplot2::scale_x_log10(labels = scales::comma)
   }
@@ -49,6 +63,20 @@ ecdfplot <- function(
     ggplot2::xlab(xlab) +
     ggplot2::ylab(ylab) +
     ggplot2::ggtitle("Curves corresponding to individuals")
+  if (show.mean) {
+    means2 <- as.data.frame(t(dosemat)) |>
+      dplyr::mutate(
+        row_mean = rowMeans(dplyr::across(dplyr::everything()), na.rm = TRUE)
+      )
+    p2 <- p2 +
+      ggplot2::stat_ecdf(
+        data = means2,
+        ggplot2::aes(x = row_mean),
+        color = "black",
+        linewidth = 1.2
+      )
+  }
+
   if (log.xaxis) {
     p2 <- p2 + ggplot2::scale_x_log10(labels = scales::comma)
   }
