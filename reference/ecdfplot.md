@@ -7,7 +7,7 @@ its uncertainty.
 
 ``` r
 ecdfplot(data, dosevars, xlab="Dose", 
-  ylab="Cumulative distribution", log.xaxis=TRUE)
+  ylab="Cumulative distribution", show.mean=TRUE, log.xaxis=TRUE)
 ```
 
 ## Arguments

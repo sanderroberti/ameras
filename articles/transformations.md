@@ -187,12 +187,12 @@ summary(fit.ameras.sigmoid)
 #>     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, 
 #>     index.t = 4:5)
 #> 
-#> Total run time: 0.6 seconds
+#> Total run time: 0.5 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.6
+#>      RC     0.5
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -217,12 +217,12 @@ summary(fit.ameras.transform1)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0.3 seconds
+#> Total run time: 0.2 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.3
+#>      RC     0.2
 #> 
 #> Summary of coefficients by method:
 #> 
