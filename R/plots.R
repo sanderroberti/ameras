@@ -8,7 +8,7 @@ ecdfplot <- function(
 ) {
   check_pkgs(c("dplyr", "ggplot2", "tidyr", "scales", "patchwork"))
 
-  dose <- curve_id <- row_id <- NULL # To suppress R CMD CHECK notes about undefined global variables
+  dose <- curve_id <- row_id <- row_mean <- NULL # To suppress R CMD CHECK notes about undefined global variables
 
   dosemat <- data[, dosevars, drop = FALSE]
 
