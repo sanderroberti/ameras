@@ -7,7 +7,7 @@ Create a descriptive figure to visualize the distribution of dose and its uncert
 }
 \usage{
 ecdfplot(data, dosevars, xlab="Dose", 
-  ylab="Cumulative distribution", log.xaxis=TRUE)
+  ylab="Cumulative distribution", show.mean=TRUE, log.xaxis=TRUE)
 }
 \arguments{
   \item{data}{data frame containing columns with dose vectors}
