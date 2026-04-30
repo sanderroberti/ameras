@@ -2,7 +2,7 @@
 
 * Shortened column names `CI.lowerbound` and `CI.upperbound` in the `summary()` output to `CI.lower` and `CI.upper`, respectively.
 
-* Substantially increased ERC computation speed for the `clogit` family.
+* Substantially increased ERC computation speed for the `clogit` and `prophaz` families.
 
 * Replaced all occurrences of `replicate` with `realization`, including in names of arguments and output. As a result, the argument `included.replicates.BMA` is now deprecated and will be removed in version 1.0.0. Use `included.realizations.BMA` instead.
 
