@@ -73,6 +73,7 @@ ecdfplot(data, paste0("V", 1:10), show.mean = FALSE)
 Next, we apply all available methods to the data:
 
 ``` r
+set.seed(12345) # For reproducibility
 fit <- ameras(Y.binomial~dose(V1:V10), data, family="binomial", 
               methods=c("RC","ERC","MCML", "FMA", "BMA"))
 #> Note: BMA may require extensive computation time
@@ -107,16 +108,16 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 56.4 seconds
+#> Total run time: 50.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     8.3
+#>     ERC     6.6
 #>    MCML     0.1
-#>     FMA     0.4
-#>     BMA    47.6
+#>     FMA     0.2
+#>     BMA    43.4
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -127,10 +128,10 @@ summary(fit)
 #>     ERC        dose   0.8214 0.14304   NA      NA
 #>    MCML (Intercept)  -0.8758 0.07323   NA      NA
 #>    MCML        dose   0.7910 0.13644   NA      NA
-#>     FMA (Intercept)  -0.8760 0.07340   NA      NA
-#>     FMA        dose   0.7913 0.13675   NA      NA
-#>     BMA (Intercept)  -0.8728 0.07228 1.01 1054.00
-#>     BMA        dose   0.7911 0.13412 1.01 1062.00
+#>     FMA (Intercept)  -0.8760 0.07320   NA      NA
+#>     FMA        dose   0.7917 0.13656   NA      NA
+#>     BMA (Intercept)  -0.8736 0.07174 1.00 1024.00
+#>     BMA        dose   0.7911 0.13323 1.00  999.00
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -144,16 +145,16 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 56.4 seconds
+#> Total run time: 50.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     8.3
+#>     ERC     6.6
 #>    MCML     0.1
-#>     FMA     0.4
-#>     BMA    47.6
+#>     FMA     0.2
+#>     BMA    43.4
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -164,10 +165,10 @@ summary(fit)
 #>     ERC        dose   0.8214 0.14304   0.5411   1.1018   NA      NA
 #>    MCML (Intercept)  -0.8758 0.07323  -1.0193  -0.7323   NA      NA
 #>    MCML        dose   0.7910 0.13644   0.5236   1.0584   NA      NA
-#>     FMA (Intercept)  -0.8760 0.07340  -1.0209  -0.7325   NA      NA
-#>     FMA        dose   0.7913 0.13675   0.5247   1.0606   NA      NA
-#>     BMA (Intercept)  -0.8728 0.07228  -1.0150  -0.7349 1.01 1054.00
-#>     BMA        dose   0.7911 0.13412   0.5509   1.0779 1.01 1062.00
+#>     FMA (Intercept)  -0.8760 0.07320  -1.0199  -0.7327   NA      NA
+#>     FMA        dose   0.7917 0.13656   0.5241   1.0594   NA      NA
+#>     BMA (Intercept)  -0.8736 0.07174  -1.0185  -0.7350 1.00 1024.00
+#>     BMA        dose   0.7911 0.13323   0.5520   1.0798 1.00  999.00
 ```
 
 See the vignettes for additional details on model fitting, confidence

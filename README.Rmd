@@ -59,6 +59,7 @@ ecdfplot(data, paste0("V", 1:10), show.mean = FALSE)
 
 Next, we apply all available methods to the data:
 ```{r}
+set.seed(12345) # For reproducibility
 fit <- ameras(Y.binomial~dose(V1:V10), data, family="binomial", 
               methods=c("RC","ERC","MCML", "FMA", "BMA"))
 summary(fit)
