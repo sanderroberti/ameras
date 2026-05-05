@@ -400,12 +400,13 @@ defaults are <code>deg=1</code>, no effect modifiers, and
 <div id="example-data" class="section level2">
 <h2>Example data</h2>
 <p>The included example dataset contains 3,000 individuals with 10
-exposure replicates <code>V1</code>-<code>V10</code>, binary covariates
-<code>X1</code> and <code>X2</code> and effect modifiers <code>M1</code>
-and <code>M2</code>, and outcomes of all types (<code>Y.gaussian</code>,
-<code>Y.binomial</code>, <code>Y.poisson</code>, <code>status</code>,
-<code>time</code>, <code>Y.multinomial</code>, <code>Y.clogit</code>,
-and <code>setnr</code>).</p>
+exposure realizations <code>V1</code>-<code>V10</code>, binary
+covariates <code>X1</code> and <code>X2</code> and effect modifiers
+<code>M1</code> and <code>M2</code>, and outcomes of all types
+(<code>Y.gaussian</code>, <code>Y.binomial</code>,
+<code>Y.poisson</code>, <code>status</code>, <code>time</code>,
+<code>Y.multinomial</code>, <code>Y.clogit</code>, and
+<code>setnr</code>).</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(data, <span class="at">package=</span><span class="st">&quot;ameras&quot;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">head</span>(data)</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;    Y.gaussian Y.binomial Y.poisson       time status setnr Y.clogit</span></span>
@@ -450,7 +451,7 @@ one component for each method, each being a list:</p>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;  $ formula           :Class &#39;formula&#39;  language Y.gaussian ~ dose(V1:V10) + X1 + X2</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;   .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: R_GlobalEnv&gt; </span></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;  $ num.rows          : int 3000</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;  $ num.replicates    : int 10</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;  $ num.realizations  : int 10</span></span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;  $ transform         :function (params, boundcheck = FALSE, ...)  </span></span>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;  $ transform.jacobian:function (params, ...)  </span></span>
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt;  $ other.args        : list()</span></span>
@@ -485,7 +486,7 @@ one component for each method, each being a list:</p>
 <span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a><span class="co">#&gt;   ..$ Y           : chr &quot;Y.gaussian&quot;</span></span>
 <span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a><span class="co">#&gt;   ..$ M           : NULL</span></span>
 <span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a><span class="co">#&gt;   ..$ X_formula   :Class &#39;formula&#39;  language ~X1 + X2</span></span>
-<span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a><span class="co">#&gt;   .. .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: 0x88b2929a8&gt; </span></span>
+<span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a><span class="co">#&gt;   .. .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: 0x7fc1c2d60&gt; </span></span>
 <span id="cb4-43"><a href="#cb4-43" tabindex="-1"></a><span class="co">#&gt;   ..$ X           : int [1:2] 9 10</span></span>
 <span id="cb4-44"><a href="#cb4-44" tabindex="-1"></a><span class="co">#&gt;   ..$ offset      : NULL</span></span>
 <span id="cb4-45"><a href="#cb4-45" tabindex="-1"></a><span class="co">#&gt;   ..$ entry       : NULL</span></span>
@@ -532,7 +533,7 @@ one component for each method, each being a list:</p>
 <span id="cb4-86"><a href="#cb4-86" tabindex="-1"></a><span class="co">#&gt;   .. ..$ counts     : Named num [1:2] 546 9</span></span>
 <span id="cb4-87"><a href="#cb4-87" tabindex="-1"></a><span class="co">#&gt;   .. .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;function&quot; &quot;gradient&quot;</span></span>
 <span id="cb4-88"><a href="#cb4-88" tabindex="-1"></a><span class="co">#&gt;   ..$ loglik      : num -4559</span></span>
-<span id="cb4-89"><a href="#cb4-89" tabindex="-1"></a><span class="co">#&gt;   ..$ runtime     : chr &quot;40 seconds&quot;</span></span>
+<span id="cb4-89"><a href="#cb4-89" tabindex="-1"></a><span class="co">#&gt;   ..$ runtime     : chr &quot;37.2 seconds&quot;</span></span>
 <span id="cb4-90"><a href="#cb4-90" tabindex="-1"></a><span class="co">#&gt;   ..$ ERC         : logi TRUE</span></span>
 <span id="cb4-91"><a href="#cb4-91" tabindex="-1"></a><span class="co">#&gt;  $ MCML              :List of 6</span></span>
 <span id="cb4-92"><a href="#cb4-92" tabindex="-1"></a><span class="co">#&gt;   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138</span></span>
@@ -552,28 +553,28 @@ one component for each method, each being a list:</p>
 <span id="cb4-106"><a href="#cb4-106" tabindex="-1"></a><span class="co">#&gt;   ..$ loglik      : num -4646</span></span>
 <span id="cb4-107"><a href="#cb4-107" tabindex="-1"></a><span class="co">#&gt;   ..$ runtime     : chr &quot;0.3 seconds&quot;</span></span>
 <span id="cb4-108"><a href="#cb4-108" tabindex="-1"></a><span class="co">#&gt;  $ FMA               :List of 6</span></span>
-<span id="cb4-109"><a href="#cb4-109" tabindex="-1"></a><span class="co">#&gt;   ..$ coefficients       : Named num [1:5] -1.28 0.484 -0.517 1.079 1.138</span></span>
+<span id="cb4-109"><a href="#cb4-109" tabindex="-1"></a><span class="co">#&gt;   ..$ coefficients         : Named num [1:5] -1.28 0.484 -0.517 1.079 1.138</span></span>
 <span id="cb4-110"><a href="#cb4-110" tabindex="-1"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:5] &quot;(Intercept)&quot; &quot;X1&quot; &quot;X2&quot; &quot;dose&quot; ...</span></span>
-<span id="cb4-111"><a href="#cb4-111" tabindex="-1"></a><span class="co">#&gt;   ..$ sd                 : Named num [1:5] 0.0373 0.0418 0.0512 0.0202 0.0147</span></span>
+<span id="cb4-111"><a href="#cb4-111" tabindex="-1"></a><span class="co">#&gt;   ..$ sd                   : Named num [1:5] 0.0373 0.0418 0.0512 0.0202 0.0147</span></span>
 <span id="cb4-112"><a href="#cb4-112" tabindex="-1"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:5] &quot;(Intercept)&quot; &quot;X1&quot; &quot;X2&quot; &quot;dose&quot; ...</span></span>
-<span id="cb4-113"><a href="#cb4-113" tabindex="-1"></a><span class="co">#&gt;   ..$ included.replicates: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
-<span id="cb4-114"><a href="#cb4-114" tabindex="-1"></a><span class="co">#&gt;   ..$ included.samples   : int 100006</span></span>
-<span id="cb4-115"><a href="#cb4-115" tabindex="-1"></a><span class="co">#&gt;   ..$ samples            :&#39;data.frame&#39;:  100006 obs. of  5 variables:</span></span>
+<span id="cb4-113"><a href="#cb4-113" tabindex="-1"></a><span class="co">#&gt;   ..$ included.realizations: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
+<span id="cb4-114"><a href="#cb4-114" tabindex="-1"></a><span class="co">#&gt;   ..$ included.samples     : int 100006</span></span>
+<span id="cb4-115"><a href="#cb4-115" tabindex="-1"></a><span class="co">#&gt;   ..$ samples              :&#39;data.frame&#39;:    100006 obs. of  5 variables:</span></span>
 <span id="cb4-116"><a href="#cb4-116" tabindex="-1"></a><span class="co">#&gt;   .. ..$ (Intercept): num [1:100006] -1.27 -1.32 -1.32 -1.26 -1.24 ...</span></span>
 <span id="cb4-117"><a href="#cb4-117" tabindex="-1"></a><span class="co">#&gt;   .. ..$ X1         : num [1:100006] 0.516 0.511 0.534 0.415 0.509 ...</span></span>
 <span id="cb4-118"><a href="#cb4-118" tabindex="-1"></a><span class="co">#&gt;   .. ..$ X2         : num [1:100006] -0.525 -0.535 -0.49 -0.529 -0.538 ...</span></span>
 <span id="cb4-119"><a href="#cb4-119" tabindex="-1"></a><span class="co">#&gt;   .. ..$ dose       : num [1:100006] 1.08 1.09 1.1 1.11 1.03 ...</span></span>
 <span id="cb4-120"><a href="#cb4-120" tabindex="-1"></a><span class="co">#&gt;   .. ..$ sigma      : num [1:100006] 1.17 1.14 1.13 1.15 1.12 ...</span></span>
-<span id="cb4-121"><a href="#cb4-121" tabindex="-1"></a><span class="co">#&gt;   ..$ runtime            : chr &quot;0.7 seconds&quot;</span></span>
+<span id="cb4-121"><a href="#cb4-121" tabindex="-1"></a><span class="co">#&gt;   ..$ runtime              : chr &quot;0.7 seconds&quot;</span></span>
 <span id="cb4-122"><a href="#cb4-122" tabindex="-1"></a><span class="co">#&gt;  $ BMA               :List of 6</span></span>
-<span id="cb4-123"><a href="#cb4-123" tabindex="-1"></a><span class="co">#&gt;   ..$ coefficients       : Named num [1:5] -1.28 0.483 -0.517 1.079 1.139</span></span>
+<span id="cb4-123"><a href="#cb4-123" tabindex="-1"></a><span class="co">#&gt;   ..$ coefficients         : Named num [1:5] -1.28 0.483 -0.517 1.079 1.139</span></span>
 <span id="cb4-124"><a href="#cb4-124" tabindex="-1"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:5] &quot;(Intercept)&quot; &quot;X1&quot; &quot;X2&quot; &quot;dose&quot; ...</span></span>
-<span id="cb4-125"><a href="#cb4-125" tabindex="-1"></a><span class="co">#&gt;   ..$ sd                 : Named num [1:5] 0.038 0.0424 0.0525 0.0202 0.015</span></span>
+<span id="cb4-125"><a href="#cb4-125" tabindex="-1"></a><span class="co">#&gt;   ..$ sd                   : Named num [1:5] 0.038 0.0424 0.0525 0.0202 0.015</span></span>
 <span id="cb4-126"><a href="#cb4-126" tabindex="-1"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:5] &quot;(Intercept)&quot; &quot;X1&quot; &quot;X2&quot; &quot;dose&quot; ...</span></span>
-<span id="cb4-127"><a href="#cb4-127" tabindex="-1"></a><span class="co">#&gt;   ..$ Rhat               :&#39;data.frame&#39;:  5 obs. of  2 variables:</span></span>
+<span id="cb4-127"><a href="#cb4-127" tabindex="-1"></a><span class="co">#&gt;   ..$ Rhat                 :&#39;data.frame&#39;:    5 obs. of  2 variables:</span></span>
 <span id="cb4-128"><a href="#cb4-128" tabindex="-1"></a><span class="co">#&gt;   .. ..$ Rhat : num [1:5] 1 1.01 1 1 1.02</span></span>
 <span id="cb4-129"><a href="#cb4-129" tabindex="-1"></a><span class="co">#&gt;   .. ..$ n.eff: num [1:5] 871 822 800 800 744</span></span>
-<span id="cb4-130"><a href="#cb4-130" tabindex="-1"></a><span class="co">#&gt;   ..$ samples            :List of 2</span></span>
+<span id="cb4-130"><a href="#cb4-130" tabindex="-1"></a><span class="co">#&gt;   ..$ samples              :List of 2</span></span>
 <span id="cb4-131"><a href="#cb4-131" tabindex="-1"></a><span class="co">#&gt;   .. ..$ chain1: num [1:400, 1:6] -1.32 -1.27 -1.33 -1.29 -1.33 ...</span></span>
 <span id="cb4-132"><a href="#cb4-132" tabindex="-1"></a><span class="co">#&gt;   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2</span></span>
 <span id="cb4-133"><a href="#cb4-133" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : NULL</span></span>
@@ -582,8 +583,8 @@ one component for each method, each being a list:</p>
 <span id="cb4-136"><a href="#cb4-136" tabindex="-1"></a><span class="co">#&gt;   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2</span></span>
 <span id="cb4-137"><a href="#cb4-137" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : NULL</span></span>
 <span id="cb4-138"><a href="#cb4-138" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr [1:6] &quot;(Intercept)&quot; &quot;X1&quot; &quot;X2&quot; &quot;dose&quot; ...</span></span>
-<span id="cb4-139"><a href="#cb4-139" tabindex="-1"></a><span class="co">#&gt;   ..$ included.replicates: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
-<span id="cb4-140"><a href="#cb4-140" tabindex="-1"></a><span class="co">#&gt;   ..$ runtime            : chr &quot;34.4 seconds&quot;</span></span>
+<span id="cb4-139"><a href="#cb4-139" tabindex="-1"></a><span class="co">#&gt;   ..$ included.realizations: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
+<span id="cb4-140"><a href="#cb4-140" tabindex="-1"></a><span class="co">#&gt;   ..$ runtime              : chr &quot;31.4 seconds&quot;</span></span>
 <span id="cb4-141"><a href="#cb4-141" tabindex="-1"></a><span class="co">#&gt;  - attr(*, &quot;class&quot;)= chr &quot;amerasfit&quot;</span></span></code></pre></div>
 <p>Access the results for e.g. regression calibration as follows:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>fit.ameras.linreg<span class="sc">$</span>RC</span>
@@ -645,16 +646,16 @@ one component for each method, each being a list:</p>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;     family = &quot;gaussian&quot;, methods = c(&quot;RC&quot;, &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, </span></span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;         &quot;BMA&quot;), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 75.5 seconds</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 69.7 seconds</span></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
 <span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;      RC     0.1</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;     ERC    40.0</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;     ERC    37.2</span></span>
 <span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.3</span></span>
 <span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt;     FMA     0.7</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;     BMA    34.4</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;     BMA    31.4</span></span>
 <span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -727,16 +728,16 @@ models</a>.</p>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;binomial&quot;, methods = c(&quot;RC&quot;, </span></span>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt;     &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, &quot;BMA&quot;), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 62.6 seconds</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 59.9 seconds</span></span>
 <span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
 <span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt;      RC     0.1</span></span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt;     ERC    31.3</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt;     ERC    30.6</span></span>
 <span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.5</span></span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt;     FMA     1.4</span></span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt;     BMA    29.3</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt;     FMA     1.3</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt;     BMA    27.4</span></span>
 <span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -791,16 +792,16 @@ models</a>.</p>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;binomial&quot;, methods = c(&quot;RC&quot;, </span></span>
 <span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt;     &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, &quot;BMA&quot;), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 45.8 seconds</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 45 seconds</span></span>
 <span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
 <span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;      RC     0.1</span></span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt;     ERC    18.4</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt;     ERC    18.2</span></span>
 <span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.3</span></span>
 <span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt;     FMA     0.7</span></span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt;     BMA    26.3</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt;     BMA    25.7</span></span>
 <span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -859,16 +860,16 @@ using an offset, first including a quadratic exposure term:</p>
 <span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;poisson&quot;, methods = c(&quot;RC&quot;, </span></span>
 <span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&gt;     &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, &quot;BMA&quot;), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 32.2 seconds</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 31.2 seconds</span></span>
 <span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
 <span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt;      RC     0.2</span></span>
 <span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt;     ERC     0.6</span></span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.8</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.7</span></span>
 <span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt;     FMA     1.7</span></span>
-<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt;     BMA    28.9</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt;     BMA    28.0</span></span>
 <span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -923,16 +924,16 @@ using an offset, first including a quadratic exposure term:</p>
 <span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;poisson&quot;, methods = c(&quot;RC&quot;, </span></span>
 <span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&gt;     &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, &quot;BMA&quot;), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 28.1 seconds</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 27.4 seconds</span></span>
 <span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
 <span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="co">#&gt;      RC     0.1</span></span>
-<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt;     ERC     0.3</span></span>
-<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.6</span></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt;     ERC     0.4</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.7</span></span>
 <span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&gt;     FMA     0.9</span></span>
-<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="co">#&gt;     BMA    26.2</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="co">#&gt;     BMA    25.3</span></span>
 <span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -1228,16 +1229,16 @@ setting <code>deg=2</code>.</p>
 <span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;prophaz&quot;, methods = c(&quot;RC&quot;, </span></span>
 <span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="co">#&gt;     &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, &quot;BMA&quot;), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 338.8 seconds</span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 72.6 seconds</span></span>
 <span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
 <span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="co">#&gt;      RC     0.2</span></span>
-<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a><span class="co">#&gt;     ERC   283.2</span></span>
-<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.7</span></span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a><span class="co">#&gt;     ERC    18.0</span></span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.4</span></span>
 <span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a><span class="co">#&gt;     FMA     1.3</span></span>
-<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a><span class="co">#&gt;     BMA    53.4</span></span>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a><span class="co">#&gt;     BMA    52.7</span></span>
 <span id="cb22-17"><a href="#cb22-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb22-18"><a href="#cb22-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb22-19"><a href="#cb22-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -1314,16 +1315,16 @@ baseline hazards, corresponding to the estimates <code>h0</code>:</p>
 <span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;prophaz&quot;, methods = c(&quot;RC&quot;, </span></span>
 <span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="co">#&gt;     &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, &quot;BMA&quot;), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 181.4 seconds</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 59.6 seconds</span></span>
 <span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
 <span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a><span class="co">#&gt;      RC     0.1</span></span>
-<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a><span class="co">#&gt;     ERC   128.6</span></span>
-<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.3</span></span>
-<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a><span class="co">#&gt;     FMA     0.8</span></span>
-<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a><span class="co">#&gt;     BMA    51.6</span></span>
+<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a><span class="co">#&gt;     ERC     7.8</span></span>
+<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a><span class="co">#&gt;    MCML     0.2</span></span>
+<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a><span class="co">#&gt;     FMA     0.7</span></span>
+<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a><span class="co">#&gt;     BMA    50.8</span></span>
 <span id="cb26-17"><a href="#cb26-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb26-18"><a href="#cb26-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb26-19"><a href="#cb26-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -1394,16 +1395,16 @@ setting <code>deg=2</code>.</p>
 <span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;multinomial&quot;, methods = c(&quot;RC&quot;, </span></span>
 <span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="co">#&gt;     &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, &quot;BMA&quot;), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 222.7 seconds</span></span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 221.6 seconds</span></span>
 <span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb29-11"><a href="#cb29-11" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
-<span id="cb29-12"><a href="#cb29-12" tabindex="-1"></a><span class="co">#&gt;      RC     0.6</span></span>
-<span id="cb29-13"><a href="#cb29-13" tabindex="-1"></a><span class="co">#&gt;     ERC    75.6</span></span>
-<span id="cb29-14"><a href="#cb29-14" tabindex="-1"></a><span class="co">#&gt;    MCML     4.4</span></span>
-<span id="cb29-15"><a href="#cb29-15" tabindex="-1"></a><span class="co">#&gt;     FMA     5.1</span></span>
-<span id="cb29-16"><a href="#cb29-16" tabindex="-1"></a><span class="co">#&gt;     BMA   137.0</span></span>
+<span id="cb29-12"><a href="#cb29-12" tabindex="-1"></a><span class="co">#&gt;      RC     0.7</span></span>
+<span id="cb29-13"><a href="#cb29-13" tabindex="-1"></a><span class="co">#&gt;     ERC    75.3</span></span>
+<span id="cb29-14"><a href="#cb29-14" tabindex="-1"></a><span class="co">#&gt;    MCML     4.8</span></span>
+<span id="cb29-15"><a href="#cb29-15" tabindex="-1"></a><span class="co">#&gt;     FMA     4.9</span></span>
+<span id="cb29-16"><a href="#cb29-16" tabindex="-1"></a><span class="co">#&gt;     BMA   135.9</span></span>
 <span id="cb29-17"><a href="#cb29-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb29-18"><a href="#cb29-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb29-19"><a href="#cb29-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -1500,16 +1501,16 @@ setting <code>deg=2</code>.</p>
 <span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;multinomial&quot;, methods = c(&quot;RC&quot;, </span></span>
 <span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="co">#&gt;     &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, &quot;BMA&quot;), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 179.3 seconds</span></span>
+<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a><span class="co">#&gt; Total run time: 178 seconds</span></span>
 <span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb32-10"><a href="#cb32-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb32-11"><a href="#cb32-11" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
 <span id="cb32-12"><a href="#cb32-12" tabindex="-1"></a><span class="co">#&gt;      RC     0.5</span></span>
-<span id="cb32-13"><a href="#cb32-13" tabindex="-1"></a><span class="co">#&gt;     ERC    53.3</span></span>
-<span id="cb32-14"><a href="#cb32-14" tabindex="-1"></a><span class="co">#&gt;    MCML     3.7</span></span>
-<span id="cb32-15"><a href="#cb32-15" tabindex="-1"></a><span class="co">#&gt;     FMA     4.6</span></span>
-<span id="cb32-16"><a href="#cb32-16" tabindex="-1"></a><span class="co">#&gt;     BMA   117.2</span></span>
+<span id="cb32-13"><a href="#cb32-13" tabindex="-1"></a><span class="co">#&gt;     ERC    54.0</span></span>
+<span id="cb32-14"><a href="#cb32-14" tabindex="-1"></a><span class="co">#&gt;    MCML     3.4</span></span>
+<span id="cb32-15"><a href="#cb32-15" tabindex="-1"></a><span class="co">#&gt;     FMA     3.8</span></span>
+<span id="cb32-16"><a href="#cb32-16" tabindex="-1"></a><span class="co">#&gt;     BMA   116.3</span></span>
 <span id="cb32-17"><a href="#cb32-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb32-18"><a href="#cb32-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb32-19"><a href="#cb32-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -1589,16 +1590,16 @@ first fit models including a quadratic exposure term by setting
 <span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a><span class="co">#&gt;     methods = c(&quot;RC&quot;, &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, &quot;BMA&quot;), nburnin.BMA = 1000, </span></span>
 <span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a><span class="co">#&gt; Total run time: 313.1 seconds</span></span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a><span class="co">#&gt; Total run time: 49 seconds</span></span>
 <span id="cb35-9"><a href="#cb35-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb35-10"><a href="#cb35-10" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb35-11"><a href="#cb35-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb35-12"><a href="#cb35-12" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
 <span id="cb35-13"><a href="#cb35-13" tabindex="-1"></a><span class="co">#&gt;      RC     0.4</span></span>
-<span id="cb35-14"><a href="#cb35-14" tabindex="-1"></a><span class="co">#&gt;     ERC   268.2</span></span>
-<span id="cb35-15"><a href="#cb35-15" tabindex="-1"></a><span class="co">#&gt;    MCML     3.8</span></span>
-<span id="cb35-16"><a href="#cb35-16" tabindex="-1"></a><span class="co">#&gt;     FMA     5.2</span></span>
-<span id="cb35-17"><a href="#cb35-17" tabindex="-1"></a><span class="co">#&gt;     BMA    35.5</span></span>
+<span id="cb35-14"><a href="#cb35-14" tabindex="-1"></a><span class="co">#&gt;     ERC     5.4</span></span>
+<span id="cb35-15"><a href="#cb35-15" tabindex="-1"></a><span class="co">#&gt;    MCML     3.5</span></span>
+<span id="cb35-16"><a href="#cb35-16" tabindex="-1"></a><span class="co">#&gt;     FMA     5.1</span></span>
+<span id="cb35-17"><a href="#cb35-17" tabindex="-1"></a><span class="co">#&gt;     BMA    34.6</span></span>
 <span id="cb35-18"><a href="#cb35-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb35-19"><a href="#cb35-19" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb35-20"><a href="#cb35-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -1650,16 +1651,16 @@ first fit models including a quadratic exposure term by setting
 <span id="cb38-5"><a href="#cb38-5" tabindex="-1"></a><span class="co">#&gt;     methods = c(&quot;RC&quot;, &quot;ERC&quot;, &quot;MCML&quot;, &quot;FMA&quot;, &quot;BMA&quot;), nburnin.BMA = 1000, </span></span>
 <span id="cb38-6"><a href="#cb38-6" tabindex="-1"></a><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span id="cb38-7"><a href="#cb38-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb38-8"><a href="#cb38-8" tabindex="-1"></a><span class="co">#&gt; Total run time: 319.5 seconds</span></span>
+<span id="cb38-8"><a href="#cb38-8" tabindex="-1"></a><span class="co">#&gt; Total run time: 49.8 seconds</span></span>
 <span id="cb38-9"><a href="#cb38-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb38-10"><a href="#cb38-10" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span id="cb38-11"><a href="#cb38-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb38-12"><a href="#cb38-12" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
-<span id="cb38-13"><a href="#cb38-13" tabindex="-1"></a><span class="co">#&gt;      RC     0.4</span></span>
-<span id="cb38-14"><a href="#cb38-14" tabindex="-1"></a><span class="co">#&gt;     ERC   274.1</span></span>
-<span id="cb38-15"><a href="#cb38-15" tabindex="-1"></a><span class="co">#&gt;    MCML     3.6</span></span>
-<span id="cb38-16"><a href="#cb38-16" tabindex="-1"></a><span class="co">#&gt;     FMA     5.2</span></span>
-<span id="cb38-17"><a href="#cb38-17" tabindex="-1"></a><span class="co">#&gt;     BMA    36.2</span></span>
+<span id="cb38-13"><a href="#cb38-13" tabindex="-1"></a><span class="co">#&gt;      RC     0.5</span></span>
+<span id="cb38-14"><a href="#cb38-14" tabindex="-1"></a><span class="co">#&gt;     ERC     5.2</span></span>
+<span id="cb38-15"><a href="#cb38-15" tabindex="-1"></a><span class="co">#&gt;    MCML     3.5</span></span>
+<span id="cb38-16"><a href="#cb38-16" tabindex="-1"></a><span class="co">#&gt;     FMA     5.0</span></span>
+<span id="cb38-17"><a href="#cb38-17" tabindex="-1"></a><span class="co">#&gt;     BMA    35.6</span></span>
 <span id="cb38-18"><a href="#cb38-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb38-19"><a href="#cb38-19" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb38-20"><a href="#cb38-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
