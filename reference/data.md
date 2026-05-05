@@ -9,6 +9,7 @@ exposure realizations in columns `V1`-`V10`.
 ## Examples
 
 ``` r
+
  data(data, package="ameras")
 
  # Display a few rows of the data

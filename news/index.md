@@ -2,16 +2,28 @@
 
 ## ameras (development version)
 
-- Shortened column names `CI.lowerbound` and `CI.upperbound` in the
-  [`summary()`](https://rdrr.io/r/base/summary.html) output to
-  `CI.lower` and `CI.upper`, respectively.
-
-- Substantially increased ERC computation speed for the `clogit` family.
+### Breaking changes
 
 - Replaced all occurrences of `replicate` with `realization`, including
   in names of arguments and output. As a result, the argument
   `included.replicates.BMA` is now deprecated and will be removed in
   version 1.0.0. Use `included.realizations.BMA` instead.
+
+### New features
+
+- [`ecdfplot()`](https://ameras.sanderroberti.com/reference/ecdfplot.md)
+  now has an argument `show.mean` (default `TRUE`) to toggle whether to
+  plot curves for the distribution of the mean doses across realizations
+  and individuals.
+
+### Minor improvements and fixes
+
+- Shortened column names `CI.lowerbound` and `CI.upperbound` in the
+  [`summary()`](https://rdrr.io/r/base/summary.html) output to
+  `CI.lower` and `CI.upper`, respectively.
+
+- Substantially increased ERC computation speed for the `clogit` and
+  `prophaz` families.
 
 ## ameras 0.2.0
 

@@ -1,6 +1,7 @@
 # Confidence intervals
 
 ``` r
+
 library(ameras)
 #> Loading required package: nimble
 #> nimble version 1.4.2 is loaded.
@@ -62,6 +63,7 @@ excess relative risk model with the default exponential transformation
 transformations](https://ameras.sanderroberti.com/articles/transformations.md)).
 
 ``` r
+
 data(data, package="ameras")
 dosevars <- paste0("V", 1:10)
 fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
@@ -145,6 +147,7 @@ package, using either the FMA samples or Bayesian posterior samples.
 Again, we use the example data to illustrate.
 
 ``` r
+
 set.seed(123)
 fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
                             family="binomial", methods=c("FMA"))
@@ -158,12 +161,12 @@ summary(fit.ameras.hpd)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.2 seconds
+#> Total run time: 1.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.2
+#>     FMA     1.6
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -177,12 +180,12 @@ summary(fit.ameras.percentile)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.2 seconds
+#> Total run time: 1.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.2
+#>     FMA     1.6
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -1,6 +1,7 @@
 # Relative risk models
 
 ``` r
+
 library(ameras)
 #> Loading required package: nimble
 #> nimble version 1.4.2 is loaded.
@@ -42,6 +43,7 @@ not passing anything to `M`, respectively). This model is fit by setting
 `model="EXP"` as follows:
 
 ``` r
+
 fit.ameras.exp <- ameras(Y.binomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
                          data=data, family="binomial", methods="RC")
 #> Fitting RC
@@ -79,6 +81,7 @@ needs to be specified. This model is fit by setting `model="ERR"` as
 follows:
 
 ``` r
+
 fit.ameras.err <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, 
                          data=data, family="binomial", methods="RC")
 #> Fitting RC
@@ -115,6 +118,7 @@ modification terms are optional. This model is fit by setting
 `model="LINEXP"` as follows:
 
 ``` r
+
 fit.ameras.linexp <- ameras(Y.binomial~dose(V1:V10, model="LINEXP")+X1+X2, 
                          data=data, family="binomial", methods="RC")
 #> Fitting RC
@@ -123,12 +127,12 @@ summary(fit.ameras.linexp)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "LINEXP") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0.5 seconds
+#> Total run time: 0.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.5
+#>      RC     0.4
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -147,6 +151,7 @@ summary(fit.ameras.linexp)
 To compare between models, it is easiest to do so visually:
 
 ``` r
+
 ggplot(data.frame(x=c(0, 5)), aes(x))+
   theme_light(base_size=15)+
   xlab("Exposure")+

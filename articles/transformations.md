@@ -1,6 +1,7 @@
 # Parameter transformations
 
 ``` r
+
   library(ameras)
 #> Loading required package: nimble
 #> nimble version 1.4.2 is loaded.
@@ -67,6 +68,7 @@ In particular, `transform1` and `transform1.jacobian` are defined as
 follows:
 
 ``` r
+
 transform1 <- function(params, index.t=1:length(params), lowlimit=rep(0,length(index.t)), 
                        boundcheck=FALSE, boundtol=1e-3, ...){
   
@@ -129,6 +131,7 @@ transformation as follows (note that since \mathbf{a} and \mathbf{b} act
 as bounds, we use an updated bound check):
 
 ``` r
+
 transform.sigmoid <- function(params, index.t=1:length(params), a=rep(0,length(index.t)), 
                               b=rep(1,length(index.t)), boundcheck=FALSE, boundtol=1e-3, ...){
   
@@ -152,6 +155,7 @@ Next, noting that \mathrm{d}f\_{a_i,b_i}/d\theta_i =
 Jacobian as follows, using `transform1.jacobian` as a starting point:
 
 ``` r
+
 transform.sigmoid.jacobian <- function(params, index.t=1:length(params), 
                                        a=rep(0,length(index.t)), b=rep(1,length(index.t)), ...){ 
   if(length(index.t)!=length(a) | length(index.t) != length(b)) 
@@ -175,6 +179,7 @@ between using `transform1` and `transform.sigmoid`. First, we fit the
 model using the sigmoid transformation:
 
 ``` r
+
 data(data, package="ameras")
 fit.ameras.sigmoid <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data=data, 
                             family="binomial", methods="RC", transform=transform.sigmoid, 
@@ -187,12 +192,12 @@ summary(fit.ameras.sigmoid)
 #>     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, 
 #>     index.t = 4:5)
 #> 
-#> Total run time: 0.5 seconds
+#> Total run time: 0.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.5
+#>      RC     0.6
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -209,6 +214,7 @@ summary(fit.ameras.sigmoid)
 Next with default settings, using `transform1`:
 
 ``` r
+
 fit.ameras.transform1 <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data=data, 
                             family="binomial", methods="RC")
 #> Fitting RC
@@ -217,12 +223,12 @@ summary(fit.ameras.transform1)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0.2 seconds
+#> Total run time: 0.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.2
+#>      RC     0.3
 #> 
 #> Summary of coefficients by method:
 #> 
