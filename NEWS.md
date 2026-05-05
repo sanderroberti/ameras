@@ -1,4 +1,4 @@
-# ameras (development version)
+# ameras 0.3.0
 
 ## Breaking changes
 
