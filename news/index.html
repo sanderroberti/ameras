@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ameras</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,18 +45,18 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="ameras-development-version">ameras (development version)<a class="anchor" aria-label="anchor" href="#ameras-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.3.0" id="ameras-030">ameras 0.3.0<a class="anchor" aria-label="anchor" href="#ameras-030"></a></h2><p class="text-muted">CRAN release: 2026-05-07</p>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<h3 id="breaking-changes-0-3-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-3-0"></a></h3>
 <ul><li>Replaced all occurrences of <code>replicate</code> with <code>realization</code>, including in names of arguments and output. As a result, the argument <code>included.replicates.BMA</code> is now deprecated and will be removed in version 1.0.0. Use <code>included.realizations.BMA</code> instead.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-0-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
 <ul><li>
 <code><a href="../reference/ecdfplot.html">ecdfplot()</a></code> now has an argument <code>show.mean</code> (default <code>TRUE</code>) to toggle whether to plot curves for the distribution of the mean doses across realizations and individuals.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-improvements-and-fixes-development-version">Minor improvements and fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-fixes-development-version"></a></h3>
+<h3 id="minor-improvements-and-fixes-0-3-0">Minor improvements and fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-fixes-0-3-0"></a></h3>
 <ul><li><p>Shortened column names <code>CI.lowerbound</code> and <code>CI.upperbound</code> in the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> output to <code>CI.lower</code> and <code>CI.upper</code>, respectively.</p></li>
 <li><p>Substantially increased ERC computation speed for the <code>clogit</code> and <code>prophaz</code> families.</p></li>
 </ul></div>
