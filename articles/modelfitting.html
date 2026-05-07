@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ameras</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -212,7 +212,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   ..$ Y           : chr "Y.gaussian"</span></span>
 <span><span class="co">#&gt;   ..$ M           : NULL</span></span>
 <span><span class="co">#&gt;   ..$ X_formula   :Class 'formula'  language ~X1 + X2</span></span>
-<span><span class="co">#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x5576115d7698&gt; </span></span>
+<span><span class="co">#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x55fd3910df38&gt; </span></span>
 <span><span class="co">#&gt;   ..$ X           : int [1:2] 9 10</span></span>
 <span><span class="co">#&gt;   ..$ offset      : NULL</span></span>
 <span><span class="co">#&gt;   ..$ entry       : NULL</span></span>
@@ -259,7 +259,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   .. ..$ counts     : Named num [1:2] 546 9</span></span>
 <span><span class="co">#&gt;   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
 <span><span class="co">#&gt;   ..$ loglik      : num -4559</span></span>
-<span><span class="co">#&gt;   ..$ runtime     : chr "110.3 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ runtime     : chr "110.6 seconds"</span></span>
 <span><span class="co">#&gt;   ..$ ERC         : logi TRUE</span></span>
 <span><span class="co">#&gt;  $ MCML              :List of 6</span></span>
 <span><span class="co">#&gt;   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138</span></span>
@@ -310,7 +310,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   .. .. .. ..$ : NULL</span></span>
 <span><span class="co">#&gt;   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   ..$ included.realizations: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
-<span><span class="co">#&gt;   ..$ runtime              : chr "78.9 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ runtime              : chr "77.3 seconds"</span></span>
 <span><span class="co">#&gt;  - attr(*, "class")= chr "amerasfit"</span></span></code></pre></div>
 <p>Access the results for e.g. regression calibration as follows:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -374,16 +374,16 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;     family = "gaussian", methods = c("RC", "ERC", "MCML", "FMA", </span></span>
 <span><span class="co">#&gt;         "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 191.4 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 190.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC   110.3</span></span>
+<span><span class="co">#&gt;     ERC   110.6</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
 <span><span class="co">#&gt;     FMA     1.3</span></span>
-<span><span class="co">#&gt;     BMA    78.9</span></span>
+<span><span class="co">#&gt;     BMA    77.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -461,16 +461,16 @@ models</a>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 139 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 139.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC    74.6</span></span>
+<span><span class="co">#&gt;     ERC    74.8</span></span>
 <span><span class="co">#&gt;    MCML     1.1</span></span>
 <span><span class="co">#&gt;     FMA     2.8</span></span>
-<span><span class="co">#&gt;     BMA    60.2</span></span>
+<span><span class="co">#&gt;     BMA    60.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -528,16 +528,16 @@ models</a>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 118.7 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 120.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC    61.4</span></span>
+<span><span class="co">#&gt;     ERC    62.7</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
 <span><span class="co">#&gt;     FMA     1.6</span></span>
-<span><span class="co">#&gt;     BMA    54.8</span></span>
+<span><span class="co">#&gt;     BMA    55.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -600,16 +600,16 @@ using an offset, first including a quadratic exposure term:</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "poisson", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 72.2 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 72.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.8</span></span>
-<span><span class="co">#&gt;     ERC     1.4</span></span>
+<span><span class="co">#&gt;      RC     0.3</span></span>
+<span><span class="co">#&gt;     ERC     1.8</span></span>
 <span><span class="co">#&gt;    MCML     1.3</span></span>
-<span><span class="co">#&gt;     FMA     3.1</span></span>
-<span><span class="co">#&gt;     BMA    65.6</span></span>
+<span><span class="co">#&gt;     FMA     3.2</span></span>
+<span><span class="co">#&gt;     BMA    65.8</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -667,16 +667,16 @@ using an offset, first including a quadratic exposure term:</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "poisson", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 67 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 67.8 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC     1.0</span></span>
-<span><span class="co">#&gt;    MCML     0.7</span></span>
+<span><span class="co">#&gt;     ERC     0.7</span></span>
+<span><span class="co">#&gt;    MCML     0.6</span></span>
 <span><span class="co">#&gt;     FMA     1.9</span></span>
-<span><span class="co">#&gt;     BMA    63.2</span></span>
+<span><span class="co">#&gt;     BMA    64.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -785,16 +785,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "prophaz", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 148.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 154.5 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC    34.2</span></span>
-<span><span class="co">#&gt;    MCML     1.3</span></span>
-<span><span class="co">#&gt;     FMA     2.1</span></span>
-<span><span class="co">#&gt;     BMA   110.7</span></span>
+<span><span class="co">#&gt;     ERC    36.0</span></span>
+<span><span class="co">#&gt;    MCML     0.7</span></span>
+<span><span class="co">#&gt;     FMA     2.2</span></span>
+<span><span class="co">#&gt;     BMA   115.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -875,16 +875,16 @@ baseline hazards, corresponding to the estimates <code>h0</code>:</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "prophaz", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 125.6 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 133.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.1</span></span>
-<span><span class="co">#&gt;     ERC    16.2</span></span>
+<span><span class="co">#&gt;     ERC    17.3</span></span>
 <span><span class="co">#&gt;    MCML     0.4</span></span>
 <span><span class="co">#&gt;     FMA     1.2</span></span>
-<span><span class="co">#&gt;     BMA   107.7</span></span>
+<span><span class="co">#&gt;     BMA   114.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -959,16 +959,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "multinomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 429 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 430 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     1.2</span></span>
-<span><span class="co">#&gt;     ERC   135.0</span></span>
-<span><span class="co">#&gt;    MCML     9.4</span></span>
+<span><span class="co">#&gt;     ERC   141.4</span></span>
+<span><span class="co">#&gt;    MCML     9.2</span></span>
 <span><span class="co">#&gt;     FMA    11.0</span></span>
-<span><span class="co">#&gt;     BMA   272.4</span></span>
+<span><span class="co">#&gt;     BMA   267.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1068,16 +1068,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "multinomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 352.5 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 363.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     1.0</span></span>
-<span><span class="co">#&gt;     ERC   104.3</span></span>
-<span><span class="co">#&gt;    MCML     6.8</span></span>
-<span><span class="co">#&gt;     FMA     8.6</span></span>
-<span><span class="co">#&gt;     BMA   231.8</span></span>
+<span><span class="co">#&gt;      RC     0.9</span></span>
+<span><span class="co">#&gt;     ERC   118.8</span></span>
+<span><span class="co">#&gt;    MCML     6.5</span></span>
+<span><span class="co">#&gt;     FMA     8.3</span></span>
+<span><span class="co">#&gt;     BMA   228.6</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1161,16 +1161,16 @@ first fit models including a quadratic exposure term by setting
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, </span></span>
 <span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 103.2 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 97.7 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.6</span></span>
-<span><span class="co">#&gt;     ERC    16.7</span></span>
-<span><span class="co">#&gt;    MCML     2.1</span></span>
-<span><span class="co">#&gt;     FMA     7.3</span></span>
-<span><span class="co">#&gt;     BMA    76.5</span></span>
+<span><span class="co">#&gt;     ERC    14.2</span></span>
+<span><span class="co">#&gt;    MCML     2.0</span></span>
+<span><span class="co">#&gt;     FMA     6.7</span></span>
+<span><span class="co">#&gt;     BMA    74.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1223,16 +1223,16 @@ first fit models including a quadratic exposure term by setting
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, </span></span>
 <span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 106.4 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 100.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.7</span></span>
-<span><span class="co">#&gt;     ERC    17.9</span></span>
-<span><span class="co">#&gt;    MCML     2.2</span></span>
-<span><span class="co">#&gt;     FMA     9.0</span></span>
-<span><span class="co">#&gt;     BMA    76.6</span></span>
+<span><span class="co">#&gt;      RC     0.6</span></span>
+<span><span class="co">#&gt;     ERC    14.5</span></span>
+<span><span class="co">#&gt;    MCML     2.0</span></span>
+<span><span class="co">#&gt;     FMA     6.8</span></span>
+<span><span class="co">#&gt;     BMA    76.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

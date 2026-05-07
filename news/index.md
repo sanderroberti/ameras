@@ -1,5 +1,7 @@
 # Changelog
 
+## ameras (development version)
+
 ## ameras 0.3.0
 
 CRAN release: 2026-05-07
