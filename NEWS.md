@@ -1,5 +1,9 @@
 # ameras (development version)
 
+## Minor improvements and fixes
+
+* Fixed a bug causing a check on `inpar` in `ameras()` to generate an error when it shouldn't
+
 # ameras 0.3.0
 
 ## Breaking changes

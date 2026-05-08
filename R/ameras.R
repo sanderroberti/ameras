@@ -582,25 +582,25 @@ ameras <- function(
 
   deg <- check_deg(parsed$deg)
 
-  if (family != "multinomial") {
-    inpar <- check_inpar(inpar, family, parsed$M, parsed$X, deg)
-  } else {
-    inpar <- check_inpar(
-      inpar,
-      family,
-      parsed$M,
-      parsed$X,
-      deg,
-      multinom_levels = length(levels(data[, parsed$Y]))
-    )
-  }
-
   if (!is.null(parsed$doseRRmod) && parsed$doseRRmod == "LINEXP") {
     deg <- 2
   }
 
   M <- getVarNumbers(parsed$M, data)
   X <- getVarNumbers(X, data)
+
+  if (family != "multinomial") {
+    inpar <- check_inpar(inpar, family, M, X, deg)
+  } else {
+    inpar <- check_inpar(
+      inpar,
+      family,
+      M,
+      X,
+      deg,
+      multinom_levels = length(levels(data[, parsed$Y]))
+    )
+  }
 
   # Add mean dose for RC and ERC to the data
   data$rcdose_ameras <- rowMeans(data[, parsed$dosevars, drop = FALSE])
