@@ -2,6 +2,12 @@
 
 ## ameras (development version)
 
+### Minor improvements and fixes
+
+- Fixed a bug causing a check on `inpar` in
+  [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) to
+  generate an error when it shouldn’t
+
 ## ameras 0.3.0
 
 CRAN release: 2026-05-07
