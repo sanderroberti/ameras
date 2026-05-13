@@ -1308,7 +1308,6 @@ ameras.bma <- function(
             doseRRmod = doseRRmod,
             data = data,
             deg = deg,
-            ERC = FALSE,
             transform = transform,
             ...
           )
@@ -1328,7 +1327,6 @@ ameras.bma <- function(
               doseRRmod = doseRRmod,
               data = data,
               deg = deg,
-              ERC = FALSE,
               transform = transform,
               ...
             )
@@ -1346,7 +1344,6 @@ ameras.bma <- function(
             doseRRmod = doseRRmod,
             data = data,
             deg = deg,
-            ERC = FALSE,
             transform = transform,
             method = optim.method,
             control = control,
@@ -1365,7 +1362,6 @@ ameras.bma <- function(
               doseRRmod = doseRRmod,
               data = data,
               deg = deg,
-              ERC = FALSE,
               transform = transform,
               method = "BFGS",
               control = control,
@@ -1384,7 +1380,6 @@ ameras.bma <- function(
             doseRRmod = doseRRmod,
             data = data,
             deg = deg,
-            ERC = FALSE,
             transform = transform,
             ...
           )

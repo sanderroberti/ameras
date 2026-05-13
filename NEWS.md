@@ -4,6 +4,12 @@
 
 * Fixed a bug causing a check on `inpar` in `ameras()` to generate an error when it shouldn't
 
+## General improvements
+
+* Reduced memory usage for large datasets: removed the use of an N x N matrix for ERC for the prophaz family, improving both memory and computation speed.
+
+
+
 # ameras 0.3.0
 
 ## Breaking changes

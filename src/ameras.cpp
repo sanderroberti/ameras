@@ -203,23 +203,39 @@ double compute_ERCsum_clogit(
 
 
 
+// Instead of passing the full Kmat, pass the raw dose matrix
+// and compute Kmat entries on the fly as needed
 // [[Rcpp::export]]
 double compute_ERCsum_prophaz(
     Eigen::Map<Eigen::VectorXd> &entry_t,
     Eigen::Map<Eigen::VectorXd> &exit_t,
-    Eigen::Map<Eigen::VectorXi> &status_ord,
+    Eigen::Map<Eigen::VectorXd> &status_ord,
     Eigen::Map<Eigen::VectorXd> &RRs,
     Eigen::Map<Eigen::VectorXd> &drdd,
     Eigen::Map<Eigen::VectorXd> &drdd2,
-    Eigen::Map<Eigen::MatrixXd> &Kmat,
+    Eigen::Map<Eigen::MatrixXd> &dosemat,  // N x K dose matrix, reordered
     Eigen::Map<Eigen::VectorXd> &dldd) {
   
-  int n = entry_t.size();
+  int n    = entry_t.size();
+  int K    = dosemat.cols();
   
-  // Precompute diagonal update terms
-  Eigen::VectorXd status_d = status_ord.cast<double>();
+  // Compute rcdose (row means) for centering
+  Eigen::VectorXd rcdose = dosemat.rowwise().mean();
+  
+  // Centered dose matrix: Xc = dosemat - rcdose (broadcast)
+  Eigen::MatrixXd Xc = dosemat.colwise() - rcdose;
+  
+  // Kmat(i,j) = (1/(K-1)) * sum_k Xc(i,k) * Xc(j,k)
+  //           = (1/(K-1)) * Xc.row(i) * Xc.row(j)^T
+  // Never form full Kmat, compute dot products on the fly
+  
+  // Diagonal update terms
+  Eigen::VectorXd status_d = status_ord;
   Eigen::VectorXd inv_RRs  = RRs.cwiseInverse();
   Eigen::VectorXd inv_RRs2 = inv_RRs.cwiseProduct(inv_RRs);
+  
+  // Diagonal of Kmat: row variances
+  Eigen::VectorXd Kmat_diag = Xc.rowwise().squaredNorm() / (K - 1);
   
   Eigen::VectorXd diag_total =
     status_d.cwiseProduct(
@@ -227,13 +243,13 @@ double compute_ERCsum_prophaz(
       drdd.cwiseProduct(drdd).cwiseProduct(inv_RRs2)
     );
   
-  // Diagonal contribution to sum(mymat * Kmat)
+  // Diagonal contribution
   double sum_mymat_Kmat = 0.0;
   for (int i = 0; i < n; i++) {
-    sum_mymat_Kmat += diag_total(i) * Kmat(i, i);
+    sum_mymat_Kmat += diag_total(i) * Kmat_diag(i);
   }
   
-  // Sort entry indices by entry time for incremental risk set maintenance
+  // Sort entry indices
   std::vector<int> entry_order(n);
   std::iota(entry_order.begin(), entry_order.end(), 0);
   std::sort(entry_order.begin(), entry_order.end(),
@@ -243,64 +259,76 @@ double compute_ERCsum_prophaz(
   std::vector<bool> at_risk(n, false);
   double            risk_RR_sum = 0.0;
   
-  // Running sum: sum_{j in risk set} drdd(j) * Kmat(:, j)
-  // Updated incrementally as risk set changes
-  Eigen::VectorXd sum_drdd_Kmat_col = Eigen::VectorXd::Zero(n);
+  // Running sum: sum_{j in risk set} drdd(j) * Kmat(:,j)
+  // Kmat(:,j) = Xc * Xc.row(j)^T / (K-1)
+  // sum_{j in risk} drdd(j) * Kmat(:,j)
+  // = Xc * (sum_{j in risk} drdd(j) * Xc.row(j)^T) / (K-1)
+  // = Xc * risk_drdd_Xc^T / (K-1)
+  // where risk_drdd_Xc = sum_{j in risk} drdd(j) * Xc.row(j)
+  
+  // So instead of maintaining an N-vector sum_drdd_Kmat_col
+  // we maintain a K-vector risk_drdd_Xc
+  // This reduces memory from O(N) to O(K) for this running sum
+  Eigen::VectorXd risk_drdd_Xc = Eigen::VectorXd::Zero(K);
   
   int entry_ptr = 0;
   int exit_ptr  = 0;
   
-  // Data is already sorted by exit_t in loglik.prophaz
   for (int i = 0; i < n; ++i) {
     double t = exit_t(i);
-
-    // Breslow's approximation for ties:
-    // Risk set at event time t includes all individuals with
-    // entry_t < t and exit_t >= t, i.e. individuals who tie
-    // at the event time are included in each other's risk sets.
-    // The strict inequality exit_t < t in the removal condition
-    // and exit_ptr < i guard ensure this is correctly handled.
-
-    // Remove individuals with exit_t < t from risk set
+    
+    // Remove exited individuals
     while (exit_ptr < i && exit_t(exit_ptr) < t) {
       int j = exit_ptr;
       if (at_risk[j]) {
-        at_risk[j]          = false;
-        risk_RR_sum        -= RRs(j);
-        sum_drdd_Kmat_col  -= drdd(j) * Kmat.col(j);
+        at_risk[j]      = false;
+        risk_RR_sum    -= RRs(j);
+        risk_drdd_Xc   -= drdd(j) * Xc.row(j).transpose();
       }
       exit_ptr++;
     }
     
-    // Add individuals with entry_t < t to risk set
+    // Add new entrants
     while (entry_ptr < n && entry_t(entry_order[entry_ptr]) < t) {
       int j = entry_order[entry_ptr];
       if (!at_risk[j]) {
-        at_risk[j]          = true;
-        risk_RR_sum        += RRs(j);
-        sum_drdd_Kmat_col  += drdd(j) * Kmat.col(j);
+        at_risk[j]      = true;
+        risk_RR_sum    += RRs(j);
+        risk_drdd_Xc   += drdd(j) * Xc.row(j).transpose();
       }
       entry_ptr++;
     }
     
-    // Accumulate contribution for this event
-    if (status_ord(i) == 1 && risk_RR_sum > 0.0) {
+    if (status_ord(i) > 0.5 && risk_RR_sum > 0.0) {
       double inv2        = 1.0 / (risk_RR_sum * risk_RR_sum);
       double inv_risk_RR = 1.0 / risk_RR_sum;
       
+      // sum_{a,b in risk} inv2 * drdd(a) * drdd(b) * Kmat(a,b)
+      // = inv2 * sum_{a in risk} drdd(a) * sum_{b in risk} drdd(b) * Kmat(a,b)
+      // = inv2 * sum_{a in risk} drdd(a) * (Xc.row(a) * risk_drdd_Xc) / (K-1)
+      // = inv2 / (K-1) * sum_{a in risk} drdd(a) * Xc.row(a) * risk_drdd_Xc
+      // = inv2 / (K-1) * risk_drdd_Xc^T * risk_drdd_Xc
+      // = inv2 / (K-1) * ||risk_drdd_Xc||^2
+      
+      sum_mymat_Kmat += inv2 / (K - 1) * risk_drdd_Xc.squaredNorm();
+      
+      // last_term diagonal correction
+      // sum_{a in risk} drdd2(a) * inv_risk_RR * Kmat(a,a)
       for (int j = 0; j < n; ++j) {
         if (at_risk[j]) {
-          // Contribution from off-diagonal mymat terms
-          sum_mymat_Kmat += inv2 * drdd(j) * sum_drdd_Kmat_col(j);
-          // Contribution from last_term diagonal correction
-          sum_mymat_Kmat -= drdd2(j) * inv_risk_RR * Kmat(j, j);
+          sum_mymat_Kmat -= drdd2(j) * inv_risk_RR * Kmat_diag(j);
         }
       }
     }
   }
   
-  // sum(tcrossprod(dldd) * Kmat) = dldd^T * Kmat * dldd
-  double sum_dldd_Kmat = (dldd.transpose() * Kmat * dldd)(0);
+  // sum(tcrossprod(dldd) * Kmat)
+  // = dldd^T * Kmat * dldd
+  // = dldd^T * Xc * Xc^T * dldd / (K-1)
+  // = ||Xc^T * dldd||^2 / (K-1)
+  // Never forms N x N Kmat
+  Eigen::VectorXd Xc_dldd = Xc.transpose() * dldd;
+  double sum_dldd_Kmat = Xc_dldd.squaredNorm() / (K - 1);
   
   return sum_mymat_Kmat + sum_dldd_Kmat;
 }

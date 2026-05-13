@@ -628,24 +628,14 @@ loglik.prophaz <- function(
   deg = 1,
   entry = NULL,
   exit,
-  ERC = FALSE,
-  Kmat = NULL,
   loglim = 1e-30,
   transform = NULL,
   ...
 ) {
   # params = c(a1, ..., ap, b1, b2, (bm1), (bm2))
-  #print(params)
+
   if (length(params) != deg * length(M) + deg + length(X)) {
     stop("Parameter vector length mismatch")
-  }
-  if (ERC & is.null(Kmat)) {
-    stop("Kmat necessary for ERC")
-  }
-  if (ERC & length(D) > 1) {
-    stop(
-      "ERC only works with one supplied dose (i.e., the mean across realizations)"
-    )
   }
 
   if (!is.null(transform)) {
@@ -732,49 +722,154 @@ loglik.prophaz <- function(
     loglim
   )
 
-  if (ERC) {
-    derivs <- dRRdD(
-      params = betavec,
-      D = D,
-      M = M,
-      data = data,
-      doseRRmod = doseRRmod,
-      deg = deg
-    )
-    drdd <- exp(pmin(Xlinpred, 7e1)) * derivs$first
-    drdd2 <- exp(pmin(Xlinpred, 7e1)) * derivs$second
+  return(-1 * ls)
+}
 
-    drdd <- drdd[ord_exit]
-    drdd2 <- drdd2[ord_exit]
 
-    Kmat <- Kmat[ord_exit, ord_exit]
-
-    if (!is.null(entry)) {
-      entry_t2 <- data[[entry]][ord_exit]
-    } else {
-      entry_t2 <- entry_t
-    }
-    tmp <- c(dldd_prophaz(entry_t2, exit_t, status_ord, RR_exit))
-    dldd <- drdd / RR_exit * (status_ord == 1) - tmp * drdd
-
-    erc_sum <- compute_ERCsum_prophaz(
-      entry_t = as.double(entry_t2),
-      exit_t = as.double(exit_t),
-      status_ord = as.integer(status_ord),
-      RRs = as.double(RR_exit),
-      drdd = as.double(drdd),
-      drdd2 = as.double(drdd2),
-      Kmat = Kmat,
-      dldd = as.double(dldd)
-    )
-
-    return(
-      -1 *
-        (ls + log(max(1 + .5 * erc_sum, loglim)))
-    )
-  } else {
-    return(-1 * ls)
+loglik.prophaz.erc <- function(
+  params,
+  D,
+  status,
+  X = NULL,
+  M = NULL,
+  doseRRmod,
+  data,
+  deg = 1,
+  entry = NULL,
+  exit,
+  loglim = 1e-30,
+  transform = NULL,
+  ...
+) {
+  # params = c(a1, ..., ap, b1, b2, (bm1), (bm2))
+  #print(params)
+  if (length(params) != deg * length(M) + deg + length(X)) {
+    stop("Parameter vector length mismatch")
   }
+
+  dosemat <- as.matrix(data[, D])
+
+  if (!is.null(transform)) {
+    if (is.function(transform)) {
+      params <- transform(params = params, ...)
+    } else {
+      stop("transform should be a function")
+    }
+  }
+
+  if (!is.null(X)) {
+    a <- params[1:length(X)]
+    Xlinpred <- c(as.matrix(data[, X]) %*% a)
+  } else {
+    Xlinpred <- 0
+  }
+
+  b1 <- params[length(X) + 1]
+
+  if (deg == 2) {
+    b2 <- params[length(X) + 2]
+  } else if (deg == 1) {
+    b2 <- 0
+  }
+
+  if (!is.null(M)) {
+    bm1 <- params[(1 + deg + length(X)):(length(M) + deg + length(X))]
+    if (deg == 2) {
+      bm2 <- params[
+        (length(M) + 1 + deg + length(X)):(2 * length(M) + deg + length(X))
+      ]
+    } else {
+      bm2 <- NULL
+    }
+  } else {
+    bm1 <- bm2 <- NULL
+  }
+
+  if (deg == 2) {
+    betavec <- c(b1, b2, bm1, bm2)
+  } else {
+    betavec <- c(b1, bm1)
+  }
+
+  e1 <- exposureRR(
+    params = betavec,
+    D = "rcdose_ameras",
+    M = M,
+    data = data,
+    doseRRmod = doseRRmod,
+    deg = deg
+  )
+  e1 <- as.matrix(e1, ncol = 1)
+  if (any(e1 < 0)) {
+    stop("RR <0, please check supplied transformation")
+  }
+
+  logRRs <- Xlinpred + log(e1)
+
+  RRs <- exp(pmin(logRRs, 7e1))
+
+  ord_exit <- order(data[[exit]])
+  exit_t <- data[[exit]][ord_exit]
+  status_ord <- data[[status]][ord_exit]
+  RR_exit <- RRs[ord_exit, , drop = FALSE]
+
+  if (!is.null(entry)) {
+    ord_entry <- order(data[[entry]])
+    entry_t <- data[[entry]][ord_entry]
+    RR_entry <- RRs[ord_entry, , drop = FALSE]
+  } else {
+    entry_t <- rep(min(exit_t) - 1, nrow(data))
+    RR_entry <- RRs
+  }
+
+  ls <- loglik_prophaz_rcpp(
+    exit_t,
+    entry_t,
+    RR_entry,
+    RR_exit,
+    status_ord,
+    loglim
+  )
+
+  derivs <- dRRdD(
+    params = betavec,
+    D = "rcdose_ameras",
+    M = M,
+    data = data,
+    doseRRmod = doseRRmod,
+    deg = deg
+  )
+  drdd <- exp(pmin(Xlinpred, 7e1)) * derivs$first
+  drdd2 <- exp(pmin(Xlinpred, 7e1)) * derivs$second
+
+  drdd <- drdd[ord_exit]
+  drdd2 <- drdd2[ord_exit]
+
+  if (!is.null(entry)) {
+    entry_t2 <- data[[entry]][ord_exit]
+  } else {
+    entry_t2 <- entry_t
+  }
+  tmp <- c(dldd_prophaz(entry_t2, exit_t, status_ord, RR_exit))
+  dldd <- drdd / RR_exit * (status_ord == 1) - tmp * drdd
+
+  dosemat_ord <- dosemat[ord_exit, ]
+
+  erc_sum <- compute_ERCsum_prophaz(
+    entry_t = as.double(entry_t2),
+    exit_t = as.double(exit_t),
+    status_ord = as.double(status_ord),
+    RRs = as.double(RR_exit),
+    drdd = as.double(drdd),
+    drdd2 = as.double(drdd2),
+    dosemat = matrix(as.double(dosemat_ord), nrow = nrow(dosemat_ord)),
+    dldd = as.double(dldd)
+  )
+
+  return(
+    -1 *
+      (ls + log(max(1 + .5 * erc_sum, loglim)))
+  )
 }
 
 

@@ -39,6 +39,8 @@ extern SEXP _ameras_compute_ERCsum_prophaz(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, S
 #endif
 
 
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -561,7 +561,7 @@ ameras.rc <- function(
   control = list(reltol = 1e-10),
   ...
 ) {
-  if (ERC & family != "poisson") {
+  if (ERC & family != "poisson" & family != "prophaz") {
     Kmat <- cov(t(data[, dosevars]))
   } else {
     Kmat <- NULL
@@ -1088,32 +1088,50 @@ ameras.rc <- function(
 
     if (length(X) + length(M) * deg + deg == 1) {
       # Optimize 1-dimensional model: use optimize instead of optim
-      fit0 <- optimize(
-        f = loglik.prophaz,
-        lower = -20,
-        upper = 5,
-        D = "rcdose_ameras",
-        status = status,
-        X = X,
-        M = M,
-        doseRRmod = doseRRmod,
-        entry = entry,
-        exit = exit,
-        data = data,
-        deg = deg,
-        ERC = ERC,
-        Kmat = Kmat,
-        loglim = loglim,
-        transform = transform,
-        ...
-      )
-      fit <- list(
-        par = fit0$minimum,
-        value = fit0$objective,
-        convergence = 0,
-        hessian = numDeriv::hessian(
-          func = loglik.prophaz,
-          x = fit0$minimum,
+      if (ERC) {
+        fit0 <- optimize(
+          f = loglik.prophaz.erc,
+          lower = -20,
+          upper = 5,
+          D = dosevars,
+          status = status,
+          X = X,
+          M = M,
+          doseRRmod = doseRRmod,
+          entry = entry,
+          exit = exit,
+          data = data,
+          deg = deg,
+          loglim = loglim,
+          transform = transform,
+          ...
+        )
+        fit <- list(
+          par = fit0$minimum,
+          value = fit0$objective,
+          convergence = 0,
+          hessian = numDeriv::hessian(
+            func = loglik.prophaz.erc,
+            x = fit0$minimum,
+            D = dosevars,
+            status = status,
+            X = X,
+            M = M,
+            doseRRmod = doseRRmod,
+            entry = entry,
+            exit = exit,
+            data = data,
+            deg = deg,
+            loglim = loglim,
+            transform = transform,
+            ...
+          )
+        )
+      } else {
+        fit0 <- optimize(
+          f = loglik.prophaz,
+          lower = -20,
+          upper = 5,
           D = "rcdose_ameras",
           status = status,
           X = X,
@@ -1123,39 +1141,55 @@ ameras.rc <- function(
           exit = exit,
           data = data,
           deg = deg,
-          ERC = ERC,
-          Kmat = Kmat,
           loglim = loglim,
           transform = transform,
           ...
         )
-      )
+        fit <- list(
+          par = fit0$minimum,
+          value = fit0$objective,
+          convergence = 0,
+          hessian = numDeriv::hessian(
+            func = loglik.prophaz,
+            x = fit0$minimum,
+            D = "rcdose_ameras",
+            status = status,
+            X = X,
+            M = M,
+            doseRRmod = doseRRmod,
+            entry = entry,
+            exit = exit,
+            data = data,
+            deg = deg,
+            loglim = loglim,
+            transform = transform,
+            ...
+          )
+        )
+      }
     } else {
-      fit <- optim(
-        inpar,
-        loglik.prophaz,
-        D = "rcdose_ameras",
-        status = status,
-        X = X,
-        M = M,
-        doseRRmod = doseRRmod,
-        entry = entry,
-        exit = exit,
-        data = data,
-        deg = deg,
-        ERC = ERC,
-        Kmat = Kmat,
-        loglim = loglim,
-        transform = transform,
-        method = optim.method,
-        control = control,
-        ...
-      )
-
-      if (optim.method == "Nelder-Mead") {
-        count0 <- fit$counts
+      if (ERC) {
         fit <- optim(
-          fit$par,
+          inpar,
+          loglik.prophaz.erc,
+          D = dosevars,
+          status = status,
+          X = X,
+          M = M,
+          doseRRmod = doseRRmod,
+          entry = entry,
+          exit = exit,
+          data = data,
+          deg = deg,
+          loglim = loglim,
+          transform = transform,
+          method = optim.method,
+          control = control,
+          ...
+        )
+      } else {
+        fit <- optim(
+          inpar,
           loglik.prophaz,
           D = "rcdose_ameras",
           status = status,
@@ -1166,35 +1200,94 @@ ameras.rc <- function(
           exit = exit,
           data = data,
           deg = deg,
-          ERC = ERC,
-          Kmat = Kmat,
           loglim = loglim,
           transform = transform,
-          method = "BFGS",
+          method = optim.method,
           control = control,
           ...
         )
+      }
+
+      if (optim.method == "Nelder-Mead") {
+        count0 <- fit$counts
+
+        if (ERC) {
+          fit <- optim(
+            fit$par,
+            loglik.prophaz.erc,
+            D = dosevars,
+            status = status,
+            X = X,
+            M = M,
+            doseRRmod = doseRRmod,
+            entry = entry,
+            exit = exit,
+            data = data,
+            deg = deg,
+            loglim = loglim,
+            transform = transform,
+            method = "BFGS",
+            control = control,
+            ...
+          )
+        } else {
+          fit <- optim(
+            fit$par,
+            loglik.prophaz,
+            D = "rcdose_ameras",
+            status = status,
+            X = X,
+            M = M,
+            doseRRmod = doseRRmod,
+            entry = entry,
+            exit = exit,
+            data = data,
+            deg = deg,
+            loglim = loglim,
+            transform = transform,
+            method = "BFGS",
+            control = control,
+            ...
+          )
+        }
         fit$counts <- replace(count0, is.na(count0), 0) +
           replace(fit$counts, is.na(fit$counts), 0)
       }
-      fit$hessian <- numDeriv::hessian(
-        func = loglik.prophaz,
-        x = fit$par,
-        D = "rcdose_ameras",
-        status = status,
-        X = X,
-        M = M,
-        doseRRmod = doseRRmod,
-        entry = entry,
-        exit = exit,
-        data = data,
-        deg = deg,
-        ERC = ERC,
-        Kmat = Kmat,
-        loglim = loglim,
-        transform = transform,
-        ...
-      )
+      if (ERC) {
+        fit$hessian <- numDeriv::hessian(
+          func = loglik.prophaz.erc,
+          x = fit$par,
+          D = dosevars,
+          status = status,
+          X = X,
+          M = M,
+          doseRRmod = doseRRmod,
+          entry = entry,
+          exit = exit,
+          data = data,
+          deg = deg,
+          loglim = loglim,
+          transform = transform,
+          ...
+        )
+      } else {
+        fit$hessian <- numDeriv::hessian(
+          func = loglik.prophaz,
+          x = fit$par,
+          D = "rcdose_ameras",
+          status = status,
+          X = X,
+          M = M,
+          doseRRmod = doseRRmod,
+          entry = entry,
+          exit = exit,
+          data = data,
+          deg = deg,
+          loglim = loglim,
+          transform = transform,
+          ...
+        )
+      }
     }
 
     if (doseRRmod != "LINEXP") {
