@@ -44,42 +44,41 @@ dldd_prophaz <- function(entry, exit, status, RRs) {
   return(ret)
 }
 
+# loglik_prophaz_rcpp <- function(
+#   exit_t,
+#   entry_t,
+#   RR_entry,
+#   RR_exit,
+#   status_ord,
+#   loglim = 1e-30
+# ) {
+#   n <- length(exit_t)
+#   K <- ncol(RR_exit)
 
-loglik_prophaz_rcpp <- function(
-  exit_t,
-  entry_t,
-  RR_entry,
-  RR_exit,
-  status_ord,
-  loglim = 1e-30
-) {
-  n <- length(exit_t)
-  K <- ncol(RR_exit)
+#   # sanity checks (minimal)
+#   stopifnot(
+#     length(entry_t) == n,
+#     length(status_ord) == n,
+#     nrow(RR_entry) == n,
+#     nrow(RR_exit) == n,
+#     ncol(RR_entry) == K
+#   )
 
-  # sanity checks (minimal)
-  stopifnot(
-    length(entry_t) == n,
-    length(status_ord) == n,
-    nrow(RR_entry) == n,
-    nrow(RR_exit) == n,
-    ncol(RR_entry) == K
-  )
+#   ret <- double(K)
 
-  ret <- double(K)
+#   tmp <- .C(
+#     "C_loglik_prophaz_rcpp",
+#     exit_t = as.double(exit_t),
+#     entry_t = as.double(entry_t),
+#     RR_entry = as.double(RR_entry),
+#     RR_exit = as.double(RR_exit),
+#     status_ord = as.integer(status_ord),
+#     n = as.integer(n),
+#     K = as.integer(K),
+#     loglim = as.double(loglim),
+#     ret = ret,
+#     PACKAGE = "ameras"
+#   )
 
-  tmp <- .C(
-    "C_loglik_prophaz_rcpp",
-    exit_t = as.double(exit_t),
-    entry_t = as.double(entry_t),
-    RR_entry = as.double(RR_entry),
-    RR_exit = as.double(RR_exit),
-    status_ord = as.integer(status_ord),
-    n = as.integer(n),
-    K = as.integer(K),
-    loglim = as.double(loglim),
-    ret = ret,
-    PACKAGE = "ameras"
-  )
-
-  tmp$ret
-}
+#   tmp$ret
+# }
