@@ -8,6 +8,12 @@
   [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) to
   generate an error when it shouldn’t
 
+### General improvements
+
+- Reduced memory usage for large datasets: removed the use of an N x N
+  matrix for ERC for the prophaz family, improving both memory and
+  computation speed.
+
 ## ameras 0.3.0
 
 CRAN release: 2026-05-07

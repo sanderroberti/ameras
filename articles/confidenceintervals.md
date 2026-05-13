@@ -161,12 +161,12 @@ summary(fit.ameras.hpd)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.7 seconds
+#> Total run time: 1.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.7
+#>     FMA     1.6
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -180,12 +180,12 @@ summary(fit.ameras.percentile)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.7 seconds
+#> Total run time: 1.6 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.7
+#>     FMA     1.6
 #> 
 #> Summary of coefficients by method:
 #> 
