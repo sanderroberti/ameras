@@ -1,5 +1,5 @@
 
-\title{Inverse of exponential parameter transformation}
+\title{Inverse of Exponential Parameter Transformation}
 \alias{transform1.inv}
 \name{transform1.inv}
 

@@ -1,7 +1,7 @@
 \name{summary.amerasfit}
 \alias{summary.amerasfit}
 \alias{print.summary.amerasfit}
-\title{Summarize an amerasfit object}
+\title{Summarize an amerasfit Object}
 
 \description{
   Produces a summary of a fitted \code{amerasfit} object, including

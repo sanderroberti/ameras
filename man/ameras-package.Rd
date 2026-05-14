@@ -2,7 +2,7 @@
 \name{ameras-package}
 \alias{ameras-package}
 \docType{package}
-\title{Analyze multiple exposure realizations in association studies}
+\title{Analyze Multiple Exposure Realizations in Association Studies}
 \description{Analyze association studies with multiple realizations of a noisy or uncertain exposure. These can be obtained from e.g. a two-dimensional Monte Carlo dosimetry system (Simon et al 2015 <doi:10.1667/RR13729.1>) to characterize exposure uncertainty.
     Methods include regression calibration (Carroll et al. 2006 \doi{10.1201/9781420010138}), extended 
     regression calibration (Little et al. 2023 \doi{10.1038/s41598-023-42283-y}), Monte Carlo maximum 

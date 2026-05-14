@@ -1,6 +1,6 @@
 \name{coef.amerasfit}
 \alias{coef.amerasfit}
-\title{Estimated coefficients for an amerasfit object}
+\title{Estimated Coefficients for an amerasfit Object}
 
 \description{
   Returns a data frame with all the parameters of a fitted

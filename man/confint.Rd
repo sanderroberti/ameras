@@ -1,6 +1,6 @@
 \name{confint.amerasfit}
 \alias{confint.amerasfit}
-\title{Confidence intervals for an amerasfit object}
+\title{Confidence Intervals for an amerasfit Object}
 
 \description{
   Computes confidence intervals for the parameters of a fitted
@@ -12,7 +12,7 @@
 \usage{
 \method{confint}{amerasfit}(object, parm="dose", level=0.95, 
         type=c("proflik","percentile"), maxit.profCI=20, 
-        tol.profCI=1e-2, data=NULL, \dots)
+        tol.profCI=1e-2, data=NULL, force=FALSE, \dots)
 }
 
 \arguments{
@@ -64,11 +64,6 @@
     }
     If \code{object} contains results for at least one of RC, ERC, and MCML and at least one of FMA and BMA, \code{type} must be length 2 and specify one method for RC, ERC, and MCML, and one for FMA and BMA.
   }
-  \item{data}{
-    The original data frame used for fitting. Only required when
-    \code{type = "proflik"} and the model was fitted with
-    \code{keep.data = FALSE}
-  }
   \item{maxit.profCI}{
     Maximum number of iterations for the root-finding algorithm used to
     locate profile likelihood interval bounds. Only used when
@@ -78,6 +73,17 @@
     Tolerance for the root-finding algorithm. Only used when
     \code{type = "proflik"}. Defaults to \code{1e-2}. Reduce for more
     precise bounds at the cost of additional computation.
+  }
+  \item{data}{
+    The original data frame used for fitting. Only required when
+    \code{type = "proflik"} and the model was fitted with
+    \code{keep.data = FALSE}
+  }
+  \item{force}{
+      Logical. If \code{TRUE}, confidence intervals are recomputed even if
+      they have already been computed for this object. Defaults to
+      \code{FALSE}, in which case a warning is issued and the object is
+      returned unchanged if confidence intervals are already present.
   }
   \item{\dots}{
     Additional arguments, currently unused.

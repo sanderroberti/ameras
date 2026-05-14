@@ -1,7 +1,7 @@
 
 \name{transform1}
 \alias{transform1}
-\title{Exponential parameter transformation}
+\title{Exponential Parameter Transformation}
 
 \description{
 Applies exponential transformation \eqn{f(\theta_i)=\exp(\theta_i)+L_i} to one or multiple components of parameter vector \eqn{\bm \theta}, where \eqn{L_i} are lower limits that can be different for each component

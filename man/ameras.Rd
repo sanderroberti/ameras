@@ -1,7 +1,7 @@
 
 \name{ameras}
 \alias{ameras}
-\title{Analyze multiple exposure realizations}
+\title{Analyze Multiple Exposure Realizations}
 
 \description{
 Fit regression models accounting for exposure uncertainty using multiple Monte Carlo exposure realizations. Six outcome model families are supported. The first is the Gaussian family for continuous outcomes, \deqn{Y_i \sim N(\mu_i, \sigma^2),} with \eqn{\mu_i = \alpha_0 + \bm X_i^T \bm \alpha +\beta_1 D_i+\beta_2 D_i^2 + \bm M_i^T \bm \beta_{m1}D_i + \bm M_i^T \bm \beta_{m2}D_i^2}. Here \eqn{\bm X_i} are covariates, \eqn{D_i} is the exposure with measurement error, and \eqn{\bm M_i} are binary effect modifiers. The quadratic exposure terms and effect modification are optional.

@@ -1,7 +1,7 @@
 
 \name{ecdfplot}
 \alias{ecdfplot}
-\title{Visualize multiple dose realizations}
+\title{Visualize Multiple Dose Realizations}
 \description{
 Create a descriptive figure to visualize the distribution of dose and its uncertainty.
 }
@@ -35,8 +35,10 @@ When using a log-scale for the x-axis, any zero dose values are excluded before 
 }
 
 \examples{
-\dontrun{
+\donttest{
+  if (requireNamespace("ggplot2", quietly = TRUE)) {
    data(data, package="ameras")
    ecdfplot(data,  dosevars=paste0("V", 1:10))
+  }
 }
 }

@@ -1,6 +1,6 @@
 \name{print.amerasfit}
 \alias{print.amerasfit}
-\title{Simple summary for an amerasfit object}
+\title{Simple Summary for an amerasfit Object}
 
 \description{
   Prints a simple summary of a fitted \code{amerasfit} object.

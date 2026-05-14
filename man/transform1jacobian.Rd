@@ -1,7 +1,7 @@
 
 \name{transform1.jacobian}
 \alias{transform1.jacobian}
-\title{Jacobian of the exponential parameter transformation}
+\title{Jacobian of the Exponential Parameter Transformation}
 
 \description{
 Computes the Jacobian matrix of \link{transform1}. Note that lower limits do not need to be specified as the Jacobian is independent of those

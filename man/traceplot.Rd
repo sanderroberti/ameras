@@ -2,7 +2,7 @@
 \name{traceplot}
 \alias{traceplot}
 \alias{traceplot.amerasfit}
-\title{Traceplots for MCMC samples}
+\title{Traceplots for MCMC Samples}
 \description{
 Produce MCMC traceplots for \code{amerasfit} objects.
 }
