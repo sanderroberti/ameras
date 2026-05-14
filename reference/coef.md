@@ -1,4 +1,4 @@
-# Estimated coefficients for an amerasfit object
+# Estimated Coefficients for an amerasfit Object
 
 Returns a data frame with all the parameters of a fitted `amerasfit`
 object. The resulting object has a column for every method supplied to

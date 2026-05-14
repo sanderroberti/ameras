@@ -1,4 +1,4 @@
-# Example data
+# Example Data
 
 Data includes outcomes of all six supported types in the appropriately
 named columns. For proportional hazards regression, the observed exit

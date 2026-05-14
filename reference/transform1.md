@@ -1,4 +1,4 @@
-# Exponential parameter transformation
+# Exponential Parameter Transformation
 
 Applies exponential transformation \\f(\theta_i)=\exp(\theta_i)+L_i\\ to
 one or multiple components of parameter vector \\\bm \theta\\, where

@@ -1,4 +1,4 @@
-# Summarize an amerasfit object
+# Summarize an amerasfit Object
 
 Produces a summary of a fitted `amerasfit` object, including parameter
 estimates, standard errors, and confidence intervals if computed via
@@ -169,6 +169,7 @@ summary(fit)
 #>      RC        dose   0.8020 0.13751
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
+#> 
 
 ## Summary with confidence intervals
 fit <- confint(fit, method = "wald.orig")
@@ -190,6 +191,7 @@ summary(fit)
 #>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
 #>      RC (Intercept)  -0.8847 0.07378       NA       NA         NA         NA
 #>      RC        dose   0.8020 0.13751   0.5648    1.112    0.05024    0.04959
+#> 
 
 ## Access the summary table directly
 s <- summary(fit)

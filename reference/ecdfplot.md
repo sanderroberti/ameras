@@ -1,4 +1,4 @@
-# Visualize multiple dose realizations
+# Visualize Multiple Dose Realizations
 
 Create a descriptive figure to visualize the distribution of dose and
 its uncertainty.
@@ -62,8 +62,11 @@ before plotting.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
+  if (requireNamespace("ggplot2", quietly = TRUE)) {
    data(data, package="ameras")
    ecdfplot(data,  dosevars=paste0("V", 1:10))
-} # }
+  }
+
+# }
 ```

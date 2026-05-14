@@ -1,4 +1,4 @@
-# Confidence intervals for an amerasfit object
+# Confidence Intervals for an amerasfit Object
 
 Computes confidence intervals for the parameters of a fitted `amerasfit`
 object. This is a separate step from model fitting, i.e.,
@@ -12,7 +12,7 @@ fitted object.
 # S3 method for class 'amerasfit'
 confint(object, parm="dose", level=0.95, 
         type=c("proflik","percentile"), maxit.profCI=20, 
-        tol.profCI=1e-2, data=NULL, ...)
+        tol.profCI=1e-2, data=NULL, force=FALSE, ...)
 ```
 
 ## Arguments
@@ -75,11 +75,6 @@ confint(object, parm="dose", level=0.95,
   at least one of FMA and BMA, `type` must be length 2 and specify one
   method for RC, ERC, and MCML, and one for FMA and BMA.
 
-- data:
-
-  The original data frame used for fitting. Only required when
-  `type = "proflik"` and the model was fitted with `keep.data = FALSE`
-
 - maxit.profCI:
 
   Maximum number of iterations for the root-finding algorithm used to
@@ -91,6 +86,18 @@ confint(object, parm="dose", level=0.95,
   Tolerance for the root-finding algorithm. Only used when
   `type = "proflik"`. Defaults to `1e-2`. Reduce for more precise bounds
   at the cost of additional computation.
+
+- data:
+
+  The original data frame used for fitting. Only required when
+  `type = "proflik"` and the model was fitted with `keep.data = FALSE`
+
+- force:
+
+  Logical. If `TRUE`, confidence intervals are recomputed even if they
+  have already been computed for this object. Defaults to `FALSE`, in
+  which case a warning is issued and the object is returned unchanged if
+  confidence intervals are already present.
 
 - ...:
 
@@ -204,11 +211,12 @@ summary(fit)
 #>  Method        Term Estimate      SE CI.lower CI.upper
 #>      RC (Intercept)  -0.8847 0.07378  -1.0293  -0.7401
 #>      RC        dose   0.8020 0.13751   0.5324   1.0715
+#> 
 
 ## Profile likelihood intervals for dose parameters only (slower)
 # \donttest{
 fit <- confint(fit, type = "proflik", parm = "dose")
-#> Obtaining profile likelihood CI for dose
+#> Warning: Confidence intervals have already been computed for this object. Returning the object unchanged. Use force=TRUE to recompute.
 summary(fit)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
@@ -223,9 +231,10 @@ summary(fit)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
-#>      RC (Intercept)  -0.8847 0.07378       NA       NA         NA         NA
-#>      RC        dose   0.8020 0.13751   0.5648    1.112    0.05024    0.04959
+#>  Method        Term Estimate      SE CI.lower CI.upper
+#>      RC (Intercept)  -0.8847 0.07378  -1.0293  -0.7401
+#>      RC        dose   0.8020 0.13751   0.5324   1.0715
+#> 
 # }
 
 ## With keep.data = FALSE, supply data explicitly for proflik
@@ -271,13 +280,13 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 105.5 seconds
+#> Total run time: 106.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>     FMA     0.4
-#>     BMA   105.1
+#>     BMA   105.9
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -286,5 +295,6 @@ summary(fit3)
 #>     FMA        dose   0.7916 0.13661   0.5241   1.0595   NA      NA
 #>     BMA (Intercept)  -0.8733 0.07569  -1.0266  -0.7309 1.00 1024.00
 #>     BMA        dose   0.7923 0.14167   0.5401   1.0977 1.00 1001.00
+#> 
 # }
 ```

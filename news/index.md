@@ -13,6 +13,12 @@
 - Reduced memory usage for large datasets: removed the use of an N x N
   matrix for ERC for the prophaz family, improving both memory and
   computation speed.
+- [`confint()`](https://rdrr.io/r/stats/confint.html) no longer
+  re-computes intervals by default if they were already computed
+  previously. To allow re-computation of intervals of a different type
+  or with different settings,
+  [`confint()`](https://rdrr.io/r/stats/confint.html) can be called with
+  the argument `force=TRUE`.
 
 ## ameras 0.3.0
 

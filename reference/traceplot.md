@@ -1,4 +1,4 @@
-# Traceplots for MCMC samples
+# Traceplots for MCMC Samples
 
 Produce MCMC traceplots for `amerasfit` objects.
 

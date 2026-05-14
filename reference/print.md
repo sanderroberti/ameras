@@ -1,4 +1,4 @@
-# Simple summary for an amerasfit object
+# Simple Summary for an amerasfit Object
 
 Prints a simple summary of a fitted `amerasfit` object.
 
@@ -59,19 +59,20 @@ fit
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total run time: 22.6 seconds
+#> Total run time: 18.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    22.6
+#>     ERC    18.3
 #> 
 #> Estimated model parameters:
 #> 
 #>                  RC     ERC
 #> (Intercept) -0.8847 -0.8849
 #> dose         0.8020  0.8214
+#> 
 print(fit)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
@@ -80,19 +81,20 @@ print(fit)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total run time: 22.6 seconds
+#> Total run time: 18.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    22.6
+#>     ERC    18.3
 #> 
 #> Estimated model parameters:
 #> 
 #>                  RC     ERC
 #> (Intercept) -0.8847 -0.8849
 #> dose         0.8020  0.8214
+#> 
 
 ## More digits
 print(fit, digits=5)
@@ -103,18 +105,19 @@ print(fit, digits=5)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total run time: 22.6 seconds
+#> Total run time: 18.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    22.6
+#>     ERC    18.3
 #> 
 #> Estimated model parameters:
 #> 
 #>                   RC      ERC
 #> (Intercept) -0.88472 -0.88491
 #> dose         0.80195  0.82142
+#> 
 # }
 ```

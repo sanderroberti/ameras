@@ -53,6 +53,8 @@
 <div class="section level3">
 <h3 id="general-improvements-development-version">General improvements<a class="anchor" aria-label="anchor" href="#general-improvements-development-version"></a></h3>
 <ul><li>Reduced memory usage for large datasets: removed the use of an N x N matrix for ERC for the prophaz family, improving both memory and computation speed.</li>
+<li>
+<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> no longer re-computes intervals by default if they were already computed previously. To allow re-computation of intervals of a different type or with different settings, <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> can be called with the argument <code>force=TRUE</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">

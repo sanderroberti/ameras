@@ -1,4 +1,4 @@
-# Analyze multiple exposure realizations
+# Analyze Multiple Exposure Realizations
 
 Fit regression models accounting for exposure uncertainty using multiple
 Monte Carlo exposure realizations. Six outcome model families are
@@ -532,5 +532,6 @@ Studies
 #> dose:M1      0.1739
 #> dose:M2      0.5054
 #> sigma        1.0661
+#> 
 # }
 ```

@@ -1,4 +1,4 @@
-# Analyze multiple exposure realizations in association studies
+# Analyze Multiple Exposure Realizations in Association Studies
 
 Analyze association studies with multiple realizations of a noisy or
 uncertain exposure. These can be obtained from e.g. a two-dimensional

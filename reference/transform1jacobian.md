@@ -1,4 +1,4 @@
-# Jacobian of the exponential parameter transformation
+# Jacobian of the Exponential Parameter Transformation
 
 Computes the Jacobian matrix of
 [transform1](https://ameras.sanderroberti.com/reference/transform1.md).

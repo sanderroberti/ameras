@@ -1,4 +1,4 @@
-# Inverse of exponential parameter transformation
+# Inverse of Exponential Parameter Transformation
 
 Inverse of `transform1` for the purpose of deriving initial values.
 
