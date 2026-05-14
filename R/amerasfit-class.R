@@ -44,6 +44,8 @@ print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\nEstimated model parameters:\n\n")
   print(format(coefs, digits = digits, nsmall = 1), row.names = TRUE)
 
+  cat("\n")
+
   invisible(x)
 }
 
@@ -201,9 +203,11 @@ print.summary.amerasfit <- function(
   if (!x$CI.computed) {
     cat(
       "\nNote: confidence intervals not yet computed.",
-      "Use confint() to add them."
+      "Use confint() to add them.\n"
     )
   }
+
+  cat("\n")
 
   invisible(x)
 }
@@ -245,8 +249,18 @@ confint.amerasfit <- function(
   maxit.profCI = 20,
   tol.profCI = 1e-2,
   data = NULL,
+  force = FALSE,
   ...
 ) {
+  # Check if CIs have already been computed
+  if (object$CI.computed && !force) {
+    warning(
+      "Confidence intervals have already been computed for this object. ",
+      "Returning the object unchanged. Use force=TRUE to recompute."
+    )
+    return(invisible(object))
+  }
+
   # Validate level
   if (!is.numeric(level) || length(level) != 1 || level <= 0 || level >= 1) {
     stop("level must be a single numeric value between 0 and 1")

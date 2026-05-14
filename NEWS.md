@@ -7,6 +7,8 @@
 ## General improvements
 
 * Reduced memory usage for large datasets: removed the use of an N x N matrix for ERC for the prophaz family, improving both memory and computation speed.
+* `confint()` no longer re-computes intervals by default if they were already computed previously. To allow re-computation of intervals of a different type
+or with different settings, `confint()` can be called with the argument `force=TRUE`.
 
 
 
