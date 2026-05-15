@@ -192,12 +192,12 @@ summary(fit.ameras.sigmoid)
 #>     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, 
 #>     index.t = 4:5)
 #> 
-#> Total run time: 0.6 seconds
+#> Total run time: 0.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.6
+#>      RC     0.7
 #> 
 #> Summary of coefficients by method:
 #> 
