@@ -17,7 +17,7 @@ compute_ERCsum_clogit <- function(set_members, RRs, drdd, drdd2, status, Kmat) {
     .Call(`_ameras_compute_ERCsum_clogit`, set_members, RRs, drdd, drdd2, status, Kmat)
 }
 
-compute_ERCsum_prophaz <- function(entry_t, exit_t, status_ord, RRs, drdd, drdd2, dosemat, dldd) {
-    .Call(`_ameras_compute_ERCsum_prophaz`, entry_t, exit_t, status_ord, RRs, drdd, drdd2, dosemat, dldd)
+compute_ERCsum_prophaz <- function(entry_t, exit_t, status_ord, RRs, drdd, drdd2, Xc, Kmat_diag, dldd) {
+    .Call(`_ameras_compute_ERCsum_prophaz`, entry_t, exit_t, status_ord, RRs, drdd, drdd2, Xc, Kmat_diag, dldd)
 }
 

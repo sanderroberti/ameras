@@ -1086,6 +1086,19 @@ ameras.rc <- function(
       inpar <- rep(0, length(X) + length(M) * deg + deg)
     }
 
+    if (ERC) {
+      ord_exit <- order(data[[exit]])
+      dosemat_ord <- as.matrix(
+        data[ord_exit, dosevars, drop = FALSE]
+      )
+      storage.mode(dosemat_ord) <- "double"
+      rcdose_ord <- data[ord_exit, "rcdose_ameras"]
+      Xc_ord <- dosemat_ord - rcdose_ord
+      Kmat_diag_ord <- rowSums(Xc_ord^2) / (ncol(dosemat_ord) - 1)
+      rm(dosemat_ord)
+      gc()
+    }
+
     if (length(X) + length(M) * deg + deg == 1) {
       # Optimize 1-dimensional model: use optimize instead of optim
       if (ERC) {
@@ -1104,6 +1117,8 @@ ameras.rc <- function(
           deg = deg,
           loglim = loglim,
           transform = transform,
+          Xc_ord = Xc_ord,
+          Kmat_diag_ord = Kmat_diag_ord,
           ...
         )
         fit <- list(
@@ -1124,6 +1139,8 @@ ameras.rc <- function(
             deg = deg,
             loglim = loglim,
             transform = transform,
+            Xc_ord = Xc_ord,
+            Kmat_diag_ord = Kmat_diag_ord,
             ...
           )
         )
@@ -1185,6 +1202,8 @@ ameras.rc <- function(
           transform = transform,
           method = optim.method,
           control = control,
+          Xc_ord = Xc_ord,
+          Kmat_diag_ord = Kmat_diag_ord,
           ...
         )
       } else {
@@ -1228,6 +1247,8 @@ ameras.rc <- function(
             transform = transform,
             method = "BFGS",
             control = control,
+            Xc_ord = Xc_ord,
+            Kmat_diag_ord = Kmat_diag_ord,
             ...
           )
         } else {
@@ -1268,6 +1289,8 @@ ameras.rc <- function(
           deg = deg,
           loglim = loglim,
           transform = transform,
+          Xc_ord = Xc_ord,
+          Kmat_diag_ord = Kmat_diag_ord,
           ...
         )
       } else {

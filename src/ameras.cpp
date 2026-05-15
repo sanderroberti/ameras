@@ -213,17 +213,14 @@ double compute_ERCsum_prophaz(
     Eigen::Map<Eigen::VectorXd> &RRs,
     Eigen::Map<Eigen::VectorXd> &drdd,
     Eigen::Map<Eigen::VectorXd> &drdd2,
-    Eigen::Map<Eigen::MatrixXd> &dosemat,  // N x K dose matrix, reordered
+    Eigen::Map<Eigen::MatrixXd> &Xc,  // precomputed centered dose matrix
+    Eigen::Map<Eigen::VectorXd> &Kmat_diag, // precomputed row variances
     Eigen::Map<Eigen::VectorXd> &dldd) {
   
   int n    = entry_t.size();
-  int K    = dosemat.cols();
+  int K    = Xc.cols();
   
-  // Compute rcdose (row means) for centering
-  Eigen::VectorXd rcdose = dosemat.rowwise().mean();
-  
-  // Centered dose matrix: Xc = dosemat - rcdose (broadcast)
-  Eigen::MatrixXd Xc = dosemat.colwise() - rcdose;
+
   
   // Kmat(i,j) = (1/(K-1)) * sum_k Xc(i,k) * Xc(j,k)
   //           = (1/(K-1)) * Xc.row(i) * Xc.row(j)^T
@@ -234,8 +231,6 @@ double compute_ERCsum_prophaz(
   Eigen::VectorXd inv_RRs  = RRs.cwiseInverse();
   Eigen::VectorXd inv_RRs2 = inv_RRs.cwiseProduct(inv_RRs);
   
-  // Diagonal of Kmat: row variances
-  Eigen::VectorXd Kmat_diag = Xc.rowwise().squaredNorm() / (K - 1);
   
   Eigen::VectorXd diag_total =
     status_d.cwiseProduct(

@@ -70,8 +70,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // compute_ERCsum_prophaz
-double compute_ERCsum_prophaz(Eigen::Map<Eigen::VectorXd>& entry_t, Eigen::Map<Eigen::VectorXd>& exit_t, Eigen::Map<Eigen::VectorXd>& status_ord, Eigen::Map<Eigen::VectorXd>& RRs, Eigen::Map<Eigen::VectorXd>& drdd, Eigen::Map<Eigen::VectorXd>& drdd2, Eigen::Map<Eigen::MatrixXd>& dosemat, Eigen::Map<Eigen::VectorXd>& dldd);
-RcppExport SEXP _ameras_compute_ERCsum_prophaz(SEXP entry_tSEXP, SEXP exit_tSEXP, SEXP status_ordSEXP, SEXP RRsSEXP, SEXP drddSEXP, SEXP drdd2SEXP, SEXP dosematSEXP, SEXP dlddSEXP) {
+double compute_ERCsum_prophaz(Eigen::Map<Eigen::VectorXd>& entry_t, Eigen::Map<Eigen::VectorXd>& exit_t, Eigen::Map<Eigen::VectorXd>& status_ord, Eigen::Map<Eigen::VectorXd>& RRs, Eigen::Map<Eigen::VectorXd>& drdd, Eigen::Map<Eigen::VectorXd>& drdd2, Eigen::Map<Eigen::MatrixXd>& Xc, Eigen::Map<Eigen::VectorXd>& Kmat_diag, Eigen::Map<Eigen::VectorXd>& dldd);
+RcppExport SEXP _ameras_compute_ERCsum_prophaz(SEXP entry_tSEXP, SEXP exit_tSEXP, SEXP status_ordSEXP, SEXP RRsSEXP, SEXP drddSEXP, SEXP drdd2SEXP, SEXP XcSEXP, SEXP Kmat_diagSEXP, SEXP dlddSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -81,9 +81,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type RRs(RRsSEXP);
     Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type drdd(drddSEXP);
     Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type drdd2(drdd2SEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type dosemat(dosematSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type Xc(XcSEXP);
+    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type Kmat_diag(Kmat_diagSEXP);
     Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type dldd(dlddSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_ERCsum_prophaz(entry_t, exit_t, status_ord, RRs, drdd, drdd2, dosemat, dldd));
+    rcpp_result_gen = Rcpp::wrap(compute_ERCsum_prophaz(entry_t, exit_t, status_ord, RRs, drdd, drdd2, Xc, Kmat_diag, dldd));
     return rcpp_result_gen;
 END_RCPP
 }

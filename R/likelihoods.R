@@ -739,6 +739,8 @@ loglik.prophaz.erc <- function(
   exit,
   loglim = 1e-30,
   transform = NULL,
+  Xc_ord,
+  Kmat_diag_ord,
   ...
 ) {
   # params = c(a1, ..., ap, b1, b2, (bm1), (bm2))
@@ -747,7 +749,7 @@ loglik.prophaz.erc <- function(
     stop("Parameter vector length mismatch")
   }
 
-  dosemat <- as.matrix(data[, D])
+  #dosemat <- as.matrix(data[, D])
 
   if (!is.null(transform)) {
     if (is.function(transform)) {
@@ -853,7 +855,7 @@ loglik.prophaz.erc <- function(
   tmp <- c(dldd_prophaz(entry_t2, exit_t, status_ord, RR_exit))
   dldd <- drdd / RR_exit * (status_ord == 1) - tmp * drdd
 
-  dosemat_ord <- dosemat[ord_exit, ]
+  #dosemat_ord <- dosemat[ord_exit, ]
 
   erc_sum <- compute_ERCsum_prophaz(
     entry_t = as.double(entry_t2),
@@ -862,7 +864,8 @@ loglik.prophaz.erc <- function(
     RRs = as.double(RR_exit),
     drdd = as.double(drdd),
     drdd2 = as.double(drdd2),
-    dosemat = matrix(as.double(dosemat_ord), nrow = nrow(dosemat_ord)),
+    Xc = Xc_ord,
+    Kmat_diag = as.double(Kmat_diag_ord),
     dldd = as.double(dldd)
   )
 

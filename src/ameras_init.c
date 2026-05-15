@@ -32,7 +32,7 @@ extern SEXP _ameras_compute_ERCsum_clogit(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern "C" {
 #endif
 
-extern SEXP _ameras_compute_ERCsum_prophaz(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _ameras_compute_ERCsum_prophaz(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 #ifdef __cplusplus
 }
@@ -53,7 +53,7 @@ extern SEXP _ameras_loglik_prophaz_rcpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   {"_ameras_compute_ERCsum_clogit", (DL_FUNC) &_ameras_compute_ERCsum_clogit, 6},
-  {"_ameras_compute_ERCsum_prophaz", (DL_FUNC) &_ameras_compute_ERCsum_prophaz, 8},
+  {"_ameras_compute_ERCsum_prophaz", (DL_FUNC) &_ameras_compute_ERCsum_prophaz, 9},
   {"_ameras_loglik_prophaz_rcpp", (DL_FUNC) &_ameras_loglik_prophaz_rcpp, 6},
   {NULL, NULL, 0}
 };
