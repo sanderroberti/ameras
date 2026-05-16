@@ -594,7 +594,9 @@ ameras <- function(
     ...
   )
   formula_to_store <- formula
-  environment(formula_to_store) <- baseenv()
+  if (!is.null(formula_to_store)) {
+    environment(formula_to_store) <- baseenv()
+  }
   ret <- c(
     list(
       call = match.call(),
