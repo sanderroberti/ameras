@@ -246,6 +246,8 @@ loglik.poisson.erc <- function(
   deg = 1,
   loglim = 1e-30,
   transform = NULL,
+  Xc,
+  Kmat_diag,
   ...
 ) {
   # C++ version
@@ -257,7 +259,7 @@ loglik.poisson.erc <- function(
   #if(ERC & is.null(Kmat)) stop("Kmat necessary for ERC")
   #if(ERC & length(D)>1) stop("ERC only works with one supplied dose (i.e., the mean across realizations)")
 
-  dosemat <- as.matrix(data[, D])
+  #dosemat <- as.matrix(data[, D])
 
   if (!is.null(transform)) {
     if (is.function(transform)) {
@@ -353,18 +355,13 @@ loglik.poisson.erc <- function(
   v <- (data[, Y] / mus - 1) * dmdd
 
   # center dose for covariance
-  Xc <- dosemat - data[, "rcdose_ameras"]
+  # Xc <- dosemat - data[, "rcdose_ameras"]
   Xt_v <- crossprod(Xc, v)
-
-  term1 <- sum(Xt_v^2) / (ncol(dosemat) - 1)
+  term1 <- sum(Xt_v^2) / (ncol(Xc) - 1)
 
   # diagonal correction
   corrterm <- (data[, Y] / mus - 1) * dmdd2 - data[, Y] / mus^2 * dmdd^2
-
-  # diag(Kmat) = row variances of dosemat
-  row_var <- rowSums(Xc^2) / (ncol(dosemat) - 1)
-
-  term2 <- sum(row_var * corrterm)
+  term2 <- sum(Kmat_diag * corrterm)
 
   val <- term1 + term2
 

@@ -72,21 +72,10 @@ ameras_main <- function(
 
   # For the Gaussian family, sigma needs to be >0 and so use standard reparametrization if another is not defined
   if (family == "gaussian" & is.null(transform)) {
-    transform <- function(params, boundcheck = FALSE, ...) {
-      return(transform1(
-        params = params,
-        index.t = 2 + length(X) + length(M) * deg + deg,
-        boundcheck = boundcheck,
-        ...
-      ))
-    }
-    transform.jacobian <- function(params, ...) {
-      return(transform1.jacobian(
-        params = params,
-        index.t = 2 + length(X) + length(M) * deg + deg,
-        ...
-      ))
-    }
+    transform <- make_transform(index.t = 2 + length(X) + length(M) * deg + deg)
+    transform.jacobian <- make_transform.jacobian(
+      index.t = 2 + length(X) + length(M) * deg + deg
+    )
   }
 
   # For linear ERR models, if no transformation is specified, use transform1 with lower limits -1/max(dose) for linear dose-response and (0,-1/max(dose^2)) for linear and linear-quadratic parameters, respectively. If effect modifiers M are specified, no transformation is used for those parameters. If negative RRs are evaluated, the program will produce an error and the user should specify a different transformation or bounds
@@ -98,35 +87,18 @@ ameras_main <- function(
         lwlmt <- c(0, -1 / max(data[, dosevars]^2))
       }
       if (family != "multinomial") {
-        transform <- function(params, boundcheck = FALSE, ...) {
-          return(transform1(
-            params = params,
-            index.t = (1 *
-              (!(family %in% c("prophaz", "clogit"))) +
-              length(X) +
-              1):(1 *
-              (!(family %in% c("prophaz", "clogit"))) +
-              length(X) +
-              deg),
-            lowlimit = lwlmt,
-            boundcheck = boundcheck,
-            ...
-          ))
-        }
-        transform.jacobian <- function(params, ...) {
-          return(transform1.jacobian(
-            params = params,
-            index.t = (1 *
-              (!(family %in% c("prophaz", "clogit"))) +
-              length(X) +
-              1):(1 *
-              (!(family %in% c("prophaz", "clogit"))) +
-              length(X) +
-              deg),
-            lowlimit = lwlmt,
-            ...
-          ))
-        }
+        indx <- (1 *
+          (!(family %in% c("prophaz", "clogit"))) +
+          length(X) +
+          1):(1 *
+          (!(family %in% c("prophaz", "clogit"))) +
+          length(X) +
+          deg)
+        transform <- make_transform(index.t = indx, lowlimit = lwlmt)
+        transform.jacobian <- make_transform.jacobian(
+          index.t = indx,
+          lowlimit = lwlmt
+        )
       } else {
         lwlmt <- rep(lwlmt, length(levels(data[, Y])) - 1)
         indx <- do.call(
@@ -137,52 +109,25 @@ ameras_main <- function(
               ((1 + length(X) + 1):(1 + length(X) + deg))
           })
         )
-
-        transform <- function(params, boundcheck = FALSE, ...) {
-          return(transform1(
-            params = params,
-            index.t = indx,
-            lowlimit = lwlmt,
-            boundcheck = boundcheck,
-            ...
-          ))
-        }
-        transform.jacobian <- function(params, ...) {
-          return(transform1.jacobian(
-            params = params,
-            index.t = indx,
-            lowlimit = lwlmt,
-            ...
-          ))
-        }
+        transform <- make_transform(index.t = indx, lowlimit = lwlmt)
+        transform.jacobian <- make_transform.jacobian(
+          index.t = indx,
+          lowlimit = lwlmt
+        )
       }
     } else if (doseRRmod == "LINEXP" & is.null(transform)) {
       lwlmt <- 0 # Lower bound of 0 for beta1, no bound for beta2
 
       if (family != "multinomial") {
-        transform <- function(params, boundcheck = FALSE, ...) {
-          return(transform1(
-            params = params,
-            index.t = (1 *
-              (!(family %in% c("prophaz", "clogit"))) +
-              length(X) +
-              1),
-            lowlimit = lwlmt,
-            boundcheck = boundcheck,
-            ...
-          ))
-        }
-        transform.jacobian <- function(params, ...) {
-          return(transform1.jacobian(
-            params = params,
-            index.t = (1 *
-              (!(family %in% c("prophaz", "clogit"))) +
-              length(X) +
-              1),
-            lowlimit = lwlmt,
-            ...
-          ))
-        }
+        indx <- (1 *
+          (!(family %in% c("prophaz", "clogit"))) +
+          length(X) +
+          1)
+        transform <- make_transform(index.t = indx, lowlimit = lwlmt)
+        transform.jacobian <- make_transform.jacobian(
+          index.t = indx,
+          lowlimit = lwlmt
+        )
       } else {
         lwlmt <- rep(lwlmt, length(levels(data[, Y])) - 1)
         indx <- do.call(
@@ -191,24 +136,11 @@ ameras_main <- function(
             xx * (1 + length(X) + length(M) * deg + deg) + (1 + length(X) + 1)
           })
         )
-
-        transform <- function(params, boundcheck = FALSE, ...) {
-          return(transform1(
-            params = params,
-            index.t = indx,
-            lowlimit = lwlmt,
-            boundcheck = boundcheck,
-            ...
-          ))
-        }
-        transform.jacobian <- function(params, ...) {
-          return(transform1.jacobian(
-            params = params,
-            index.t = indx,
-            lowlimit = lwlmt,
-            ...
-          ))
-        }
+        transform <- make_transform(index.t = indx, lowlimit = lwlmt)
+        transform.jacobian <- make_transform.jacobian(
+          index.t = indx,
+          lowlimit = lwlmt
+        )
       }
     }
   }
@@ -604,7 +536,10 @@ ameras <- function(
 
   # Add mean dose for RC and ERC to the data
   data$rcdose_ameras <- rowMeans(data[, parsed$dosevars, drop = FALSE])
-
+  X_formula_to_store <- parsed$X_formula
+  if (!is.null(X_formula_to_store)) {
+    environment(X_formula_to_store) <- baseenv()
+  }
   model_list <- list(
     data = if (keep.data) data else NULL,
     keep.data = keep.data,
@@ -612,7 +547,7 @@ ameras <- function(
     dosevars = parsed$dosevars,
     Y = Y,
     M = M,
-    X_formula = parsed$X_formula,
+    X_formula = X_formula_to_store,
     X = X,
     offset = parsed$offset,
     entry = parsed$entry,
@@ -658,10 +593,12 @@ ameras <- function(
     optim.method = optim.method,
     ...
   )
+  formula_to_store <- formula
+  environment(formula_to_store) <- baseenv()
   ret <- c(
     list(
       call = match.call(),
-      formula = formula,
+      formula = formula_to_store,
       num.rows = nrow(data),
       num.realizations = length(parsed$dosevars),
       transform = result$transform,

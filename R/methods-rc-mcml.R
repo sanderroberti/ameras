@@ -757,6 +757,13 @@ ameras.rc <- function(
       inpar <- rep(0, 1 + length(X) + length(M) * deg + deg)
     }
     if (ERC) {
+      dosemat_poisson <- as.matrix(data[, dosevars, drop = FALSE])
+      storage.mode(dosemat_poisson) <- "double"
+      Xc <- dosemat_poisson - data[, "rcdose_ameras"]
+      Kmat_diag <- rowSums(Xc^2) / (ncol(dosemat_poisson) - 1)
+      rm(dosemat_poisson)
+      gc()
+
       fit <- optim(
         inpar,
         loglik.poisson.erc,
@@ -772,6 +779,8 @@ ameras.rc <- function(
         transform = transform,
         method = optim.method,
         control = control,
+        Xc = Xc,
+        Kmat_diag = Kmat_diag,
         ...
       )
     } else {
@@ -811,6 +820,8 @@ ameras.rc <- function(
           transform = transform,
           method = "BFGS",
           control = control,
+          Xc = Xc,
+          Kmat_diag = Kmat_diag,
           ...
         )
       } else {
@@ -850,6 +861,8 @@ ameras.rc <- function(
         deg = deg,
         loglim = loglim,
         transform = transform,
+        Xc = Xc,
+        Kmat_diag = Kmat_diag,
         ...
       )
     } else {
@@ -1092,8 +1105,7 @@ ameras.rc <- function(
         data[ord_exit, dosevars, drop = FALSE]
       )
       storage.mode(dosemat_ord) <- "double"
-      rcdose_ord <- data[ord_exit, "rcdose_ameras"]
-      Xc_ord <- dosemat_ord - rcdose_ord
+      Xc_ord <- dosemat_ord - data[ord_exit, "rcdose_ameras"]
       Kmat_diag_ord <- rowSums(Xc_ord^2) / (ncol(dosemat_ord) - 1)
       rm(dosemat_ord)
       gc()

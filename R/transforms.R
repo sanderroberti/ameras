@@ -1,3 +1,40 @@
+# The following 2 helper functions make sure no large environments get
+# attached to the transform and transform.jacobian function
+
+make_transform <- function(index.t = NULL, lowlimit = NULL) {
+  e <- new.env(parent = asNamespace("ameras"))
+  e$index.t <- index.t
+  e$lowlimit <- lowlimit
+
+  f <- function(params, boundcheck = FALSE, ...) {
+    args <- list(params = params, boundcheck = boundcheck, ...)
+    if (!is.null(index.t)) {
+      args$index.t <- index.t
+    }
+    if (!is.null(lowlimit)) {
+      args$lowlimit <- lowlimit
+    }
+    do.call(transform1, args)
+  }
+  environment(f) <- e
+  f
+}
+
+make_transform.jacobian <- function(index.t = NULL, lowlimit = NULL) {
+  e <- new.env(parent = asNamespace("ameras"))
+  e$index.t <- index.t
+
+  f <- function(params, ...) {
+    args <- list(params = params, ...)
+    if (!is.null(index.t)) {
+      args$index.t <- index.t
+    }
+    do.call(transform1.jacobian, args)
+  }
+  environment(f) <- e
+  f
+}
+
 transform1 <- function(
   params,
   index.t = 1:length(params),
