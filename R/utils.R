@@ -4,43 +4,93 @@ make_base_loglik_fn <- function(object, method_fit, data) {
   if (is.null(ERC)) {
     ERC <- FALSE
   }
-  Kmat <- if (ERC && m$family != "poisson") {
-    cov(t(data[, m$dosevars, drop = FALSE]))
+  if (ERC && m$family == "prophaz") {
+    ord_exit <- order(data[[m$exit]])
+    dosemat_ord <- as.matrix(data[ord_exit, m$dosevars, drop = FALSE])
+    storage.mode(dosemat_ord) <- "double"
+    rcdose_ord <- data[ord_exit, "rcdose_ameras"]
+    Xc_ord <- dosemat_ord - rcdose_ord
+    Kmat_diag_ord <- rowSums(Xc_ord^2) / (ncol(dosemat_ord) - 1)
+    rm(dosemat_ord)
+    gc()
+
+    Kmat <- NULL
+  } else if (ERC && m$family == "poisson") {
+    dosemat_poisson <- as.matrix(data[, m$dosevars, drop = FALSE])
+    storage.mode(dosemat_poisson) <- "double"
+    Xc_poisson <- dosemat_poisson - data[, "rcdose_ameras"]
+    Kmat_diag_poisson <- rowSums(Xc_poisson^2) / (ncol(dosemat_poisson) - 1)
+    rm(dosemat_poisson)
+    gc()
+
+    Kmat <- NULL
+  } else if (ERC) {
+    Kmat <- cov(t(data[, m$dosevars, drop = FALSE]))
   } else {
-    NULL
+    Kmat <- NULL
   }
 
-  if (m$family == "gaussian") {
-    function(params, D) {
-      do.call(
-        loglik.gaussian,
-        c(
-          list(
-            params = params,
-            D = D,
-            X = m$X,
-            Y = m$Y,
-            M = m$M,
-            data = data,
-            deg = m$deg,
-            ERC = ERC,
-            Kmat = Kmat,
-            loglim = m$loglim,
-            transform = object$transform
-          ),
-          object$other.args
+  if (m$family == "prophaz") {
+    if (ERC) {
+      # Xc_ord and Kmat_diag_ord captured in closure
+      function(params, D) {
+        do.call(
+          loglik.prophaz.erc,
+          c(
+            list(
+              params = params,
+              D = D,
+              X = m$X,
+              status = m$status,
+              entry = m$entry,
+              exit = m$exit,
+              M = m$M,
+              doseRRmod = m$doseRRmod,
+              data = data,
+              deg = m$deg,
+              loglim = m$loglim,
+              transform = object$transform,
+              Xc_ord = Xc_ord,
+              Kmat_diag_ord = Kmat_diag_ord
+            ),
+            object$transform.args
+          )
         )
-      )
+      }
+    } else {
+      function(params, D) {
+        do.call(
+          loglik.prophaz,
+          c(
+            list(
+              params = params,
+              D = D,
+              X = m$X,
+              status = m$status,
+              entry = m$entry,
+              exit = m$exit,
+              M = m$M,
+              doseRRmod = m$doseRRmod,
+              data = data,
+              deg = m$deg,
+              loglim = m$loglim,
+              transform = object$transform
+            ),
+            object$transform.args
+          )
+        )
+      }
     }
   } else if (m$family == "poisson") {
     if (ERC) {
+      # Xc_poisson and Kmat_diag_poisson captured in closure
       function(params, D) {
         do.call(
           loglik.poisson.erc,
           c(
             list(
               params = params,
-              D = m$dosevars,
+              D = D,
               X = m$X,
               Y = m$Y,
               M = m$M,
@@ -49,9 +99,11 @@ make_base_loglik_fn <- function(object, method_fit, data) {
               data = data,
               deg = m$deg,
               loglim = m$loglim,
-              transform = object$transform
+              transform = object$transform,
+              Xc = Xc_poisson,
+              Kmat_diag = Kmat_diag_poisson
             ),
-            object$other.args
+            object$transform.args
           )
         )
       }
@@ -73,15 +125,15 @@ make_base_loglik_fn <- function(object, method_fit, data) {
               loglim = m$loglim,
               transform = object$transform
             ),
-            object$other.args
+            object$transform.args
           )
         )
       }
     }
-  } else if (m$family == "binomial") {
+  } else if (m$family == "gaussian") {
     function(params, D) {
       do.call(
-        loglik.binomial,
+        loglik.gaussian,
         c(
           list(
             params = params,
@@ -89,7 +141,6 @@ make_base_loglik_fn <- function(object, method_fit, data) {
             X = m$X,
             Y = m$Y,
             M = m$M,
-            doseRRmod = m$doseRRmod,
             data = data,
             deg = m$deg,
             ERC = ERC,
@@ -101,18 +152,16 @@ make_base_loglik_fn <- function(object, method_fit, data) {
         )
       )
     }
-  } else if (m$family == "prophaz") {
+  } else if (m$family == "binomial") {
     function(params, D) {
       do.call(
-        loglik.prophaz,
+        loglik.binomial,
         c(
           list(
             params = params,
             D = D,
             X = m$X,
-            status = m$status,
-            entry = m$entry,
-            exit = m$exit,
+            Y = m$Y,
             M = m$M,
             doseRRmod = m$doseRRmod,
             data = data,
