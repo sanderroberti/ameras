@@ -869,6 +869,7 @@ ameras.fma <- function(
 
     included.samples <- nrow(FMAsamples)
   } else {
+    FMAsamples <- NULL
     coefs <- sd <- NA * FMAfits[[1]]$coef
     names(coefs) <- names(sd) <- parnames
 
