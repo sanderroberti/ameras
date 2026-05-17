@@ -7,6 +7,9 @@
 - Fixed a bug causing a check on `inpar` in
   [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) to
   generate an error when it shouldn’t
+- Fixed an issue where FMA generated an error instead of returning
+  `NULL` for the generated samples when all individual fits were
+  excluded
 
 ### General improvements
 
