@@ -71,12 +71,27 @@ fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data,
 #> Fitting RC
 
 fit.ameras.waldorig <- confint(fit.ameras, type="wald.orig")
+#> RC confidence intervals:
+#> 
+#>       lower upper
+#> dose 0.5663 1.135
 fit.ameras.waldtransformed <- confint(fit.ameras, type="wald.transformed")
+#> RC confidence intervals:
+#> 
+#>      lower upper
+#> dose 0.605 1.183
 fit.ameras.proflik <- confint(fit.ameras, type="proflik", parm="all")
 #> Obtaining profile likelihood CI for (Intercept)
 #> Obtaining profile likelihood CI for X1
 #> Obtaining profile likelihood CI for X2
 #> Obtaining profile likelihood CI for dose
+#> RC confidence intervals:
+#> 
+#>               lower   upper pval.lower pval.upper iter.lower iter.upper
+#> (Intercept) -1.2391 -0.8971    0.05248    0.05153          5          3
+#> X1           0.2908  0.5917    0.04878    0.04853          4          4
+#> X2          -0.5256 -0.1490    0.04822    0.04902          4          4
+#> dose         0.6009  1.1784    0.05040    0.04952          5          4
 
 summary(fit.ameras.waldorig)
 #> Call:
@@ -154,19 +169,27 @@ fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data,
 #> Fitting FMA
 
 fit.ameras.hpd <- confint(fit.ameras2, type="hpd")
+#> FMA confidence intervals:
+#> 
+#>      lower upper
+#> dose 0.564 1.132
 fit.ameras.percentile <- confint(fit.ameras2, type="percentile")
+#> FMA confidence intervals:
+#> 
+#>       lower upper
+#> dose 0.5616  1.13
 
 summary(fit.ameras.hpd)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.5 seconds
+#> Total run time: 1.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.5
+#>     FMA     1.7
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -180,12 +203,12 @@ summary(fit.ameras.percentile)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.5 seconds
+#> Total run time: 1.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     1.5
+#>     FMA     1.7
 #> 
 #> Summary of coefficients by method:
 #> 

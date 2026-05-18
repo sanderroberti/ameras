@@ -21,7 +21,22 @@
   previously. To allow re-computation of intervals of a different type
   or with different settings,
   [`confint()`](https://rdrr.io/r/stats/confint.html) can be called with
-  the argument `force=TRUE`.
+  the argument `force=TRUE`. In addition,
+  [`confint()`](https://rdrr.io/r/stats/confint.html) now prints CIs.
+
+### New features
+
+- Added methods
+  [`included_realizations()`](https://ameras.sanderroberti.com/reference/included_realizations.md),
+  [`Rhat()`](https://ameras.sanderroberti.com/reference/Rhat.md), and
+  `CI` for the `amerasfit` class.
+  [`included_realizations()`](https://ameras.sanderroberti.com/reference/included_realizations.md)
+  prints numeric vectors with the indices of realizations included in
+  FMA and BMA results,
+  [`Rhat()`](https://ameras.sanderroberti.com/reference/Rhat.md) is an
+  accessor for the `Rhat` object of the `BMA` component of the fit
+  object, and `CI` is an accessor for confidence/credible intervals
+  primarily intended for programmatic use.
 
 ## ameras 0.3.0
 

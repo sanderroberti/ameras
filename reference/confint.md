@@ -1,10 +1,12 @@
 # Confidence Intervals for an amerasfit Object
 
-Computes confidence intervals for the parameters of a fitted `amerasfit`
-object. This is a separate step from model fitting, i.e.,
-[`ameras`](https://ameras.sanderroberti.com/reference/ameras.md) fits
-the model and `confint` computes intervals and attaches them to the
-fitted object.
+Computes and/or prints confidence intervals for the parameters of a
+fitted `amerasfit` object. This is a separate step from model fitting,
+i.e., [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md)
+fits the model and `confint` computes intervals, attaches them to the
+fitted object, and prints them. If `confint` is called a second time on
+the same object, intervals are only printed and not recomputed, unless
+`force=TRUE`.
 
 ## Usage
 
@@ -12,7 +14,8 @@ fitted object.
 # S3 method for class 'amerasfit'
 confint(object, parm="dose", level=0.95, 
         type=c("proflik","percentile"), maxit.profCI=20, 
-        tol.profCI=1e-2, data=NULL, force=FALSE, ...)
+        tol.profCI=1e-2, data=NULL, force=FALSE,
+        digits = max(3, getOption("digits") - 3), ...)
 ```
 
 ## Arguments
@@ -98,6 +101,11 @@ confint(object, parm="dose", level=0.95,
   have already been computed for this object. Defaults to `FALSE`, in
   which case a warning is issued and the object is returned unchanged if
   confidence intervals are already present.
+
+- digits:
+
+  Number of significant digits to be printed. Default is \`max(3,
+  getOption("digits") - 3)\`
 
 - ...:
 
@@ -194,6 +202,11 @@ fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binom
 
 ## Wald intervals (fast)
 fit <- confint(fit, type = "wald.orig")
+#> RC confidence intervals:
+#> 
+#>       lower upper
+#> dose 0.5324 1.071
+#> 
 summary(fit)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
@@ -216,7 +229,12 @@ summary(fit)
 ## Profile likelihood intervals for dose parameters only (slower)
 # \donttest{
 fit <- confint(fit, type = "proflik", parm = "dose")
-#> Warning: Confidence intervals have already been computed for this object. Returning the object unchanged. Use force=TRUE to recompute.
+#> Confidence intervals have already been computed for this object. Returning the object unchanged. Use force=TRUE to recompute.
+#> RC confidence intervals:
+#> 
+#>       lower upper
+#> dose 0.5324 1.071
+#> 
 summary(fit)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
@@ -244,6 +262,11 @@ fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "bino
 #> Fitting RC
 fit2 <- confint(fit2, type = "proflik", data = data)
 #> Obtaining profile likelihood CI for dose
+#> RC confidence intervals:
+#> 
+#>       lower upper pval.lower pval.upper iter.lower iter.upper
+#> dose 0.5648 1.112    0.05024    0.04959          5          4
+#> 
 # }
 
 ## FMA and BMA with percentile intervals
@@ -275,18 +298,28 @@ fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "bino
 #> |-------------|-------------|-------------|-------------|
 #> |-------------------------------------------------------|
 fit3 <- confint(fit3, type = "percentile")
+#> FMA confidence intervals:
+#> 
+#>       lower upper
+#> dose 0.5241  1.06
+#> 
+#> BMA confidence intervals:
+#> 
+#>       lower upper
+#> dose 0.5401 1.098
+#> 
 summary(fit3)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 104.6 seconds
+#> Total run time: 108.1 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>     FMA     0.4
-#>     BMA   104.2
+#>     BMA   107.7
 #> 
 #> Summary of coefficients by method:
 #> 

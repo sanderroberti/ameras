@@ -2,6 +2,10 @@
 
 ## All functions
 
+- [`CI()`](https://ameras.sanderroberti.com/reference/CI.md) : Extract
+  Confidence Intervals from an amerasfit Object
+- [`Rhat()`](https://ameras.sanderroberti.com/reference/Rhat.md) :
+  Extract MCMC Convergence Diagnostics from an amerasfit Object
 - [`ameras-package`](https://ameras.sanderroberti.com/reference/ameras-package.md)
   : Analyze Multiple Exposure Realizations in Association Studies
 - [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) :
@@ -14,6 +18,8 @@
   Data
 - [`ecdfplot()`](https://ameras.sanderroberti.com/reference/ecdfplot.md)
   : Visualize Multiple Dose Realizations
+- [`included_realizations()`](https://ameras.sanderroberti.com/reference/included_realizations.md)
+  : Extract Included Realizations from an amerasfit Object
 - [`print(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/print.md)
   : Simple Summary for an amerasfit Object
 - [`summary(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/summary.md)

@@ -174,6 +174,11 @@ summary(fit)
 ## Summary with confidence intervals
 fit <- confint(fit, method = "wald.orig")
 #> Obtaining profile likelihood CI for dose
+#> RC confidence intervals:
+#> 
+#>       lower upper pval.lower pval.upper iter.lower iter.upper
+#> dose 0.5648 1.112    0.05024    0.04959          5          4
+#> 
 summary(fit)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
