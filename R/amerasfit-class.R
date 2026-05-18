@@ -266,10 +266,10 @@ Rhat.amerasfit <- function(x, ...) {
 
 included_realizations <- function(x, ...) UseMethod("included_realizations")
 
-included_realizations.amerasfit <- function(x, method = c("FMA", "BMA"), ...) {
-  method <- match.arg(method, several.ok = TRUE)
+included_realizations.amerasfit <- function(x, methods = c("FMA", "BMA"), ...) {
+  methods <- match.arg(methods, several.ok = TRUE)
 
-  available <- intersect(method, names(x)[names(x) %in% c("FMA", "BMA")])
+  available <- intersect(methods, names(x)[names(x) %in% c("FMA", "BMA")])
 
   if (!length(available)) {
     stop("None of the requested methods were run")

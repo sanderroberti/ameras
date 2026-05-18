@@ -23,7 +23,7 @@ included_realizations(x, \dots)
     A fitted model object of class \code{amerasfit}, as returned by
     \code{\link{ameras}}, with FMA and/or BMA results present.
   }
-  \item{method}{
+  \item{methods}{
     Character vector specifying which method(s) to extract included
     realizations for. One or both of \code{"FMA"} and \code{"BMA"}.
     Defaults to both. Only methods that were run are returned.
@@ -50,7 +50,7 @@ included_realizations(x, \dots)
   For BMA, all realizations are included by default. A subset of
   realizations can be specified via the \code{included.replicates.BMA}
   argument to \code{\link{ameras}}, for example by passing the indices
-  returned by \code{included_realizations(fit, method="FMA")} from a
+  returned by \code{included_realizations(fit, methods="FMA")} from a
   prior FMA fit.
 }
 
@@ -74,7 +74,7 @@ length(included_realizations(fit))
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods=c("FMA", "BMA"))
 included_realizations(fit2)
-included_realizations(fit2, method="FMA")
-included_realizations(fit2, method="BMA")
+included_realizations(fit2, methods="FMA")
+included_realizations(fit2, methods="BMA")
 }
 }
