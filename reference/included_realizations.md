@@ -12,7 +12,7 @@ included_realizations(x, ...)
 
 # S3 method for class 'amerasfit'
 included_realizations(x,
-                              method = c("FMA", "BMA"),
+                              methods = c("FMA", "BMA"),
                               ...)
 ```
 
@@ -24,7 +24,7 @@ included_realizations(x,
   [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md), with
   FMA and/or BMA results present.
 
-- method:
+- methods:
 
   Character vector specifying which method(s) to extract included
   realizations for. One or both of `"FMA"` and `"BMA"`. Defaults to
@@ -52,7 +52,7 @@ For BMA, all realizations are included by default. A subset of
 realizations can be specified via the `included.replicates.BMA` argument
 to [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md), for
 example by passing the indices returned by
-`included_realizations(fit, method="FMA")` from a prior FMA fit.
+`included_realizations(fit, methods="FMA")` from a prior FMA fit.
 
 ## See also
 
@@ -86,9 +86,9 @@ fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
 #> ! object 'dosevars' not found
 included_realizations(fit2)
 #> Error: object 'fit2' not found
-included_realizations(fit2, method="FMA")
+included_realizations(fit2, methods="FMA")
 #> Error: object 'fit2' not found
-included_realizations(fit2, method="BMA")
+included_realizations(fit2, methods="BMA")
 #> Error: object 'fit2' not found
 # }
 ```

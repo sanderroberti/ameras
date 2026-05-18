@@ -12,7 +12,7 @@ coverage in simulation studies, where printing is not desired.
 CI(x, ...)
 
 # S3 method for class 'amerasfit'
-CI(x, method = c("RC", "ERC", "MCML", "FMA", "BMA"),
+CI(x, methods = c("RC", "ERC", "MCML", "FMA", "BMA"),
    parm = NULL, ...)
 ```
 
@@ -25,7 +25,7 @@ CI(x, method = c("RC", "ERC", "MCML", "FMA", "BMA"),
   confidence intervals computed via
   [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
 
-- method:
+- methods:
 
   Character vector specifying which method(s) to extract confidence
   intervals for. One or more of `"RC"`, `"ERC"`, `"MCML"`, `"FMA"`, and
@@ -33,10 +33,9 @@ CI(x, method = c("RC", "ERC", "MCML", "FMA", "BMA"),
 
 - parm:
 
-  Either `NULL` to return all parameters, `"dose"` to return
-  dose-related parameters only, `"all"` to explicitly return all
-  parameters, or a character vector of specific parameter names.
-  Defaults to `NULL`.
+  Defaults to `NULL`, which returns all parameters. Otherwise `parm` can
+  be `"dose"` to return dose-related parameters or a character vector of
+  specific parameter names.
 
 - ...:
 
@@ -45,9 +44,10 @@ CI(x, method = c("RC", "ERC", "MCML", "FMA", "BMA"),
 ## Value
 
 If a single method is requested or only one method was run, a data frame
-with columns `lower` and `upper` and rows corresponding to parameters is
-returned. If multiple methods are requested and multiple methods were
-run, a named list of such data frames is returned, one per method.
+with columns for confidence interval results and rows corresponding to
+parameters is returned. If multiple methods are requested and multiple
+methods were run, a named list of such data frames is returned, one per
+method.
 
 ## Details
 
@@ -80,7 +80,7 @@ fit <- confint(fit, method=c("wald.orig","percentile"))
 #> Error: object 'fit' not found
 
 ## Extract all CIs for RC
-CI(fit, method="RC")
+CI(fit, methods="RC")
 #> Error: object 'fit' not found
 
 ## Extract dose parameters only for all methods
@@ -88,6 +88,6 @@ CI(fit, parm="dose")
 #> Error: object 'fit' not found
 
 ## Extract specific parameter
-CI(fit, method="RC", parm="dose")
+CI(fit, methods="RC", parm="dose")
 #> Error: object 'fit' not found
 ```
