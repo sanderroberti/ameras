@@ -43,7 +43,7 @@ CI(x, \dots)
 
 \value{
   If a single method is requested or only one method was run, a data
-  frame with columns \code{lower} and \code{upper} and rows
+  frame with columns for confidence interval results and rows
   corresponding to parameters is returned. If multiple methods are requested and
   multiple methods were run, a named list of such data frames is returned, one per
   method.
