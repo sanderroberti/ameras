@@ -14,7 +14,7 @@
 \usage{
 CI(x, \dots)
 
-\method{CI}{amerasfit}(x, method = c("RC", "ERC", "MCML", "FMA", "BMA"),
+\method{CI}{amerasfit}(x, methods = c("RC", "ERC", "MCML", "FMA", "BMA"),
    parm = NULL, \dots)
 }
 
@@ -24,17 +24,16 @@ CI(x, \dots)
     \code{\link{ameras}}, with confidence intervals computed via
     \code{\link[=confint.amerasfit]{confint}}.
   }
-  \item{method}{
+  \item{methods}{
     Character vector specifying which method(s) to extract confidence
     intervals for. One or more of \code{"RC"}, \code{"ERC"},
     \code{"MCML"}, \code{"FMA"}, and \code{"BMA"}. Defaults to all.
     Only methods that were run are returned.
   }
   \item{parm}{
-    Either \code{NULL} to return all parameters, \code{"dose"} to
-    return dose-related parameters only, \code{"all"} to explicitly
-    return all parameters, or a character vector of specific parameter
-    names. Defaults to \code{NULL}.
+    Defaults to \code{NULL}, which returns all parameters. Otherwise 
+    \code{parm} can be \code{"dose"} to return dose-related parameters
+    or a character vector of specific parameter names. 
   }
   \item{\dots}{
     Additional arguments, currently unused.
@@ -74,13 +73,13 @@ fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
 fit <- confint(fit, method=c("wald.orig","percentile"))
 
 ## Extract all CIs for RC
-CI(fit, method="RC")
+CI(fit, methods="RC")
 
 ## Extract dose parameters only for all methods
 CI(fit, parm="dose")
 
 ## Extract specific parameter
-CI(fit, method="RC", parm="dose")
+CI(fit, methods="RC", parm="dose")
 
 }
 

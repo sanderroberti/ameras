@@ -448,14 +448,14 @@ CI <- function(x, ...) UseMethod("CI")
 
 CI.amerasfit <- function(
   x,
-  method = c("RC", "ERC", "MCML", "FMA", "BMA"),
+  methods = c("RC", "ERC", "MCML", "FMA", "BMA"),
   parm = NULL,
   ...
 ) {
-  method <- match.arg(method, several.ok = TRUE)
+  methods <- match.arg(methods, several.ok = TRUE)
 
   available <- intersect(
-    method,
+    methods,
     names(x)[names(x) %in% c("RC", "ERC", "MCML", "FMA", "BMA")]
   )
 
