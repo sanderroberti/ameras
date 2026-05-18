@@ -485,8 +485,18 @@ ameras.mcml <- function(
           rcond(fit$hessian) > .Machine$double.eps &
           all(eigen(fit$hessian)$values > 0)
       ) {
-        jac <- transform.jacobian(fit$par, ...)
-        vcov <- jac %*% solve(fit$hessian) %*% t(jac)
+        cholH <- tryCatch(chol(fit$hessian), error = function(e) NULL)
+        if (!is.null(cholH)) {
+          jac <- transform.jacobian(fit$par, ...)
+          tmpsolve <- backsolve(cholH, t(jac), transpose = TRUE)
+          vcov <- crossprod(tmpsolve)
+          #vcov <- jac %*% MASS::ginv(fit$hessian) %*% t(jac)
+        } else {
+          warning(
+            "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
+          )
+          vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
+        }
       } else {
         warning(
           "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
@@ -503,7 +513,7 @@ ameras.mcml <- function(
         rcond(fit$hessian) > .Machine$double.eps &
         all(eigen(fit$hessian)$values > 0)
     ) {
-      vcov <- solve(fit$hessian)
+      vcov <- chol2inv(chol(fit$hessian)) #MASS::ginv(fit$hessian)
     } else {
       warning(
         "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
@@ -1482,8 +1492,18 @@ ameras.rc <- function(
           rcond(fit$hessian) > .Machine$double.eps &
           all(eigen(fit$hessian)$values > 0)
       ) {
-        jac <- transform.jacobian(fit$par, ...)
-        vcov <- jac %*% solve(fit$hessian) %*% t(jac)
+        cholH <- tryCatch(chol(fit$hessian), error = function(e) NULL)
+        if (!is.null(cholH)) {
+          jac <- transform.jacobian(fit$par, ...)
+          tmpsolve <- backsolve(cholH, t(jac), transpose = TRUE)
+          vcov <- crossprod(tmpsolve)
+          #vcov <- jac %*% MASS::ginv(fit$hessian) %*% t(jac)
+        } else {
+          warning(
+            "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
+          )
+          vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
+        }
       } else {
         warning(
           "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
@@ -1500,7 +1520,7 @@ ameras.rc <- function(
         rcond(fit$hessian) > .Machine$double.eps &
         all(eigen(fit$hessian)$values > 0)
     ) {
-      vcov <- solve(fit$hessian)
+      vcov <- chol2inv(chol(fit$hessian)) #MASS::ginv(fit$hessian)
     } else {
       warning(
         "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"

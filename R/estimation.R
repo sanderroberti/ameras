@@ -42,7 +42,7 @@ compute_wald_CI <- function(
       return(data.frame(lower = na_vec, upper = na_vec))
     }
 
-    hess_inv <- solve(hessian)
+    hess_inv <- chol2inv(chol(hessian))
 
     CIlower <- do.call(
       transform,
@@ -115,7 +115,7 @@ compute_proflik_CI <- function(
     all(eigen(hessian)$values > 0)
 
   if (invertible) {
-    se <- sqrt(diag(solve(hessian)))
+    se <- sqrt(diag(chol2inv(chol(hessian))))
     lowlims <- inpar - 4 * se
     uplims <- inpar + 4 * se
   } else {

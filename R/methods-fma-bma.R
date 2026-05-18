@@ -794,13 +794,15 @@ ameras.fma <- function(
     if (fit.FMAi$include) {
       if (!is.null(transform) & !is.null(transform.jacobian)) {
         if (is.function(transform) & is.function(transform.jacobian)) {
+          cholH <- chol(fit.FMAi$hess)
           jac <- transform.jacobian(fit.FMAi$coef, ...)
-          samplevar <- jac %*% solve(fit.FMAi$hess) %*% t(jac)
+          tmpsolve <- backsolve(cholH, t(jac), transpose = TRUE)
+          samplevar <- crossprod(tmpsolve) # jac %*% solve(fit.FMAi$hess) %*% t(jac)
         } else {
           stop("transform and transform.jacobian should be functions")
         }
       } else {
-        samplevar <- solve(fit.FMAi$hess)
+        samplevar <- chol2inv(chol(fit.FMAi$hess)) #solve(fit.FMAi$hess)
       }
       if (!isSymmetric(samplevar)) {
         FMAfits[[iii]]$include <- FALSE
@@ -838,14 +840,17 @@ ameras.fma <- function(
         if (!is.null(transform) & !is.null(transform.jacobian)) {
           if (is.function(transform) & is.function(transform.jacobian)) {
             samplemeans <- transform(fit.FMAi$coef, ...)
+            cholH <- chol(fit.FMAi$hess)
             jac <- transform.jacobian(fit.FMAi$coef, ...)
-            samplevar <- jac %*% solve(fit.FMAi$hess) %*% t(jac)
+            tmpsolve <- backsolve(cholH, t(jac), transpose = TRUE)
+            samplevar <- crossprod(tmpsolve)
+            #samplevar <- jac %*% solve(fit.FMAi$hess) %*% t(jac)
           } else {
             stop("transform and transform.jacobian should be functions")
           }
         } else {
           samplemeans <- fit.FMAi$coef
-          samplevar <- solve(fit.FMAi$hess)
+          samplevar <- chol2inv(chol(fit.FMAi$hess)) #solve(fit.FMAi$hess)
         }
 
         return(rmvnorm(n = fit.FMAi$M, mean = samplemeans, sigma = samplevar))
