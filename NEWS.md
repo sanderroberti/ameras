@@ -8,9 +8,11 @@
 ## General improvements
 
 * Reduced memory usage for large datasets: removed the use of an N x N matrix for ERC for the prophaz family, improving both memory and computation speed.
-* `confint()` no longer re-computes intervals by default if they were already computed previously. To allow re-computation of intervals of a different type
-or with different settings, `confint()` can be called with the argument `force=TRUE`.
+* `confint()` no longer re-computes intervals by default if they were already computed previously. To allow re-computation of intervals of a different type or with different settings, `confint()` can be called with the argument `force=TRUE`. In addition, `confint()` now prints CIs.
 
+## New features
+
+* Added methods `included_realizations()`, `Rhat()`, and `CI` for the `amerasfit` class. `included_realizations()` prints numeric vectors with the indices of realizations included in FMA and BMA results, `Rhat()` is an accessor for the `Rhat` object of the `BMA` component of the fit object, and `CI` is an accessor for confidence/credible intervals primarily intended for programmatic use.
 
 
 # ameras 0.3.0

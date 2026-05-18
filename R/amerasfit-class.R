@@ -79,6 +79,50 @@ coef.amerasfit <- function(object, ...) {
   res
 }
 
+print_confint <- function(
+  object,
+  parm = NULL,
+  digits = max(3, getOption("digits") - 3)
+) {
+  methods_present <- intersect(
+    names(object),
+    c("RC", "ERC", "MCML", "FMA", "BMA")
+  )
+
+  for (m in methods_present) {
+    if (is.null(object[[m]]$CI)) {
+      next
+    }
+
+    cat(m, "confidence intervals:\n\n")
+
+    CI <- object[[m]]$CI
+
+    # Filter rows based on parm
+    if (!is.null(parm)) {
+      if (identical(parm, "dose")) {
+        # Match dose-related parameters
+        keep <- startsWith(rownames(CI), "dose") |
+          grepl(")_dose", rownames(CI))
+        CI <- CI[keep, , drop = FALSE]
+      } else if (!identical(parm, "all")) {
+        # Match specific parameter names
+        keep <- rownames(CI) %in% parm
+        CI <- CI[keep, , drop = FALSE]
+      }
+    }
+
+    if (nrow(CI) == 0) {
+      cat("No parameters matched parm.\n\n")
+      next
+    }
+
+    print(format(CI, digits = digits), row.names = TRUE)
+    cat("\n")
+  }
+
+  invisible(object)
+}
 
 summary.amerasfit <- function(object, ...) {
   object0 <- object[intersect(
@@ -211,6 +255,31 @@ print.summary.amerasfit <- function(
 
   invisible(x)
 }
+Rhat <- function(x, ...) UseMethod("Rhat")
+
+Rhat.amerasfit <- function(x, ...) {
+  if (is.null(x$BMA)) {
+    stop("BMA not present in fitted object")
+  }
+  x$BMA$Rhat
+}
+
+included_realizations <- function(x, ...) UseMethod("included_realizations")
+
+included_realizations.amerasfit <- function(x, method = c("FMA", "BMA"), ...) {
+  method <- match.arg(method, several.ok = TRUE)
+
+  available <- intersect(method, names(x)[names(x) %in% c("FMA", "BMA")])
+
+  if (!length(available)) {
+    stop("None of the requested methods were run")
+  }
+
+  result <- lapply(available, function(m) x[[m]]$included.realizations)
+  names(result) <- available
+
+  if (length(available) == 1) result[[1]] else result
+}
 
 traceplot <- function(object, ...) {
   UseMethod("traceplot")
@@ -250,14 +319,16 @@ confint.amerasfit <- function(
   tol.profCI = 1e-2,
   data = NULL,
   force = FALSE,
+  digits = max(3, getOption("digits") - 3),
   ...
 ) {
   # Check if CIs have already been computed
   if (object$CI.computed && !force) {
-    warning(
+    message(
       "Confidence intervals have already been computed for this object. ",
       "Returning the object unchanged. Use force=TRUE to recompute."
     )
+    print_confint(object, parm = parm, digits = digits)
     return(invisible(object))
   }
 
@@ -297,12 +368,24 @@ confint.amerasfit <- function(
       } else {
         samples <- fitobj[[it]]$samples
       }
-
-      object[[method]]$CI <- compute_sample_CI(
-        samples = samples,
-        level = level,
-        type = type.i
-      )
+      if (!is.null(samples)) {
+        object[[method]]$CI <- compute_sample_CI(
+          samples = samples,
+          level = level,
+          type = type.i
+        )
+      } else {
+        if (is.null(samples) || nrow(samples) == 0) {
+          warning(
+            "No samples available for CI computation. ",
+            "All realizations may have been excluded during fitting."
+          )
+        }
+        object[[method]]$CI <- data.frame(
+          lower = NA * object[[method]]$coefficients,
+          upper = NA * object[[method]]$coefficients
+        )
+      }
     } else {
       # RC, ERC, MCML
       type.i <- match.arg(
@@ -356,5 +439,49 @@ confint.amerasfit <- function(
 
   object$CI.computed <- TRUE
 
-  return(object)
+  print_confint(object, parm = parm, digits = digits)
+  invisible(object)
+}
+
+
+CI <- function(x, ...) UseMethod("CI")
+
+CI.amerasfit <- function(
+  x,
+  method = c("RC", "ERC", "MCML", "FMA", "BMA"),
+  parm = NULL,
+  ...
+) {
+  method <- match.arg(method, several.ok = TRUE)
+
+  available <- intersect(
+    method,
+    names(x)[names(x) %in% c("RC", "ERC", "MCML", "FMA", "BMA")]
+  )
+
+  if (!length(available)) {
+    stop("None of the requested methods were run")
+  }
+
+  result <- lapply(available, function(m) {
+    ci <- x[[m]]$CI
+    if (is.null(ci)) {
+      return(NULL)
+    }
+
+    if (!is.null(parm)) {
+      if (identical(parm, "dose")) {
+        keep <- startsWith(rownames(ci), "dose") |
+          grepl(")_dose", rownames(ci))
+        ci <- ci[keep, , drop = FALSE]
+      } else if (!identical(parm, "all")) {
+        keep <- rownames(ci) %in% parm
+        ci <- ci[keep, , drop = FALSE]
+      }
+    }
+    ci
+  })
+  names(result) <- available
+
+  if (length(available) == 1) result[[1]] else result
 }

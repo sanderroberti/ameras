@@ -42,7 +42,10 @@ export(
   transform1.inv,
   transform1.jacobian,
   traceplot,
-  ecdfplot
+  ecdfplot,
+  Rhat,
+  included_realizations,
+  CI
 )
 S3method(coef, amerasfit)
 S3method(summary, amerasfit)
@@ -50,3 +53,6 @@ S3method(print, summary.amerasfit)
 S3method(traceplot, amerasfit)
 S3method(print, amerasfit)
 S3method(confint, amerasfit)
+S3method(included_realizations, amerasfit)
+S3method(Rhat, amerasfit)
+S3method(CI, amerasfit)

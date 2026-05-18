@@ -3,16 +3,19 @@
 \title{Confidence Intervals for an amerasfit Object}
 
 \description{
-  Computes confidence intervals for the parameters of a fitted
+  Computes and/or prints confidence intervals for the parameters of a fitted
   \code{amerasfit} object. This is a separate step from model fitting,
   i.e., \code{\link{ameras}} fits the model and \code{confint} computes 
-  intervals and attaches them to the fitted object.
+  intervals, attaches them to the fitted object, and prints them. If
+  \code{confint} is called a second time on the same object, intervals
+  are only printed and not recomputed, unless \code{force=TRUE}.
 }
 
 \usage{
 \method{confint}{amerasfit}(object, parm="dose", level=0.95, 
         type=c("proflik","percentile"), maxit.profCI=20, 
-        tol.profCI=1e-2, data=NULL, force=FALSE, \dots)
+        tol.profCI=1e-2, data=NULL, force=FALSE,
+        digits = max(3, getOption("digits") - 3), \dots)
 }
 
 \arguments{
@@ -84,6 +87,9 @@
       they have already been computed for this object. Defaults to
       \code{FALSE}, in which case a warning is issued and the object is
       returned unchanged if confidence intervals are already present.
+  }
+  \item{digits}{
+      Number of significant digits to be printed. Default is `max(3, getOption("digits") - 3)`
   }
   \item{\dots}{
     Additional arguments, currently unused.
