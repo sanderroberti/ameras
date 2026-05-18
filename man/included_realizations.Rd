@@ -14,7 +14,7 @@
 included_realizations(x, \dots)
 
 \method{included_realizations}{amerasfit}(x,
-                              method = c("FMA", "BMA"),
+                              methods = c("FMA", "BMA"),
                               \dots)
 }
 
