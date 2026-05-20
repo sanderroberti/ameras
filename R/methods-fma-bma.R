@@ -788,28 +788,6 @@ ameras.fma <- function(
     )
   }
 
-  #Extra exclusion check for asymmetric variance matrix
-  for (iii in 1:length(FMAfits)) {
-    fit.FMAi <- FMAfits[[iii]]
-    if (fit.FMAi$include) {
-      if (!is.null(transform) & !is.null(transform.jacobian)) {
-        if (is.function(transform) & is.function(transform.jacobian)) {
-          cholH <- chol(fit.FMAi$hess)
-          jac <- transform.jacobian(fit.FMAi$coef, ...)
-          tmpsolve <- backsolve(cholH, t(jac), transpose = TRUE)
-          samplevar <- crossprod(tmpsolve) # jac %*% solve(fit.FMAi$hess) %*% t(jac)
-        } else {
-          stop("transform and transform.jacobian should be functions")
-        }
-      } else {
-        samplevar <- chol2inv(chol(fit.FMAi$hess)) #solve(fit.FMAi$hess)
-      }
-      if (!isSymmetric(samplevar)) {
-        FMAfits[[iii]]$include <- FALSE
-      }
-    }
-  }
-
   #allfits <- FMAfits
   included.realizations <- which(sapply(FMAfits, function(x) x$include))
 
@@ -873,12 +851,14 @@ ameras.fma <- function(
     names(coefs) <- names(sd) <- names(FMAsamples) <- parnames
 
     included.samples <- nrow(FMAsamples)
+    wgts <- sapply(FMAfits, function(x) x$wgt)
   } else {
     FMAsamples <- NULL
     coefs <- sd <- NA * FMAfits[[1]]$coef
     names(coefs) <- names(sd) <- parnames
 
     included.samples <- 0
+    wgts <- NULL
   }
 
   t1 <- proc.time()
@@ -905,6 +885,7 @@ ameras.fma <- function(
     sd = sd,
     included.realizations = included.realizations,
     included.samples = included.samples,
+    weights = wgts,
     samples = FMAsamples,
     #includedfits=FMAfits,
     #allfits=allfits,
