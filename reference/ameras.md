@@ -298,15 +298,15 @@ components:
 
   named vector of standard deviations.
 
+- vcov:
+
+  covariance matrix for the full parameter vector.
+
 - runtime:
 
   string with the runtime in seconds.
 
 For RC, ERC, and MCML the following additional output is included:
-
-- vcov:
-
-  covariance matrix for the full parameter vector.
 
 - optim:
 
@@ -366,6 +366,11 @@ Finally, for FMA the output additionally contains:
 
   the samples generated from the normal distributions associated with
   each dose realization.
+
+- weigths:
+
+  vector of weights corresponding to the models fit to each included
+  realization
 
 - included.samples:
 
@@ -515,7 +520,7 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total run time: 0.3 seconds
+#> Total runtime: 0.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 

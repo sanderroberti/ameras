@@ -50,6 +50,9 @@
 <h3 id="minor-improvements-and-fixes-development-version">Minor improvements and fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-fixes-development-version"></a></h3>
 <ul><li>Fixed a bug causing a check on <code>inpar</code> in <code><a href="../reference/ameras.html">ameras()</a></code> to generate an error when it shouldn’t</li>
 <li>Fixed an issue where FMA generated an error instead of returning <code>NULL</code> for the generated samples when all individual fits were excluded</li>
+<li>Fixed an issue where setting <code>keep.data=FALSE</code> in <code><a href="../reference/ameras.html">ameras()</a></code> and passing data to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> failed an internal check when using effect modifiers.</li>
+<li>FMA and BMA output now includes variance-covariance matrix <code>vcov</code>
+</li>
 </ul></div>
 <div class="section level3">
 <h3 id="general-improvements-development-version">General improvements<a class="anchor" aria-label="anchor" href="#general-improvements-development-version"></a></h3>
@@ -59,7 +62,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>Added methods <code><a href="../reference/included_realizations.html">included_realizations()</a></code>, <code><a href="../reference/Rhat.html">Rhat()</a></code>, and <code>CI</code> for the <code>amerasfit</code> class. <code><a href="../reference/included_realizations.html">included_realizations()</a></code> prints numeric vectors with the indices of realizations included in FMA and BMA results, <code><a href="../reference/Rhat.html">Rhat()</a></code> is an accessor for the <code>Rhat</code> object of the <code>BMA</code> component of the fit object, and <code>CI</code> is an accessor for confidence/credible intervals primarily intended for programmatic use.</li>
+<ul><li>Added methods <code><a href="../reference/included_realizations.html">included_realizations()</a></code>, <code><a href="../reference/Rhat.html">Rhat()</a></code>, <code><a href="../reference/summary.html">summary_table()</a></code> and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> for the <code>amerasfit</code> class. <code><a href="../reference/included_realizations.html">included_realizations()</a></code> prints numeric vectors with the indices of realizations included in FMA and BMA results, <code><a href="../reference/Rhat.html">Rhat()</a></code> is an accessor for the <code>Rhat</code> object of the <code>BMA</code> component of the fit object, and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> provides residual-based diagnostic plots.</li>
 </ul></div>
 </div>
     <div class="section level2">

@@ -10,6 +10,9 @@ estimates, standard errors, and confidence intervals if computed via
 # S3 method for class 'amerasfit'
 summary(object, ...)
 
+# S3 method for class 'amerasfit'
+summary_table(object, ...)
+
 # S3 method for class 'summary.amerasfit'
 print(x, digits = max(3, getOption("digits") - 3), ...)
 ```
@@ -42,9 +45,8 @@ which is a list containing the following elements:
 
 - `call`:
 
-  The matched call from the original
-  [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md)
-  invocation.
+  The matched call from the original call to
+  [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md).
 
 - `summary_table`:
 
@@ -128,6 +130,11 @@ intervals are only printed if they have been computed by
 BMA results are present in the fitted object, the summary table includes
 columns `Rhat` and `n.eff`, with `NA` values for all other methods.
 
+Printing the summary prints the original call to `ameras`, the runtime
+(total and by method), and the table described above. This table can
+also be accessed directly (i.e., to retrieve confidence intervals) using
+`summary_table`.
+
 ## See also
 
 [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md) for
@@ -199,20 +206,57 @@ summary(fit)
 #> 
 
 ## Access the summary table directly
-s <- summary(fit)
-s$summary_table
-#>   Method        Term   Estimate         SE  CI.lower CI.upper pval.lower
-#> 1     RC (Intercept) -0.8847176 0.07378315        NA       NA         NA
-#> 2     RC        dose  0.8019528 0.13750708 0.5647607 1.111609 0.05024383
-#>   pval.upper
-#> 1         NA
-#> 2 0.04958787
+s <- summary_table(fit)
 
 ## Multiple methods
-if (FALSE) { # \dontrun{
+# \donttest{
 fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
               methods = c("RC", "ERC", "MCML"))
+#> Fitting RC
+#> Fitting ERC
+#> Fitting MCML
 fit2 <- confint(fit2, method = "wald.orig")
+#> Obtaining profile likelihood CI for dose
+#> Obtaining profile likelihood CI for dose
+#> Obtaining profile likelihood CI for dose
+#> RC confidence intervals:
+#> 
+#>       lower upper pval.lower pval.upper iter.lower iter.upper
+#> dose 0.5648 1.112    0.05024    0.04959          5          4
+#> 
+#> ERC confidence intervals:
+#> 
+#>       lower upper pval.lower pval.upper iter.lower iter.upper
+#> dose 0.5728 1.144    0.04953    0.04819          6          4
+#> 
+#> MCML confidence intervals:
+#> 
+#>       lower upper pval.lower pval.upper iter.lower iter.upper
+#> dose 0.5554 1.098    0.05008    0.04957          5          4
+#> 
 summary(fit2)
-} # }
+#> Call:
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#>     family = "binomial", methods = c("RC", "ERC", "MCML"))
+#> 
+#> Total run time: 16.9 seconds
+#> 
+#> Runtime in seconds by method:
+#> 
+#>  Method Runtime
+#>      RC     0.0
+#>     ERC    16.6
+#>    MCML     0.3
+#> 
+#> Summary of coefficients by method:
+#> 
+#>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
+#>      RC (Intercept)  -0.8847 0.07378       NA       NA         NA         NA
+#>      RC        dose   0.8020 0.13751   0.5648    1.112    0.05024    0.04959
+#>     ERC (Intercept)  -0.8849 0.07477       NA       NA         NA         NA
+#>     ERC        dose   0.8214 0.14304   0.5728    1.144    0.04953    0.04819
+#>    MCML (Intercept)  -0.8758 0.07323       NA       NA         NA         NA
+#>    MCML        dose   0.7910 0.13644   0.5554    1.098    0.05008    0.04957
+#> 
+# }
 ```

@@ -217,7 +217,16 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The output is an object of class <code>amerasfit</code>. General components are <code>call</code> (the function call to <code>ameras</code>), <code>formula</code> (the formula object specifying the model), <code>num.rows</code> (the number of rows in <code>data</code>), <code>num.realizations</code> (the number of dose realizations provided), <code>transform</code> (the used transformation function, if applicable), <code>transform.jacobian</code> (the used Jacobian function for the transformation, if applicable), <code>other.args</code> (any other arguments passed to ...), <code>model</code> (a list containing the specified model components parsed from the formula), <code>CI.computed</code> (logical, whether confidence intervals have been attached by <code><a href="confint.html">confint</a></code>), and <code>data</code> (either the data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL</code> otherwise).</p>
+    <p>The output is an object of class <code>amerasfit</code>. General components are <code>call</code>
+(the function call to <code>ameras</code>), <code>formula</code> (the formula object specifying
+the model), <code>num.rows</code> (the number of rows in <code>data</code>), <code>num.realizations</code>
+(the number of dose realizations provided), <code>transform</code> (the used transformation
+function, if applicable), <code>transform.jacobian</code> (the used Jacobian function for
+the transformation, if applicable), <code>other.args</code> (any other arguments passed to
+...), <code>model</code> (a list containing the specified model components parsed from
+the formula), <code>CI.computed</code> (logical, whether confidence intervals have been
+attached by <code><a href="confint.html">confint</a></code>), and <code>data</code> (either the
+data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL</code> otherwise).</p>
 <p>For each method supplied to <code>methods</code>, the output contains a list with components:</p>
 <dl><dt>coefficients</dt>
 <dd><p>named vector of model coefficients.</p></dd>
@@ -225,15 +234,15 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
   <dt>sd</dt>
 <dd><p>named vector of standard deviations.</p></dd>
 
+  <dt>vcov</dt>
+<dd><p>covariance matrix for the full parameter vector.</p></dd>
+
   <dt>runtime</dt>
 <dd><p>string with the runtime in seconds.</p></dd>
 
 
 </dl><p>For RC, ERC, and MCML  the following additional output is included:</p>
-<dl><dt>vcov</dt>
-<dd><p>covariance matrix for the full parameter vector.</p></dd>
-
-  <dt>optim</dt>
+<dl><dt>optim</dt>
 <dd><p>a list object with results returned by optim. Components are <code>par</code> (raw parameters before applying a transformation if applicable), <code>hessian</code> (Hessian matrix for <code>par</code>), <code>convergence</code> (convergence code with 0 indicating convergence and 1 indicating that the maximal number of iterations was reached), and <code>counts</code> (the number of likelihood function evaluations used during optimization).</p></dd>
 
   <dt>loglik</dt>
@@ -262,6 +271,9 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 </dl><p>Finally, for FMA the output additionally contains:</p>
 <dl><dt>samples</dt>
 <dd><p>the samples generated from the normal distributions associated with each dose realization.</p></dd>
+
+  <dt>weigths</dt>
+<dd><p>vector of weights corresponding to the models fit to each included realization</p></dd>
 
   <dt>included.samples</dt>
 <dd><p>the total number of samples included.</p></dd>
@@ -310,7 +322,7 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 0.3 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total runtime: 0.3 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

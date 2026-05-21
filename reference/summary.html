@@ -60,6 +60,9 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'amerasfit'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for class 'amerasfit'</span></span>
+<span><span class="fu">summary_table</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for class 'summary.amerasfit'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"digits"</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -88,7 +91,7 @@
     <p><code>summary.amerasfit</code> returns an object of class
   <code>summary.amerasfit</code>, which is a list containing the following
   elements:</p><dl><dt><code>call</code></dt>
-<dd><p>The matched call from the original <code><a href="ameras.html">ameras</a></code> invocation.</p></dd>
+<dd><p>The matched call from the original call to <code><a href="ameras.html">ameras</a></code>.</p></dd>
 
     <dt><code>summary_table</code></dt>
 <dd><p>A data frame with one row per parameter per method, containing
@@ -156,6 +159,10 @@
   <code><a href="confint.html">confint</a></code>. When BMA results are present
   in the fitted object, the summary table includes columns <code>Rhat</code> and
   <code>n.eff</code>, with <code>NA</code> values for all other methods.</p>
+<p>Printing the summary prints the original call to <code>ameras</code>, the runtime
+  (total and by method), and the table described above. This table can also
+  be accessed directly (i.e., to retrieve confidence intervals) using
+  <code>summary_table</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -225,22 +232,59 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Access the summary table directly</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">s</span><span class="op">$</span><span class="va">summary_table</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Method        Term   Estimate         SE  CI.lower CI.upper pval.lower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     RC (Intercept) -0.8847176 0.07378315        NA       NA         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     RC        dose  0.8019528 0.13750708 0.5647607 1.111609 0.05024383</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   pval.upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.04958787</span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">summary_table</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Multiple methods</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span>,</span></span>
 <span class="r-in"><span>              methods <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting RC</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting ERC</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting MCML</span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit2</span>, method <span class="op">=</span> <span class="st">"wald.orig"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Obtaining profile likelihood CI for dose</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Obtaining profile likelihood CI for dose</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Obtaining profile likelihood CI for dose</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RC confidence intervals:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper pval.lower pval.upper iter.lower iter.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5648 1.112    0.05024    0.04959          5          4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ERC confidence intervals:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper pval.lower pval.upper iter.lower iter.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5728 1.144    0.04953    0.04819          6          4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> MCML confidence intervals:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper pval.lower pval.upper iter.lower iter.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5554 1.098    0.05008    0.04957          5          4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("RC", "ERC", "MCML"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 16.9 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC     0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC    16.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML     0.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378       NA       NA         NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751   0.5648    1.112    0.05024    0.04959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC (Intercept)  -0.8849 0.07477       NA       NA         NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC        dose   0.8214 0.14304   0.5728    1.144    0.04953    0.04819</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML (Intercept)  -0.8758 0.07323       NA       NA         NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML        dose   0.7910 0.13644   0.5554    1.098    0.05008    0.04957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

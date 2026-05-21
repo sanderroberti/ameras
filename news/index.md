@@ -10,6 +10,11 @@
 - Fixed an issue where FMA generated an error instead of returning
   `NULL` for the generated samples when all individual fits were
   excluded
+- Fixed an issue where setting `keep.data=FALSE` in
+  [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) and
+  passing data to [`confint()`](https://rdrr.io/r/stats/confint.html)
+  failed an internal check when using effect modifiers.
+- FMA and BMA output now includes variance-covariance matrix `vcov`
 
 ### General improvements
 
@@ -28,15 +33,17 @@
 
 - Added methods
   [`included_realizations()`](https://ameras.sanderroberti.com/reference/included_realizations.md),
-  [`Rhat()`](https://ameras.sanderroberti.com/reference/Rhat.md), and
-  `CI` for the `amerasfit` class.
+  [`Rhat()`](https://ameras.sanderroberti.com/reference/Rhat.md),
+  [`summary_table()`](https://ameras.sanderroberti.com/reference/summary.md)
+  and [`plot()`](https://rdrr.io/r/graphics/plot.default.html) for the
+  `amerasfit` class.
   [`included_realizations()`](https://ameras.sanderroberti.com/reference/included_realizations.md)
   prints numeric vectors with the indices of realizations included in
   FMA and BMA results,
   [`Rhat()`](https://ameras.sanderroberti.com/reference/Rhat.md) is an
   accessor for the `Rhat` object of the `BMA` component of the fit
-  object, and `CI` is an accessor for confidence/credible intervals
-  primarily intended for programmatic use.
+  object, and [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+  provides residual-based diagnostic plots.
 
 ## ameras 0.3.0
 

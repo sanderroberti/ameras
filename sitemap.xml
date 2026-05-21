@@ -10,7 +10,6 @@
 <url><loc>https://ameras.sanderroberti.com/authors.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/index.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/news/index.html</loc></url>
-<url><loc>https://ameras.sanderroberti.com/reference/CI.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/Rhat.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/ameras-package.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/ameras.html</loc></url>
@@ -20,11 +19,14 @@
 <url><loc>https://ameras.sanderroberti.com/reference/ecdfplot.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/included_realizations.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/index.html</loc></url>
+<url><loc>https://ameras.sanderroberti.com/reference/plot.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/print.html</loc></url>
+<url><loc>https://ameras.sanderroberti.com/reference/residuals.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/summary.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/traceplot.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/transform1.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/transform1inv.html</loc></url>
 <url><loc>https://ameras.sanderroberti.com/reference/transform1jacobian.html</loc></url>
+<url><loc>https://ameras.sanderroberti.com/reference/vcov.html</loc></url>
 </urlset>
 

@@ -59,13 +59,13 @@ fit
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total run time: 20 seconds
+#> Total runtime: 23.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    20.0
+#>     ERC    23.7
 #> 
 #> Estimated model parameters:
 #> 
@@ -81,13 +81,13 @@ print(fit)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total run time: 20 seconds
+#> Total runtime: 23.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    20.0
+#>     ERC    23.7
 #> 
 #> Estimated model parameters:
 #> 
@@ -105,13 +105,13 @@ print(fit, digits=5)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total run time: 20 seconds
+#> Total runtime: 23.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    20.0
+#>     ERC    23.7
 #> 
 #> Estimated model parameters:
 #> 
