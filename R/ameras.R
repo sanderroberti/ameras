@@ -547,6 +547,7 @@ ameras <- function(
     dosevars = parsed$dosevars,
     Y = Y,
     M = M,
+    M_names = parsed$M, # names for resolve_data and required_vars
     X_formula = X_formula_to_store,
     X = X,
     offset = parsed$offset,

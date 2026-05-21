@@ -285,7 +285,7 @@ check_char_vec <- function(x, nm, valid = NULL, def = NULL, len = 0) {
 
 
 required_vars <- function(m) {
-  vars <- c(m$dosevars, m$X, m$M)
+  vars <- c(m$dosevars, m$X, m$M_names)
 
   if (m$family %in% c("gaussian", "binomial", "poisson", "multinomial")) {
     vars <- c(vars, m$Y)
