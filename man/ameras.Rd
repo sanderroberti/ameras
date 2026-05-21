@@ -78,15 +78,24 @@ Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncat
 \item{\dots}{other arguments, passed to functions such as \code{transform}.}
 }
 \value{
-The output is an object of class \code{amerasfit}. General components are \code{call} (the function call to \code{ameras}), \code{formula} (the formula object specifying the model), \code{num.rows} (the number of rows in \code{data}), \code{num.realizations} (the number of dose realizations provided), \code{transform} (the used transformation function, if applicable), \code{transform.jacobian} (the used Jacobian function for the transformation, if applicable), \code{other.args} (any other arguments passed to \dots), \code{model} (a list containing the specified model components parsed from the formula), \code{CI.computed} (logical, whether confidence intervals have been attached by \code{\link[=confint.amerasfit]{confint}}), and \code{data} (either the data frame used for model fitting when \code{keep.data=TRUE} or \code{NULL} otherwise).
+The output is an object of class \code{amerasfit}. General components are \code{call} 
+(the function call to \code{ameras}), \code{formula} (the formula object specifying 
+the model), \code{num.rows} (the number of rows in \code{data}), \code{num.realizations} 
+(the number of dose realizations provided), \code{transform} (the used transformation 
+function, if applicable), \code{transform.jacobian} (the used Jacobian function for 
+the transformation, if applicable), \code{other.args} (any other arguments passed to 
+\dots), \code{model} (a list containing the specified model components parsed from 
+the formula), \code{CI.computed} (logical, whether confidence intervals have been 
+attached by \code{\link[=confint.amerasfit]{confint}}), and \code{data} (either the 
+data frame used for model fitting when \code{keep.data=TRUE} or \code{NULL} otherwise).
 
 For each method supplied to \code{methods}, the output contains a list with components:
   \item{coefficients}{named vector of model coefficients.}
   \item{sd}{named vector of standard deviations.}
+  \item{vcov}{covariance matrix for the full parameter vector.}
   \item{runtime}{string with the runtime in seconds.}
   
 For RC, ERC, and MCML  the following additional output is included:
-  \item{vcov}{covariance matrix for the full parameter vector.}
   \item{optim}{a list object with results returned by optim. Components are \code{par} (raw parameters before applying a transformation if applicable), \code{hessian} (Hessian matrix for \code{par}), \code{convergence} (convergence code with 0 indicating convergence and 1 indicating that the maximal number of iterations was reached), and \code{counts} (the number of likelihood function evaluations used during optimization).}
   \item{loglik}{log-likelihood value at the optimum.}
 
@@ -101,6 +110,7 @@ For BMA  the output additionally contains:
 
 Finally, for FMA the output additionally contains:
   \item{samples}{the samples generated from the normal distributions associated with each dose realization.}
+  \item{weigths}{vector of weights corresponding to the models fit to each included realization}
   \item{included.samples}{the total number of samples included.}
   \item{included.realizations}{indices of realization exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results. }
 

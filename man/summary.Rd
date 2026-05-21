@@ -1,6 +1,8 @@
 \name{summary.amerasfit}
 \alias{summary.amerasfit}
 \alias{print.summary.amerasfit}
+\alias{summary_table}
+\alias{summary_table.amerasfit}
 \title{Summarize an amerasfit Object}
 
 \description{
@@ -11,6 +13,8 @@
 
 \usage{
 \method{summary}{amerasfit}(object, \dots)
+
+\method{summary_table}{amerasfit}(object, \dots)
 
 \method{print}{summary.amerasfit}(x, digits = max(3, getOption("digits") - 3), \dots)
 }
@@ -39,7 +43,7 @@
   elements:
   \describe{
     \item{\code{call}}{
-      The matched call from the original \code{\link{ameras}} invocation.
+      The matched call from the original call to \code{\link{ameras}}.
     }
     \item{\code{summary_table}}{
       A data frame with one row per parameter per method, containing
@@ -100,6 +104,11 @@
   \code{\link[=confint.amerasfit]{confint}}. When BMA results are present 
   in the fitted object, the summary table includes columns \code{Rhat} and 
   \code{n.eff}, with \code{NA} values for all other methods.
+
+  Printing the summary prints the original call to \code{ameras}, the runtime
+  (total and by method), and the table described above. This table can also
+  be accessed directly (i.e., to retrieve confidence intervals) using
+  \code{summary_table}.
 }
 
 \seealso{
@@ -125,11 +134,10 @@ fit <- confint(fit, method = "wald.orig")
 summary(fit)
 
 ## Access the summary table directly
-s <- summary(fit)
-s$summary_table
+s <- summary_table(fit)
 
 ## Multiple methods
-\dontrun{
+\donttest{
 fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
               methods = c("RC", "ERC", "MCML"))
 fit2 <- confint(fit2, method = "wald.orig")

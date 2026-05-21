@@ -5,6 +5,7 @@ import(methods)
 importFrom(
   "stats",
   "cov",
+  "var",
   "optim",
   "pchisq",
   "quantile",
@@ -17,7 +18,11 @@ importFrom(
   "model.matrix",
   "terms",
   "as.formula",
-  "confint"
+  "confint",
+  "qqline",
+  "qqnorm",
+  "ppoints",
+  "smooth.spline"
 )
 importFrom("mvtnorm", "rmvnorm")
 importFrom(
@@ -36,6 +41,8 @@ importFrom("coda", "HPDinterval", "as.mcmc")
 importFrom("numDeriv", "hessian")
 importFrom("MCMCvis", "MCMCsummary", "MCMCtrace")
 importFrom("utils", "head")
+importFrom("graphics", "abline", "panel.smooth", "par", "text", "lines")
+importFrom("grDevices", "dev.interactive")
 export(
   ameras,
   transform1,
@@ -45,7 +52,7 @@ export(
   ecdfplot,
   Rhat,
   included_realizations,
-  CI
+  summary_table
 )
 S3method(coef, amerasfit)
 S3method(summary, amerasfit)
@@ -55,4 +62,7 @@ S3method(print, amerasfit)
 S3method(confint, amerasfit)
 S3method(included_realizations, amerasfit)
 S3method(Rhat, amerasfit)
-S3method(CI, amerasfit)
+S3method(residuals, amerasfit)
+S3method(plot, amerasfit)
+S3method(summary_table, amerasfit)
+S3method(vcov, amerasfit)

@@ -108,16 +108,16 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 50.3 seconds
+#> Total run time: 54.1 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     6.6
+#>     ERC     6.7
 #>    MCML     0.1
 #>     FMA     0.2
-#>     BMA    43.4
+#>     BMA    47.1
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -140,21 +140,45 @@ Finally, we add confidence intervals to the `fit` object:
 
 ``` r
 fit <- confint(fit, type=c("wald.orig","percentile"))
+#> RC confidence intervals:
+#> 
+#>       lower upper
+#> dose 0.5324 1.071
+#> 
+#> ERC confidence intervals:
+#> 
+#>       lower upper
+#> dose 0.5411 1.102
+#> 
+#> MCML confidence intervals:
+#> 
+#>       lower upper
+#> dose 0.5236 1.058
+#> 
+#> FMA confidence intervals:
+#> 
+#>       lower upper
+#> dose 0.5241 1.059
+#> 
+#> BMA confidence intervals:
+#> 
+#>      lower upper
+#> dose 0.552  1.08
 summary(fit)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 50.3 seconds
+#> Total run time: 54.1 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     6.6
+#>     ERC     6.7
 #>    MCML     0.1
 #>     FMA     0.2
-#>     BMA    43.4
+#>     BMA    47.1
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -170,6 +194,15 @@ summary(fit)
 #>     BMA (Intercept)  -0.8736 0.07174  -1.0185  -0.7350 1.00 1024.00
 #>     BMA        dose   0.7911 0.13323   0.5520   1.0798 1.00  999.00
 ```
+
+For visual model diagnostics using residuals, use `plot()`. For example,
+for regression calibration:
+
+``` r
+plot(fit, methods="RC")
+```
+
+<img src="man/figures/README-unnamed-chunk-5-1.png" alt="" width="100%" /><img src="man/figures/README-unnamed-chunk-5-2.png" alt="" width="100%" />
 
 See the vignettes for additional details on model fitting, confidence
 intervals, and the use of transformations.

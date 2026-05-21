@@ -4,6 +4,8 @@
 
 * Fixed a bug causing a check on `inpar` in `ameras()` to generate an error when it shouldn't
 * Fixed an issue where FMA generated an error instead of returning `NULL` for the generated samples when all individual fits were excluded
+* Fixed an issue where setting `keep.data=FALSE` in `ameras()` and passing data to `confint()` failed an internal check when using effect modifiers.
+* FMA and BMA output now includes variance-covariance matrix `vcov`
 
 ## General improvements
 
@@ -12,7 +14,7 @@
 
 ## New features
 
-* Added methods `included_realizations()`, `Rhat()`, and `CI` for the `amerasfit` class. `included_realizations()` prints numeric vectors with the indices of realizations included in FMA and BMA results, `Rhat()` is an accessor for the `Rhat` object of the `BMA` component of the fit object, and `CI` is an accessor for confidence/credible intervals primarily intended for programmatic use.
+* Added methods `included_realizations()`, `Rhat()`, `summary_table()` and `plot()` for the `amerasfit` class. `included_realizations()` prints numeric vectors with the indices of realizations included in FMA and BMA results, `Rhat()` is an accessor for the `Rhat` object of the `BMA` component of the fit object, and `plot()` provides residual-based diagnostic plots.
 
 
 # ameras 0.3.0

@@ -846,16 +846,20 @@ ameras.fma <- function(
 
     coefs <- colMeans(FMAsamples)
     sd <- apply(FMAsamples, 2, sd)
+    vcov <- var(FMAsamples)
 
     FMAsamples <- as.data.frame(FMAsamples)
-    names(coefs) <- names(sd) <- names(FMAsamples) <- parnames
+    rownames(vcov) <- colnames(vcov) <- names(coefs) <- names(sd) <- names(
+      FMAsamples
+    ) <- parnames
 
     included.samples <- nrow(FMAsamples)
     wgts <- sapply(FMAfits, function(x) x$wgt)
   } else {
     FMAsamples <- NULL
-    coefs <- sd <- NA * FMAfits[[1]]$coef
-    names(coefs) <- names(sd) <- parnames
+    coefs <- sd <- NA * inpar
+    vcov <- matrix(NA, ncol = length(inpar), nrow = length(inpar))
+    rownames(vcov) <- colnames(vcov) <- names(coefs) <- names(sd) <- parnames
 
     included.samples <- 0
     wgts <- NULL
@@ -883,6 +887,7 @@ ameras.fma <- function(
   out <- list(
     coefficients = coefs,
     sd = sd,
+    vcov = vcov,
     included.realizations = included.realizations,
     included.samples = included.samples,
     weights = wgts,
@@ -1994,6 +1999,9 @@ ameras.bma <- function(
   sd <- apply(nimblesamples.stacked, 2, sd)
   names(sd) <- parnames
 
+  vcov <- var(nimblesamples.stacked)
+  rownames(vcov) <- colnames(vcov) <- parnames
+
   mcmcsum <- MCMCsummary(nimblesamples)
   Rhat <- mcmcsum[-nrow(mcmcsum), c("Rhat", "n.eff")]
   if (nchains > 1) {
@@ -2007,16 +2015,6 @@ ameras.bma <- function(
       "WARNING: MCMC convergence cannot be assessed using a single chains"
     )
   }
-
-  # if(CI=="percentile"){
-  #   CIlower=apply(nimblesamples.stacked, 2, function(x) quantile(x, .025))
-  #   CIupper=apply(nimblesamples.stacked, 2, function(x) quantile(x, .975))
-  #   CIresult <- data.frame(lower=CIlower, upper=CIupper)
-  # } else if(CI=="hpd"){
-  #   CIresult <- as.data.frame(HPDinterval(as.mcmc(nimblesamples.stacked)))
-  # }
-
-  # rownames(CIresult) <- parnames
 
   t1 <- proc.time()
   timedif <- t1 - t0
@@ -2037,6 +2035,7 @@ ameras.bma <- function(
   out <- list(
     coefficients = coef,
     sd = sd,
+    vcov = vcov,
     #CI=CIresult,
     Rhat = Rhat,
     samples = nimblesamples,

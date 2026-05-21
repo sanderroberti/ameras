@@ -71,4 +71,9 @@ fit <- confint(fit, type=c("wald.orig","percentile"))
 summary(fit)
 ```
 
+For visual model diagnostics using residuals, use `plot()`. For example, for regression calibration:
+```{r}
+plot(fit, methods="RC")
+```
+
 See the vignettes for additional details on model fitting, confidence intervals, and the use of transformations.
