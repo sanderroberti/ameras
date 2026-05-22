@@ -1,20 +1,57 @@
 # ameras (development version)
 
-## Minor improvements and fixes
+## Bug fixes
 
-* Fixed a bug causing a check on `inpar` in `ameras()` to generate an error when it shouldn't
-* Fixed an issue where FMA generated an error instead of returning `NULL` for the generated samples when all individual fits were excluded
-* Fixed an issue where setting `keep.data=FALSE` in `ameras()` and passing data to `confint()` failed an internal check when using effect modifiers.
-* FMA and BMA output now includes variance-covariance matrix `vcov`
+* Fixed a bug causing the `inpar` check in `ameras()` to generate an
+  error when it should not.
+* Fixed an issue where FMA generated an error instead of returning
+  `NULL` for generated samples when all individual fits were excluded.
+* Fixed an issue where setting `keep.data=FALSE` and passing data to
+  `confint()` failed an internal check when effect modifiers were
+  present.
+* Fixed an issue where profile likelihood confidence intervals for the
+  ERC method of the proportional hazards family were computed using
+  the non-ERC likelihood, silently ignoring the measurement error
+  correction.
+* Removed the `isSymmetric` check for FMA variance matrices, which
+  caused platform-dependent differences in included realizations due
+  to numerical differences between Cholesky and `solve`-based
+  computations. The Cholesky-based variance computation now used
+  guarantees exact symmetry without an explicit check.
 
-## General improvements
+## Improvements
 
-* Reduced memory usage for large datasets: removed the use of an N x N matrix for ERC for the prophaz family, improving both memory and computation speed.
-* `confint()` no longer re-computes intervals by default if they were already computed previously. To allow re-computation of intervals of a different type or with different settings, `confint()` can be called with the argument `force=TRUE`. In addition, `confint()` now prints CIs.
+* Reduced memory usage and improved computation speed for large
+  datasets: removed the use of N x N matrices for ERC for the
+  proportional hazards family, and precomputed centered dose matrices
+  for ERC are now stored and reused across likelihood evaluations
+  rather than recomputed at each call.
+* `confint()` no longer recomputes confidence intervals by default if
+  they have already been computed. Use `force=TRUE` to recompute with
+  different settings. `confint()` now also prints the computed
+  confidence intervals.
+* FMA and BMA output now includes a variance-covariance matrix
+  `vcov`, computed from the model-averaged posterior samples.
 
-## New features
+## New methods and accessors
 
-* Added methods `included_realizations()`, `Rhat()`, `summary_table()` and `plot()` for the `amerasfit` class. `included_realizations()` prints numeric vectors with the indices of realizations included in FMA and BMA results, `Rhat()` is an accessor for the `Rhat` object of the `BMA` component of the fit object, and `plot()` provides residual-based diagnostic plots.
+* `residuals()`: computes Pearson, deviance, and response residuals
+  for all supported families, and Schoenfeld residuals for
+  `family="prophaz"`, supporting both raw and scaled versions
+  following Grambsch and Therneau (1994).
+* `plot()`: diagnostic plots including residuals versus fitted values
+  and normal Q-Q plots. For `family="prophaz"`, Schoenfeld residual
+  plots are produced to assess the proportional hazards assumption.
+* `vcov()`: extracts the variance-covariance matrix of parameter
+  estimates for one or more estimation methods.
+* `included_realizations()`: returns the indices of realizations
+  included in FMA and BMA model averaging.
+* `Rhat()`: returns the Gelman-Rubin convergence diagnostics and
+  effective sample sizes for BMA results.
+* `summary_table()`: extracts the summary table from a
+  `summary.amerasfit` object as a data frame, for programmatic
+  access to parameter estimates, standard errors, and confidence
+  intervals.
 
 
 # ameras 0.3.0
