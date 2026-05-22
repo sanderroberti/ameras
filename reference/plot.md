@@ -10,8 +10,7 @@ for each estimation method present in the fitted object.
 # S3 method for class 'amerasfit'
 plot(x,
      methods = c("RC", "ERC", "MCML", "FMA", "BMA"), 
-     which = NULL,
-     type = NULL, dose_col = NULL, 
+     which = NULL, type = NULL, dose.col = NULL, 
      add.smooth = getOption("add.smooth", TRUE), 
      qqline = TRUE, id.n = 3, ask = NULL, data = NULL, ...)
 ```
@@ -27,13 +26,13 @@ plot(x,
 
   Character vector specifying which estimation methods to produce plots
   for. One or more of `"RC"`, `"ERC"`, `"MCML"`, `"FMA"`, and `"BMA"`.
-  Defaults to all.
+  Defaults to all. Methods not present in `x` are silently skipped.
 
 - which:
 
   Character vector specifying which plots to produce. For
   non-`"prophaz"` families, one or both of `"residuals-vs-fitted"` and
-  `"qq"`. For `family = "prophaz"`, `"schoenfeld"` produces a scaled
+  `"qq"`. For `family="prophaz"`, `"schoenfeld"` produces a scaled
   Schoenfeld residual plot against event time. Defaults to both for
   non-`"prophaz"` families and to `"schoenfeld"` for `"prophaz"`
   families.
@@ -41,13 +40,13 @@ plot(x,
 - type:
 
   The type of residuals to use. One of `"pearson"`, `"deviance"`, or
-  `"response"` for non-`"prophaz"` models. For `family = "prophaz"`,
-  this must be `"schoenfeld"`. Defaults to `"pearson"` for
-  non-`"prophaz"` families and to `"schoenfeld"` for `"prophaz"`. See
+  `"response"` for non-`"prophaz"` models. For `family="prophaz"`, this
+  must be `"schoenfeld"`. Defaults to `"pearson"` for non-`"prophaz"`
+  families and to `"schoenfeld"` for `"prophaz"`. See
   [`residuals.amerasfit`](https://ameras.sanderroberti.com/reference/residuals.md)
   for details.
 
-- dose_col:
+- dose.col:
 
   The dose realization to use for computation of residuals. If `NULL`
   (default), a best fitting realization is determined for each method
@@ -58,19 +57,20 @@ plot(x,
   Logical. If `TRUE`, a loess smooth line is added to the residuals
   versus fitted plot via
   [`panel.smooth`](https://rdrr.io/r/graphics/panel.smooth.html).
-  Defaults to `getOption("add.smooth", TRUE)`.
+  Defaults to `getOption("add.smooth", TRUE)`. Is not used for the
+  Schoenfeld residual plot for which a spline is always shown, mirroring
+  [plot.cox.zph](https://rdrr.io/pkg/survival/man/plot.cox.zph.html).
 
 - qqline:
 
-  Logical. If `TRUE`, a reference line is added to the normal Q-Q plot
-  via [`qqline`](https://rdrr.io/r/stats/qqnorm.html). Defaults to
-  `TRUE`.
+  Logical. If `TRUE`, a reference line is added to normal Q-Q plots via
+  [`qqline`](https://rdrr.io/r/stats/qqnorm.html). Defaults to `TRUE`.
 
 - id.n:
 
-  Integer. The number of extreme residuals to label in each plot. Labels
-  show the row index of the observation. Defaults to `3`. Set to `0` to
-  suppress labeling.
+  Integer. The number of extreme residuals to label in residuals vs
+  fitted and normal Q-Q plots. Labels show the row index of the
+  observation. Defaults to `3`. Set to `0` to suppress labeling.
 
 - ask:
 
@@ -82,9 +82,7 @@ plot(x,
 - data:
 
   The original data frame used for fitting. Only required when the model
-  was fitted with `keep.data=FALSE`. See
-  [`residuals.amerasfit`](https://ameras.sanderroberti.com/reference/residuals.md)
-  for details.
+  was fitted with `keep.data=FALSE`.
 
 - ...:
 
@@ -116,14 +114,18 @@ residuals are labeled. For `family="multinomial"`, one panel is produced
 per non-reference outcome category.
 
 For proportional hazards models, scaled Schoenfeld residuals are drawn
-against the original event times. This corresponds to using
-`transform = "identity"` in
+against the observed event times to assess the proportional hazards
+assumption. Under proportional hazards, the residuals should fluctuate
+randomly around zero with no systematic trend over time. Systematic
+patterns or smooth trends may indicate time-varying covariate effects
+and violation of the proportional hazards assumption. Note that the
+implementation here corresponds to using `transform = "identity"` in
 [`cox.zph`](https://rdrr.io/pkg/survival/man/cox.zph.html), in contrast
 to the default setting for that function which applies a Kaplan–Meier
 transformation of time.
 
-The data must be available either stored on the object
-(`keep.data=TRUE`, the default) or supplied via the `data` argument.
+The data must either be stored on the object (`keep.data=TRUE` in
+`ameras`, the default) or supplied via the `data` argument.
 
 ## See also
 

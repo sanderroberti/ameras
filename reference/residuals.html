@@ -53,8 +53,12 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'amerasfit'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">object</span>,</span>
-<span>          method <span class="op">=</span> <span class="st">"RC"</span>, type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pearson"</span>, <span class="st">"deviance"</span>, <span class="st">"response"</span>, <span class="st">"schoenfeld"</span><span class="op">)</span>,</span>
-<span>          data <span class="op">=</span> <span class="cn">NULL</span>, dose_col <span class="op">=</span> <span class="cn">NULL</span>, scaled_schoenfeld <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span>          method <span class="op">=</span> <span class="st">"RC"</span>,</span>
+<span>          type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>          data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>          dose.col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>          scaled.schoenfeld <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>          <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -70,78 +74,74 @@
     <code>"FMA"</code>, or <code>"BMA"</code>. Defaults to <code>"RC"</code>.</p></dd>
 
   <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>The type of residuals to compute. Let \(\mu_i\) denote the
-    fitted value for individual \(i\), defined as the predicted
-    mean response given the covariates and specified <code>dose_col</code>.
-    For conditional logistic regression, these are the predicted
-    conditional probabilities within matched sets.
-    One of:</p><dl><dt><code>"pearson"</code></dt>
+<dd><p>The type of residuals to compute. Defaults to <code>"pearson"</code> for
+    all families except <code>"prophaz"</code>, for which the default is
+    <code>"schoenfeld"</code>. For types other than <code>"schoenfeld"</code>, let \(Y_i\)
+    and \(\mu_i\) denote the observed response and fitted mean response
+    for individual \(i\), respectively. Then the residuals are defined as follows:</p><dl><dt><code>"pearson"</code></dt>
 <dd><p>Pearson residuals. For <code>"gaussian"</code>:
-        \((Y_i - \mu_i) / \sigma\) where \(\sigma\) is the
-        estimated residual standard deviation (note that this differs from
-        <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></code> which returns the raw (response) residuals). For
-        <code>"binomial"</code> or <code>"clogit"</code>: \((Y_i - \mu_i) / \sqrt{\mu_i(1 -
-        \mu_i)}\). For <code>"poisson"</code>: \((Y_i - \mu_i) /
-        \sqrt{\mu_i}\). For <code>"multinomial"</code>: per-category Pearson
-        residuals \((Y_{iz} - \mu_{iz}) / \sqrt{\mu_{iz}(1 -
-        \mu_{iz})}\) returned as an \(N \times (Z-1)\) matrix, where
-        \(\mu_{iz}\) is the fitted probability of category \(z\)
-        for individual \(i\).</p></dd>
+    \((Y_i - \mu_i) / \sigma\) where \(\sigma\) is the
+    estimated residual standard deviation (note: <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></code>
+    returns raw residuals for Gaussian). For <code>"binomial"</code> and <code>"clogit"</code>:
+    \((Y_i - \mu_i) / \sqrt{\mu_i(1 - \mu_i)}\). For
+    <code>"poisson"</code>: \((Y_i - \mu_i) / \sqrt{\mu_i}\). For
+    <code>"multinomial"</code>: per-category Pearson
+    residuals \((Y_{iz} - \mu_{iz}) / \sqrt{\mu_{iz}(1 -
+    \mu_{iz})}\) where
+    \(\mu_{iz}\) is the fitted probability of category \(z\)
+    for individual \(i\).</p></dd>
 
-      <dt><code>"deviance"</code></dt>
+    <dt><code>"deviance"</code></dt>
 <dd><p>Deviance residuals, defined as the signed square root of the
-        individual contribution to the deviance. For
-        <code>"gaussian"</code>: the raw residual \(Y_i - \mu_i\). For
-        <code>"binomial"</code> or <code>"clogit"</code>: \(\pm\sqrt{-2\log(\hat{p}_i)}\) where
-        \(\hat{p}_i = \mu_i\) if \(Y_i = 1\) and
-        \(\hat{p}_i = 1 - \mu_i\) if \(Y_i = 0\), with sign
-        equal to \(\text{sign}(Y_i - \mu_i)\). For
-        <code>"poisson"</code>: \(\pm\sqrt{2(Y_i \log(Y_i/\mu_i) - (Y_i
-        - \mu_i))}\) for \(Y_i &gt; 0\) and
-        \(\pm\sqrt{2\mu_i}\) for \(Y_i = 0\), with sign equal to
-        \(\text{sign}(Y_i - \mu_i)\). For <code>"multinomial"</code>:
-        per-category deviance residuals returned as an \(N \times
-        (Z-1)\) matrix.</p></dd>
+    individual contribution to the deviance. For
+    <code>"gaussian"</code>: the raw residual \(Y_i - \mu_i\). For
+    <code>"binomial"</code> and <code>"clogit"</code>:
+    \(\pm\sqrt{-2\log(\hat{p}_i)}\) where
+    \(\hat{p}_i = \mu_i\) if \(Y_i = 1\) and
+    \(\hat{p}_i = 1 - \mu_i\) if \(Y_i = 0\), with sign
+    equal to \(\text{sign}(Y_i - \mu_i)\). For <code>"poisson"</code>:
+    \(\pm\sqrt{2(Y_i \log(Y_i/\mu_i) - (Y_i
+    - \mu_i))}\) for \(Y_i &gt; 0\) and \(\pm\sqrt{2\mu_i}\) for
+    \(Y_i = 0\), with sign equal to
+    \(\text{sign}(Y_i - \mu_i)\). For <code>"multinomial"</code>:
+    per-category deviance residuals as for <code>"binomial"</code>.</p></dd>
 
       <dt><code>"response"</code></dt>
-<dd><p>Raw residuals \(Y_i - \mu_i\). For <code>"multinomial"</code>
+<dd><p>Raw residuals \(Y_i - \mu_i\). For <code>"multinomial"</code>:
         the matrix \(\bm{Y} - \hat{\bm{P}}\) where \(\bm{Y}\) is
         the \(N \times Z\) indicator matrix of observed categories
         and \(\hat{\bm{P}}\) is the \(N \times Z\) matrix of
         fitted probabilities.</p></dd>
 
       <dt><code>"schoenfeld"</code></dt>
-<dd><p>Schoenfeld residuals for proportional hazards-type fits. This is
-        a matrix with one column for each covariate in the model, and a row for
-        each event time. For each event time, the vector of raw Schoenfeld residuals
-        is the observed covariate vector for the individual experiencing the event
-        minus the risk-set weighted mean of the covariates at that event time. If
-        <code>scaled_schoenfeld = TRUE</code>, the residuals are scaled using the
-        full estimated coefficient covariance matrix, otherwise the raw Schoenfeld
-        residuals are returned. This residual type is only used for
-        <code>family = "prophaz"</code>.</p></dd>
+<dd><p>Schoenfeld residuals for <code>family="prophaz"</code> only. For
+        each event time, the unscaled residual for the individual
+        experiencing the event is the observed covariate vector
+        minus the risk-set weighted mean covariate vector at that
+        event time. See Details.</p></dd>
 
 
-</dl><p>Defaults to <code>"pearson"</code> for all families other than <code>"prophaz"</code>, for which the
-    default is <code>"schoenfeld"</code>.</p></dd>
+</dl><p></p></dd>
 
   <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>The original data frame used for fitting. Only required when the
     model was fitted with <code>keep.data=FALSE</code>.</p></dd>
 
-  <dt id="arg-dose-col">dose_col<a class="anchor" aria-label="anchor" href="#arg-dose-col"></a></dt>
+  <dt id="arg-dose-col">dose.col<a class="anchor" aria-label="anchor" href="#arg-dose-col"></a></dt>
 <dd><p>Character string specifying the dose column to use when computing
     fitted values. If <code>NULL</code> (the default), the dose column is
-    selected automatically based on the estimation method: the mean
-    dose across realizations for RC and ERC, the realization with the
-    highest likelihood for MCML and FMA, and the most frequently selected
-    realization for BMA. Can be set to any dose column present in the
-    data to override the automatic selection.</p></dd>
+    selected automatically: the mean dose across realizations
+    for RC and ERC, the realization with the
+    highest likelihood for MCML and FMA, and the most frequently
+    selected realization for BMA. Can be set to any dose column
+    present in the data to override the automatic selection.</p></dd>
 
-  <dt id="arg-scaled-schoenfeld">scaled_schoenfeld<a class="anchor" aria-label="anchor" href="#arg-scaled-schoenfeld"></a></dt>
-<dd><p>Logical; whether to compute scaled (<code>scaled_schoenfeld=TRUE</code>) or raw
-  (<code>scaled_schoenfeld=FALSE</code>) Schoenfeld residuals. Not used for other
-  residual types.</p></dd>
+  <dt id="arg-scaled-schoenfeld">scaled.schoenfeld<a class="anchor" aria-label="anchor" href="#arg-scaled-schoenfeld"></a></dt>
+<dd><p>Logical. If <code>TRUE</code> (the default), scaled Schoenfeld residuals
+    are returned, obtained by multiplying the raw Schoenfeld residuals
+    by the estimated coefficient variance-covariance matrix following
+    Grambsch and Therneau (1994). If <code>FALSE</code>, raw Schoenfeld
+    residuals are returned. Only used when <code>type="schoenfeld"</code>.</p></dd>
 
   <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments, currently unused.</p></dd>
@@ -149,23 +149,56 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>For <code>family</code> in <code>"gaussian"</code>, <code>"binomial"</code>, and
-  <code>"poisson"</code>, a numeric vector containing the residuals.
-  For <code>family="multinomial"</code>, a numeric matrix of dimension
-  \(N \times (Z-1)\) where \(Z\) is the number of outcome
-  categories and the reference category (the last factor level) is
-  excluded. Column names correspond to the non-reference factor levels.</p>
+    <p>For families <code>"gaussian"</code>, <code>"binomial"</code>,
+  <code>"poisson"</code>, and <code>"clogit"</code>, a numeric vector of
+  length \(N\) containing the residuals.</p>
+<p>For <code>family="multinomial"</code>, a numeric matrix of dimension
+  \(N \times Z\) where \(Z\) is the number of outcome
+  categories. Column names correspond to the factor levels.
+  Note that when plotting via <code><a href="plot.html">plot</a></code>, the
+  reference category is excluded since its residuals are a
+  linear combination of the other categories.</p>
+<p>For <code>family="prophaz"</code> with <code>type="schoenfeld"</code>, a data
+  frame with columns <code>id</code> (row index of the event), <code>time</code>
+  (event time), and one additional column per model parameter
+  containing the Schoenfeld residuals. Only rows corresponding to
+  events (<code>status=1</code>) are included.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Fitted values are computed using the mean dose across realizations
-  (<code>rcdose_ameras</code>) for RC and ERC, or the single "best fitting"
-  realization for MCML, FMA, and BMA. For <code>family="multinomial"</code>,
-  residuals are computed per outcome category.</p>
+    <p>Fitted values are computed using the dose column specified by
+  <code>dose.col</code>.</p>
+<p>For <code>family="clogit"</code>, fitted values \(\mu_i\) are the
+  conditional probabilities of being a case within each matched set,
+  computed as \(R_i / \sum_{j \in \text{set}(i)} R_j\) where
+  \(R_i\) is the relative risk for individual \(i\) and the sum
+  is over all individuals in the same matched set.</p>
+<p>For <code>family="prophaz"</code> and <code>type="schoenfeld"</code>, the
+  Schoenfeld residual for the individual failing at time \(t\) is:
+  $$\bm{r} = \bm{x} - \bar{\bm{x}}(t)$$
+  where \(\bm{x}\) is the observed covariate vector for the failing
+  individual and
+  $$\bar{\bm{x}}(t) = \frac{\sum_{j \in \mathcal{R}(t)} \bm{x}_j R_j}
+  {\sum_{j \in \mathcal{R}(t)} R_j}$$
+  is the weighted mean covariate vector in the risk set
+  \(\mathcal{R}(t)\) at time \(t\), with weights equal to the
+  relative risks \(R_j\). Ties in event times are handled using the
+  Breslow approximation.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Schoenfeld, D. (1982). Partial residuals for the proportional
+  hazards regression model.
+  <em>Biometrika</em>, <b>69</b>(1), 239–241.
+  <a href="https://doi.org/10.1093/biomet/69.1.239" class="external-link">doi:10.1093/biomet/69.1.239</a></p>
+<p>Grambsch, P. M. and Therneau, T. M. (1994). Proportional hazards
+  tests and diagnostics based on weighted residuals.
+  <em>Biometrika</em>, <b>81</b>(3), 515–526.
+  <a href="https://doi.org/10.1093/biomet/81.3.515" class="external-link">doi:10.1093/biomet/81.3.515</a></p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="plot.html">plot.amerasfit</a></code> for diagnostic plots using these
+    <div class="dont-index"><p><code><a href="plot.html">plot</a></code> for diagnostic plots using these
   residuals,
   <code><a href="ameras.html">ameras</a></code> for model fitting,
   <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></code> for the generic function.</p></div>
@@ -173,11 +206,11 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="st">"data"</span>, package <span class="op">=</span> <span class="st">"ameras"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="st">"data"</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dosevars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, model <span class="op">=</span> <span class="st">"ERR"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, methods <span class="op">=</span> <span class="st">"RC"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in resolve_dose_selection(sel_args, data):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `all_of(dosevars)`.</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> object 'dosevars' not found</span>
@@ -189,51 +222,50 @@
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'res' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Deviance residuals</span></span></span>
-<span class="r-in"><span><span class="va">res_dev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"deviance"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res_dev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit</span>, type<span class="op">=</span><span class="st">"deviance"</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit' not found</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_dev</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'res_dev' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Response residuals</span></span></span>
-<span class="r-in"><span><span class="va">res_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit</span>, type<span class="op">=</span><span class="st">"response"</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit' not found</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_raw</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'res_raw' not found</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Specific method</span></span></span>
+<span class="r-in"><span><span class="co">## Specific dose column</span></span></span>
+<span class="r-in"><span><span class="va">res_v1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit</span>, dose.col<span class="op">=</span><span class="st">"V1"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit' not found</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Multiple methods</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, model <span class="op">=</span> <span class="st">"ERR"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>               data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, methods <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>               data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in resolve_dose_selection(sel_args, data):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `all_of(dosevars)`.</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> object 'dosevars' not found</span>
-<span class="r-in"><span><span class="va">res_erc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit2</span>, method <span class="op">=</span> <span class="st">"ERC"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res_erc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit2</span>, method<span class="op">=</span><span class="st">"ERC"</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit2' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Specific dose column</span></span></span>
-<span class="r-in"><span><span class="va">res_v1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit</span>, dose_col <span class="op">=</span> <span class="st">"V1"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit' not found</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## With keep.data = FALSE</span></span></span>
+<span class="r-in"><span><span class="co">## With keep.data=FALSE</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">fit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, model <span class="op">=</span> <span class="st">"ERR"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>               data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, methods <span class="op">=</span> <span class="st">"RC"</span>,</span></span>
-<span class="r-in"><span>               keep.data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>               data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span>,</span></span>
+<span class="r-in"><span>               keep.data<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in resolve_dose_selection(sel_args, data):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `all_of(dosevars)`.</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> object 'dosevars' not found</span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit3</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit3</span>, data<span class="op">=</span><span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit3' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
-<span class="r-in"><span><span class="co">## Schoenfeld residuals for proportional hazards fits</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Schoenfeld residuals for proportional hazards model</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, model <span class="op">=</span> <span class="st">"ERR"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"prophaz"</span>, methods <span class="op">=</span> <span class="st">"RC"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>               data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"prophaz"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in resolve_dose_selection(sel_args, data):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `all_of(dosevars)`.</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> object 'dosevars' not found</span>
-<span class="r-in"><span><span class="va">res_sch</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit4</span>, type <span class="op">=</span> <span class="st">"schoenfeld"</span>, scaled_schoenfeld <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res_sch</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit4' not found</span>
+<span class="r-in"><span><span class="va">res_raw_sch</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fit4</span>, scaled.schoenfeld<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit4' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
