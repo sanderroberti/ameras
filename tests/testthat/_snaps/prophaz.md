@@ -148,3 +148,23 @@
       11    BMA        h0[9]    0.365 0.052    0.268   0.4743    1   365
       12    BMA       h0[10]    0.409 0.060    0.307   0.5448    1   356
 
+# prophaz snapshot: FMA 1-par
+
+    structure(list(FMA = 1.06798681864581), class = "data.frame", row.names = "dose")
+
+---
+
+    c(dose = 0.188879612817662)
+
+---
+
+    structure(list(lower = 0.69966449201711, upper = 1.43913843180591), class = "data.frame", row.names = "dose")
+
+---
+
+    Code
+      print(summary(fit)$summary_table, digits = 2)
+    Output
+        Method Term Estimate   SE CI.lower CI.upper
+      1    FMA dose      1.1 0.19      0.7      1.4
+

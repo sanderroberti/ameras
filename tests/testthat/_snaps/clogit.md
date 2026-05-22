@@ -125,3 +125,23 @@
       1    BMA         dose    0.630 0.14    0.364   0.8585  3.3    49
       2    BMA dose_squared   -0.049 0.03   -0.099   0.0068  3.6    29
 
+# clogit snapshot: FMA 1-par
+
+    structure(list(FMA = 1.09177057785782), class = "data.frame", row.names = "dose")
+
+---
+
+    c(dose = 0.211208164015115)
+
+---
+
+    structure(list(lower = 0.679044763960655, upper = 1.50712257637798), class = "data.frame", row.names = "dose")
+
+---
+
+    Code
+      print(summary(fit)$summary_table, digits = 2)
+    Output
+        Method Term Estimate   SE CI.lower CI.upper
+      1    FMA dose      1.1 0.21     0.68      1.5
+
