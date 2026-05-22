@@ -228,7 +228,7 @@ make_base_loglik_fn <- function(object, method_fit, data) {
   }
 }
 
-make_base_loglik_fn_single <- function(object, method_fit, data, dose_col) {
+make_base_loglik_fn_single <- function(object, method_fit, data, dose.col) {
   m <- object$model
   ERC <- FALSE # always non-ERC since we are evaluating at a single column
 
@@ -239,7 +239,7 @@ make_base_loglik_fn_single <- function(object, method_fit, data, dose_col) {
         c(
           list(
             params = params,
-            D = dose_col,
+            D = dose.col,
             X = m$X,
             Y = m$Y,
             M = m$M,
@@ -261,7 +261,7 @@ make_base_loglik_fn_single <- function(object, method_fit, data, dose_col) {
         c(
           list(
             params = params,
-            D = dose_col,
+            D = dose.col,
             X = m$X,
             Y = m$Y,
             M = m$M,
@@ -284,7 +284,7 @@ make_base_loglik_fn_single <- function(object, method_fit, data, dose_col) {
         c(
           list(
             params = params,
-            D = dose_col,
+            D = dose.col,
             X = m$X,
             Y = m$Y,
             M = m$M,
@@ -306,7 +306,7 @@ make_base_loglik_fn_single <- function(object, method_fit, data, dose_col) {
         c(
           list(
             params = params,
-            D = dose_col,
+            D = dose.col,
             X = m$X,
             Y = m$Y,
             M = m$M,
@@ -333,7 +333,7 @@ make_base_loglik_fn_single <- function(object, method_fit, data, dose_col) {
         c(
           list(
             params = params,
-            D = dose_col,
+            D = dose.col,
             X = m$X,
             status = m$status,
             M = m$M,
@@ -358,7 +358,7 @@ make_base_loglik_fn_single <- function(object, method_fit, data, dose_col) {
         c(
           list(
             params = params,
-            D = dose_col,
+            D = dose.col,
             X = m$X,
             status = m$status,
             entry = m$entry,
@@ -495,7 +495,7 @@ compute_fitted <- function(
   object,
   method = "RC",
   data,
-  dose_col = "rcdose_ameras"
+  dose.col = "rcdose_ameras"
 ) {
   m <- object$model
   coefs <- object[[method]]$coefficients
@@ -540,7 +540,7 @@ compute_fitted <- function(
 
     RR <- exposureRR(
       params = betavec,
-      D = dose_col,
+      D = dose.col,
       M = m$M,
       data = data,
       doseRRmod = m$doseRRmod,
@@ -584,7 +584,7 @@ compute_fitted <- function(
     for (ii in 1:(Z - 1)) {
       RRmat[, ii] <- exposureRR(
         params = betamat[, ii],
-        D = dose_col,
+        D = dose.col,
         M = m$M,
         data = data,
         doseRRmod = m$doseRRmod,
@@ -637,7 +637,7 @@ compute_fitted <- function(
 
     RR <- exposureRR(
       params = betavec,
-      D = dose_col,
+      D = dose.col,
       M = m$M,
       data = data,
       doseRRmod = m$doseRRmod,
@@ -671,7 +671,7 @@ select_dose_col <- function(object, method, data) {
         object,
         method_fit = object$MCML,
         data = data,
-        dose_col = dv
+        dose.col = dv
       )
       fn(params)
     })
@@ -718,7 +718,7 @@ compute_schoenfeld_residuals <- function(
   rr,
   entry = NULL,
   scaled = TRUE,
-  vcov_mat = NULL
+  vcov.mat = NULL
 ) {
   exit <- as.numeric(exit)
   status <- as.integer(status)
@@ -769,17 +769,17 @@ compute_schoenfeld_residuals <- function(
 
   scaled_out <- NULL
   if (scaled) {
-    if (is.null(vcov_mat)) {
-      stop("vcov_mat is required when scaled = TRUE.")
+    if (is.null(vcov.mat)) {
+      stop("vcov.mat is required when scaled = TRUE.")
     }
-    vcov_mat <- as.matrix(vcov_mat)
-    if (!all(dim(vcov_mat) == c(p, p))) {
+    vcov.mat <- as.matrix(vcov.mat)
+    if (!all(dim(vcov.mat) == c(p, p))) {
       stop(
-        "vcov_mat must be a p x p covariance matrix matching ncol(covariates)."
+        "vcov.mat must be a p x p covariance matrix matching ncol(covariates)."
       )
     }
 
-    scaled_out <- raw_out %*% vcov_mat
+    scaled_out <- raw_out %*% vcov.mat
     if (!is.null(colnames(raw_out))) {
       colnames(scaled_out) <- colnames(covariates)
     }

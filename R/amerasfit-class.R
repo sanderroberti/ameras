@@ -479,13 +479,21 @@ summary_table.amerasfit <- function(object, ...) {
 residuals.amerasfit <- function(
   object,
   method = "RC",
-  type = c("pearson", "deviance", "response", "schoenfeld"),
+  type = NULL,
   data = NULL,
-  dose_col = NULL,
-  scaled_schoenfeld = TRUE,
+  dose.col = NULL,
+  scaled.schoenfeld = TRUE,
   ...
 ) {
-  type <- match.arg(type)
+  if (is.null(type)) {
+    if (object$model$family == "prophaz") {
+      type <- "schoenfeld"
+    } else {
+      type <- "pearson"
+    }
+  }
+  type <- match.arg(type, c("pearson", "response", "deviance", "schoenfeld"))
+
   if (object$model$family == "prophaz") {
     if (type != "schoenfeld") {
       stop("Only schoenfeld residuals are supported for family 'prophaz'")
@@ -508,11 +516,11 @@ residuals.amerasfit <- function(
 
   resolved_data <- resolve_data(object, data = data)
 
-  if (is.null(dose_col)) {
-    dose_col <- select_dose_col(object, method, resolved_data)
+  if (is.null(dose.col)) {
+    dose.col <- select_dose_col(object, method, resolved_data)
   } else {
-    if (!dose_col %in% colnames(resolved_data)) {
-      stop("dose_col '", dose_col, "' not found in data")
+    if (!dose.col %in% colnames(resolved_data)) {
+      stop("dose.col '", dose.col, "' not found in data")
     }
   }
 
@@ -522,7 +530,7 @@ residuals.amerasfit <- function(
     object,
     method = method,
     data = resolved_data,
-    dose_col = dose_col
+    dose.col = dose.col
   )
   Y <- if (m$family == "clogit") {
     resolved_data[, m$status]
@@ -594,45 +602,41 @@ residuals.amerasfit <- function(
   } else if (m$family == "prophaz") {
     if (type == "schoenfeld") {
       if (m$doseRRmod == "LINEXP") {
-        b2 <- object[[method]]$coefficients["dose_exponential"]
-        dose_lin <- resolved_data[, dose_col]
-        dose_exp <- dose_lin * exp(b2 * dose_lin)
-        dose_mat <- cbind(dose_lin, dose_exp)
+        dose_mat <- cbind(
+          resolved_data[, dose.col],
+          resolved_data[, dose.col]
+        )
         colnames(dose_mat) <- c("dose_linear", "dose_exponential")
+      } else if (m$deg == 2) {
+        dose_mat <- cbind(
+          resolved_data[, dose.col],
+          resolved_data[, dose.col]^2
+        )
+        colnames(dose_mat) <- c("dose", "dose_squared")
+      } else {
+        dose_mat <- matrix(resolved_data[, dose.col], ncol = 1)
+        colnames(dose_mat) <- "dose"
+      }
 
-        if (!is.null(m$M)) {
-          M_mat <- as.matrix(resolved_data[, m$M, drop = FALSE])
-          M_names <- m$M_names
-          mod_lin <- M_mat * dose_lin
-          mod_exp <- M_mat * dose_exp
+      # Modifier columns: observed M * D values
+      if (!is.null(m$M)) {
+        M_mat <- as.matrix(resolved_data[, m$M, drop = FALSE])
+        M_names <- m$M_names
+
+        if (m$doseRRmod == "LINEXP") {
+          mod_lin <- sweep(M_mat, 1, resolved_data[, dose.col], "*")
+          mod_exp <- sweep(M_mat, 1, resolved_data[, dose.col], "*")
           colnames(mod_lin) <- paste0("dose_linear:", M_names)
           colnames(mod_exp) <- paste0("dose_exponential:", M_names)
           dose_mat <- cbind(dose_mat, mod_lin, mod_exp)
-        }
-      } else if (m$deg == 2) {
-        dose_lin <- resolved_data[, dose_col]
-        dose_sq <- dose_lin^2
-        dose_mat <- cbind(dose_lin, dose_sq)
-        colnames(dose_mat) <- c("dose", "dose_squared")
-
-        if (!is.null(m$M)) {
-          M_mat <- as.matrix(resolved_data[, m$M, drop = FALSE])
-          M_names <- m$M_names
-          mod_lin <- M_mat * dose_lin
-          mod_sq <- M_mat * dose_sq
+        } else if (m$deg == 2) {
+          mod_lin <- sweep(M_mat, 1, resolved_data[, dose.col], "*")
+          mod_sq <- sweep(M_mat, 1, resolved_data[, dose.col]^2, "*")
           colnames(mod_lin) <- paste0("dose:", M_names)
           colnames(mod_sq) <- paste0("dose_squared:", M_names)
           dose_mat <- cbind(dose_mat, mod_lin, mod_sq)
-        }
-      } else {
-        dose_lin <- resolved_data[, dose_col]
-        dose_mat <- matrix(dose_lin, ncol = 1)
-        colnames(dose_mat) <- "dose"
-
-        if (!is.null(m$M)) {
-          M_mat <- as.matrix(resolved_data[, m$M, drop = FALSE])
-          M_names <- m$M_names
-          mod_lin <- M_mat * dose_lin
+        } else {
+          mod_lin <- sweep(M_mat, 1, resolved_data[, dose.col], "*")
           colnames(mod_lin) <- paste0("dose:", M_names)
           dose_mat <- cbind(dose_mat, mod_lin)
         }
@@ -649,7 +653,7 @@ residuals.amerasfit <- function(
         dose_mat
       }
 
-      vcov_mat <- object[[method]]$vcov[
+      vcov.mat <- object[[method]]$vcov[
         colnames(covariates),
         colnames(covariates),
         drop = FALSE
@@ -661,8 +665,8 @@ residuals.amerasfit <- function(
         covariates = covariates,
         rr = mus,
         entry = if (!is.null(m$entry)) resolved_data[, m$entry] else NULL,
-        scaled = scaled_schoenfeld,
-        vcov_mat = vcov_mat
+        scaled = scaled.schoenfeld,
+        vcov.mat = vcov.mat
       )
       return(sf)
     }
@@ -677,7 +681,7 @@ plot.amerasfit <- function(
   methods = c("RC", "ERC", "MCML", "FMA", "BMA"),
   which = NULL,
   type = NULL,
-  dose_col = NULL,
+  dose.col = NULL,
   add.smooth = getOption("add.smooth", TRUE),
   qqline = TRUE,
   id.n = 3,
@@ -751,36 +755,36 @@ plot.amerasfit <- function(
 
   # Precompute for all methods before plotting
   precomputed <- lapply(available, function(method) {
-    if (is.null(dose_col)) {
-      dose_col <- select_dose_col(x, method, resolved_data)
-      dose_col_plot <- if (dose_col == "rcdose_ameras") {
+    if (is.null(dose.col)) {
+      dose.col <- select_dose_col(x, method, resolved_data)
+      dose.col.plot <- if (dose.col == "rcdose_ameras") {
         "mean of realizations"
       } else {
-        paste0("realization: ", dose_col)
+        paste0("realization: ", dose.col)
       }
     } else {
-      dose_col_plot <- paste0("realization: ", dose_col)
+      dose.col.plot <- paste0("realization: ", dose.col)
     }
 
     fitted_vals <- compute_fitted(
       x,
       method = method,
       data = resolved_data,
-      dose_col = dose_col
+      dose.col = dose.col
     )
     resids <- residuals.amerasfit(
       x,
       method = method,
       type = type,
       data = resolved_data,
-      dose_col = dose_col,
-      scaled_schoenfeld = TRUE
+      dose.col = dose.col,
+      scaled.schoenfeld = TRUE
     )
     list(
       fitted_vals = fitted_vals,
       resids = resids,
-      dose_col = dose_col,
-      dose_col_plot = dose_col_plot,
+      dose.col = dose.col,
+      dose.col.plot = dose.col.plot,
       residMatrix = is.matrix(resids)
     )
   })
@@ -813,7 +817,7 @@ plot.amerasfit <- function(
                   ") \n(",
                   method,
                   ", ",
-                  precomputed[[method]]$dose_col_plot,
+                  precomputed[[method]]$dose.col.plot,
                   ")"
                 ),
                 ...
@@ -849,7 +853,7 @@ plot.amerasfit <- function(
                   ") \n(",
                   method,
                   ", ",
-                  precomputed[[method]]$dose_col_plot,
+                  precomputed[[method]]$dose.col.plot,
                   ")"
                 ),
                 ylab = paste0(tools::toTitleCase(type), " residuals"),
@@ -888,7 +892,7 @@ plot.amerasfit <- function(
                 "Residuals vs Fitted\n(",
                 method,
                 ", ",
-                precomputed[[method]]$dose_col_plot,
+                precomputed[[method]]$dose.col.plot,
                 ")"
               ),
               ...
@@ -923,7 +927,7 @@ plot.amerasfit <- function(
                 "Normal Q-Q\n(",
                 method,
                 ", ",
-                precomputed[[method]]$dose_col_plot,
+                precomputed[[method]]$dose.col.plot,
                 ")"
               ),
               ylab = paste0(tools::toTitleCase(type), " residuals"),
@@ -980,15 +984,11 @@ plot.amerasfit <- function(
             "\n(",
             method,
             ", ",
-            precomputed[[method]]$dose_col_plot,
+            precomputed[[method]]$dose.col.plot,
             ")"
           ),
           ...
-          #las = 1,
-          #bty = "l"
         )
-
-        #abline(h = 0, lty = 2, col = "gray50")
 
         # smooth trend, similar in spirit to cox.zph
         ok <- is.finite(x_sf) & is.finite(y)
@@ -996,8 +996,6 @@ plot.amerasfit <- function(
           sm <- smooth.spline(x_sf[ok], y[ok])
           lines(sm, lwd = 2, col = "black")
         }
-
-        #rug(x_sf, col = "gray70")
       }
     }
   }
