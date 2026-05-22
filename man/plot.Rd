@@ -54,7 +54,7 @@
     residuals versus fitted plot via \code{\link{panel.smooth}}.
     Defaults to \code{getOption("add.smooth", TRUE)}. Is not used 
     for the Schoenfeld residual plot for which a spline is always 
-    shown, mirroring \link{plot.cox.zph}.
+    shown, mirroring \link[survival]{plot.cox.zph}.
   }
   \item{qqline}{
     Logical. If \code{TRUE}, a reference line is added to normal
