@@ -47,10 +47,31 @@ dosevars <- paste0("V", 1:10)
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
               data=data, family="binomial", methods="BMA")
 #> Note: BMA may require extensive computation time
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting BMA
+#> Defining model
+#> Building model
+#> Setting data and initial values
+#> Running calculate on model
+#>   [Note] Any error reports that follow may simply reflect missing values in model variables.
+#> Checking model sizes and dimensions
+#>   [Note] This model is not fully initialized. This is not an error.
+#>          To see which variables are not initialized, use model$initializeInfo().
+#>          For more information on model initialization, see help(modelInitialization).
+#> Compiling
+#>   [Note] This may take a minute.
+#>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+#> Compiling
+#>   [Note] This may take a minute.
+#>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+#> running chain 1...
+#> |-------------|-------------|-------------|-------------|
+#> |-------------------------------------------------------|
+#> running chain 2...
+#> |-------------|-------------|-------------|-------------|
+#> |-------------------------------------------------------|
 Rhat(fit)
-#> Error: object 'fit' not found
+#>             Rhat n.eff
+#> (Intercept) 1.03  1236
+#> dose        1.02   969
 # }
 ```

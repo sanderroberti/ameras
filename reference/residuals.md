@@ -165,37 +165,30 @@ dosevars <- paste0("V", 1:10)
 
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
               data=data, family="binomial", methods="RC")
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting RC
 
 ## Pearson residuals (default)
 res <- residuals(fit)
-#> Error: object 'fit' not found
 summary(res)
-#> Error: object 'res' not found
+#>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+#> -1.45550 -0.80586 -0.67823  0.00103  1.10709  1.55575 
 
 ## Deviance residuals
 res_dev <- residuals(fit, type="deviance")
-#> Error: object 'fit' not found
 
 ## Response residuals
 res_raw <- residuals(fit, type="response")
-#> Error: object 'fit' not found
 
 ## Specific dose column
 res_v1 <- residuals(fit, dose.col="V1")
-#> Error: object 'fit' not found
 
 ## Multiple methods
 # \donttest{
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods=c("RC", "ERC"))
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting RC
+#> Fitting ERC
 res_erc <- residuals(fit2, method="ERC")
-#> Error: object 'fit2' not found
 # }
 
 ## With keep.data=FALSE
@@ -203,23 +196,16 @@ res_erc <- residuals(fit2, method="ERC")
 fit3 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods="RC",
                keep.data=FALSE)
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting RC
 res <- residuals(fit3, data=data)
-#> Error: object 'fit3' not found
 # }
 
 ## Schoenfeld residuals for proportional hazards model
 # \donttest{
 fit4 <- ameras(Surv(time, status) ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="prophaz", methods="RC")
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting RC
 res_sch <- residuals(fit4)
-#> Error: object 'fit4' not found
 res_raw_sch <- residuals(fit4, scaled.schoenfeld=FALSE)
-#> Error: object 'fit4' not found
 # }
 ```

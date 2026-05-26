@@ -69,26 +69,49 @@ dosevars <- paste0("V", 1:10)
 ## FMA only
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
               data=data, family="binomial", methods="FMA")
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting FMA
 included_realizations(fit)
-#> Error: object 'fit' not found
+#>  [1]  1  2  3  4  5  6  7  8  9 10
 length(included_realizations(fit))
-#> Error: object 'fit' not found
+#> [1] 10
 
 ## Both FMA and BMA
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods=c("FMA", "BMA"))
 #> Note: BMA may require extensive computation time
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting FMA
+#> Fitting BMA
+#> Defining model
+#> Building model
+#> Setting data and initial values
+#> Running calculate on model
+#>   [Note] Any error reports that follow may simply reflect missing values in model variables.
+#> Checking model sizes and dimensions
+#>   [Note] This model is not fully initialized. This is not an error.
+#>          To see which variables are not initialized, use model$initializeInfo().
+#>          For more information on model initialization, see help(modelInitialization).
+#> Compiling
+#>   [Note] This may take a minute.
+#>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+#> Compiling
+#>   [Note] This may take a minute.
+#>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+#> running chain 1...
+#> |-------------|-------------|-------------|-------------|
+#> |-------------------------------------------------------|
+#> running chain 2...
+#> |-------------|-------------|-------------|-------------|
+#> |-------------------------------------------------------|
 included_realizations(fit2)
-#> Error: object 'fit2' not found
+#> $FMA
+#>  [1]  1  2  3  4  5  6  7  8  9 10
+#> 
+#> $BMA
+#>  [1]  1  2  3  4  5  6  7  8  9 10
+#> 
 included_realizations(fit2, methods="FMA")
-#> Error: object 'fit2' not found
+#>  [1]  1  2  3  4  5  6  7  8  9 10
 included_realizations(fit2, methods="BMA")
-#> Error: object 'fit2' not found
+#>  [1]  1  2  3  4  5  6  7  8  9 10
 # }
 ```

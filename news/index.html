@@ -47,22 +47,35 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ameras-development-version">ameras (development version)<a class="anchor" aria-label="anchor" href="#ameras-development-version"></a></h2>
 <div class="section level3">
-<h3 id="minor-improvements-and-fixes-development-version">Minor improvements and fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-fixes-development-version"></a></h3>
-<ul><li>Fixed a bug causing a check on <code>inpar</code> in <code><a href="../reference/ameras.html">ameras()</a></code> to generate an error when it shouldn’t</li>
-<li>Fixed an issue where FMA generated an error instead of returning <code>NULL</code> for the generated samples when all individual fits were excluded</li>
-<li>Fixed an issue where setting <code>keep.data=FALSE</code> in <code><a href="../reference/ameras.html">ameras()</a></code> and passing data to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> failed an internal check when using effect modifiers.</li>
-<li>FMA and BMA output now includes variance-covariance matrix <code>vcov</code>
-</li>
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>Fixed a bug causing the <code>inpar</code> check in <code><a href="../reference/ameras.html">ameras()</a></code> to generate an error when it should not.</li>
+<li>Fixed an issue where FMA generated an error instead of returning <code>NULL</code> for generated samples when all individual fits were excluded.</li>
+<li>Fixed an issue where setting <code>keep.data=FALSE</code> and passing data to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> failed an internal check when effect modifiers were present.</li>
+<li>Fixed an issue where profile likelihood confidence intervals for the ERC method of the proportional hazards family were computed using the non-ERC likelihood, silently ignoring the measurement error correction.</li>
+<li>Removed the <code>isSymmetric</code> check for FMA variance matrices, which caused platform-dependent differences in included realizations due to numerical differences between Cholesky and <code>solve</code>-based computations. The Cholesky-based variance computation now used guarantees exact symmetry without an explicit check.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="general-improvements-development-version">General improvements<a class="anchor" aria-label="anchor" href="#general-improvements-development-version"></a></h3>
-<ul><li>Reduced memory usage for large datasets: removed the use of an N x N matrix for ERC for the prophaz family, improving both memory and computation speed.</li>
+<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
+<ul><li>Reduced memory usage and improved computation speed for large datasets: removed the use of N x N matrices for ERC for the proportional hazards family, and precomputed centered dose matrices for ERC are now stored and reused across likelihood evaluations rather than recomputed at each call.</li>
 <li>
-<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> no longer re-computes intervals by default if they were already computed previously. To allow re-computation of intervals of a different type or with different settings, <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> can be called with the argument <code>force=TRUE</code>. In addition, <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now prints CIs.</li>
+<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> no longer recomputes confidence intervals by default if they have already been computed. Use <code>force=TRUE</code> to recompute with different settings. <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now also prints the computed confidence intervals.</li>
+<li>FMA and BMA output now includes a variance-covariance matrix <code>vcov</code>, computed from the model-averaged posterior samples.</li>
+<li>It is now possible to use a <code>dosevars</code> variable defined locally (e.g., within a simulation script) through <code>all_of(dosevars)</code> in the formula passed to <code><a href="../reference/ameras.html">ameras()</a></code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>Added methods <code><a href="../reference/included_realizations.html">included_realizations()</a></code>, <code><a href="../reference/Rhat.html">Rhat()</a></code>, <code><a href="../reference/summary.html">summary_table()</a></code> and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> for the <code>amerasfit</code> class. <code><a href="../reference/included_realizations.html">included_realizations()</a></code> prints numeric vectors with the indices of realizations included in FMA and BMA results, <code><a href="../reference/Rhat.html">Rhat()</a></code> is an accessor for the <code>Rhat</code> object of the <code>BMA</code> component of the fit object, and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> provides residual-based diagnostic plots.</li>
+<h3 id="new-methods-and-accessors-development-version">New methods and accessors<a class="anchor" aria-label="anchor" href="#new-methods-and-accessors-development-version"></a></h3>
+<ul><li>
+<code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code>: computes Pearson, deviance, and response residuals for all supported families, and Schoenfeld residuals for <code>family="prophaz"</code>, supporting both raw and scaled versions following Grambsch and Therneau (1994).</li>
+<li>
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>: diagnostic plots including residuals versus fitted values and normal Q-Q plots. For <code>family="prophaz"</code>, Schoenfeld residual plots are produced to assess the proportional hazards assumption.</li>
+<li>
+<code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code>: extracts the variance-covariance matrix of parameter estimates for one or more estimation methods.</li>
+<li>
+<code><a href="../reference/included_realizations.html">included_realizations()</a></code>: returns the indices of realizations included in FMA and BMA model averaging.</li>
+<li>
+<code><a href="../reference/Rhat.html">Rhat()</a></code>: returns the Gelman-Rubin convergence diagnostics and effective sample sizes for BMA results.</li>
+<li>
+<code><a href="../reference/summary.html">summary_table()</a></code>: extracts the summary table from a <code>summary.amerasfit</code> object as a data frame, for programmatic access to parameter estimates, standard errors, and confidence intervals.</li>
 </ul></div>
 </div>
     <div class="section level2">

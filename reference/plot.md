@@ -146,31 +146,33 @@ dosevars <- paste0("V", 1:10)
 ## Binomial model
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
               data=data, family="binomial", methods="RC")
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting RC
 
 ## Both diagnostic plots for RC
 plot(fit)
-#> Error: object 'fit' not found
+
+
 
 ## Residuals vs fitted only
 plot(fit, which="residuals-vs-fitted")
-#> Error: object 'fit' not found
+
 
 ## Deviance residuals
 plot(fit, type="deviance")
-#> Error: object 'fit' not found
+
+
 
 ## Multiple methods
 # \donttest{
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods=c("RC", "ERC"))
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting RC
+#> Fitting ERC
 plot(fit2)
-#> Error: object 'fit2' not found
+
+
+
+
 # }
 
 ## With keep.data=FALSE, supply data explicitly
@@ -178,21 +180,18 @@ plot(fit2)
 fit3 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods="RC",
                keep.data=FALSE)
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting RC
 plot(fit3, data=data)
-#> Error: object 'fit3' not found
+
+
 # }
 
 ## Schoenfeld residual plot
 # \donttest{
 fit4 <- ameras(Surv(time, status) ~ dose(all_of(dosevars), model = "ERR"),
               data = data, family = "prophaz", methods = "RC")
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting RC
 plot(fit4)
-#> Error: object 'fit4' not found
+
 # }
 ```

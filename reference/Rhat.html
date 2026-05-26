@@ -94,11 +94,32 @@
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">dosevars</span><span class="op">)</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>              data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"BMA"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note: BMA may require extensive computation time</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in resolve_dose_selection(sel_args, data):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `all_of(dosevars)`.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> object 'dosevars' not found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting BMA</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Defining model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Building model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Setting data and initial values</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running calculate on model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] Any error reports that follow may simply reflect missing values in model variables.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Checking model sizes and dimensions</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] This model is not fully initialized. This is not an error.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>          To see which variables are not initialized, use model$initializeInfo().</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>          For more information on model initialization, see help(modelInitialization).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Compiling</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] This may take a minute.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Compiling</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] This may take a minute.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> running chain 1...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |-------------|-------------|-------------|-------------|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |-------------------------------------------------------|</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> running chain 2...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |-------------|-------------|-------------|-------------|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |-------------------------------------------------------|</span>
 <span class="r-in"><span><span class="fu">Rhat</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Rhat n.eff</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) 1.03  1236</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose        1.02   969</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

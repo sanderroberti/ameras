@@ -301,33 +301,33 @@ fit3 <- confint(fit3, type = "percentile")
 #> FMA confidence intervals:
 #> 
 #>       lower upper
-#> dose 0.5241  1.06
+#> dose 0.5243 1.058
 #> 
 #> BMA confidence intervals:
 #> 
 #>       lower upper
-#> dose 0.5401 1.098
+#> dose 0.5554 1.081
 #> 
 summary(fit3)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 103.8 seconds
+#> Total run time: 94.7 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>     FMA     0.4
-#>     BMA   103.4
+#>     BMA    94.3
 #> 
 #> Summary of coefficients by method:
 #> 
 #>  Method        Term Estimate      SE CI.lower CI.upper Rhat   n.eff
-#>     FMA (Intercept)  -0.8762 0.07336  -1.0194  -0.7315   NA      NA
-#>     FMA        dose   0.7916 0.13661   0.5241   1.0595   NA      NA
-#>     BMA (Intercept)  -0.8733 0.07569  -1.0266  -0.7309 1.00 1024.00
-#>     BMA        dose   0.7923 0.14167   0.5401   1.0977 1.00 1001.00
+#>     FMA (Intercept)  -0.8759 0.07349  -1.0203  -0.7321   NA      NA
+#>     FMA        dose   0.7913 0.13664   0.5243   1.0583   NA      NA
+#>     BMA (Intercept)  -0.8780 0.07121  -1.0083  -0.7337 1.00 1073.00
+#>     BMA        dose   0.8003 0.13344   0.5554   1.0806 1.00 1068.00
 #> 
 # }
 ```

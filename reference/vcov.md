@@ -60,20 +60,39 @@ dosevars <- paste0("V", 1:10)
 
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
               data=data, family="binomial", methods=c("RC", "ERC"))
-#> Error in resolve_dose_selection(sel_args, data): ℹ In argument: `all_of(dosevars)`.
-#> Caused by error:
-#> ! object 'dosevars' not found
+#> Fitting RC
+#> Fitting ERC
 
 ## Extract vcov for all available methods
 vcov(fit)
-#> Error: object 'fit' not found
+#> $RC
+#>              (Intercept)         dose
+#> (Intercept)  0.005443953 -0.008716237
+#> dose        -0.008716237  0.018908197
+#> 
+#> $ERC
+#>              (Intercept)         dose
+#> (Intercept)  0.005589966 -0.009297482
+#> dose        -0.009297482  0.020459538
+#> 
 
 ## Extract vcov for a single method, returns a matrix
 vcov(fit, methods="RC")
-#> Error: object 'fit' not found
+#>              (Intercept)         dose
+#> (Intercept)  0.005443953 -0.008716237
+#> dose        -0.008716237  0.018908197
 
 ## Extract vcov for multiple methods, returns a named list
 vcov(fit, methods=c("RC", "ERC"))
-#> Error: object 'fit' not found
+#> $RC
+#>              (Intercept)         dose
+#> (Intercept)  0.005443953 -0.008716237
+#> dose        -0.008716237  0.018908197
+#> 
+#> $ERC
+#>              (Intercept)         dose
+#> (Intercept)  0.005589966 -0.009297482
+#> dose        -0.009297482  0.020459538
+#> 
 # }
 ```
