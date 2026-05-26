@@ -14,7 +14,7 @@ the same object, intervals are only printed and not recomputed, unless
 # S3 method for class 'amerasfit'
 confint(object, parm="dose", level=0.95, 
         type=c("proflik","percentile"), maxit.profCI=20, 
-        tol.profCI=1e-2, data=NULL, force=FALSE,
+        tol.profCI=1e-2, data=NULL, force=FALSE, print=TRUE,
         digits = max(3, getOption("digits") - 3), ...)
 ```
 
@@ -101,6 +101,11 @@ confint(object, parm="dose", level=0.95,
   have already been computed for this object. Defaults to `FALSE`, in
   which case a warning is issued and the object is returned unchanged if
   confidence intervals are already present.
+
+- print:
+
+  Logical. If `TRUE` (default), confidence intervals are printed to the
+  console.
 
 - digits:
 
@@ -313,13 +318,13 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 94.7 seconds
+#> Total run time: 92.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     0.4
-#>     BMA    94.3
+#>     FMA     0.5
+#>     BMA    91.8
 #> 
 #> Summary of coefficients by method:
 #> 

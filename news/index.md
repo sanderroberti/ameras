@@ -33,7 +33,8 @@
   recomputes confidence intervals by default if they have already been
   computed. Use `force=TRUE` to recompute with different settings.
   [`confint()`](https://rdrr.io/r/stats/confint.html) now also prints
-  the computed confidence intervals.
+  the computed confidence intervals when called with `print=TRUE`
+  (default).
 - FMA and BMA output now includes a variance-covariance matrix `vcov`,
   computed from the model-averaged posterior samples.
 - It is now possible to use a `dosevars` variable defined locally (e.g.,

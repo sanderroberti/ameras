@@ -58,7 +58,7 @@
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
 <ul><li>Reduced memory usage and improved computation speed for large datasets: removed the use of N x N matrices for ERC for the proportional hazards family, and precomputed centered dose matrices for ERC are now stored and reused across likelihood evaluations rather than recomputed at each call.</li>
 <li>
-<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> no longer recomputes confidence intervals by default if they have already been computed. Use <code>force=TRUE</code> to recompute with different settings. <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now also prints the computed confidence intervals.</li>
+<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> no longer recomputes confidence intervals by default if they have already been computed. Use <code>force=TRUE</code> to recompute with different settings. <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now also prints the computed confidence intervals when called with <code>print=TRUE</code> (default).</li>
 <li>FMA and BMA output now includes a variance-covariance matrix <code>vcov</code>, computed from the model-averaged posterior samples.</li>
 <li>It is now possible to use a <code>dosevars</code> variable defined locally (e.g., within a simulation script) through <code>all_of(dosevars)</code> in the formula passed to <code><a href="../reference/ameras.html">ameras()</a></code>.</li>
 </ul></div>
