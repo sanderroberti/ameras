@@ -32,6 +32,9 @@
   confidence intervals.
 * FMA and BMA output now includes a variance-covariance matrix
   `vcov`, computed from the model-averaged posterior samples.
+* It is now possible to use a `dosevars` variable defined locally (e.g.,
+  within a simulation script) through `all_of(dosevars)` in the 
+  formula passed to `ameras()`.
 
 ## New methods and accessors
 

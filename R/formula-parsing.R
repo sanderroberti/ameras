@@ -1,4 +1,4 @@
-parse_ameras_formula <- function(formula, data, family) {
+parse_ameras_formula <- function(formula, data, family, env = parent.frame()) {
   specials <- c("dose", "strata", "offset")
   X_formula <- collect_X(formula)
 
@@ -6,7 +6,7 @@ parse_ameras_formula <- function(formula, data, family) {
     surv <- parse_surv_term(formula)
     formula[[2]] <- quote(.response)
     tt <- terms(formula, specials = specials)
-    dose <- parse_dose_term(tt, data)
+    dose <- parse_dose_term(tt, data, env = env)
 
     return(list(
       Y = NULL,
@@ -23,7 +23,7 @@ parse_ameras_formula <- function(formula, data, family) {
     ))
   } else if (family == "clogit") {
     tt <- terms(formula, specials = specials)
-    dose <- parse_dose_term(tt, data)
+    dose <- parse_dose_term(tt, data, env = env)
     strata <- parse_strata_term(tt)
 
     if (is.null(strata$setnr)) {
@@ -45,7 +45,7 @@ parse_ameras_formula <- function(formula, data, family) {
     ))
   } else if (family == "poisson") {
     tt <- terms(formula, specials = specials)
-    dose <- parse_dose_term(tt, data)
+    dose <- parse_dose_term(tt, data, env = env)
     off <- parse_offset_term(tt)
 
     return(list(
@@ -63,7 +63,7 @@ parse_ameras_formula <- function(formula, data, family) {
     ))
   } else {
     tt <- terms(formula, specials = specials)
-    dose <- parse_dose_term(tt, data)
+    dose <- parse_dose_term(tt, data, env = env)
 
     return(list(
       Y = as.character(formula[[2]]),
@@ -82,7 +82,7 @@ parse_ameras_formula <- function(formula, data, family) {
 }
 
 
-parse_dose_term <- function(tt, data) {
+parse_dose_term <- function(tt, data, env = parent.frame()) {
   special_idx <- attr(tt, "specials")$dose
   if (is.null(special_idx)) {
     stop("Formula must contain a dose() term")
@@ -100,7 +100,7 @@ parse_dose_term <- function(tt, data) {
   named_args <- dose_args[named_idx]
   sel_args <- dose_args[!named_idx]
 
-  dosevars <- resolve_dose_selection(sel_args, data)
+  dosevars <- resolve_dose_selection(sel_args, data, env = env)
   doseRRmod <- if (!is.null(named_args$model)) {
     as.character(named_args$model)
   } else {
@@ -141,14 +141,14 @@ parse_modifier <- function(expr) {
 }
 
 
-resolve_dose_selection <- function(sel_args, data) {
+resolve_dose_selection <- function(sel_args, data, env = parent.frame()) {
   sel_expr <- if (length(sel_args) == 1) {
     sel_args[[1]]
   } else {
     as.call(c(list(quote(c)), sel_args))
   }
 
-  idx <- tidyselect::eval_select(sel_expr, data)
+  idx <- tidyselect::eval_select(sel_expr, data, env = env)
   colnames(data)[idx]
 }
 

@@ -334,6 +334,8 @@ ameras <- function(
   keep.data = TRUE,
   ...
 ) {
+  call_env <- parent.frame()
+
   old_interface <- is.null(formula) || !inherits(formula, "formula")
   if (!is.null(included.replicates.BMA)) {
     included.realizations.BMA <- included.replicates.BMA
@@ -397,7 +399,7 @@ ameras <- function(
       )
     }
 
-    parsed <- parse_ameras_formula(formula, data, family)
+    parsed <- parse_ameras_formula(formula, data, family, env = call_env)
   } else {
     # Old direct argument interface
     lifecycle::deprecate_warn(
