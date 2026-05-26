@@ -344,6 +344,7 @@ confint.amerasfit <- function(
   tol.profCI = 1e-2,
   data = NULL,
   force = FALSE,
+  print = TRUE,
   digits = max(3, getOption("digits") - 3),
   ...
 ) {
@@ -463,8 +464,9 @@ confint.amerasfit <- function(
   }
 
   object$CI.computed <- TRUE
-
-  print_confint(object, parm = parm, digits = digits)
+  if (print) {
+    print_confint(object, parm = parm, digits = digits)
+  }
   invisible(object)
 }
 

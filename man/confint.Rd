@@ -14,7 +14,7 @@
 \usage{
 \method{confint}{amerasfit}(object, parm="dose", level=0.95, 
         type=c("proflik","percentile"), maxit.profCI=20, 
-        tol.profCI=1e-2, data=NULL, force=FALSE,
+        tol.profCI=1e-2, data=NULL, force=FALSE, print=TRUE,
         digits = max(3, getOption("digits") - 3), \dots)
 }
 
@@ -87,6 +87,9 @@
       they have already been computed for this object. Defaults to
       \code{FALSE}, in which case a warning is issued and the object is
       returned unchanged if confidence intervals are already present.
+  }
+  \item{print}{
+      Logical. If \code{TRUE} (default), confidence intervals are printed to the console.
   }
   \item{digits}{
       Number of significant digits to be printed. Default is `max(3, getOption("digits") - 3)`
