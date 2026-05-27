@@ -300,7 +300,9 @@ components:
 
 - vcov:
 
-  covariance matrix for the full parameter vector.
+  covariance matrix for the full parameter vector. Based on the observed
+  information (negative second derivative of log-likelihood) for RC,
+  ERC, and MCML, and on the obtained samples for FMA and BMA.
 
 - runtime:
 

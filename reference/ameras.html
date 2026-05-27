@@ -235,7 +235,7 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
 <dd><p>named vector of standard deviations.</p></dd>
 
   <dt>vcov</dt>
-<dd><p>covariance matrix for the full parameter vector.</p></dd>
+<dd><p>covariance matrix for the full parameter vector. Based on the observed information (negative second derivative of log-likelihood) for RC, ERC, and MCML, and on the obtained samples for FMA and BMA.</p></dd>
 
   <dt>runtime</dt>
 <dd><p>string with the runtime in seconds.</p></dd>
