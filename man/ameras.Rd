@@ -92,7 +92,7 @@ data frame used for model fitting when \code{keep.data=TRUE} or \code{NULL} othe
 For each method supplied to \code{methods}, the output contains a list with components:
   \item{coefficients}{named vector of model coefficients.}
   \item{sd}{named vector of standard deviations.}
-  \item{vcov}{covariance matrix for the full parameter vector.}
+  \item{vcov}{covariance matrix for the full parameter vector. Based on the observed information (negative second derivative of log-likelihood) for RC, ERC, and MCML, and on the obtained samples for FMA and BMA.}
   \item{runtime}{string with the runtime in seconds.}
   
 For RC, ERC, and MCML  the following additional output is included:
