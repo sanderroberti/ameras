@@ -66,8 +66,8 @@ If \code{methods} contains at least one of RC, ERC, and MCML and at least one of
 \item{prophaz.numints.BMA}{for \code{methods="BMA"} with \code{family="prophaz"}, the number of subintervals with constant baseline hazard (default 10). Cut points are determined based on quantiles of the event time distribution among cases.}
 \item{ERRprior.BMA}{prior for dose-related parameters when \code{doseRRmod="ERR"} or \code{"LINEXP"} and \code{methods="BMA"}.
 Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncated_doubleexponential"}, \code{"normal"}, \code{"horseshoe"}, \code{"doubleexponential"}, see Details (default \code{"doubleexponential"}).}
-\item{nburnin.BMA}{number of MCMC burn-in iterations for BMA (default 1,000).}
-\item{niter.BMA}{number of MCMC iterations per chain for BMA (default 5,000).}
+\item{nburnin.BMA}{number of MCMC burn-in iterations for BMA (default 5,000).}
+\item{niter.BMA}{number of MCMC iterations per chain for BMA (default 20,000).}
 \item{nchains.BMA}{number of MCMC chains for BMA (default 2).}
 \item{thin.BMA}{thinning rate for BMA (default 10).}
 \item{included.realizations.BMA}{indices of exposure realizations used in BMA (defaults to all realizations).}
