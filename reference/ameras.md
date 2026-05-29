@@ -224,11 +224,11 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 
 - nburnin.BMA:
 
-  number of MCMC burn-in iterations for BMA (default 1,000).
+  number of MCMC burn-in iterations for BMA (default 5,000).
 
 - niter.BMA:
 
-  number of MCMC iterations per chain for BMA (default 5,000).
+  number of MCMC iterations per chain for BMA (default 20,000).
 
 - nchains.BMA:
 
@@ -366,8 +366,8 @@ Finally, for FMA the output additionally contains:
 
 - samples:
 
-  the samples generated from the normal distributions associated with
-  each dose realization.
+  data frame with samples generated from the normal distributions
+  associated with parameters estimated for each dose realization.
 
 - weigths:
 
@@ -522,12 +522,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total runtime: 0.4 seconds
+#> Total runtime: 0.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.4
+#>      RC     0.3
 #> 
 #> Estimated model parameters:
 #> 

@@ -185,10 +185,10 @@ If <code>methods</code> contains at least one of RC, ERC, and MCML and at least 
 Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <code>"truncated_doubleexponential"</code>, <code>"normal"</code>, <code>"horseshoe"</code>, <code>"doubleexponential"</code>, see Details (default <code>"doubleexponential"</code>).</p></dd>
 
 <dt id="arg-nburnin-bma">nburnin.BMA<a class="anchor" aria-label="anchor" href="#arg-nburnin-bma"></a></dt>
-<dd><p>number of MCMC burn-in iterations for BMA (default 1,000).</p></dd>
+<dd><p>number of MCMC burn-in iterations for BMA (default 5,000).</p></dd>
 
 <dt id="arg-niter-bma">niter.BMA<a class="anchor" aria-label="anchor" href="#arg-niter-bma"></a></dt>
-<dd><p>number of MCMC iterations per chain for BMA (default 5,000).</p></dd>
+<dd><p>number of MCMC iterations per chain for BMA (default 20,000).</p></dd>
 
 <dt id="arg-nchains-bma">nchains.BMA<a class="anchor" aria-label="anchor" href="#arg-nchains-bma"></a></dt>
 <dd><p>number of MCMC chains for BMA (default 2).</p></dd>
@@ -270,7 +270,7 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
 
 </dl><p>Finally, for FMA the output additionally contains:</p>
 <dl><dt>samples</dt>
-<dd><p>the samples generated from the normal distributions associated with each dose realization.</p></dd>
+<dd><p>data frame with samples generated from the normal distributions associated with parameters estimated for each dose realization.</p></dd>
 
   <dt>weigths</dt>
 <dd><p>vector of weights corresponding to the models fit to each included realization</p></dd>
@@ -322,12 +322,12 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total runtime: 0.4 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total runtime: 0.3 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC     0.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC     0.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
