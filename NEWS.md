@@ -1,4 +1,4 @@
-# ameras (development version)
+# ameras 0.4.0
 
 ## Bug fixes
 
