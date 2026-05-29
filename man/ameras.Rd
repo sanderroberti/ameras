@@ -109,7 +109,7 @@ For BMA  the output additionally contains:
   \item{prophaz.timepoints}{for \code{family="prophaz"}, time points defining the intervals on which the estimated baseline hazards is constant; these are \code{prophaz.numints.BMA + 1} time points covering the interval \code{(min(entry), max(exit))}, based on quantiles among observed event times. See Details.}
 
 Finally, for FMA the output additionally contains:
-  \item{samples}{the samples generated from the normal distributions associated with each dose realization.}
+  \item{samples}{data frame with samples generated from the normal distributions associated with parameters estimated for each dose realization.}
   \item{weigths}{vector of weights corresponding to the models fit to each included realization}
   \item{included.samples}{the total number of samples included.}
   \item{included.realizations}{indices of realization exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results. }
