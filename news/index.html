@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ameras</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,9 +45,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="ameras-development-version">ameras (development version)<a class="anchor" aria-label="anchor" href="#ameras-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4.0" id="ameras-040">ameras 0.4.0<a class="anchor" aria-label="anchor" href="#ameras-040"></a></h2><p class="text-muted">CRAN release: 2026-05-29</p>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-4-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-0"></a></h3>
 <ul><li>Fixed a bug causing the <code>inpar</code> check in <code><a href="../reference/ameras.html">ameras()</a></code> to generate an error when it should not.</li>
 <li>Fixed an issue where FMA generated an error instead of returning <code>NULL</code> for generated samples when all individual fits were excluded.</li>
 <li>Fixed an issue where setting <code>keep.data=FALSE</code> and passing data to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> failed an internal check when effect modifiers were present.</li>
@@ -55,7 +55,7 @@
 <li>Removed the <code>isSymmetric</code> check for FMA variance matrices, which caused platform-dependent differences in included realizations due to numerical differences between Cholesky and <code>solve</code>-based computations. The Cholesky-based variance computation now used guarantees exact symmetry without an explicit check.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
+<h3 id="improvements-0-4-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-4-0"></a></h3>
 <ul><li>Reduced memory usage and improved computation speed for large datasets: removed the use of N x N matrices for ERC for the proportional hazards family, and precomputed centered dose matrices for ERC are now stored and reused across likelihood evaluations rather than recomputed at each call.</li>
 <li>
 <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> no longer recomputes confidence intervals by default if they have already been computed. Use <code>force=TRUE</code> to recompute with different settings. <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now also prints the computed confidence intervals when called with <code>print=TRUE</code> (default).</li>
@@ -63,7 +63,7 @@
 <li>It is now possible to use a <code>dosevars</code> variable defined locally (e.g., within a simulation script) through <code>all_of(dosevars)</code> in the formula passed to <code><a href="../reference/ameras.html">ameras()</a></code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-methods-and-accessors-development-version">New methods and accessors<a class="anchor" aria-label="anchor" href="#new-methods-and-accessors-development-version"></a></h3>
+<h3 id="new-methods-and-accessors-0-4-0">New methods and accessors<a class="anchor" aria-label="anchor" href="#new-methods-and-accessors-0-4-0"></a></h3>
 <ul><li>
 <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code>: computes Pearson, deviance, and response residuals for all supported families, and Schoenfeld residuals for <code>family="prophaz"</code>, supporting both raw and scaled versions following Grambsch and Therneau (1994).</li>
 <li>

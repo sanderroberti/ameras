@@ -1,6 +1,8 @@
 # Changelog
 
-## ameras (development version)
+## ameras 0.4.0
+
+CRAN release: 2026-05-29
 
 ### Bug fixes
 
