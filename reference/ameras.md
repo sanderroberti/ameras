@@ -522,12 +522,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total runtime: 0.3 seconds
+#> Total runtime: 0.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.3
+#>      RC     0.4
 #> 
 #> Estimated model parameters:
 #> 
