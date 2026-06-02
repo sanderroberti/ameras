@@ -73,13 +73,19 @@ fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data,
 fit.ameras.waldorig <- confint(fit.ameras, type="wald.orig")
 #> RC confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5663 1.135
+#>               lower   upper
+#> (Intercept) -1.2363 -0.8918
+#> X1           0.2914  0.5904
+#> X2          -0.5230 -0.1489
+#> dose         0.5663  1.1353
 fit.ameras.waldtransformed <- confint(fit.ameras, type="wald.transformed")
 #> RC confidence intervals:
 #> 
-#>      lower upper
-#> dose 0.605 1.183
+#>               lower   upper
+#> (Intercept) -1.2363 -0.8918
+#> X1           0.2914  0.5904
+#> X2          -0.5230 -0.1489
+#> dose         0.6050  1.1827
 fit.ameras.proflik <- confint(fit.ameras, type="proflik", parm="all")
 #> Obtaining profile likelihood CI for (Intercept)
 #> Obtaining profile likelihood CI for X1
@@ -171,13 +177,19 @@ fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data,
 fit.ameras.hpd <- confint(fit.ameras2, type="hpd")
 #> FMA confidence intervals:
 #> 
-#>      lower upper
-#> dose 0.564 1.132
+#>               lower   upper
+#> (Intercept) -1.2284 -0.8856
+#> X1           0.2939  0.5937
+#> X2          -0.5260 -0.1530
+#> dose         0.5640  1.1317
 fit.ameras.percentile <- confint(fit.ameras2, type="percentile")
 #> FMA confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5616  1.13
+#>               lower   upper
+#> (Intercept) -1.2290 -0.8860
+#> X1           0.2938  0.5935
+#> X2          -0.5250 -0.1518
+#> dose         0.5616  1.1298
 
 summary(fit.ameras.hpd)
 #> Call:

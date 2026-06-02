@@ -2,6 +2,16 @@
 
 ## ameras (development version)
 
+### Bug fixes
+
+- Fixed an issue with FMA where large differences in AIC values between
+  dose realizations caused `NaN` weights, resulting in an error.
+- Fixed an issue where a subsequent call to
+  [`confint()`](https://rdrr.io/r/stats/confint.html) would print
+  intervals for dose-related parameters only.
+  [`confint()`](https://rdrr.io/r/stats/confint.html) now prints
+  intervals for all parameters.
+
 ## ameras 0.4.0
 
 CRAN release: 2026-05-29

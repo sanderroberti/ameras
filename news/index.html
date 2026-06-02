@@ -46,6 +46,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ameras-development-version">ameras (development version)<a class="anchor" aria-label="anchor" href="#ameras-development-version"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>Fixed an issue with FMA where large differences in AIC values between dose realizations caused <code>NaN</code> weights, resulting in an error.</li>
+<li>Fixed an issue where a subsequent call to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> would print intervals for dose-related parameters only. <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now prints intervals for all parameters.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="ameras-040">ameras 0.4.0<a class="anchor" aria-label="anchor" href="#ameras-040"></a></h2><p class="text-muted">CRAN release: 2026-05-29</p>

@@ -209,8 +209,9 @@ fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binom
 fit <- confint(fit, type = "wald.orig")
 #> RC confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5324 1.071
+#>               lower   upper
+#> (Intercept) -1.0293 -0.7401
+#> dose         0.5324  1.0715
 #> 
 summary(fit)
 #> Call:
@@ -237,8 +238,9 @@ fit <- confint(fit, type = "proflik", parm = "dose")
 #> Confidence intervals have already been computed for this object. Returning the object unchanged. Use force=TRUE to recompute.
 #> RC confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5324 1.071
+#>               lower   upper
+#> (Intercept) -1.0293 -0.7401
+#> dose         0.5324  1.0715
 #> 
 summary(fit)
 #> Call:
@@ -305,26 +307,28 @@ fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "bino
 fit3 <- confint(fit3, type = "percentile")
 #> FMA confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5243 1.058
+#>               lower   upper
+#> (Intercept) -1.0203 -0.7321
+#> dose         0.5243  1.0583
 #> 
 #> BMA confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5554 1.081
+#>               lower   upper
+#> (Intercept) -1.0083 -0.7337
+#> dose         0.5554  1.0806
 #> 
 summary(fit3)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 94.1 seconds
+#> Total run time: 96 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>     FMA     0.4
-#>     BMA    93.7
+#>     FMA     0.5
+#>     BMA    95.5
 #> 
 #> Summary of coefficients by method:
 #> 
