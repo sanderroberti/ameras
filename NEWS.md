@@ -1,5 +1,11 @@
 # ameras (development version)
 
+## Bug fixes
+
+* Fixed an issue with FMA where large differences in AIC values between dose realizations caused `NaN` weights, resulting in an error.
+* Fixed an issue where a subsequent call to `confint()` would print intervals for dose-related parameters only. `confint()` now prints intervals for all parameters.
+
+
 # ameras 0.4.0
 
 ## Bug fixes

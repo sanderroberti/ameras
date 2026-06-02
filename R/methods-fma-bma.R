@@ -794,10 +794,10 @@ ameras.fma <- function(
   if (length(included.realizations) > 0) {
     FMAfits <- FMAfits[sapply(FMAfits, function(x) x$include)]
 
-    meanAIC <- mean(sapply(FMAfits, function(x) x$AIC))
+    minAIC <- min(sapply(FMAfits, function(x) x$AIC))
 
     FMAfits <- lapply(FMAfits, function(x) {
-      x$AIC_cent <- x$AIC - meanAIC
+      x$AIC_cent <- x$AIC - minAIC
       x
     })
 
@@ -832,12 +832,6 @@ ameras.fma <- function(
         }
 
         return(rmvnorm(n = fit.FMAi$M, mean = samplemeans, sigma = samplevar))
-
-        # if(isSymmetric(samplevar)){
-        #   return(rmvnorm(n=fit.FMAi$M, mean=samplemeans, sigma=samplevar))
-        # } else{
-        #   return(NULL)
-        # }
       },
       ...
     )

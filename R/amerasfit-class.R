@@ -104,11 +104,7 @@ coef.amerasfit <- function(object, ...) {
   res
 }
 
-print_confint <- function(
-  object,
-  parm = NULL,
-  digits = max(3, getOption("digits") - 3)
-) {
+print_confint <- function(object, digits = max(3, getOption("digits") - 3)) {
   methods_present <- intersect(
     names(object),
     c("RC", "ERC", "MCML", "FMA", "BMA")
@@ -116,33 +112,11 @@ print_confint <- function(
 
   for (m in methods_present) {
     if (is.null(object[[m]]$CI)) {
-      next
+      next()
     }
 
     cat(m, "confidence intervals:\n\n")
-
-    CI <- object[[m]]$CI
-
-    # Filter rows based on parm
-    if (!is.null(parm)) {
-      if (identical(parm, "dose")) {
-        # Match dose-related parameters
-        keep <- startsWith(rownames(CI), "dose") |
-          grepl(")_dose", rownames(CI))
-        CI <- CI[keep, , drop = FALSE]
-      } else if (!identical(parm, "all")) {
-        # Match specific parameter names
-        keep <- rownames(CI) %in% parm
-        CI <- CI[keep, , drop = FALSE]
-      }
-    }
-
-    if (nrow(CI) == 0) {
-      cat("No parameters matched parm.\n\n")
-      next
-    }
-
-    print(format(CI, digits = digits), row.names = TRUE)
+    print(format(object[[m]]$CI, digits = digits), row.names = TRUE)
     cat("\n")
   }
 
@@ -354,7 +328,7 @@ confint.amerasfit <- function(
       "Confidence intervals have already been computed for this object. ",
       "Returning the object unchanged. Use force=TRUE to recompute."
     )
-    print_confint(object, parm = parm, digits = digits)
+    print_confint(object, digits = digits)
     return(invisible(object))
   }
 
@@ -465,7 +439,7 @@ confint.amerasfit <- function(
 
   object$CI.computed <- TRUE
   if (print) {
-    print_confint(object, parm = parm, digits = digits)
+    print_confint(object, digits = digits)
   }
   invisible(object)
 }
