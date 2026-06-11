@@ -788,10 +788,23 @@ ameras.fma <- function(
     )
   }
 
-  #allfits <- FMAfits
-  included.realizations <- which(sapply(FMAfits, function(x) x$include))
+  n_total <- length(dosevars)
+  n_hess_included <- sum(sapply(FMAfits, function(x) x$include))
+  n_hess_excluded <- n_total - n_hess_included
 
-  if (length(included.realizations) > 0) {
+  # Warn for computational exclusions
+  if (n_hess_excluded > 0) {
+    warning(
+      n_hess_excluded,
+      " of ",
+      n_total,
+      " realization(s) excluded due to convergence or ",
+      "Hessian issues. Using different bounds or starting values may help."
+    )
+  }
+
+  if (sum(sapply(FMAfits, function(x) x$include)) > 0) {
+    original_indices <- which(sapply(FMAfits, function(x) x$include))
     FMAfits <- FMAfits[sapply(FMAfits, function(x) x$include)]
 
     minAIC <- min(sapply(FMAfits, function(x) x$AIC))
@@ -808,48 +821,82 @@ ameras.fma <- function(
         x$wgt <- exp(-.5 * x$AIC_cent) /
           sum(sapply(FMAfits, function(y) exp(-.5 * y$AIC_cent)))
       }
-      x$M <- max(round(x$wgt * MFMA), 1)
+      x$M <- round(x$wgt * MFMA)
+      if (x$M == 0) {
+        x$include <- FALSE
+      }
       x
     })
 
-    FMAsamples <- lapply(
-      FMAfits,
-      function(fit.FMAi, ...) {
-        if (!is.null(transform) & !is.null(transform.jacobian)) {
-          if (is.function(transform) & is.function(transform.jacobian)) {
-            samplemeans <- transform(fit.FMAi$coef, ...)
-            cholH <- chol(fit.FMAi$hess)
-            jac <- transform.jacobian(fit.FMAi$coef, ...)
-            tmpsolve <- backsolve(cholH, t(jac), transpose = TRUE)
-            samplevar <- crossprod(tmpsolve)
-            #samplevar <- jac %*% solve(fit.FMAi$hess) %*% t(jac)
+    weight_included <- sapply(FMAfits, function(x) x$include)
+    included.realizations <- original_indices[weight_included]
+    n_weight_excluded <- sum(!weight_included)
+
+    # Message for weight-based exclusions
+    if (n_weight_excluded > 0) {
+      message(
+        n_weight_excluded,
+        " realization(s) excluded due to negligible model averaging weight ",
+        "(weight < ",
+        round(0.5 / MFMA, 8),
+        " corresponding to 0 samples ",
+        "for MFMA=",
+        MFMA,
+        ")."
+      )
+    }
+
+    if (length(included.realizations) > 0) {
+      FMAfits <- FMAfits[sapply(FMAfits, function(x) x$include)]
+      FMAsamples <- lapply(
+        FMAfits,
+        function(fit.FMAi, ...) {
+          if (!is.null(transform) & !is.null(transform.jacobian)) {
+            if (is.function(transform) & is.function(transform.jacobian)) {
+              samplemeans <- transform(fit.FMAi$coef, ...)
+              cholH <- chol(fit.FMAi$hess)
+              jac <- transform.jacobian(fit.FMAi$coef, ...)
+              tmpsolve <- backsolve(cholH, t(jac), transpose = TRUE)
+              samplevar <- crossprod(tmpsolve)
+              #samplevar <- jac %*% solve(fit.FMAi$hess) %*% t(jac)
+            } else {
+              stop("transform and transform.jacobian should be functions")
+            }
           } else {
-            stop("transform and transform.jacobian should be functions")
+            samplemeans <- fit.FMAi$coef
+            samplevar <- chol2inv(chol(fit.FMAi$hess))
           }
-        } else {
-          samplemeans <- fit.FMAi$coef
-          samplevar <- chol2inv(chol(fit.FMAi$hess)) #solve(fit.FMAi$hess)
-        }
 
-        return(rmvnorm(n = fit.FMAi$M, mean = samplemeans, sigma = samplevar))
-      },
-      ...
-    )
+          return(rmvnorm(n = fit.FMAi$M, mean = samplemeans, sigma = samplevar))
+        },
+        ...
+      )
 
-    FMAsamples <- do.call("rbind", FMAsamples)
+      FMAsamples <- do.call("rbind", FMAsamples)
 
-    coefs <- colMeans(FMAsamples)
-    sd <- apply(FMAsamples, 2, sd)
-    vcov <- var(FMAsamples)
+      coefs <- colMeans(FMAsamples)
+      sd <- apply(FMAsamples, 2, sd)
+      vcov <- var(FMAsamples)
 
-    FMAsamples <- as.data.frame(FMAsamples)
-    rownames(vcov) <- colnames(vcov) <- names(coefs) <- names(sd) <- names(
-      FMAsamples
-    ) <- parnames
+      FMAsamples <- as.data.frame(FMAsamples)
+      rownames(vcov) <- colnames(vcov) <- names(coefs) <- names(sd) <- names(
+        FMAsamples
+      ) <- parnames
 
-    included.samples <- nrow(FMAsamples)
-    wgts <- sapply(FMAfits, function(x) x$wgt)
+      included.samples <- nrow(FMAsamples)
+      wgts <- sapply(FMAfits, function(x) x$wgt)
+      names(wgts) <- dosevars[included.realizations]
+    } else {
+      FMAsamples <- NULL
+      coefs <- sd <- NA * inpar
+      vcov <- matrix(NA, ncol = length(inpar), nrow = length(inpar))
+      rownames(vcov) <- colnames(vcov) <- names(coefs) <- names(sd) <- parnames
+
+      included.samples <- 0
+      wgts <- NULL
+    }
   } else {
+    included.realizations <- integer(0)
     FMAsamples <- NULL
     coefs <- sd <- NA * inpar
     vcov <- matrix(NA, ncol = length(inpar), nrow = length(inpar))
@@ -866,16 +913,25 @@ ameras.fma <- function(
     "seconds"
   )
 
-  prc_excluded <- round(
-    100 * (1 - length(included.realizations) / length(dosevars)),
-    1
-  )
-  if (length(included.realizations) / length(dosevars) < .8) {
-    warning(paste0(
-      "WARNING: ",
-      prc_excluded,
-      "% of realizations excluded from model averaging. Try different bounds or starting values."
-    ))
+  n_final <- length(included.realizations)
+
+  if (n_final == 0) {
+    warning(
+      "No realizations contributed to FMA. ",
+      "Returning NA for all estimates."
+    )
+  } else if (n_final == 1) {
+    warning(
+      "FMA is based on a single realization. ",
+      "Results do not incorporate model averaging uncertainty. ",
+      "Consider using RC instead."
+    )
+  } else if (n_final <= 5) {
+    warning(
+      "FMA is based on only ",
+      n_final,
+      " realizations. "
+    )
   }
 
   out <- list(
