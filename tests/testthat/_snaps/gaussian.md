@@ -94,8 +94,8 @@
 
 ---
 
-    c("(Intercept)" = 0.0370273042047476, dose = 0.0519364859403298, 
-    dose_squared = 0.0129118107700265, sigma = 0.0148852541053793
+    c("(Intercept)" = 0.0370220947588556, dose = 0.0519113151824632, 
+    dose_squared = 0.0129043157144241, sigma = 0.0148845339274785
     )
 
 ---
@@ -118,21 +118,21 @@
 
 # gaussian snapshot: BMA
 
-    structure(list(BMA = c(-0.86075388734466, 0.483858407793307, 
-    0.147825002240133, 1.15099747564059)), class = "data.frame", row.names = c("(Intercept)", 
+    structure(list(BMA = c(-0.861039230169073, 0.487861545224281, 
+    0.14629264262881, 1.15221514057702)), class = "data.frame", row.names = c("(Intercept)", 
     "dose", "dose_squared", "sigma"))
 
 ---
 
-    c("(Intercept)" = 0.0375232386622422, dose = 0.0452318592245169, 
-    dose_squared = 0.0111250825137037, sigma = 0.0139880095194784
+    c("(Intercept)" = 0.0418836048547209, dose = 0.0483052036046024, 
+    dose_squared = 0.0134316186907068, sigma = 0.0152618089835416
     )
 
 ---
 
-    structure(list(lower = c(-0.937124709210879, 0.395445532983898, 
-    0.122642690868872, 1.12289146189322), upper = c(-0.790254797080576, 
-    0.566691532270053, 0.16606777228885, 1.17564663726968)), class = "data.frame", row.names = c("(Intercept)", 
+    structure(list(lower = c(-0.932181495784226, 0.399744498981121, 
+    0.116521528523675, 1.12572933691506), upper = c(-0.772456861961563, 
+    0.589715462876947, 0.168357634915395, 1.18362357773664)), class = "data.frame", row.names = c("(Intercept)", 
     "dose", "dose_squared", "sigma"))
 
 ---
@@ -141,8 +141,8 @@
       print(summary(fit)$summary_table, digits = 2)
     Output
         Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (Intercept)    -0.86 0.038    -0.94    -0.79  1.0    81
-      2    BMA         dose     0.48 0.045     0.40     0.57  1.0    73
-      3    BMA dose_squared     0.15 0.011     0.12     0.17  1.1    73
-      4    BMA        sigma     1.15 0.014     1.12     1.18  1.2    91
+      1    BMA  (Intercept)    -0.86 0.042    -0.93    -0.77 0.99   100
+      2    BMA         dose     0.49 0.048     0.40     0.59 1.05    56
+      3    BMA dose_squared     0.15 0.013     0.12     0.17 1.17    32
+      4    BMA        sigma     1.15 0.015     1.13     1.18 1.00   210
 

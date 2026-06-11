@@ -22,10 +22,10 @@
     Code
       print(summary(fit1)$summary_table, digits = 2)
     Output
-        Method         Term Estimate    SE CI.lower CI.upper pval.lower pval.upper
-      1     RC  (Intercept)   -0.696 0.085       NA       NA         NA         NA
-      2     RC         dose    0.036 0.205     0.00     0.48       0.86      0.050
-      3     RC dose_squared    0.274 0.078     0.12     0.39       0.05      0.049
+        Method         Term Estimate    SE CI.lower CI.upper
+      1     RC  (Intercept)   -0.696 0.085       NA       NA
+      2     RC         dose    0.036 0.205     0.00     0.48
+      3     RC dose_squared    0.274 0.078     0.12     0.39
 
 ---
 
@@ -79,10 +79,10 @@
     Code
       print(summary(fit1)$summary_table, digits = 2)
     Output
-        Method         Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
-      1    ERC  (Intercept) -6.9e-01 0.05255       NA       NA         NA         NA
-      2    ERC         dose  5.3e-08 0.00023     0.00       NA      0.992         NA
-      3    ERC dose_squared  3.2e-01 0.04694     0.23     0.42      0.049      0.049
+        Method         Term Estimate      SE CI.lower CI.upper
+      1    ERC  (Intercept) -6.9e-01 0.05255       NA       NA
+      2    ERC         dose  5.3e-08 0.00023     0.00       NA
+      3    ERC dose_squared  3.2e-01 0.04694     0.23     0.42
 
 ---
 
@@ -135,10 +135,10 @@
     Code
       print(summary(fit1)$summary_table, digits = 2)
     Output
-        Method         Term Estimate    SE CI.lower CI.upper pval.lower pval.upper
-      1   MCML  (Intercept)  -0.6781 0.084       NA       NA         NA         NA
-      2   MCML         dose   0.0084 0.198     0.00     0.44       0.97      0.050
-      3   MCML dose_squared   0.2756 0.075     0.13     0.38       0.05      0.049
+        Method         Term Estimate    SE CI.lower CI.upper
+      1   MCML  (Intercept)  -0.6781 0.084       NA       NA
+      2   MCML         dose   0.0084 0.198     0.00     0.44
+      3   MCML dose_squared   0.2756 0.075     0.13     0.38
 
 ---
 

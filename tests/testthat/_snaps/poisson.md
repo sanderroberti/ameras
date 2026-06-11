@@ -112,20 +112,20 @@
 
 # Poisson snapshot: BMA
 
-    structure(list(BMA = c(-0.816042010970857, 0.548296349764407, 
-    -0.030468230010967)), class = "data.frame", row.names = c("(Intercept)", 
+    structure(list(BMA = c(-0.85217931252014, 0.596796037428263, 
+    -0.0394542111389367)), class = "data.frame", row.names = c("(Intercept)", 
     "dose", "dose_squared"))
 
 ---
 
-    c("(Intercept)" = 0.0848227674909227, dose = 0.102316694541126, 
-    dose_squared = 0.0174258321558769)
+    c("(Intercept)" = 0.114340566756727, dose = 0.150770058437058, 
+    dose_squared = 0.0285392945914736)
 
 ---
 
-    structure(list(lower = c(-0.936287928910797, 0.327186090023886, 
-    -0.0575862008232684), upper = c(-0.628417092320246, 0.703246734058374, 
-    0.00519617749309753)), class = "data.frame", row.names = c("(Intercept)", 
+    structure(list(lower = c(-1.08057982786042, 0.273738071459514, 
+    -0.098169394133088), upper = c(-0.60058016404825, 0.892978104234397, 
+    0.0199593865839747)), class = "data.frame", row.names = c("(Intercept)", 
     "dose", "dose_squared"))
 
 ---
@@ -134,7 +134,7 @@
       print(summary(fit)$summary_table, digits = 2)
     Output
         Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (Intercept)    -0.82 0.085   -0.936  -0.6284  1.4     7
-      2    BMA         dose     0.55 0.102    0.327   0.7032  1.8     4
-      3    BMA dose_squared    -0.03 0.017   -0.058   0.0052  1.8     4
+      1    BMA  (Intercept)   -0.852 0.114   -1.081    -0.60  1.0     7
+      2    BMA         dose    0.597 0.151    0.274     0.89  1.2     3
+      3    BMA dose_squared   -0.039 0.029   -0.098     0.02  1.5     3
 
