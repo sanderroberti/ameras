@@ -5,6 +5,12 @@
 * Fixed an issue with FMA where large differences in AIC values between dose realizations caused `NaN` weights, resulting in an error.
 * Fixed an issue where a subsequent call to `confint()` would print intervals for dose-related parameters only. `confint()` now prints intervals for all parameters.
 
+## Improvements
+
+* FMA no longer uses a cutoff of 20% excluded realizations before warning about potential computational issues. The user is now always warned about the number of excluded realizations.
+* FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are now internally excluded. The user is informed of the number of realizations excluded for this reason through a `message()`
+* Added an additional warning for FMA for the situation when results are based on only 1 or 2-5 realizations after exclusions.
+* Streamlined information printed by `summary()` and `confint()`: columns `pval.lower` and `pval.upper` for profile likelihood intervals are no longer printed. They are still accessible within the fit object, and warnings are still printed in case an inaccurate profile likelihood bound is suspected.
 
 # ameras 0.4.0
 
