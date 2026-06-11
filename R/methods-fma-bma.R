@@ -1,3 +1,13 @@
+summarize_fma_realization_fit <- function(fit, npar) {
+  list(
+    coef = fit$par,
+    hess = fit$hessian,
+    AIC = 2 * fit$value + 2 * npar,
+    convergence = fit$convergence,
+    include = fit_passes_hessian_check(fit)
+  )
+}
+
 ameras.fma <- function(
   family,
   dosevars,
@@ -38,7 +48,7 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      fit.FMAi <- optim(
+      fit.FMAi <- fit_objective_with_hessian(
         inpar,
         loglik.gaussian,
         D = dosevars[Xi],
@@ -49,59 +59,13 @@ ameras.fma <- function(
         deg = deg,
         ERC = FALSE,
         transform = transform,
-        method = optim.method,
+        optim.method = optim.method,
         control = control,
         ...
       )
-      if (optim.method == "Nelder-Mead") {
-        fit.FMAi <- optim(
-          fit.FMAi$par,
-          loglik.gaussian,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          method = "BFGS",
-          control = control,
-          ...
-        )
-      }
-
-      fit.FMAi$hessian <- numDeriv::hessian(
-        func = loglik.gaussian,
-        x = fit.FMAi$par,
-        D = dosevars[Xi],
-        X = X,
-        Y = Y,
-        M = M,
-        data = data,
-        deg = deg,
-        ERC = FALSE,
-        transform = transform,
-        ...
-      )
-
-      if (
-        det(fit.FMAi$hessian) != 0 &
-          rcond(fit.FMAi$hessian) > .Machine$double.eps &
-          fit.FMAi$convergence == 0 &
-          all(eigen(fit.FMAi$hessian)$values > 0)
-      ) {
-        include <- TRUE
-      } else {
-        include <- FALSE
-      }
-
-      list(
-        coef = fit.FMAi$par,
-        hess = fit.FMAi$hessian,
-        AIC = 2 * fit.FMAi$value + 2 * (2 + length(X) + length(M) * deg + deg),
-        convergence = fit.FMAi$convergence,
-        include = include
+      summarize_fma_realization_fit(
+        fit.FMAi,
+        2 + length(X) + length(M) * deg + deg
       )
     })
 
@@ -130,7 +94,7 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      fit.FMAi <- optim(
+      fit.FMAi <- fit_objective_with_hessian(
         inpar,
         loglik.binomial,
         D = dosevars[Xi],
@@ -142,60 +106,13 @@ ameras.fma <- function(
         deg = deg,
         ERC = FALSE,
         transform = transform,
-        method = optim.method,
+        optim.method = optim.method,
         control = control,
         ...
       )
-      if (optim.method == "Nelder-Mead") {
-        fit.FMAi <- optim(
-          fit.FMAi$par,
-          loglik.binomial,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          method = "BFGS",
-          control = control,
-          ...
-        )
-      }
-      fit.FMAi$hessian <- numDeriv::hessian(
-        func = loglik.binomial,
-        x = fit.FMAi$par,
-        D = dosevars[Xi],
-        X = X,
-        Y = Y,
-        M = M,
-        doseRRmod = doseRRmod,
-        data = data,
-        deg = deg,
-        ERC = FALSE,
-        transform = transform,
-        ...
-      )
-
-      if (
-        det(fit.FMAi$hessian) != 0 &
-          rcond(fit.FMAi$hessian) > .Machine$double.eps &
-          fit.FMAi$convergence == 0 &
-          all(eigen(fit.FMAi$hessian)$values > 0)
-      ) {
-        include <- TRUE
-      } else {
-        include <- FALSE
-      }
-
-      list(
-        coef = fit.FMAi$par,
-        hess = fit.FMAi$hessian,
-        AIC = 2 * fit.FMAi$value + 2 * (1 + length(X) + length(M) * deg + deg),
-        convergence = fit.FMAi$convergence,
-        include = include
+      summarize_fma_realization_fit(
+        fit.FMAi,
+        1 + length(X) + length(M) * deg + deg
       )
     })
 
@@ -241,7 +158,7 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      fit.FMAi <- optim(
+      fit.FMAi <- fit_objective_with_hessian(
         inpar,
         loglik.poisson,
         D = dosevars[Xi],
@@ -253,60 +170,13 @@ ameras.fma <- function(
         data = data,
         deg = deg,
         transform = transform,
-        method = optim.method,
+        optim.method = optim.method,
         control = control,
         ...
       )
-      if (optim.method == "Nelder-Mead") {
-        fit.FMAi <- optim(
-          fit.FMAi$par,
-          loglik.poisson,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          offset = offset,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          transform = transform,
-          method = "BFGS",
-          control = control,
-          ...
-        )
-      }
-      fit.FMAi$hessian <- numDeriv::hessian(
-        func = loglik.poisson,
-        x = fit.FMAi$par,
-        D = dosevars[Xi],
-        X = X,
-        Y = Y,
-        M = M,
-        offset = offset,
-        doseRRmod = doseRRmod,
-        data = data,
-        deg = deg,
-        transform = transform,
-        ...
-      )
-
-      if (
-        det(fit.FMAi$hessian) != 0 &
-          rcond(fit.FMAi$hessian) > .Machine$double.eps &
-          fit.FMAi$convergence == 0 &
-          all(eigen(fit.FMAi$hessian)$values > 0)
-      ) {
-        include <- TRUE
-      } else {
-        include <- FALSE
-      }
-
-      list(
-        coef = fit.FMAi$par,
-        hess = fit.FMAi$hessian,
-        AIC = 2 * fit.FMAi$value + 2 * (1 + length(X) + length(M) * deg + deg),
-        convergence = fit.FMAi$convergence,
-        include = include
+      summarize_fma_realization_fit(
+        fit.FMAi,
+        1 + length(X) + length(M) * deg + deg
       )
     })
 
@@ -357,115 +227,26 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      if (length(X) + length(M) * deg + deg == 1) {
-        # Optimize 1-dimensional model: use optimize instead of optim
-        fit0 <- optimize(
-          f = loglik.clogit,
-          lower = -20,
-          upper = 5,
-          D = dosevars[Xi],
-          status = status,
-          X = X,
-          M = M,
-          designmat = designmat,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          ...
-        )
-        fit.FMAi <- list(
-          par = fit0$minimum,
-          value = fit0$objective,
-          convergence = 0,
-          hessian = numDeriv::hessian(
-            func = loglik.clogit,
-            x = fit0$minimum,
-            D = dosevars[Xi],
-            status = status,
-            X = X,
-            M = M,
-            designmat = designmat,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            ERC = FALSE,
-            transform = transform,
-            ...
-          )
-        )
-      } else {
-        fit.FMAi <- optim(
-          inpar,
-          loglik.clogit,
-          D = dosevars[Xi],
-          status = status,
-          X = X,
-          M = M,
-          designmat = designmat,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          method = optim.method,
-          control = control,
-          ...
-        )
-        if (optim.method == "Nelder-Mead") {
-          fit.FMAi <- optim(
-            fit.FMAi$par,
-            loglik.clogit,
-            D = dosevars[Xi],
-            status = status,
-            X = X,
-            M = M,
-            designmat = designmat,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            ERC = FALSE,
-            transform = transform,
-            method = "BFGS",
-            control = control,
-            ...
-          )
-        }
-        fit.FMAi$hessian <- numDeriv::hessian(
-          func = loglik.clogit,
-          x = fit.FMAi$par,
-          D = dosevars[Xi],
-          status = status,
-          X = X,
-          M = M,
-          designmat = designmat,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          ...
-        )
-      }
-
-      if (
-        det(fit.FMAi$hessian) != 0 &
-          rcond(fit.FMAi$hessian) > .Machine$double.eps &
-          fit.FMAi$convergence == 0 &
-          all(eigen(fit.FMAi$hessian)$values > 0)
-      ) {
-        include <- TRUE
-      } else {
-        include <- FALSE
-      }
-
-      list(
-        coef = fit.FMAi$par,
-        hess = fit.FMAi$hessian,
-        AIC = 2 * fit.FMAi$value + 2 * (length(X) + length(M) * deg + deg),
-        convergence = fit.FMAi$convergence,
-        include = include
+      fit.FMAi <- fit_objective_with_hessian(
+        inpar,
+        loglik.clogit,
+        D = dosevars[Xi],
+        status = status,
+        X = X,
+        M = M,
+        designmat = designmat,
+        doseRRmod = doseRRmod,
+        data = data,
+        deg = deg,
+        ERC = FALSE,
+        transform = transform,
+        optim.method = optim.method,
+        control = control,
+        ...
+      )
+      summarize_fma_realization_fit(
+        fit.FMAi,
+        length(X) + length(M) * deg + deg
       )
     })
 
@@ -515,120 +296,27 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      if (length(X) + length(M) * deg + deg == 1) {
-        # Optimize 1-dimensional model: use optimize instead of optim
-        fit0 <- optimize(
-          f = loglik.prophaz,
-          lower = -20,
-          upper = 5,
-          D = dosevars[Xi],
-          status = status,
-          X = X,
-          M = M,
-          entry = entry,
-          exit = exit,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          ...
-        )
-        fit.FMAi <- list(
-          par = fit0$minimum,
-          value = fit0$objective,
-          convergence = 0,
-          hessian = numDeriv::hessian(
-            func = loglik.prophaz,
-            x = fit0$minimum,
-            D = dosevars[Xi],
-            status = status,
-            X = X,
-            M = M,
-            entry = entry,
-            exit = exit,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            ERC = FALSE,
-            transform = transform,
-            ...
-          )
-        )
-      } else {
-        fit.FMAi <- optim(
-          inpar,
-          loglik.prophaz,
-          D = dosevars[Xi],
-          status = status,
-          X = X,
-          M = M,
-          entry = entry,
-          exit = exit,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          method = optim.method,
-          control = control,
-          ...
-        )
-        if (optim.method == "Nelder-Mead") {
-          fit.FMAi <- optim(
-            fit.FMAi$par,
-            loglik.prophaz,
-            D = dosevars[Xi],
-            status = status,
-            X = X,
-            M = M,
-            entry = entry,
-            exit = exit,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            ERC = FALSE,
-            transform = transform,
-            method = "BFGS",
-            control = control,
-            ...
-          )
-        }
-        fit.FMAi$hessian <- numDeriv::hessian(
-          func = loglik.prophaz,
-          x = fit.FMAi$par,
-          D = dosevars[Xi],
-          status = status,
-          X = X,
-          M = M,
-          entry = entry,
-          exit = exit,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          ...
-        )
-      }
-
-      if (
-        det(fit.FMAi$hessian) != 0 &
-          rcond(fit.FMAi$hessian) > .Machine$double.eps &
-          fit.FMAi$convergence == 0 &
-          all(eigen(fit.FMAi$hessian)$values > 0)
-      ) {
-        include <- TRUE
-      } else {
-        include <- FALSE
-      }
-
-      list(
-        coef = fit.FMAi$par,
-        hess = fit.FMAi$hessian,
-        AIC = 2 * fit.FMAi$value + 2 * (length(X) + length(M) * deg + deg),
-        convergence = fit.FMAi$convergence,
-        include = include
+      fit.FMAi <- fit_objective_with_hessian(
+        inpar,
+        loglik.prophaz,
+        D = dosevars[Xi],
+        status = status,
+        X = X,
+        M = M,
+        entry = entry,
+        exit = exit,
+        doseRRmod = doseRRmod,
+        data = data,
+        deg = deg,
+        ERC = FALSE,
+        transform = transform,
+        optim.method = optim.method,
+        control = control,
+        ...
+      )
+      summarize_fma_realization_fit(
+        fit.FMAi,
+        length(X) + length(M) * deg + deg
       )
     })
 
@@ -676,7 +364,7 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      fit.FMAi <- optim(
+      fit.FMAi <- fit_objective_with_hessian(
         inpar,
         loglik.multinomial,
         D = dosevars[Xi],
@@ -688,60 +376,13 @@ ameras.fma <- function(
         deg = deg,
         ERC = FALSE,
         transform = transform,
-        method = optim.method,
+        optim.method = optim.method,
         control = control,
         ...
       )
-      if (optim.method == "Nelder-Mead") {
-        fit.FMAi <- optim(
-          fit.FMAi$par,
-          loglik.multinomial,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          method = "BFGS",
-          control = control,
-          ...
-        )
-      }
-      fit.FMAi$hessian <- numDeriv::hessian(
-        func = loglik.multinomial,
-        x = fit.FMAi$par,
-        D = dosevars[Xi],
-        X = X,
-        Y = Y,
-        M = M,
-        doseRRmod = doseRRmod,
-        data = data,
-        deg = deg,
-        ERC = FALSE,
-        transform = transform,
-        ...
-      )
-
-      if (
-        det(fit.FMAi$hessian) != 0 &
-          rcond(fit.FMAi$hessian) > .Machine$double.eps &
-          fit.FMAi$convergence == 0 &
-          all(eigen(fit.FMAi$hessian)$values > 0)
-      ) {
-        include <- TRUE
-      } else {
-        include <- FALSE
-      }
-
-      list(
-        coef = fit.FMAi$par,
-        hess = fit.FMAi$hessian,
-        AIC = 2 * fit.FMAi$value + 2 * (1 + length(X) + length(M) * deg + deg),
-        convergence = fit.FMAi$convergence,
-        include = include
+      summarize_fma_realization_fit(
+        fit.FMAi,
+        1 + length(X) + length(M) * deg + deg
       )
     })
 
@@ -1010,78 +651,18 @@ ameras.bma <- function(
 
   t0 <- proc.time()
 
+  if (is.null(included.realizations)) {
+    stop(
+      "Automatic BMA realization screening is not currently enabled. ",
+      "Supply included.realizations explicitly."
+    )
+  }
+
   if (family == "gaussian") {
     if (is.null(Y)) {
       stop("Y is required for family=gaussian")
     }
 
-    if (is.null(included.realizations)) {
-      if (is.null(inpar)) {
-        inpar <- rep(0, 2 + length(X) + length(M) * deg + deg)
-      }
-
-      toInclude <- sapply(1:length(dosevars), function(Xi) {
-        fit.FMAi <- optim(
-          inpar,
-          loglik.gaussian,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          method = optim.method,
-          control = control,
-          ...
-        )
-        if (optim.method == "Nelder-Mead") {
-          fit.FMAi <- optim(
-            fit.FMAi$par,
-            loglik.gaussian,
-            D = dosevars[Xi],
-            X = X,
-            Y = Y,
-            M = M,
-            data = data,
-            deg = deg,
-            ERC = FALSE,
-            transform = transform,
-            method = "BFGS",
-            control = control,
-            ...
-          )
-        }
-        fit.FMAi$hessian <- numDeriv::hessian(
-          func = loglik.gaussian,
-          x = fit.FMAi$par,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          ...
-        )
-
-        if (
-          det(fit.FMAi$hessian) != 0 &
-            rcond(fit.FMAi$hessian) > .Machine$double.eps &
-            fit.FMAi$convergence == 0 &
-            all(eigen(fit.FMAi$hessian)$values > 0)
-        ) {
-          include <- TRUE
-        } else {
-          include <- FALSE
-        }
-
-        return(include)
-      })
-      included.realizations <- which(toInclude == TRUE)
-    }
     dosevars <- dosevars[included.realizations]
 
     nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars])
@@ -1113,77 +694,6 @@ ameras.bma <- function(
     }
     if (is.null(doseRRmod)) {
       stop("doseRRmod is required for family=binomial")
-    }
-
-    if (is.null(included.realizations)) {
-      if (is.null(inpar)) {
-        inpar <- rep(0, 1 + length(X) + length(M) * deg + deg)
-      }
-
-      toInclude <- sapply(1:length(dosevars), function(Xi) {
-        fit.FMAi <- optim(
-          inpar,
-          loglik.binomial,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          method = optim.method,
-          control = control,
-          ...
-        )
-        if (optim.method == "Nelder-Mead") {
-          fit.FMAi <- optim(
-            fit.FMAi$par,
-            loglik.binomial,
-            D = dosevars[Xi],
-            X = X,
-            Y = Y,
-            M = M,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            ERC = FALSE,
-            transform = transform,
-            method = "BFGS",
-            control = control,
-            ...
-          )
-        }
-        fit.FMAi$hessian <- numDeriv::hessian(
-          func = loglik.binomial,
-          x = fit.FMAi$par,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          ...
-        )
-
-        if (
-          det(fit.FMAi$hessian) != 0 &
-            rcond(fit.FMAi$hessian) > .Machine$double.eps &
-            fit.FMAi$convergence == 0 &
-            all(eigen(fit.FMAi$hessian)$values > 0)
-        ) {
-          include <- TRUE
-        } else {
-          include <- FALSE
-        }
-
-        return(include)
-      })
-      included.realizations <- which(toInclude == TRUE)
     }
 
     dosevars <- dosevars[included.realizations]
@@ -1224,76 +734,6 @@ ameras.bma <- function(
       P <- data[, offset]
     }
 
-    if (is.null(included.realizations)) {
-      if (is.null(inpar)) {
-        inpar <- rep(0, 1 + length(X) + length(M) * deg + deg)
-      }
-
-      toInclude <- sapply(1:length(dosevars), function(Xi) {
-        fit.FMAi <- optim(
-          inpar,
-          loglik.poisson,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          offset = offset,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          transform = transform,
-          method = optim.method,
-          control = control,
-          ...
-        )
-        if (optim.method == "Nelder-Mead") {
-          fit.FMAi <- optim(
-            fit.FMAi$par,
-            loglik.poisson,
-            D = dosevars[Xi],
-            X = X,
-            Y = Y,
-            M = M,
-            offset = offset,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            transform = transform,
-            method = "BFGS",
-            control = control,
-            ...
-          )
-        }
-        fit.FMAi$hessian <- numDeriv::hessian(
-          func = loglik.poisson,
-          x = fit.FMAi$par,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          offset = offset,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          transform = transform,
-          ...
-        )
-
-        if (
-          det(fit.FMAi$hessian) != 0 &
-            rcond(fit.FMAi$hessian) > .Machine$double.eps &
-            fit.FMAi$convergence == 0 &
-            all(eigen(fit.FMAi$hessian)$values > 0)
-        ) {
-          include <- TRUE
-        } else {
-          include <- FALSE
-        }
-
-        return(include)
-      })
-      included.realizations <- which(toInclude == TRUE)
-    }
     dosevars <- dosevars[included.realizations]
 
     nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars])
@@ -1327,120 +767,6 @@ ameras.bma <- function(
     }
     if (is.null(status)) {
       stop("status is required for family=prophaz")
-    }
-
-    if (is.null(included.realizations)) {
-      if (is.null(inpar)) {
-        inpar <- rep(0, length(X) + length(M) * deg + deg)
-      }
-
-      toInclude <- sapply(1:length(dosevars), function(Xi) {
-        if (length(X) + length(M) * deg + deg == 1) {
-          # Optimize 1-dimensional model: use optimize instead of optim
-          fit0 <- optimize(
-            f = loglik.prophaz,
-            lower = -20,
-            upper = 5,
-            D = dosevars[Xi],
-            status = status,
-            X = X,
-            M = M,
-            entry = entry,
-            exit = exit,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            transform = transform,
-            ...
-          )
-          fit.FMAi <- list(
-            par = fit0$minimum,
-            value = fit0$objective,
-            convergence = 0,
-            hessian = numDeriv::hessian(
-              func = loglik.prophaz,
-              x = fit0$minimum,
-              D = dosevars[Xi],
-              status = status,
-              X = X,
-              M = M,
-              entry = entry,
-              exit = exit,
-              doseRRmod = doseRRmod,
-              data = data,
-              deg = deg,
-              transform = transform,
-              ...
-            )
-          )
-        } else {
-          fit.FMAi <- optim(
-            inpar,
-            loglik.prophaz,
-            D = dosevars[Xi],
-            status = status,
-            X = X,
-            M = M,
-            entry = entry,
-            exit = exit,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            transform = transform,
-            method = optim.method,
-            control = control,
-            ...
-          )
-          if (optim.method == "Nelder-Mead") {
-            fit.FMAi <- optim(
-              fit.FMAi$par,
-              loglik.prophaz,
-              D = dosevars[Xi],
-              status = status,
-              X = X,
-              M = M,
-              entry = entry,
-              exit = exit,
-              doseRRmod = doseRRmod,
-              data = data,
-              deg = deg,
-              transform = transform,
-              method = "BFGS",
-              control = control,
-              ...
-            )
-          }
-          fit.FMAi$hessian <- numDeriv::hessian(
-            func = loglik.prophaz,
-            x = fit.FMAi$par,
-            D = dosevars[Xi],
-            status = status,
-            X = X,
-            M = M,
-            entry = entry,
-            exit = exit,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            transform = transform,
-            ...
-          )
-        }
-
-        if (
-          det(fit.FMAi$hessian) != 0 &
-            rcond(fit.FMAi$hessian) > .Machine$double.eps &
-            fit.FMAi$convergence == 0 &
-            all(eigen(fit.FMAi$hessian)$values > 0)
-        ) {
-          include <- TRUE
-        } else {
-          include <- FALSE
-        }
-
-        return(include)
-      })
-      included.realizations <- which(toInclude == TRUE)
     }
 
     dosevars <- dosevars[included.realizations]
@@ -1522,122 +848,6 @@ ameras.bma <- function(
     set_start <- cumsum(c(1, head(set_sizes, -1)))
     set_end <- cumsum(set_sizes)
 
-    if (is.null(included.realizations)) {
-      designmat <- t(model.matrix(~ as.factor(data[, setnr]) - 1))
-
-      if (is.null(inpar)) {
-        inpar <- rep(0, length(X) + length(M) * deg + deg)
-      }
-
-      toInclude <- sapply(1:length(dosevars), function(Xi) {
-        if (length(X) + length(M) * deg + deg == 1) {
-          # Optimize 1-dimensional model: use optimize instead of optim
-          fit0 <- optimize(
-            f = loglik.clogit,
-            lower = -20,
-            upper = 5,
-            D = dosevars[Xi],
-            status = status,
-            X = X,
-            M = M,
-            designmat = designmat,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            ERC = FALSE,
-            transform = transform,
-            ...
-          )
-          fit.FMAi <- list(
-            par = fit0$minimum,
-            value = fit0$objective,
-            convergence = 0,
-            hessian = numDeriv::hessian(
-              func = loglik.clogit,
-              x = fit0$minimum,
-              D = dosevars[Xi],
-              status = status,
-              X = X,
-              M = M,
-              designmat = designmat,
-              doseRRmod = doseRRmod,
-              data = data,
-              deg = deg,
-              ERC = FALSE,
-              transform = transform,
-              ...
-            )
-          )
-        } else {
-          fit.FMAi <- optim(
-            inpar,
-            loglik.clogit,
-            D = dosevars[Xi],
-            status = status,
-            X = X,
-            M = M,
-            designmat = designmat,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            ERC = FALSE,
-            transform = transform,
-            method = optim.method,
-            control = control,
-            ...
-          )
-          if (optim.method == "Nelder-Mead") {
-            fit.FMAi <- optim(
-              fit.FMAi$par,
-              loglik.clogit,
-              D = dosevars[Xi],
-              status = status,
-              X = X,
-              M = M,
-              designmat = designmat,
-              doseRRmod = doseRRmod,
-              data = data,
-              deg = deg,
-              ERC = FALSE,
-              transform = transform,
-              method = "BFGS",
-              control = control,
-              ...
-            )
-          }
-          fit.FMAi$hessian <- numDeriv::hessian(
-            func = loglik.clogit,
-            x = fit.FMAi$par,
-            D = dosevars[Xi],
-            status = status,
-            X = X,
-            M = M,
-            designmat = designmat,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            ERC = FALSE,
-            transform = transform,
-            ...
-          )
-        }
-
-        if (
-          det(fit.FMAi$hessian) != 0 &
-            rcond(fit.FMAi$hessian) > .Machine$double.eps &
-            fit.FMAi$convergence == 0 &
-            all(eigen(fit.FMAi$hessian)$values > 0)
-        ) {
-          include <- TRUE
-        } else {
-          include <- FALSE
-        }
-
-        return(include)
-      })
-      included.realizations <- which(toInclude == TRUE)
-    }
-
     dosevars <- dosevars[included.realizations]
 
     nimbledata <- list(
@@ -1670,77 +880,6 @@ ameras.bma <- function(
     }
 
     Z <- nlevels(data[, Y])
-    if (is.null(included.realizations)) {
-      if (is.null(inpar)) {
-        inpar <- rep(0, (Z - 1) * (1 + length(X) + length(M) * deg + deg))
-      }
-
-      toInclude <- sapply(1:length(dosevars), function(Xi) {
-        fit.FMAi <- optim(
-          inpar,
-          loglik.multinomial,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          method = optim.method,
-          control = control,
-          ...
-        )
-        if (optim.method == "Nelder-Mead") {
-          fit.FMAi <- optim(
-            fit.FMAi$par,
-            loglik.multinomial,
-            D = dosevars[Xi],
-            X = X,
-            Y = Y,
-            M = M,
-            doseRRmod = doseRRmod,
-            data = data,
-            deg = deg,
-            ERC = FALSE,
-            transform = transform,
-            method = "BFGS",
-            control = control,
-            ...
-          )
-        }
-        fit.FMAi$hessian <- numDeriv::hessian(
-          func = loglik.multinomial,
-          x = fit.FMAi$par,
-          D = dosevars[Xi],
-          X = X,
-          Y = Y,
-          M = M,
-          doseRRmod = doseRRmod,
-          data = data,
-          deg = deg,
-          ERC = FALSE,
-          transform = transform,
-          ...
-        )
-
-        if (
-          det(fit.FMAi$hessian) != 0 &
-            rcond(fit.FMAi$hessian) > .Machine$double.eps &
-            fit.FMAi$convergence == 0 &
-            all(eigen(fit.FMAi$hessian)$values > 0)
-        ) {
-          include <- TRUE
-        } else {
-          include <- FALSE
-        }
-
-        return(include)
-      })
-      included.realizations <- which(toInclude == TRUE)
-    }
-
     dosevars <- dosevars[included.realizations]
 
     nimbledata <- list(
