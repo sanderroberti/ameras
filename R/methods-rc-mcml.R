@@ -62,22 +62,6 @@ ameras.mcml <- function(
       ) # with explim=7e1
       #return(mean(logliks)) # mean of log likelihoods
     }
-
-    parnames <- c(
-      "(Intercept)",
-      names(data[, X, drop = FALSE]),
-      c("dose", "dose_squared")[1:deg]
-    )
-    if (!is.null(M)) {
-      parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-      if (deg == 2) {
-        parnames <- c(
-          parnames,
-          paste0("dose_squared:", names(data[, M, drop = FALSE]))
-        )
-      }
-    }
-    parnames <- c(parnames, "sigma")
   } else if (family == "binomial") {
     if (is.null(Y)) {
       stop("Y is required for family=binomial")
@@ -113,39 +97,6 @@ ameras.mcml <- function(
       ) # with explim=7e1
       #return(mean(logliks)) # mean of log likelihoods
     }
-
-    if (doseRRmod != "LINEXP") {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose", "dose_squared")[1:deg]
-      )
-      if (!is.null(M)) {
-        parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-        if (deg == 2) {
-          parnames <- c(
-            parnames,
-            paste0("dose_squared:", names(data[, M, drop = FALSE]))
-          )
-        }
-      }
-    } else {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose_linear", "dose_exponential")
-      )
-      if (!is.null(M)) {
-        parnames <- c(
-          parnames,
-          paste0("dose_linear:", names(data[, M, drop = FALSE]))
-        )
-        parnames <- c(
-          parnames,
-          paste0("dose_exponential:", names(data[, M, drop = FALSE]))
-        )
-      }
-    }
   } else if (family == "poisson") {
     if (is.null(Y)) {
       stop("Y is required for family=poisson")
@@ -180,39 +131,6 @@ ameras.mcml <- function(
           max(-1 * logliks)
       ) # with explim=7e1
       #return(mean(logliks)) # mean of log likelihoods
-    }
-
-    if (doseRRmod != "LINEXP") {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose", "dose_squared")[1:deg]
-      )
-      if (!is.null(M)) {
-        parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-        if (deg == 2) {
-          parnames <- c(
-            parnames,
-            paste0("dose_squared:", names(data[, M, drop = FALSE]))
-          )
-        }
-      }
-    } else {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose_linear", "dose_exponential")
-      )
-      if (!is.null(M)) {
-        parnames <- c(
-          parnames,
-          paste0("dose_linear:", names(data[, M, drop = FALSE]))
-        )
-        parnames <- c(
-          parnames,
-          paste0("dose_exponential:", names(data[, M, drop = FALSE]))
-        )
-      }
     }
   } else if (family == "clogit") {
     if (is.null(doseRRmod)) {
@@ -253,37 +171,6 @@ ameras.mcml <- function(
           max(-1 * logliks)
       ) # with explim=7e1
       #return(mean(logliks)) # mean of log likelihoods
-    }
-
-    if (doseRRmod != "LINEXP") {
-      parnames <- c(
-        names(data[, X, drop = FALSE]),
-        c("dose", "dose_squared")[1:deg]
-      )
-      if (!is.null(M)) {
-        parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-        if (deg == 2) {
-          parnames <- c(
-            parnames,
-            paste0("dose_squared:", names(data[, M, drop = FALSE]))
-          )
-        }
-      }
-    } else {
-      parnames <- c(
-        names(data[, X, drop = FALSE]),
-        c("dose_linear", "dose_exponential")
-      )
-      if (!is.null(M)) {
-        parnames <- c(
-          parnames,
-          paste0("dose_linear:", names(data[, M, drop = FALSE]))
-        )
-        parnames <- c(
-          parnames,
-          paste0("dose_exponential:", names(data[, M, drop = FALSE]))
-        )
-      }
     }
   } else if (family == "prophaz") {
     if (is.null(exit)) {
@@ -327,37 +214,6 @@ ameras.mcml <- function(
       ) # with explim=7e1
       #return(mean(logliks)) # mean of log likelihoods
     }
-
-    if (doseRRmod != "LINEXP") {
-      parnames <- c(
-        names(data[, X, drop = FALSE]),
-        c("dose", "dose_squared")[1:deg]
-      )
-      if (!is.null(M)) {
-        parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-        if (deg == 2) {
-          parnames <- c(
-            parnames,
-            paste0("dose_squared:", names(data[, M, drop = FALSE]))
-          )
-        }
-      }
-    } else {
-      parnames <- c(
-        names(data[, X, drop = FALSE]),
-        c("dose_linear", "dose_exponential")
-      )
-      if (!is.null(M)) {
-        parnames <- c(
-          parnames,
-          paste0("dose_linear:", names(data[, M, drop = FALSE]))
-        )
-        parnames <- c(
-          parnames,
-          paste0("dose_exponential:", names(data[, M, drop = FALSE]))
-        )
-      }
-    }
   } else if (family == "multinomial") {
     if (is.null(Y)) {
       stop("Y is required for family=multinomial")
@@ -397,49 +253,16 @@ ameras.mcml <- function(
       ) # with explim=7e1
       #return(mean(logliks)) # mean of log likelihoods
     }
-
-    if (doseRRmod != "LINEXP") {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose", "dose_squared")[1:deg]
-      )
-      if (!is.null(M)) {
-        parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-        if (deg == 2) {
-          parnames <- c(
-            parnames,
-            paste0("dose_squared:", names(data[, M, drop = FALSE]))
-          )
-        }
-      }
-    } else {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose_linear", "dose_exponential")
-      )
-      if (!is.null(M)) {
-        parnames <- c(
-          parnames,
-          paste0("dose_linear:", names(data[, M, drop = FALSE]))
-        )
-        parnames <- c(
-          parnames,
-          paste0("dose_exponential:", names(data[, M, drop = FALSE]))
-        )
-      }
-    }
-
-    mylv <- levels(data[, Y])
-
-    mylv <- mylv[-length(mylv)]
-
-    parnames <- do.call(
-      "c",
-      lapply(mylv, function(lv) paste0("(", lv, ")_", parnames))
-    )
   }
+  parnames <- make_method_parnames(
+    family = family,
+    data = data,
+    Y = Y,
+    X = X,
+    M = M,
+    deg = deg,
+    doseRRmod = doseRRmod
+  )
   t0 <- proc.time()
   if (length(parnames) == 1) {
     # Optimize 1-dimensional model: use optimize instead of optim
@@ -642,22 +465,6 @@ ameras.rc <- function(
       ...
     )
 
-    parnames <- c(
-      "(Intercept)",
-      names(data[, X, drop = FALSE]),
-      c("dose", "dose_squared")[1:deg]
-    )
-    if (!is.null(M)) {
-      parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-
-      if (deg == 2) {
-        parnames <- c(
-          parnames,
-          paste0("dose_squared:", names(data[, M, drop = FALSE]))
-        )
-      }
-    }
-    parnames <- c(parnames, "sigma")
   } else if (family == "binomial") {
     if (is.null(Y)) {
       stop("Y is required for family=binomial")
@@ -726,38 +533,6 @@ ameras.rc <- function(
       ...
     )
 
-    if (doseRRmod != "LINEXP") {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose", "dose_squared")[1:deg]
-      )
-      if (!is.null(M)) {
-        parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-        if (deg == 2) {
-          parnames <- c(
-            parnames,
-            paste0("dose_squared:", names(data[, M, drop = FALSE]))
-          )
-        }
-      }
-    } else {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose_linear", "dose_exponential")
-      )
-      if (!is.null(M)) {
-        parnames <- c(
-          parnames,
-          paste0("dose_linear:", names(data[, M, drop = FALSE]))
-        )
-        parnames <- c(
-          parnames,
-          paste0("dose_exponential:", names(data[, M, drop = FALSE]))
-        )
-      }
-    }
   } else if (family == "poisson") {
     if (is.null(Y)) {
       stop("Y is required for family=poisson")
@@ -891,38 +666,6 @@ ameras.rc <- function(
         transform = transform,
         ...
       )
-    }
-    if (doseRRmod != "LINEXP") {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose", "dose_squared")[1:deg]
-      )
-      if (!is.null(M)) {
-        parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-        if (deg == 2) {
-          parnames <- c(
-            parnames,
-            paste0("dose_squared:", names(data[, M, drop = FALSE]))
-          )
-        }
-      }
-    } else {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose_linear", "dose_exponential")
-      )
-      if (!is.null(M)) {
-        parnames <- c(
-          parnames,
-          paste0("dose_linear:", names(data[, M, drop = FALSE]))
-        )
-        parnames <- c(
-          parnames,
-          paste0("dose_exponential:", names(data[, M, drop = FALSE]))
-        )
-      }
     }
   } else if (family %in% c("clogit")) {
     if (is.null(doseRRmod)) {
@@ -1064,36 +807,6 @@ ameras.rc <- function(
       )
     }
 
-    if (doseRRmod != "LINEXP") {
-      parnames <- c(
-        names(data[, X, drop = FALSE]),
-        c("dose", "dose_squared")[1:deg]
-      )
-      if (!is.null(M)) {
-        parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-        if (deg == 2) {
-          parnames <- c(
-            parnames,
-            paste0("dose_squared:", names(data[, M, drop = FALSE]))
-          )
-        }
-      }
-    } else {
-      parnames <- c(
-        names(data[, X, drop = FALSE]),
-        c("dose_linear", "dose_exponential")
-      )
-      if (!is.null(M)) {
-        parnames <- c(
-          parnames,
-          paste0("dose_linear:", names(data[, M, drop = FALSE]))
-        )
-        parnames <- c(
-          parnames,
-          paste0("dose_exponential:", names(data[, M, drop = FALSE]))
-        )
-      }
-    }
   } else if (family == "prophaz") {
     if (is.null(exit)) {
       stop("exit is required for family=prophaz")
@@ -1335,36 +1048,6 @@ ameras.rc <- function(
       }
     }
 
-    if (doseRRmod != "LINEXP") {
-      parnames <- c(
-        names(data[, X, drop = FALSE]),
-        c("dose", "dose_squared")[1:deg]
-      )
-      if (!is.null(M)) {
-        parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-        if (deg == 2) {
-          parnames <- c(
-            parnames,
-            paste0("dose_squared:", names(data[, M, drop = FALSE]))
-          )
-        }
-      }
-    } else {
-      parnames <- c(
-        names(data[, X, drop = FALSE]),
-        c("dose_linear", "dose_exponential")
-      )
-      if (!is.null(M)) {
-        parnames <- c(
-          parnames,
-          paste0("dose_linear:", names(data[, M, drop = FALSE]))
-        )
-        parnames <- c(
-          parnames,
-          paste0("dose_exponential:", names(data[, M, drop = FALSE]))
-        )
-      }
-    }
   } else if (family == "multinomial") {
     if (is.null(Y)) {
       stop("Y is required for family=multinomial")
@@ -1436,48 +1119,16 @@ ameras.rc <- function(
       ...
     )
 
-    if (doseRRmod != "LINEXP") {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose", "dose_squared")[1:deg]
-      )
-      if (!is.null(M)) {
-        parnames <- c(parnames, paste0("dose:", names(data[, M, drop = FALSE])))
-        if (deg == 2) {
-          parnames <- c(
-            parnames,
-            paste0("dose_squared:", names(data[, M, drop = FALSE]))
-          )
-        }
-      }
-    } else {
-      parnames <- c(
-        "(Intercept)",
-        names(data[, X, drop = FALSE]),
-        c("dose_linear", "dose_exponential")
-      )
-      if (!is.null(M)) {
-        parnames <- c(
-          parnames,
-          paste0("dose_linear:", names(data[, M, drop = FALSE]))
-        )
-        parnames <- c(
-          parnames,
-          paste0("dose_exponential:", names(data[, M, drop = FALSE]))
-        )
-      }
-    }
-
-    mylv <- levels(data[, Y])
-
-    mylv <- mylv[-length(mylv)]
-
-    parnames <- do.call(
-      "c",
-      lapply(mylv, function(lv) paste0("(", lv, ")_", parnames))
-    )
   }
+  parnames <- make_method_parnames(
+    family = family,
+    data = data,
+    Y = Y,
+    X = X,
+    M = M,
+    deg = deg,
+    doseRRmod = doseRRmod
+  )
 
   if (!is.null(transform) & !is.null(transform.jacobian)) {
     if (is.function(transform) & is.function(transform.jacobian)) {
