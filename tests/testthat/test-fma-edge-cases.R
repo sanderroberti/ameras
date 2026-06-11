@@ -142,8 +142,8 @@ test_that("FMA returns NA estimates when all weight allocations round to zero", 
 })
 
 expect_fma_parameter_names <- function(fit, expected) {
-  # LINEXP FMA names are copied into several parallel result objects. Checking
-  # all of them catches cases where only one summary table was named correctly.
+  # FMA names are copied into several parallel result objects. Checking all of
+  # them catches cases where only one summary table was named correctly.
   expect_identical(names(fit$FMA$coefficients), expected)
   expect_identical(names(fit$FMA$sd), expected)
   expect_identical(rownames(fit$FMA$vcov), expected)
@@ -269,6 +269,73 @@ test_that("FMA LINEXP parameter names are set with and without modifiers", {
   )
 })
 
+test_that("FMA non-LINEXP parameter names include modifier terms", {
+  data("data", package = "ameras")
+
+  # EXP reaches the doseRRmod != "LINEXP" parname branch without the lower-bound
+  # fragility of ERR models. deg = 2 also covers the dose_squared modifier names.
+  expected_with_intercept_m <- c(
+    "(Intercept)",
+    "dose",
+    "dose_squared",
+    "dose:M1",
+    "dose_squared:M1"
+  )
+  expected_gaussian_m <- c(expected_with_intercept_m, "sigma")
+  expected_no_intercept_m <- c(
+    "dose",
+    "dose_squared",
+    "dose:M1",
+    "dose_squared:M1"
+  )
+
+  expect_fma_parameter_names(
+    fit_fma_quietly(
+      Y.gaussian ~ dose(V1:V2, deg = 2, modifier = M1),
+      data = data,
+      family = "gaussian"
+    ),
+    expected_gaussian_m
+  )
+
+  expect_fma_parameter_names(
+    fit_fma_quietly(
+      Y.binomial ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1),
+      data = data,
+      family = "binomial"
+    ),
+    expected_with_intercept_m
+  )
+
+  expect_fma_parameter_names(
+    fit_fma_quietly(
+      Y.poisson ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1),
+      data = data,
+      family = "poisson"
+    ),
+    expected_with_intercept_m
+  )
+
+  expect_fma_parameter_names(
+    fit_fma_quietly(
+      Y.clogit ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1) +
+        strata(setnr),
+      data = data,
+      family = "clogit"
+    ),
+    expected_no_intercept_m
+  )
+
+  expect_fma_parameter_names(
+    fit_fma_quietly(
+      Surv(time, status) ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1),
+      data = data,
+      family = "prophaz"
+    ),
+    expected_no_intercept_m
+  )
+})
+
 test_that("FMA multinomial LINEXP parameter names include level prefixes", {
   data("data", package = "ameras")
   linexp_data <- data
@@ -309,6 +376,35 @@ test_that("FMA multinomial LINEXP parameter names include level prefixes", {
     fit_fma_quietly(
       Y.multinomial ~ dose(V1:V2, model = LINEXP, modifier = Mzero),
       data = linexp_data,
+      family = "multinomial"
+    ),
+    unlist(
+      lapply(
+        non_reference_levels,
+        function(level) paste0("(", level, ")_", expected_base_m)
+      ),
+      use.names = FALSE
+    )
+  )
+})
+
+test_that("FMA multinomial non-LINEXP names include modifiers and prefixes", {
+  data("data", package = "ameras")
+
+  expected_base_m <- c(
+    "(Intercept)",
+    "dose",
+    "dose_squared",
+    "dose:M1",
+    "dose_squared:M1"
+  )
+  non_reference_levels <- levels(data$Y.multinomial)
+  non_reference_levels <- non_reference_levels[-length(non_reference_levels)]
+
+  expect_fma_parameter_names(
+    fit_fma_quietly(
+      Y.multinomial ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1),
+      data = data,
       family = "multinomial"
     ),
     unlist(

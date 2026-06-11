@@ -64,3 +64,36 @@ test_that("BMA automatic realization screening is disabled explicitly", {
     fixed = TRUE
   )
 })
+
+test_that("ameras passes default BMA realization indices explicitly", {
+  data("data", package = "ameras")
+  captured <- NULL
+
+  testthat::with_mocked_bindings(
+    ameras.bma = function(...) {
+      captured <<- list(...)
+      list(
+        coefficients = numeric(),
+        sd = numeric(),
+        vcov = matrix(numeric()),
+        Rhat = NULL,
+        samples = NULL,
+        included.realizations = captured$included.realizations,
+        runtime = "0 seconds"
+      )
+    },
+    {
+      fit <- suppressMessages(
+        ameras(
+          Y.gaussian ~ dose(V1:V2),
+          data = data[1:20, ],
+          family = "gaussian",
+          methods = "BMA"
+        )
+      )
+    }
+  )
+
+  expect_identical(captured$included.realizations, 1:2)
+  expect_identical(fit$BMA$included.realizations, 1:2)
+})

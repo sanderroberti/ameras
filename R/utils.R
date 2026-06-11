@@ -228,155 +228,228 @@ make_base_loglik_fn <- function(object, method_fit, data) {
   }
 }
 
-make_base_loglik_fn_single <- function(object, method_fit, data, dose.col) {
-  m <- object$model
-  ERC <- FALSE # always non-ERC since we are evaluating at a single column
+make_single_realization_loglik <- function(
+  family,
+  dose.col,
+  data,
+  Y = NULL,
+  M = NULL,
+  X = NULL,
+  offset = NULL,
+  entry = NULL,
+  exit = NULL,
+  status = NULL,
+  setnr = NULL,
+  doseRRmod = NULL,
+  deg = 1,
+  loglim = 1e-30,
+  transform = NULL,
+  ERC = FALSE,
+  Kmat = NULL,
+  designmat = NULL,
+  set_members = NULL,
+  ...
+) {
+  # Build a single-dose likelihood closure from raw fitting arguments. This is
+  # used before an amerasfit object exists, and by fitted-object helpers below.
+  captured_args <- list(...)
+  append_call_args <- function(base_args, dynamic_args) {
+    # Arguments supplied when the closure is evaluated should override captured
+    # arguments. This preserves existing transform/optimizer forwarding behavior.
+    if (length(dynamic_args) && length(captured_args)) {
+      captured <- captured_args[
+        !(names(captured_args) %in% names(dynamic_args))
+      ]
+    } else {
+      captured <- captured_args
+    }
+    c(base_args, captured, dynamic_args)
+  }
 
-  if (m$family == "gaussian") {
-    function(params) {
+  if (family == "gaussian") {
+    function(params, ...) {
       do.call(
         loglik.gaussian,
-        c(
+        append_call_args(
           list(
             params = params,
             D = dose.col,
-            X = m$X,
-            Y = m$Y,
-            M = m$M,
+            X = X,
+            Y = Y,
+            M = M,
             data = data,
-            deg = m$deg,
+            deg = deg,
             ERC = ERC,
-            Kmat = NULL,
-            loglim = m$loglim,
-            transform = object$transform
+            Kmat = Kmat,
+            loglim = loglim,
+            transform = transform
           ),
-          object$transform.args
+          list(...)
         )
       )
     }
-  } else if (m$family == "binomial") {
-    function(params) {
+  } else if (family == "binomial") {
+    function(params, ...) {
       do.call(
         loglik.binomial,
-        c(
+        append_call_args(
           list(
             params = params,
             D = dose.col,
-            X = m$X,
-            Y = m$Y,
-            M = m$M,
-            doseRRmod = m$doseRRmod,
+            X = X,
+            Y = Y,
+            M = M,
+            doseRRmod = doseRRmod,
             data = data,
-            deg = m$deg,
+            deg = deg,
             ERC = ERC,
-            Kmat = NULL,
-            loglim = m$loglim,
-            transform = object$transform
+            Kmat = Kmat,
+            loglim = loglim,
+            transform = transform
           ),
-          object$transform.args
+          list(...)
         )
       )
     }
-  } else if (m$family == "poisson") {
-    function(params) {
+  } else if (family == "poisson") {
+    function(params, ...) {
       do.call(
         loglik.poisson,
-        c(
+        append_call_args(
           list(
             params = params,
             D = dose.col,
-            X = m$X,
-            Y = m$Y,
-            M = m$M,
-            offset = m$offset,
-            doseRRmod = m$doseRRmod,
+            X = X,
+            Y = Y,
+            M = M,
+            offset = offset,
+            doseRRmod = doseRRmod,
             data = data,
-            deg = m$deg,
-            loglim = m$loglim,
-            transform = object$transform
+            deg = deg,
+            loglim = loglim,
+            transform = transform
           ),
-          object$transform.args
+          list(...)
         )
       )
     }
-  } else if (m$family == "multinomial") {
-    function(params) {
+  } else if (family == "multinomial") {
+    function(params, ...) {
       do.call(
         loglik.multinomial,
-        c(
+        append_call_args(
           list(
             params = params,
             D = dose.col,
-            X = m$X,
-            Y = m$Y,
-            M = m$M,
-            doseRRmod = m$doseRRmod,
+            X = X,
+            Y = Y,
+            M = M,
+            doseRRmod = doseRRmod,
             data = data,
-            deg = m$deg,
-            ERC = FALSE,
-            Kmat = NULL,
-            loglim = m$loglim,
-            transform = object$transform
+            deg = deg,
+            ERC = ERC,
+            Kmat = Kmat,
+            loglim = loglim,
+            transform = transform
           ),
-          object$transform.args
+          list(...)
         )
       )
     }
-  } else if (m$family == "clogit") {
-    designmat <- t(model.matrix(~ as.factor(data[, m$setnr]) - 1))
-    set_members <- lapply(sort(unique(data[, m$setnr])), function(s) {
-      which(data[, m$setnr] == s) - 1L
-    })
-    function(params) {
+  } else if (family == "clogit") {
+    # Conditional logistic likelihoods need set membership structures. FMA can
+    # pass a precomputed design matrix; fitted-object callers can let us build it.
+    if (is.null(designmat)) {
+      designmat <- t(model.matrix(~ as.factor(data[, setnr]) - 1))
+    }
+    if (is.null(set_members) && !is.null(setnr)) {
+      set_members <- lapply(sort(unique(data[, setnr])), function(s) {
+        which(data[, setnr] == s) - 1L
+      })
+    }
+
+    function(params, ...) {
       do.call(
         loglik.clogit,
-        c(
+        append_call_args(
           list(
             params = params,
             D = dose.col,
-            X = m$X,
-            status = m$status,
-            M = m$M,
-            doseRRmod = m$doseRRmod,
+            X = X,
+            status = status,
+            M = M,
+            doseRRmod = doseRRmod,
             designmat = designmat,
             set_members = set_members,
             data = data,
-            deg = m$deg,
-            ERC = FALSE,
-            Kmat = NULL,
-            loglim = m$loglim,
-            transform = object$transform
+            deg = deg,
+            ERC = ERC,
+            Kmat = Kmat,
+            loglim = loglim,
+            transform = transform
           ),
-          object$transform.args
+          list(...)
         )
       )
     }
-  } else if (m$family == "prophaz") {
-    function(params) {
+  } else if (family == "prophaz") {
+    function(params, ...) {
       do.call(
         loglik.prophaz,
-        c(
+        append_call_args(
           list(
             params = params,
             D = dose.col,
-            X = m$X,
-            status = m$status,
-            entry = m$entry,
-            exit = m$exit,
-            M = m$M,
-            doseRRmod = m$doseRRmod,
+            X = X,
+            status = status,
+            entry = entry,
+            exit = exit,
+            M = M,
+            doseRRmod = doseRRmod,
             data = data,
-            deg = m$deg,
-            loglim = m$loglim,
-            transform = object$transform
+            deg = deg,
+            loglim = loglim,
+            transform = transform
           ),
-          object$transform.args
+          list(...)
         )
       )
     }
   } else {
-    stop("Unknown family: ", m$family)
+    stop("Unknown family: ", family)
   }
+}
+
+make_base_loglik_fn_single <- function(object, method_fit, data, dose.col) {
+  m <- object$model
+
+  # Reuse the raw-argument helper so fitted objects and in-progress fits build
+  # single-realization likelihoods through the same family-specific code path.
+  do.call(
+    make_single_realization_loglik,
+    c(
+      list(
+        family = m$family,
+        dose.col = dose.col,
+        data = data,
+        Y = m$Y,
+        M = m$M,
+        X = m$X,
+        offset = m$offset,
+        entry = m$entry,
+        exit = m$exit,
+        status = m$status,
+        setnr = m$setnr,
+        doseRRmod = m$doseRRmod,
+        deg = m$deg,
+        loglim = m$loglim,
+        transform = object$transform,
+        ERC = FALSE,
+        Kmat = NULL
+      ),
+      object$transform.args
+    )
+  )
 }
 
 make_loglik_fn <- function(object, method_name, method_fit, data) {

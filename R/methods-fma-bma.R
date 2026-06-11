@@ -48,17 +48,20 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik.gaussian,
-        D = dosevars[Xi],
-        X = X,
+      loglik_fn <- make_single_realization_loglik(
+        family = "gaussian",
+        dose.col = dosevars[Xi],
+        data = data,
         Y = Y,
         M = M,
-        data = data,
+        X = X,
         deg = deg,
         ERC = FALSE,
-        transform = transform,
+        transform = transform
+      )
+      fit.FMAi <- fit_objective_with_hessian(
+        inpar,
+        loglik_fn,
         optim.method = optim.method,
         control = control,
         ...
@@ -94,18 +97,21 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik.binomial,
-        D = dosevars[Xi],
-        X = X,
+      loglik_fn <- make_single_realization_loglik(
+        family = "binomial",
+        dose.col = dosevars[Xi],
+        data = data,
         Y = Y,
         M = M,
+        X = X,
         doseRRmod = doseRRmod,
-        data = data,
         deg = deg,
         ERC = FALSE,
-        transform = transform,
+        transform = transform
+      )
+      fit.FMAi <- fit_objective_with_hessian(
+        inpar,
+        loglik_fn,
         optim.method = optim.method,
         control = control,
         ...
@@ -158,18 +164,21 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik.poisson,
-        D = dosevars[Xi],
-        X = X,
+      loglik_fn <- make_single_realization_loglik(
+        family = "poisson",
+        dose.col = dosevars[Xi],
+        data = data,
         Y = Y,
         M = M,
+        X = X,
         offset = offset,
         doseRRmod = doseRRmod,
-        data = data,
         deg = deg,
-        transform = transform,
+        transform = transform
+      )
+      fit.FMAi <- fit_objective_with_hessian(
+        inpar,
+        loglik_fn,
         optim.method = optim.method,
         control = control,
         ...
@@ -227,19 +236,22 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik.clogit,
-        D = dosevars[Xi],
-        status = status,
-        X = X,
-        M = M,
-        designmat = designmat,
-        doseRRmod = doseRRmod,
+      loglik_fn <- make_single_realization_loglik(
+        family = "clogit",
+        dose.col = dosevars[Xi],
         data = data,
+        M = M,
+        X = X,
+        status = status,
+        doseRRmod = doseRRmod,
         deg = deg,
         ERC = FALSE,
         transform = transform,
+        designmat = designmat
+      )
+      fit.FMAi <- fit_objective_with_hessian(
+        inpar,
+        loglik_fn,
         optim.method = optim.method,
         control = control,
         ...
@@ -296,20 +308,23 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik.prophaz,
-        D = dosevars[Xi],
-        status = status,
-        X = X,
+      loglik_fn <- make_single_realization_loglik(
+        family = "prophaz",
+        dose.col = dosevars[Xi],
+        data = data,
         M = M,
+        X = X,
         entry = entry,
         exit = exit,
+        status = status,
         doseRRmod = doseRRmod,
-        data = data,
         deg = deg,
         ERC = FALSE,
-        transform = transform,
+        transform = transform
+      )
+      fit.FMAi <- fit_objective_with_hessian(
+        inpar,
+        loglik_fn,
         optim.method = optim.method,
         control = control,
         ...
@@ -364,18 +379,21 @@ ameras.fma <- function(
     }
 
     FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik.multinomial,
-        D = dosevars[Xi],
-        X = X,
+      loglik_fn <- make_single_realization_loglik(
+        family = "multinomial",
+        dose.col = dosevars[Xi],
+        data = data,
         Y = Y,
         M = M,
+        X = X,
         doseRRmod = doseRRmod,
-        data = data,
         deg = deg,
         ERC = FALSE,
-        transform = transform,
+        transform = transform
+      )
+      fit.FMAi <- fit_objective_with_hessian(
+        inpar,
+        loglik_fn,
         optim.method = optim.method,
         control = control,
         ...
