@@ -116,7 +116,10 @@ print_confint <- function(object, digits = max(3, getOption("digits") - 3)) {
     }
 
     cat(m, "confidence intervals:\n\n")
-    print(format(object[[m]]$CI, digits = digits), row.names = TRUE)
+    print(
+      format(object[[m]]$CI[, c("lower", "upper")], digits = digits),
+      row.names = TRUE
+    )
     cat("\n")
   }
 
@@ -161,17 +164,6 @@ summary.amerasfit <- function(object, ...) {
             CI.upper = CI.upper
           )
         )
-        # Add p-value columns for profile likelihood intervals. If not used, these will be removed after
-        res <- cbind(res, data.frame(pval.lower = NA, pval.upper = NA))
-
-        if ("pval.lower" %in% names(CI) && "pval.upper" %in% names(CI)) {
-          pval.lower <- pval.upper <- coef * NA
-          pval.lower[match(rownames(CI), names(coef))] <- CI$pval.lower
-          pval.upper[match(rownames(CI), names(coef))] <- CI$pval.upper
-          res$pval.lower <- pval.lower
-          res$pval.upper <- pval.upper
-          #res <- cbind(res, data.frame(pval.lower = pval.lower, pval.upper = pval.upper))
-        }
       }
 
       if (bma) {
@@ -186,17 +178,6 @@ summary.amerasfit <- function(object, ...) {
     })
   )
 
-  # Remove p-value columns if not used
-  if (object$CI.computed) {
-    if (
-      all(is.na(summary_table$pval.lower)) &
-        all(is.na(summary_table$pval.upper))
-    ) {
-      summary_table <- summary_table[,
-        -which(names(summary_table) %in% c("pval.lower", "pval.upper"))
-      ]
-    }
-  }
   runtime_table <- do.call(
     "rbind",
     lapply(1:length(object0), function(i) {
