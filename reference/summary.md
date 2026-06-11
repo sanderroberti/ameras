@@ -183,8 +183,8 @@ fit <- confint(fit, method = "wald.orig")
 #> Obtaining profile likelihood CI for dose
 #> RC confidence intervals:
 #> 
-#>       lower upper pval.lower pval.upper iter.lower iter.upper
-#> dose 0.5648 1.112    0.05024    0.04959          5          4
+#>       lower upper
+#> dose 0.5648 1.112
 #> 
 summary(fit)
 #> Call:
@@ -200,9 +200,9 @@ summary(fit)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
-#>      RC (Intercept)  -0.8847 0.07378       NA       NA         NA         NA
-#>      RC        dose   0.8020 0.13751   0.5648    1.112    0.05024    0.04959
+#>  Method        Term Estimate      SE CI.lower CI.upper
+#>      RC (Intercept)  -0.8847 0.07378       NA       NA
+#>      RC        dose   0.8020 0.13751   0.5648    1.112
 #> 
 
 ## Access the summary table directly
@@ -221,42 +221,42 @@ fit2 <- confint(fit2, method = "wald.orig")
 #> Obtaining profile likelihood CI for dose
 #> RC confidence intervals:
 #> 
-#>       lower upper pval.lower pval.upper iter.lower iter.upper
-#> dose 0.5648 1.112    0.05024    0.04959          5          4
+#>       lower upper
+#> dose 0.5648 1.112
 #> 
 #> ERC confidence intervals:
 #> 
-#>       lower upper pval.lower pval.upper iter.lower iter.upper
-#> dose 0.5728 1.144    0.04953    0.04819          6          4
+#>       lower upper
+#> dose 0.5728 1.144
 #> 
 #> MCML confidence intervals:
 #> 
-#>       lower upper pval.lower pval.upper iter.lower iter.upper
-#> dose 0.5554 1.098    0.05008    0.04957          5          4
+#>       lower upper
+#> dose 0.5554 1.098
 #> 
 summary(fit2)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("RC", "ERC", "MCML"))
 #> 
-#> Total run time: 14.8 seconds
+#> Total run time: 13.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC    14.6
+#>     ERC    13.2
 #>    MCML     0.2
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
-#>      RC (Intercept)  -0.8847 0.07378       NA       NA         NA         NA
-#>      RC        dose   0.8020 0.13751   0.5648    1.112    0.05024    0.04959
-#>     ERC (Intercept)  -0.8849 0.07477       NA       NA         NA         NA
-#>     ERC        dose   0.8214 0.14304   0.5728    1.144    0.04953    0.04819
-#>    MCML (Intercept)  -0.8758 0.07323       NA       NA         NA         NA
-#>    MCML        dose   0.7910 0.13644   0.5554    1.098    0.05008    0.04957
+#>  Method        Term Estimate      SE CI.lower CI.upper
+#>      RC (Intercept)  -0.8847 0.07378       NA       NA
+#>      RC        dose   0.8020 0.13751   0.5648    1.112
+#>     ERC (Intercept)  -0.8849 0.07477       NA       NA
+#>     ERC        dose   0.8214 0.14304   0.5728    1.144
+#>    MCML (Intercept)  -0.8758 0.07323       NA       NA
+#>    MCML        dose   0.7910 0.13644   0.5554    1.098
 #> 
 # }
 ```

@@ -103,16 +103,16 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 54.1 seconds
+#> Total run time: 54.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     6.7
+#>     ERC     7.3
 #>    MCML     0.1
 #>     FMA     0.2
-#>     BMA    47.1
+#>     BMA    46.7
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -138,43 +138,48 @@ Finally, we add confidence intervals to the `fit` object:
 fit <- confint(fit, type=c("wald.orig","percentile"))
 #> RC confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5324 1.071
+#>               lower   upper
+#> (Intercept) -1.0293 -0.7401
+#> dose         0.5324  1.0715
 #> 
 #> ERC confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5411 1.102
+#>               lower   upper
+#> (Intercept) -1.0314 -0.7384
+#> dose         0.5411  1.1018
 #> 
 #> MCML confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5236 1.058
+#>               lower   upper
+#> (Intercept) -1.0193 -0.7323
+#> dose         0.5236  1.0584
 #> 
 #> FMA confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5241 1.059
+#>               lower   upper
+#> (Intercept) -1.0199 -0.7327
+#> dose         0.5241  1.0594
 #> 
 #> BMA confidence intervals:
 #> 
-#>      lower upper
-#> dose 0.552  1.08
+#>              lower  upper
+#> (Intercept) -1.019 -0.735
+#> dose         0.552  1.080
 summary(fit)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total run time: 54.1 seconds
+#> Total run time: 54.3 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.0
-#>     ERC     6.7
+#>     ERC     7.3
 #>    MCML     0.1
 #>     FMA     0.2
-#>     BMA    47.1
+#>     BMA    46.7
 #> 
 #> Summary of coefficients by method:
 #> 

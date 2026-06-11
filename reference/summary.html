@@ -209,8 +209,8 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Obtaining profile likelihood CI for dose</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RC confidence intervals:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper pval.lower pval.upper iter.lower iter.upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5648 1.112    0.05024    0.04959          5          4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5648 1.112</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
@@ -226,9 +226,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378       NA       NA         NA         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751   0.5648    1.112    0.05024    0.04959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lower CI.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378       NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751   0.5648    1.112</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Access the summary table directly</span></span></span>
@@ -247,42 +247,42 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Obtaining profile likelihood CI for dose</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RC confidence intervals:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper pval.lower pval.upper iter.lower iter.upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5648 1.112    0.05024    0.04959          5          4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5648 1.112</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ERC confidence intervals:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper pval.lower pval.upper iter.lower iter.upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5728 1.144    0.04953    0.04819          6          4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5728 1.144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> MCML confidence intervals:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper pval.lower pval.upper iter.lower iter.upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5554 1.098    0.05008    0.04957          5          4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5554 1.098</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("RC", "ERC", "MCML"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 14.8 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total run time: 13.4 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      RC     0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC    14.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC    13.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    MCML     0.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378       NA       NA         NA         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751   0.5648    1.112    0.05024    0.04959</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC (Intercept)  -0.8849 0.07477       NA       NA         NA         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC        dose   0.8214 0.14304   0.5728    1.144    0.04953    0.04819</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML (Intercept)  -0.8758 0.07323       NA       NA         NA         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML        dose   0.7910 0.13644   0.5554    1.098    0.05008    0.04957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lower CI.upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378       NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751   0.5648    1.112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC (Intercept)  -0.8849 0.07477       NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC        dose   0.8214 0.14304   0.5728    1.144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML (Intercept)  -0.8758 0.07323       NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML        dose   0.7910 0.13644   0.5554    1.098</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>

@@ -271,8 +271,8 @@ fit2 <- confint(fit2, type = "proflik", data = data)
 #> Obtaining profile likelihood CI for dose
 #> RC confidence intervals:
 #> 
-#>       lower upper pval.lower pval.upper iter.lower iter.upper
-#> dose 0.5648 1.112    0.05024    0.04959          5          4
+#>       lower upper
+#> dose 0.5648 1.112
 #> 
 # }
 
@@ -322,13 +322,13 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 96 seconds
+#> Total run time: 94.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>     FMA     0.5
-#>     BMA    95.5
+#>     BMA    93.9
 #> 
 #> Summary of coefficients by method:
 #> 

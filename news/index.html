@@ -51,6 +51,14 @@
 <ul><li>Fixed an issue with FMA where large differences in AIC values between dose realizations caused <code>NaN</code> weights, resulting in an error.</li>
 <li>Fixed an issue where a subsequent call to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> would print intervals for dose-related parameters only. <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now prints intervals for all parameters.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
+<ul><li>FMA no longer uses a cutoff of 20% excluded realizations before warning about potential computational issues. The user is now always warned about the number of excluded realizations.</li>
+<li>FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are now internally excluded. The user is informed of the number of realizations excluded for this reason through a <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code>
+</li>
+<li>Added an additional warning for FMA for the situation when results are based on only 1 or 2-5 realizations after exclusions.</li>
+<li>Streamlined information printed by <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>: columns <code>pval.lower</code> and <code>pval.upper</code> for profile likelihood intervals are no longer printed. They are still accessible within the fit object, and warnings are still printed in case an inaccurate profile likelihood bound is suspected.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="ameras-040">ameras 0.4.0<a class="anchor" aria-label="anchor" href="#ameras-040"></a></h2><p class="text-muted">CRAN release: 2026-05-29</p>

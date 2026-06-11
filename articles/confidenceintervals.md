@@ -93,11 +93,11 @@ fit.ameras.proflik <- confint(fit.ameras, type="proflik", parm="all")
 #> Obtaining profile likelihood CI for dose
 #> RC confidence intervals:
 #> 
-#>               lower   upper pval.lower pval.upper iter.lower iter.upper
-#> (Intercept) -1.2391 -0.8971    0.05248    0.05153          5          3
-#> X1           0.2908  0.5917    0.04878    0.04853          4          4
-#> X2          -0.5256 -0.1490    0.04822    0.04902          4          4
-#> dose         0.6009  1.1784    0.05040    0.04952          5          4
+#>               lower   upper
+#> (Intercept) -1.2391 -0.8971
+#> X1           0.2908  0.5917
+#> X2          -0.5256 -0.1490
+#> dose         0.6009  1.1784
 
 summary(fit.ameras.waldorig)
 #> Call:
@@ -151,11 +151,11 @@ summary(fit.ameras.proflik)
 #> 
 #> Summary of coefficients by method:
 #> 
-#>  Method        Term Estimate      SE CI.lower CI.upper pval.lower pval.upper
-#>      RC (Intercept)  -1.0641 0.08788  -1.2391  -0.8971    0.05248    0.05153
-#>      RC          X1   0.4409 0.07628   0.2908   0.5917    0.04878    0.04853
-#>      RC          X2  -0.3360 0.09544  -0.5256  -0.1490    0.04822    0.04902
-#>      RC        dose   0.8508 0.14517   0.6009   1.1784    0.05040    0.04952
+#>  Method        Term Estimate      SE CI.lower CI.upper
+#>      RC (Intercept)  -1.0641 0.08788  -1.2391  -0.8971
+#>      RC          X1   0.4409 0.07628   0.2908   0.5917
+#>      RC          X2  -0.3360 0.09544  -0.5256  -0.1490
+#>      RC        dose   0.8508 0.14517   0.6009   1.1784
 ```
 
 ## Frequentist and Bayesian model averaging

@@ -149,16 +149,16 @@
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", </span></span>
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 54.1 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 54.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.0</span></span>
-<span><span class="co">#&gt;     ERC     6.7</span></span>
+<span><span class="co">#&gt;     ERC     7.3</span></span>
 <span><span class="co">#&gt;    MCML     0.1</span></span>
 <span><span class="co">#&gt;     FMA     0.2</span></span>
-<span><span class="co">#&gt;     BMA    47.1</span></span>
+<span><span class="co">#&gt;     BMA    46.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -180,43 +180,48 @@
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald.orig"</span>,<span class="st">"percentile"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; RC confidence intervals:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;       lower upper</span></span>
-<span><span class="co">#&gt; dose 0.5324 1.071</span></span>
+<span><span class="co">#&gt;               lower   upper</span></span>
+<span><span class="co">#&gt; (Intercept) -1.0293 -0.7401</span></span>
+<span><span class="co">#&gt; dose         0.5324  1.0715</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ERC confidence intervals:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;       lower upper</span></span>
-<span><span class="co">#&gt; dose 0.5411 1.102</span></span>
+<span><span class="co">#&gt;               lower   upper</span></span>
+<span><span class="co">#&gt; (Intercept) -1.0314 -0.7384</span></span>
+<span><span class="co">#&gt; dose         0.5411  1.1018</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; MCML confidence intervals:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;       lower upper</span></span>
-<span><span class="co">#&gt; dose 0.5236 1.058</span></span>
+<span><span class="co">#&gt;               lower   upper</span></span>
+<span><span class="co">#&gt; (Intercept) -1.0193 -0.7323</span></span>
+<span><span class="co">#&gt; dose         0.5236  1.0584</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; FMA confidence intervals:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;       lower upper</span></span>
-<span><span class="co">#&gt; dose 0.5241 1.059</span></span>
+<span><span class="co">#&gt;               lower   upper</span></span>
+<span><span class="co">#&gt; (Intercept) -1.0199 -0.7327</span></span>
+<span><span class="co">#&gt; dose         0.5241  1.0594</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; BMA confidence intervals:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      lower upper</span></span>
-<span><span class="co">#&gt; dose 0.552  1.08</span></span>
+<span><span class="co">#&gt;              lower  upper</span></span>
+<span><span class="co">#&gt; (Intercept) -1.019 -0.735</span></span>
+<span><span class="co">#&gt; dose         0.552  1.080</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", </span></span>
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 54.1 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 54.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.0</span></span>
-<span><span class="co">#&gt;     ERC     6.7</span></span>
+<span><span class="co">#&gt;     ERC     7.3</span></span>
 <span><span class="co">#&gt;    MCML     0.1</span></span>
 <span><span class="co">#&gt;     FMA     0.2</span></span>
-<span><span class="co">#&gt;     BMA    47.1</span></span>
+<span><span class="co">#&gt;     BMA    46.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

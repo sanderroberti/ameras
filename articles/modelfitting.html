@@ -164,6 +164,8 @@ covariates <code>X1</code> and <code>X2</code> and effect modifiers
 <span><span class="va">fit.ameras.linreg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data<span class="op">=</span><span class="va">data</span>, </span>
 <span>                            family<span class="op">=</span><span class="st">"gaussian"</span>, niter.BMA<span class="op">=</span><span class="fl">5000</span>, nburnin.BMA<span class="op">=</span><span class="fl">1000</span>,</span>
 <span>                            methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in ameras.fma(family = family, dosevars = dosevars, data = data, : FMA</span></span>
+<span><span class="co">#&gt; is based on only 4 realizations.</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
@@ -242,7 +244,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   .. ..$ counts     : Named num [1:2] 509 1</span></span>
 <span><span class="co">#&gt;   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
 <span><span class="co">#&gt;   ..$ loglik      : num -4563</span></span>
-<span><span class="co">#&gt;   ..$ runtime     : chr "0.2 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ runtime     : chr "0.3 seconds"</span></span>
 <span><span class="co">#&gt;   ..$ ERC         : logi FALSE</span></span>
 <span><span class="co">#&gt;  $ ERC               :List of 7</span></span>
 <span><span class="co">#&gt;   ..$ coefficients: Named num [1:5] -1.361 0.48 -0.519 1.165 1.106</span></span>
@@ -260,7 +262,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   .. ..$ counts     : Named num [1:2] 546 9</span></span>
 <span><span class="co">#&gt;   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"</span></span>
 <span><span class="co">#&gt;   ..$ loglik      : num -4559</span></span>
-<span><span class="co">#&gt;   ..$ runtime     : chr "120.6 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ runtime     : chr "110.2 seconds"</span></span>
 <span><span class="co">#&gt;   ..$ ERC         : logi TRUE</span></span>
 <span><span class="co">#&gt;  $ MCML              :List of 6</span></span>
 <span><span class="co">#&gt;   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138</span></span>
@@ -284,43 +286,44 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   ..$ sd                   : Named num [1:5] 0.0373 0.0418 0.0512 0.0202 0.0147</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ vcov                 : num [1:5, 1:5] 1.39e-03 -8.93e-04 -5.20e-04 -4.06e-04 -8.61e-07 ...</span></span>
+<span><span class="co">#&gt;   ..$ vcov                 : num [1:5, 1:5] 1.39e-03 -8.93e-04 -5.20e-04 -4.06e-04 -8.48e-07 ...</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span></span>
 <span><span class="co">#&gt;   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ included.realizations: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
-<span><span class="co">#&gt;   ..$ included.samples     : int 100006</span></span>
-<span><span class="co">#&gt;   ..$ weights              : num [1:10] 1.23e-25 1.49e-18 2.02e-05 6.23e-04 3.11e-09 ...</span></span>
-<span><span class="co">#&gt;   ..$ samples              :'data.frame':    100006 obs. of  5 variables:</span></span>
-<span><span class="co">#&gt;   .. ..$ (Intercept): num [1:100006] -1.27 -1.32 -1.32 -1.26 -1.24 ...</span></span>
-<span><span class="co">#&gt;   .. ..$ X1         : num [1:100006] 0.516 0.511 0.534 0.415 0.509 ...</span></span>
-<span><span class="co">#&gt;   .. ..$ X2         : num [1:100006] -0.525 -0.535 -0.49 -0.529 -0.538 ...</span></span>
-<span><span class="co">#&gt;   .. ..$ dose       : num [1:100006] 1.08 1.09 1.1 1.11 1.03 ...</span></span>
-<span><span class="co">#&gt;   .. ..$ sigma      : num [1:100006] 1.17 1.14 1.13 1.15 1.12 ...</span></span>
-<span><span class="co">#&gt;   ..$ runtime              : chr "1.2 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ included.realizations: int [1:4] 3 4 8 9</span></span>
+<span><span class="co">#&gt;   ..$ included.samples     : int 100000</span></span>
+<span><span class="co">#&gt;   ..$ weights              : Named num [1:4] 2.02e-05 6.23e-04 9.94e-01 5.17e-03</span></span>
+<span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:4] "V3" "V4" "V8" "V9"</span></span>
+<span><span class="co">#&gt;   ..$ samples              :'data.frame':    100000 obs. of  5 variables:</span></span>
+<span><span class="co">#&gt;   .. ..$ (Intercept): num [1:100000] -1.27 -1.35 -1.3 -1.23 -1.24 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ X1         : num [1:100000] 0.484 0.51 0.53 0.411 0.509 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ X2         : num [1:100000] -0.517 -0.51 -0.484 -0.523 -0.538 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ dose       : num [1:100000] 1.08 1.1 1.07 1.08 1.03 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ sigma      : num [1:100000] 1.15 1.13 1.13 1.14 1.12 ...</span></span>
+<span><span class="co">#&gt;   ..$ runtime              : chr "1.4 seconds"</span></span>
 <span><span class="co">#&gt;  $ BMA               :List of 7</span></span>
-<span><span class="co">#&gt;   ..$ coefficients         : Named num [1:5] -1.28 0.483 -0.517 1.079 1.139</span></span>
+<span><span class="co">#&gt;   ..$ coefficients         : Named num [1:5] -1.281 0.483 -0.516 1.08 1.139</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ sd                   : Named num [1:5] 0.038 0.0424 0.0525 0.0202 0.015</span></span>
+<span><span class="co">#&gt;   ..$ sd                   : Named num [1:5] 0.0373 0.0386 0.0527 0.0205 0.0153</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   ..$ vcov                 : num [1:5, 1:5] 1.44e-03 -9.34e-04 -5.28e-04 -4.02e-04 3.98e-05 ...</span></span>
+<span><span class="co">#&gt;   ..$ vcov                 : num [1:5, 1:5] 1.39e-03 -7.83e-04 -4.98e-04 -4.43e-04 -5.79e-06 ...</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span></span>
 <span><span class="co">#&gt;   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   ..$ Rhat                 :'data.frame':    5 obs. of  2 variables:</span></span>
-<span><span class="co">#&gt;   .. ..$ Rhat : num [1:5] 1 1.01 1 1 1.02</span></span>
-<span><span class="co">#&gt;   .. ..$ n.eff: num [1:5] 871 822 800 800 744</span></span>
+<span><span class="co">#&gt;   .. ..$ Rhat : num [1:5] 1.01 1 1.01 1.01 1</span></span>
+<span><span class="co">#&gt;   .. ..$ n.eff: num [1:5] 800 717 750 800 868</span></span>
 <span><span class="co">#&gt;   ..$ samples              :List of 2</span></span>
-<span><span class="co">#&gt;   .. ..$ chain1: num [1:400, 1:6] -1.32 -1.27 -1.33 -1.29 -1.33 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ chain1: num [1:400, 1:6] -1.24 -1.2 -1.26 -1.3 -1.27 ...</span></span>
 <span><span class="co">#&gt;   .. .. ..- attr(*, "dimnames")=List of 2</span></span>
 <span><span class="co">#&gt;   .. .. .. ..$ : NULL</span></span>
 <span><span class="co">#&gt;   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...</span></span>
-<span><span class="co">#&gt;   .. ..$ chain2: num [1:400, 1:6] -1.3 -1.29 -1.23 -1.3 -1.26 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ chain2: num [1:400, 1:6] -1.3 -1.3 -1.29 -1.23 -1.3 ...</span></span>
 <span><span class="co">#&gt;   .. .. ..- attr(*, "dimnames")=List of 2</span></span>
 <span><span class="co">#&gt;   .. .. .. ..$ : NULL</span></span>
 <span><span class="co">#&gt;   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...</span></span>
 <span><span class="co">#&gt;   ..$ included.realizations: int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
-<span><span class="co">#&gt;   ..$ runtime              : chr "75.5 seconds"</span></span>
+<span><span class="co">#&gt;   ..$ runtime              : chr "79.3 seconds"</span></span>
 <span><span class="co">#&gt;  - attr(*, "class")= chr "amerasfit"</span></span></code></pre></div>
 <p>Access the results for e.g. regression calibration as follows:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -371,7 +374,7 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt; [1] -4563.325</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $runtime</span></span>
-<span><span class="co">#&gt; [1] "0.2 seconds"</span></span>
+<span><span class="co">#&gt; [1] "0.3 seconds"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $ERC</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
@@ -384,16 +387,16 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;     family = "gaussian", methods = c("RC", "ERC", "MCML", "FMA", </span></span>
 <span><span class="co">#&gt;         "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 198.2 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 191.9 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC   120.6</span></span>
+<span><span class="co">#&gt;      RC     0.3</span></span>
+<span><span class="co">#&gt;     ERC   110.2</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
-<span><span class="co">#&gt;     FMA     1.2</span></span>
-<span><span class="co">#&gt;     BMA    75.5</span></span>
+<span><span class="co">#&gt;     FMA     1.4</span></span>
+<span><span class="co">#&gt;     BMA    79.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -418,11 +421,11 @@ one component for each method, each being a list:</p>
 <span><span class="co">#&gt;     FMA          X2  -0.5173 0.05124   NA     NA</span></span>
 <span><span class="co">#&gt;     FMA        dose   1.0792 0.02015   NA     NA</span></span>
 <span><span class="co">#&gt;     FMA       sigma   1.1377 0.01467   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA (Intercept)  -1.2796 0.03797 1.00 871.00</span></span>
-<span><span class="co">#&gt;     BMA          X1   0.4831 0.04240 1.01 822.00</span></span>
-<span><span class="co">#&gt;     BMA          X2  -0.5169 0.05254 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA        dose   1.0788 0.02024 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA       sigma   1.1391 0.01503 1.02 744.00</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -1.2810 0.03733 1.01 800.00</span></span>
+<span><span class="co">#&gt;     BMA          X1   0.4827 0.03865 1.00 717.00</span></span>
+<span><span class="co">#&gt;     BMA          X2  -0.5159 0.05268 1.01 750.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   1.0799 0.02048 1.01 800.00</span></span>
+<span><span class="co">#&gt;     BMA       sigma   1.1391 0.01525 1.00 868.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <p>To extract model coefficients and compare between methods, use
@@ -430,11 +433,11 @@ one component for each method, each being a list:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.linreg</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     RC        ERC       MCML        FMA        BMA</span></span>
-<span><span class="co">#&gt; (Intercept) -1.3622239 -1.3610557 -1.2802532 -1.2803273 -1.2796163</span></span>
-<span><span class="co">#&gt; X1           0.4807463  0.4795308  0.4836506  0.4836869  0.4830670</span></span>
-<span><span class="co">#&gt; X2          -0.5187877 -0.5188299 -0.5171452 -0.5173188 -0.5169488</span></span>
-<span><span class="co">#&gt; dose         1.1660368  1.1649227  1.0790214  1.0791951  1.0787855</span></span>
-<span><span class="co">#&gt; sigma        1.1075696  1.1062486  1.1377732  1.1377321  1.1391166</span></span></code></pre></div>
+<span><span class="co">#&gt; (Intercept) -1.3622239 -1.3610557 -1.2802532 -1.2803270 -1.2809953</span></span>
+<span><span class="co">#&gt; X1           0.4807463  0.4795308  0.4836506  0.4836875  0.4827281</span></span>
+<span><span class="co">#&gt; X2          -0.5187877 -0.5188299 -0.5171452 -0.5173177 -0.5158568</span></span>
+<span><span class="co">#&gt; dose         1.1660368  1.1649227  1.0790214  1.0791942  1.0798948</span></span>
+<span><span class="co">#&gt; sigma        1.1075696  1.1062486  1.1377732  1.1377311  1.1391308</span></span></code></pre></div>
 <p>To produce traceplots and density plots for BMA results, use
 <code>traceplot</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -471,16 +474,16 @@ models</a>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 144.2 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 141.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC    81.0</span></span>
+<span><span class="co">#&gt;     ERC    75.4</span></span>
 <span><span class="co">#&gt;    MCML     1.1</span></span>
-<span><span class="co">#&gt;     FMA     2.7</span></span>
-<span><span class="co">#&gt;     BMA    59.1</span></span>
+<span><span class="co">#&gt;     FMA     2.9</span></span>
+<span><span class="co">#&gt;     BMA    61.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -538,16 +541,16 @@ models</a>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 106 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 107.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.1</span></span>
-<span><span class="co">#&gt;     ERC    49.4</span></span>
+<span><span class="co">#&gt;      RC     0.2</span></span>
+<span><span class="co">#&gt;     ERC    47.2</span></span>
 <span><span class="co">#&gt;    MCML     0.7</span></span>
-<span><span class="co">#&gt;     FMA     1.5</span></span>
-<span><span class="co">#&gt;     BMA    54.3</span></span>
+<span><span class="co">#&gt;     FMA     1.6</span></span>
+<span><span class="co">#&gt;     BMA    57.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -595,14 +598,97 @@ using an offset, first including a quadratic exposure term:</p>
 <span>                             data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"poisson"</span>, </span>
 <span>                             methods<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span>, <span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span>, </span>
 <span>                             niter.BMA <span class="op">=</span> <span class="fl">5000</span>, nburnin.BMA <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[17]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[676]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1566]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1635]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1755]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2021]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2395]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2407]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2715]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2733]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2907]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
 <span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
-<span><span class="co">#&gt; warning: logProb of data node Y[247]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[7]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[17]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[41]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[46]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[341]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[370]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[420]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[432]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[433]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[509]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[620]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[627]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node Y[676]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[716]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[749]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node Y[833]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[839]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[873]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1002]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1009]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1037]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1070]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1081]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1210]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1247]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1319]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1357]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1517]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1523]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1566]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1572]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; warning: logProb of data node Y[1635]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1661]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1664]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1693]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1755]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1836]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1838]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1888]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1948]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1972]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1979]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1991]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[1997]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2009]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2021]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2089]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2101]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2129]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2208]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2237]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2339]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2395]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2463]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2490]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2495]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2524]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2530]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2559]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2655]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2671]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2688]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2715]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2728]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2733]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2747]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2774]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2787]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2824]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2838]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2886]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2907]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2937]: logProb less than -1e12.</span></span>
+<span><span class="co">#&gt; warning: logProb of data node Y[2971]: logProb less than -1e12.</span></span>
 <span><span class="co">#&gt; |-------------|-------------|-------------|-------------|</span></span>
-<span><span class="co">#&gt; |-------------------------------------------------------|</span></span></code></pre></div>
+<span><span class="co">#&gt; |-------------------------------------------------------|</span></span>
+<span><span class="co">#&gt; Warning in ameras.bma(family = family, dosevars = dosevars, data = data, :</span></span>
+<span><span class="co">#&gt; WARNING: Potential problems with MCMC convergence, consider using longer chains</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.poisson</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -610,14 +696,14 @@ using an offset, first including a quadratic exposure term:</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "poisson", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 74 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 73.9 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
 <span><span class="co">#&gt;     ERC     1.9</span></span>
-<span><span class="co">#&gt;    MCML     1.4</span></span>
+<span><span class="co">#&gt;    MCML     1.3</span></span>
 <span><span class="co">#&gt;     FMA     3.2</span></span>
 <span><span class="co">#&gt;     BMA    67.2</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -641,24 +727,24 @@ using an offset, first including a quadratic exposure term:</p>
 <span><span class="co">#&gt;    MCML dose_squared -0.03644 0.005719   NA     NA</span></span>
 <span><span class="co">#&gt;     FMA  (Intercept) -1.07542 0.047056   NA     NA</span></span>
 <span><span class="co">#&gt;     FMA           X1  0.49896 0.041800   NA     NA</span></span>
-<span><span class="co">#&gt;     FMA           X2 -0.37716 0.055479   NA     NA</span></span>
+<span><span class="co">#&gt;     FMA           X2 -0.37716 0.055480   NA     NA</span></span>
 <span><span class="co">#&gt;     FMA         dose  0.60138 0.035163   NA     NA</span></span>
 <span><span class="co">#&gt;     FMA dose_squared -0.03656 0.005998   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA  (Intercept) -1.07944 0.044741 1.02 215.00</span></span>
-<span><span class="co">#&gt;     BMA           X1  0.49801 0.039956 1.03 435.00</span></span>
-<span><span class="co">#&gt;     BMA           X2 -0.38167 0.055527 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA         dose  0.60805 0.035663 1.03  87.00</span></span>
-<span><span class="co">#&gt;     BMA dose_squared -0.03798 0.006215 1.03  79.00</span></span>
+<span><span class="co">#&gt;     BMA  (Intercept) -1.07799 0.047700 1.01 214.00</span></span>
+<span><span class="co">#&gt;     BMA           X1  0.49992 0.043816 1.00 417.00</span></span>
+<span><span class="co">#&gt;     BMA           X2 -0.37653 0.054501 1.00 720.00</span></span>
+<span><span class="co">#&gt;     BMA         dose  0.60364 0.034757 1.04  84.00</span></span>
+<span><span class="co">#&gt;     BMA dose_squared -0.03708 0.006049 1.06  94.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.poisson</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                       RC         ERC        MCML         FMA        BMA</span></span>
-<span><span class="co">#&gt; (Intercept)  -1.09455980 -1.09068092 -1.07519346 -1.07541780 -1.0794372</span></span>
-<span><span class="co">#&gt; X1            0.49070108  0.49179875  0.49897425  0.49895993  0.4980120</span></span>
-<span><span class="co">#&gt; X2           -0.37624508 -0.37854805 -0.37711401 -0.37715581 -0.3816682</span></span>
-<span><span class="co">#&gt; dose          0.61975742  0.61138406  0.60089474  0.60137955  0.6080481</span></span>
-<span><span class="co">#&gt; dose_squared -0.03849039 -0.03626348 -0.03643505 -0.03656317 -0.0379750</span></span></code></pre></div>
+<span><span class="co">#&gt;                       RC         ERC        MCML         FMA         BMA</span></span>
+<span><span class="co">#&gt; (Intercept)  -1.09455980 -1.09068092 -1.07519346 -1.07541780 -1.07799473</span></span>
+<span><span class="co">#&gt; X1            0.49070108  0.49179875  0.49897425  0.49896042  0.49992168</span></span>
+<span><span class="co">#&gt; X2           -0.37624508 -0.37854805 -0.37711401 -0.37715570 -0.37653372</span></span>
+<span><span class="co">#&gt; dose          0.61975742  0.61138406  0.60089474  0.60137902  0.60363665</span></span>
+<span><span class="co">#&gt; dose_squared -0.03849039 -0.03626348 -0.03643505 -0.03656298 -0.03707947</span></span></code></pre></div>
 <p>Without the quadratic term (<code>deg=1</code>):</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">24252</span><span class="op">)</span></span>
@@ -677,16 +763,16 @@ using an offset, first including a quadratic exposure term:</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "poisson", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 65.5 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 66.9 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.2</span></span>
-<span><span class="co">#&gt;     ERC     1.2</span></span>
+<span><span class="co">#&gt;     ERC     1.3</span></span>
 <span><span class="co">#&gt;    MCML     0.6</span></span>
-<span><span class="co">#&gt;     FMA     1.8</span></span>
-<span><span class="co">#&gt;     BMA    61.7</span></span>
+<span><span class="co">#&gt;     FMA     2.4</span></span>
+<span><span class="co">#&gt;     BMA    62.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -707,19 +793,19 @@ using an offset, first including a quadratic exposure term:</p>
 <span><span class="co">#&gt;     FMA          X1   0.5121 0.04257   NA     NA</span></span>
 <span><span class="co">#&gt;     FMA          X2  -0.3584 0.05587   NA     NA</span></span>
 <span><span class="co">#&gt;     FMA        dose   0.3826 0.01255   NA     NA</span></span>
-<span><span class="co">#&gt;     BMA (Intercept)  -0.9180 0.04041 1.00 301.00</span></span>
-<span><span class="co">#&gt;     BMA          X1   0.5100 0.04121 1.01 364.00</span></span>
-<span><span class="co">#&gt;     BMA          X2  -0.3581 0.05584 1.00 800.00</span></span>
-<span><span class="co">#&gt;     BMA        dose   0.3833 0.01343 1.01 371.00</span></span>
+<span><span class="co">#&gt;     BMA (Intercept)  -0.9176 0.03962 1.00 311.00</span></span>
+<span><span class="co">#&gt;     BMA          X1   0.5086 0.04094 1.00 457.00</span></span>
+<span><span class="co">#&gt;     BMA          X2  -0.3622 0.05604 1.00 694.00</span></span>
+<span><span class="co">#&gt;     BMA        dose   0.3828 0.01287 1.00 415.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.ameras.poisson.lin</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     RC        ERC       MCML        FMA        BMA</span></span>
-<span><span class="co">#&gt; (Intercept) -0.9649529 -0.9666735 -0.9173445 -0.9173785 -0.9179930</span></span>
-<span><span class="co">#&gt; X1           0.5054270  0.5049256  0.5129102  0.5120519  0.5099994</span></span>
-<span><span class="co">#&gt; X2          -0.3639707 -0.3666592 -0.3579466 -0.3583942 -0.3581445</span></span>
-<span><span class="co">#&gt; dose         0.4204226  0.4222084  0.3822723  0.3826304  0.3833150</span></span></code></pre></div>
+<span><span class="co">#&gt; (Intercept) -0.9649529 -0.9666735 -0.9173445 -0.9173789 -0.9175622</span></span>
+<span><span class="co">#&gt; X1           0.5054270  0.5049256  0.5129102  0.5120522  0.5086146</span></span>
+<span><span class="co">#&gt; X2          -0.3639707 -0.3666592 -0.3579466 -0.3583937 -0.3621559</span></span>
+<span><span class="co">#&gt; dose         0.4204226  0.4222084  0.3822723  0.3826305  0.3827546</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="proportional-hazards-regression">Proportional hazards regression<a class="anchor" aria-label="anchor" href="#proportional-hazards-regression"></a>
@@ -986,16 +1072,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "prophaz", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 120.4 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 123.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.3</span></span>
-<span><span class="co">#&gt;     ERC     8.2</span></span>
+<span><span class="co">#&gt;     ERC     7.3</span></span>
 <span><span class="co">#&gt;    MCML     0.6</span></span>
 <span><span class="co">#&gt;     FMA     2.0</span></span>
-<span><span class="co">#&gt;     BMA   109.3</span></span>
+<span><span class="co">#&gt;     BMA   113.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1076,16 +1162,16 @@ baseline hazards, corresponding to the estimates <code>h0</code>:</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "prophaz", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 111.9 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 115.8 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.1</span></span>
-<span><span class="co">#&gt;     ERC     4.1</span></span>
+<span><span class="co">#&gt;      RC     0.9</span></span>
+<span><span class="co">#&gt;     ERC     3.5</span></span>
 <span><span class="co">#&gt;    MCML     0.4</span></span>
 <span><span class="co">#&gt;     FMA     1.2</span></span>
-<span><span class="co">#&gt;     BMA   106.1</span></span>
+<span><span class="co">#&gt;     BMA   109.8</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1160,16 +1246,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "multinomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 459.2 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 444.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     1.5</span></span>
-<span><span class="co">#&gt;     ERC   173.3</span></span>
-<span><span class="co">#&gt;    MCML     9.2</span></span>
-<span><span class="co">#&gt;     FMA    12.2</span></span>
-<span><span class="co">#&gt;     BMA   263.0</span></span>
+<span><span class="co">#&gt;      RC     1.2</span></span>
+<span><span class="co">#&gt;     ERC   155.8</span></span>
+<span><span class="co">#&gt;    MCML     8.6</span></span>
+<span><span class="co">#&gt;     FMA    11.9</span></span>
+<span><span class="co">#&gt;     BMA   266.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1269,16 +1355,16 @@ setting <code>deg=2</code>.</p>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "multinomial", methods = c("RC", </span></span>
 <span><span class="co">#&gt;     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 371.9 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 348.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     1.1</span></span>
-<span><span class="co">#&gt;     ERC   130.6</span></span>
-<span><span class="co">#&gt;    MCML     6.8</span></span>
-<span><span class="co">#&gt;     FMA     8.3</span></span>
-<span><span class="co">#&gt;     BMA   225.1</span></span>
+<span><span class="co">#&gt;     ERC   103.3</span></span>
+<span><span class="co">#&gt;    MCML     6.5</span></span>
+<span><span class="co">#&gt;     FMA     8.6</span></span>
+<span><span class="co">#&gt;     BMA   228.7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1362,16 +1448,16 @@ first fit models including a quadratic exposure term by setting
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, </span></span>
 <span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 96.1 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 98 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
 <span><span class="co">#&gt;      RC     0.6</span></span>
-<span><span class="co">#&gt;     ERC    14.3</span></span>
+<span><span class="co">#&gt;     ERC    15.8</span></span>
 <span><span class="co">#&gt;    MCML     1.9</span></span>
-<span><span class="co">#&gt;     FMA     6.6</span></span>
-<span><span class="co">#&gt;     BMA    72.7</span></span>
+<span><span class="co">#&gt;     FMA     6.7</span></span>
+<span><span class="co">#&gt;     BMA    73.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1424,16 +1510,16 @@ first fit models including a quadratic exposure term by setting
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, </span></span>
 <span><span class="co">#&gt;     niter.BMA = 5000)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 96.5 seconds</span></span>
+<span><span class="co">#&gt; Total run time: 100 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.5</span></span>
-<span><span class="co">#&gt;     ERC    14.2</span></span>
+<span><span class="co">#&gt;      RC     0.6</span></span>
+<span><span class="co">#&gt;     ERC    16.6</span></span>
 <span><span class="co">#&gt;    MCML     1.9</span></span>
-<span><span class="co">#&gt;     FMA     6.7</span></span>
-<span><span class="co">#&gt;     BMA    73.2</span></span>
+<span><span class="co">#&gt;     FMA     6.8</span></span>
+<span><span class="co">#&gt;     BMA    74.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

@@ -80,6 +80,8 @@ set.seed(12345)
 fit.ameras.linreg <- ameras(Y.gaussian~dose(V1:V10)+X1+X2, data=data, 
                             family="gaussian", niter.BMA=5000, nburnin.BMA=1000,
                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"))
+#> Warning in ameras.fma(family = family, dosevars = dosevars, data = data, : FMA
+#> is based on only 4 realizations.
 #> |-------------|-------------|-------------|-------------|
 #> |-------------------------------------------------------|
 #> |-------------|-------------|-------------|-------------|
@@ -162,7 +164,7 @@ str(fit.ameras.linreg)
 #>   .. ..$ counts     : Named num [1:2] 509 1
 #>   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"
 #>   ..$ loglik      : num -4563
-#>   ..$ runtime     : chr "0.2 seconds"
+#>   ..$ runtime     : chr "0.3 seconds"
 #>   ..$ ERC         : logi FALSE
 #>  $ ERC               :List of 7
 #>   ..$ coefficients: Named num [1:5] -1.361 0.48 -0.519 1.165 1.106
@@ -180,7 +182,7 @@ str(fit.ameras.linreg)
 #>   .. ..$ counts     : Named num [1:2] 546 9
 #>   .. .. ..- attr(*, "names")= chr [1:2] "function" "gradient"
 #>   ..$ loglik      : num -4559
-#>   ..$ runtime     : chr "120.6 seconds"
+#>   ..$ runtime     : chr "110.2 seconds"
 #>   ..$ ERC         : logi TRUE
 #>  $ MCML              :List of 6
 #>   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138
@@ -204,43 +206,44 @@ str(fit.ameras.linreg)
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
 #>   ..$ sd                   : Named num [1:5] 0.0373 0.0418 0.0512 0.0202 0.0147
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
-#>   ..$ vcov                 : num [1:5, 1:5] 1.39e-03 -8.93e-04 -5.20e-04 -4.06e-04 -8.61e-07 ...
+#>   ..$ vcov                 : num [1:5, 1:5] 1.39e-03 -8.93e-04 -5.20e-04 -4.06e-04 -8.48e-07 ...
 #>   .. ..- attr(*, "dimnames")=List of 2
 #>   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
 #>   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
-#>   ..$ included.realizations: int [1:10] 1 2 3 4 5 6 7 8 9 10
-#>   ..$ included.samples     : int 100006
-#>   ..$ weights              : num [1:10] 1.23e-25 1.49e-18 2.02e-05 6.23e-04 3.11e-09 ...
-#>   ..$ samples              :'data.frame':    100006 obs. of  5 variables:
-#>   .. ..$ (Intercept): num [1:100006] -1.27 -1.32 -1.32 -1.26 -1.24 ...
-#>   .. ..$ X1         : num [1:100006] 0.516 0.511 0.534 0.415 0.509 ...
-#>   .. ..$ X2         : num [1:100006] -0.525 -0.535 -0.49 -0.529 -0.538 ...
-#>   .. ..$ dose       : num [1:100006] 1.08 1.09 1.1 1.11 1.03 ...
-#>   .. ..$ sigma      : num [1:100006] 1.17 1.14 1.13 1.15 1.12 ...
-#>   ..$ runtime              : chr "1.2 seconds"
+#>   ..$ included.realizations: int [1:4] 3 4 8 9
+#>   ..$ included.samples     : int 100000
+#>   ..$ weights              : Named num [1:4] 2.02e-05 6.23e-04 9.94e-01 5.17e-03
+#>   .. ..- attr(*, "names")= chr [1:4] "V3" "V4" "V8" "V9"
+#>   ..$ samples              :'data.frame':    100000 obs. of  5 variables:
+#>   .. ..$ (Intercept): num [1:100000] -1.27 -1.35 -1.3 -1.23 -1.24 ...
+#>   .. ..$ X1         : num [1:100000] 0.484 0.51 0.53 0.411 0.509 ...
+#>   .. ..$ X2         : num [1:100000] -0.517 -0.51 -0.484 -0.523 -0.538 ...
+#>   .. ..$ dose       : num [1:100000] 1.08 1.1 1.07 1.08 1.03 ...
+#>   .. ..$ sigma      : num [1:100000] 1.15 1.13 1.13 1.14 1.12 ...
+#>   ..$ runtime              : chr "1.4 seconds"
 #>  $ BMA               :List of 7
-#>   ..$ coefficients         : Named num [1:5] -1.28 0.483 -0.517 1.079 1.139
+#>   ..$ coefficients         : Named num [1:5] -1.281 0.483 -0.516 1.08 1.139
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
-#>   ..$ sd                   : Named num [1:5] 0.038 0.0424 0.0525 0.0202 0.015
+#>   ..$ sd                   : Named num [1:5] 0.0373 0.0386 0.0527 0.0205 0.0153
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
-#>   ..$ vcov                 : num [1:5, 1:5] 1.44e-03 -9.34e-04 -5.28e-04 -4.02e-04 3.98e-05 ...
+#>   ..$ vcov                 : num [1:5, 1:5] 1.39e-03 -7.83e-04 -4.98e-04 -4.43e-04 -5.79e-06 ...
 #>   .. ..- attr(*, "dimnames")=List of 2
 #>   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
 #>   .. .. ..$ : chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
 #>   ..$ Rhat                 :'data.frame':    5 obs. of  2 variables:
-#>   .. ..$ Rhat : num [1:5] 1 1.01 1 1 1.02
-#>   .. ..$ n.eff: num [1:5] 871 822 800 800 744
+#>   .. ..$ Rhat : num [1:5] 1.01 1 1.01 1.01 1
+#>   .. ..$ n.eff: num [1:5] 800 717 750 800 868
 #>   ..$ samples              :List of 2
-#>   .. ..$ chain1: num [1:400, 1:6] -1.32 -1.27 -1.33 -1.29 -1.33 ...
+#>   .. ..$ chain1: num [1:400, 1:6] -1.24 -1.2 -1.26 -1.3 -1.27 ...
 #>   .. .. ..- attr(*, "dimnames")=List of 2
 #>   .. .. .. ..$ : NULL
 #>   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...
-#>   .. ..$ chain2: num [1:400, 1:6] -1.3 -1.29 -1.23 -1.3 -1.26 ...
+#>   .. ..$ chain2: num [1:400, 1:6] -1.3 -1.3 -1.29 -1.23 -1.3 ...
 #>   .. .. ..- attr(*, "dimnames")=List of 2
 #>   .. .. .. ..$ : NULL
 #>   .. .. .. ..$ : chr [1:6] "(Intercept)" "X1" "X2" "dose" ...
 #>   ..$ included.realizations: int [1:10] 1 2 3 4 5 6 7 8 9 10
-#>   ..$ runtime              : chr "75.5 seconds"
+#>   ..$ runtime              : chr "79.3 seconds"
 #>  - attr(*, "class")= chr "amerasfit"
 ```
 
@@ -295,7 +298,7 @@ fit.ameras.linreg$RC
 #> [1] -4563.325
 #> 
 #> $runtime
-#> [1] "0.2 seconds"
+#> [1] "0.3 seconds"
 #> 
 #> $ERC
 #> [1] FALSE
@@ -312,16 +315,16 @@ summary(fit.ameras.linreg)
 #>     family = "gaussian", methods = c("RC", "ERC", "MCML", "FMA", 
 #>         "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 198.2 seconds
+#> Total run time: 191.9 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.2
-#>     ERC   120.6
+#>      RC     0.3
+#>     ERC   110.2
 #>    MCML     0.7
-#>     FMA     1.2
-#>     BMA    75.5
+#>     FMA     1.4
+#>     BMA    79.3
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -346,11 +349,11 @@ summary(fit.ameras.linreg)
 #>     FMA          X2  -0.5173 0.05124   NA     NA
 #>     FMA        dose   1.0792 0.02015   NA     NA
 #>     FMA       sigma   1.1377 0.01467   NA     NA
-#>     BMA (Intercept)  -1.2796 0.03797 1.00 871.00
-#>     BMA          X1   0.4831 0.04240 1.01 822.00
-#>     BMA          X2  -0.5169 0.05254 1.00 800.00
-#>     BMA        dose   1.0788 0.02024 1.00 800.00
-#>     BMA       sigma   1.1391 0.01503 1.02 744.00
+#>     BMA (Intercept)  -1.2810 0.03733 1.01 800.00
+#>     BMA          X1   0.4827 0.03865 1.00 717.00
+#>     BMA          X2  -0.5159 0.05268 1.01 750.00
+#>     BMA        dose   1.0799 0.02048 1.01 800.00
+#>     BMA       sigma   1.1391 0.01525 1.00 868.00
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -361,11 +364,11 @@ To extract model coefficients and compare between methods, use `coef`:
 
 coef(fit.ameras.linreg)
 #>                     RC        ERC       MCML        FMA        BMA
-#> (Intercept) -1.3622239 -1.3610557 -1.2802532 -1.2803273 -1.2796163
-#> X1           0.4807463  0.4795308  0.4836506  0.4836869  0.4830670
-#> X2          -0.5187877 -0.5188299 -0.5171452 -0.5173188 -0.5169488
-#> dose         1.1660368  1.1649227  1.0790214  1.0791951  1.0787855
-#> sigma        1.1075696  1.1062486  1.1377732  1.1377321  1.1391166
+#> (Intercept) -1.3622239 -1.3610557 -1.2802532 -1.2803270 -1.2809953
+#> X1           0.4807463  0.4795308  0.4836506  0.4836875  0.4827281
+#> X2          -0.5187877 -0.5188299 -0.5171452 -0.5173177 -0.5158568
+#> dose         1.1660368  1.1649227  1.0790214  1.0791942  1.0798948
+#> sigma        1.1075696  1.1062486  1.1377732  1.1377311  1.1391308
 ```
 
 To produce traceplots and density plots for BMA results, use
@@ -413,16 +416,16 @@ summary(fit.ameras.logreg)
 #>     X1 + X2, data = data, family = "binomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 144.2 seconds
+#> Total run time: 141.1 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC    81.0
+#>     ERC    75.4
 #>    MCML     1.1
-#>     FMA     2.7
-#>     BMA    59.1
+#>     FMA     2.9
+#>     BMA    61.4
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -490,16 +493,16 @@ summary(fit.ameras.logreg.lin)
 #>     X1 + X2, data = data, family = "binomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 106 seconds
+#> Total run time: 107.1 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.1
-#>     ERC    49.4
+#>      RC     0.2
+#>     ERC    47.2
 #>    MCML     0.7
-#>     FMA     1.5
-#>     BMA    54.3
+#>     FMA     1.6
+#>     BMA    57.4
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -552,14 +555,97 @@ fit.ameras.poisson <- ameras(Y.poisson~dose(V1:V10, deg=2, model="EXP")+X1+X2,
                              data=data, family="poisson", 
                              methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                              niter.BMA = 5000, nburnin.BMA = 1000)
-#> |-------------|-------------|-------------|-------------|
-#> |-------------------------------------------------------|
-#> warning: logProb of data node Y[247]: logProb less than -1e12.
+#> warning: logProb of data node Y[17]: logProb less than -1e12.
 #> warning: logProb of data node Y[676]: logProb less than -1e12.
-#> warning: logProb of data node Y[833]: logProb less than -1e12.
+#> warning: logProb of data node Y[1566]: logProb less than -1e12.
 #> warning: logProb of data node Y[1635]: logProb less than -1e12.
+#> warning: logProb of data node Y[1755]: logProb less than -1e12.
+#> warning: logProb of data node Y[2021]: logProb less than -1e12.
+#> warning: logProb of data node Y[2395]: logProb less than -1e12.
+#> warning: logProb of data node Y[2407]: logProb less than -1e12.
+#> warning: logProb of data node Y[2715]: logProb less than -1e12.
+#> warning: logProb of data node Y[2733]: logProb less than -1e12.
+#> warning: logProb of data node Y[2907]: logProb less than -1e12.
 #> |-------------|-------------|-------------|-------------|
 #> |-------------------------------------------------------|
+#> warning: logProb of data node Y[7]: logProb less than -1e12.
+#> warning: logProb of data node Y[17]: logProb less than -1e12.
+#> warning: logProb of data node Y[41]: logProb less than -1e12.
+#> warning: logProb of data node Y[46]: logProb less than -1e12.
+#> warning: logProb of data node Y[341]: logProb less than -1e12.
+#> warning: logProb of data node Y[370]: logProb less than -1e12.
+#> warning: logProb of data node Y[420]: logProb less than -1e12.
+#> warning: logProb of data node Y[432]: logProb less than -1e12.
+#> warning: logProb of data node Y[433]: logProb less than -1e12.
+#> warning: logProb of data node Y[509]: logProb less than -1e12.
+#> warning: logProb of data node Y[620]: logProb less than -1e12.
+#> warning: logProb of data node Y[627]: logProb less than -1e12.
+#> warning: logProb of data node Y[676]: logProb less than -1e12.
+#> warning: logProb of data node Y[716]: logProb less than -1e12.
+#> warning: logProb of data node Y[749]: logProb less than -1e12.
+#> warning: logProb of data node Y[833]: logProb less than -1e12.
+#> warning: logProb of data node Y[839]: logProb less than -1e12.
+#> warning: logProb of data node Y[873]: logProb less than -1e12.
+#> warning: logProb of data node Y[1002]: logProb less than -1e12.
+#> warning: logProb of data node Y[1009]: logProb less than -1e12.
+#> warning: logProb of data node Y[1037]: logProb less than -1e12.
+#> warning: logProb of data node Y[1070]: logProb less than -1e12.
+#> warning: logProb of data node Y[1081]: logProb less than -1e12.
+#> warning: logProb of data node Y[1210]: logProb less than -1e12.
+#> warning: logProb of data node Y[1247]: logProb less than -1e12.
+#> warning: logProb of data node Y[1319]: logProb less than -1e12.
+#> warning: logProb of data node Y[1357]: logProb less than -1e12.
+#> warning: logProb of data node Y[1517]: logProb less than -1e12.
+#> warning: logProb of data node Y[1523]: logProb less than -1e12.
+#> warning: logProb of data node Y[1566]: logProb less than -1e12.
+#> warning: logProb of data node Y[1572]: logProb less than -1e12.
+#> warning: logProb of data node Y[1635]: logProb less than -1e12.
+#> warning: logProb of data node Y[1661]: logProb less than -1e12.
+#> warning: logProb of data node Y[1664]: logProb less than -1e12.
+#> warning: logProb of data node Y[1693]: logProb less than -1e12.
+#> warning: logProb of data node Y[1755]: logProb less than -1e12.
+#> warning: logProb of data node Y[1836]: logProb less than -1e12.
+#> warning: logProb of data node Y[1838]: logProb less than -1e12.
+#> warning: logProb of data node Y[1888]: logProb less than -1e12.
+#> warning: logProb of data node Y[1948]: logProb less than -1e12.
+#> warning: logProb of data node Y[1972]: logProb less than -1e12.
+#> warning: logProb of data node Y[1979]: logProb less than -1e12.
+#> warning: logProb of data node Y[1991]: logProb less than -1e12.
+#> warning: logProb of data node Y[1997]: logProb less than -1e12.
+#> warning: logProb of data node Y[2009]: logProb less than -1e12.
+#> warning: logProb of data node Y[2021]: logProb less than -1e12.
+#> warning: logProb of data node Y[2089]: logProb less than -1e12.
+#> warning: logProb of data node Y[2101]: logProb less than -1e12.
+#> warning: logProb of data node Y[2129]: logProb less than -1e12.
+#> warning: logProb of data node Y[2208]: logProb less than -1e12.
+#> warning: logProb of data node Y[2237]: logProb less than -1e12.
+#> warning: logProb of data node Y[2339]: logProb less than -1e12.
+#> warning: logProb of data node Y[2395]: logProb less than -1e12.
+#> warning: logProb of data node Y[2463]: logProb less than -1e12.
+#> warning: logProb of data node Y[2490]: logProb less than -1e12.
+#> warning: logProb of data node Y[2495]: logProb less than -1e12.
+#> warning: logProb of data node Y[2524]: logProb less than -1e12.
+#> warning: logProb of data node Y[2530]: logProb less than -1e12.
+#> warning: logProb of data node Y[2559]: logProb less than -1e12.
+#> warning: logProb of data node Y[2655]: logProb less than -1e12.
+#> warning: logProb of data node Y[2671]: logProb less than -1e12.
+#> warning: logProb of data node Y[2688]: logProb less than -1e12.
+#> warning: logProb of data node Y[2715]: logProb less than -1e12.
+#> warning: logProb of data node Y[2728]: logProb less than -1e12.
+#> warning: logProb of data node Y[2733]: logProb less than -1e12.
+#> warning: logProb of data node Y[2747]: logProb less than -1e12.
+#> warning: logProb of data node Y[2774]: logProb less than -1e12.
+#> warning: logProb of data node Y[2787]: logProb less than -1e12.
+#> warning: logProb of data node Y[2824]: logProb less than -1e12.
+#> warning: logProb of data node Y[2838]: logProb less than -1e12.
+#> warning: logProb of data node Y[2886]: logProb less than -1e12.
+#> warning: logProb of data node Y[2907]: logProb less than -1e12.
+#> warning: logProb of data node Y[2937]: logProb less than -1e12.
+#> warning: logProb of data node Y[2971]: logProb less than -1e12.
+#> |-------------|-------------|-------------|-------------|
+#> |-------------------------------------------------------|
+#> Warning in ameras.bma(family = family, dosevars = dosevars, data = data, :
+#> WARNING: Potential problems with MCMC convergence, consider using longer chains
 ```
 
 ``` r
@@ -570,14 +656,14 @@ summary(fit.ameras.poisson)
 #>     X1 + X2, data = data, family = "poisson", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 74 seconds
+#> Total run time: 73.9 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
 #>     ERC     1.9
-#>    MCML     1.4
+#>    MCML     1.3
 #>     FMA     3.2
 #>     BMA    67.2
 #> 
@@ -601,14 +687,14 @@ summary(fit.ameras.poisson)
 #>    MCML dose_squared -0.03644 0.005719   NA     NA
 #>     FMA  (Intercept) -1.07542 0.047056   NA     NA
 #>     FMA           X1  0.49896 0.041800   NA     NA
-#>     FMA           X2 -0.37716 0.055479   NA     NA
+#>     FMA           X2 -0.37716 0.055480   NA     NA
 #>     FMA         dose  0.60138 0.035163   NA     NA
 #>     FMA dose_squared -0.03656 0.005998   NA     NA
-#>     BMA  (Intercept) -1.07944 0.044741 1.02 215.00
-#>     BMA           X1  0.49801 0.039956 1.03 435.00
-#>     BMA           X2 -0.38167 0.055527 1.00 800.00
-#>     BMA         dose  0.60805 0.035663 1.03  87.00
-#>     BMA dose_squared -0.03798 0.006215 1.03  79.00
+#>     BMA  (Intercept) -1.07799 0.047700 1.01 214.00
+#>     BMA           X1  0.49992 0.043816 1.00 417.00
+#>     BMA           X2 -0.37653 0.054501 1.00 720.00
+#>     BMA         dose  0.60364 0.034757 1.04  84.00
+#>     BMA dose_squared -0.03708 0.006049 1.06  94.00
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -616,12 +702,12 @@ summary(fit.ameras.poisson)
 ``` r
 
 coef(fit.ameras.poisson)
-#>                       RC         ERC        MCML         FMA        BMA
-#> (Intercept)  -1.09455980 -1.09068092 -1.07519346 -1.07541780 -1.0794372
-#> X1            0.49070108  0.49179875  0.49897425  0.49895993  0.4980120
-#> X2           -0.37624508 -0.37854805 -0.37711401 -0.37715581 -0.3816682
-#> dose          0.61975742  0.61138406  0.60089474  0.60137955  0.6080481
-#> dose_squared -0.03849039 -0.03626348 -0.03643505 -0.03656317 -0.0379750
+#>                       RC         ERC        MCML         FMA         BMA
+#> (Intercept)  -1.09455980 -1.09068092 -1.07519346 -1.07541780 -1.07799473
+#> X1            0.49070108  0.49179875  0.49897425  0.49896042  0.49992168
+#> X2           -0.37624508 -0.37854805 -0.37711401 -0.37715570 -0.37653372
+#> dose          0.61975742  0.61138406  0.60089474  0.60137902  0.60363665
+#> dose_squared -0.03849039 -0.03626348 -0.03643505 -0.03656298 -0.03707947
 ```
 
 Without the quadratic term (`deg=1`):
@@ -647,16 +733,16 @@ summary(fit.ameras.poisson.lin)
 #>     X1 + X2, data = data, family = "poisson", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 65.5 seconds
+#> Total run time: 66.9 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.2
-#>     ERC     1.2
+#>     ERC     1.3
 #>    MCML     0.6
-#>     FMA     1.8
-#>     BMA    61.7
+#>     FMA     2.4
+#>     BMA    62.4
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -677,10 +763,10 @@ summary(fit.ameras.poisson.lin)
 #>     FMA          X1   0.5121 0.04257   NA     NA
 #>     FMA          X2  -0.3584 0.05587   NA     NA
 #>     FMA        dose   0.3826 0.01255   NA     NA
-#>     BMA (Intercept)  -0.9180 0.04041 1.00 301.00
-#>     BMA          X1   0.5100 0.04121 1.01 364.00
-#>     BMA          X2  -0.3581 0.05584 1.00 800.00
-#>     BMA        dose   0.3833 0.01343 1.01 371.00
+#>     BMA (Intercept)  -0.9176 0.03962 1.00 311.00
+#>     BMA          X1   0.5086 0.04094 1.00 457.00
+#>     BMA          X2  -0.3622 0.05604 1.00 694.00
+#>     BMA        dose   0.3828 0.01287 1.00 415.00
 #> 
 #> Note: confidence intervals not yet computed. Use confint() to add them.
 ```
@@ -689,10 +775,10 @@ summary(fit.ameras.poisson.lin)
 
 coef(fit.ameras.poisson.lin)
 #>                     RC        ERC       MCML        FMA        BMA
-#> (Intercept) -0.9649529 -0.9666735 -0.9173445 -0.9173785 -0.9179930
-#> X1           0.5054270  0.5049256  0.5129102  0.5120519  0.5099994
-#> X2          -0.3639707 -0.3666592 -0.3579466 -0.3583942 -0.3581445
-#> dose         0.4204226  0.4222084  0.3822723  0.3826304  0.3833150
+#> (Intercept) -0.9649529 -0.9666735 -0.9173445 -0.9173789 -0.9175622
+#> X1           0.5054270  0.5049256  0.5129102  0.5120522  0.5086146
+#> X2          -0.3639707 -0.3666592 -0.3579466 -0.3583937 -0.3621559
+#> dose         0.4204226  0.4222084  0.3822723  0.3826305  0.3827546
 ```
 
 ## Proportional hazards regression
@@ -964,16 +1050,16 @@ summary(fit.ameras.prophaz)
 #>     X1 + X2, data = data, family = "prophaz", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 120.4 seconds
+#> Total run time: 123.4 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.3
-#>     ERC     8.2
+#>     ERC     7.3
 #>    MCML     0.6
 #>     FMA     2.0
-#>     BMA   109.3
+#>     BMA   113.2
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1068,16 +1154,16 @@ summary(fit.ameras.prophaz.lin)
 #>     X1 + X2, data = data, family = "prophaz", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 111.9 seconds
+#> Total run time: 115.8 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.1
-#>     ERC     4.1
+#>      RC     0.9
+#>     ERC     3.5
 #>    MCML     0.4
 #>     FMA     1.2
-#>     BMA   106.1
+#>     BMA   109.8
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1160,16 +1246,16 @@ summary(fit.ameras.multinomial)
 #>     X1 + X2, data = data, family = "multinomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 459.2 seconds
+#> Total run time: 444.2 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     1.5
-#>     ERC   173.3
-#>    MCML     9.2
-#>     FMA    12.2
-#>     BMA   263.0
+#>      RC     1.2
+#>     ERC   155.8
+#>    MCML     8.6
+#>     FMA    11.9
+#>     BMA   266.7
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1279,16 +1365,16 @@ summary(fit.ameras.multinomial.lin)
 #>     X1 + X2, data = data, family = "multinomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total run time: 371.9 seconds
+#> Total run time: 348.2 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     1.1
-#>     ERC   130.6
-#>    MCML     6.8
-#>     FMA     8.3
-#>     BMA   225.1
+#>     ERC   103.3
+#>    MCML     6.5
+#>     FMA     8.6
+#>     BMA   228.7
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1379,16 +1465,16 @@ summary(fit.ameras.clogit)
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, 
 #>     niter.BMA = 5000)
 #> 
-#> Total run time: 96.1 seconds
+#> Total run time: 98 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
 #>      RC     0.6
-#>     ERC    14.3
+#>     ERC    15.8
 #>    MCML     1.9
-#>     FMA     6.6
-#>     BMA    72.7
+#>     FMA     6.7
+#>     BMA    73.0
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1451,16 +1537,16 @@ summary(fit.ameras.clogit.lin)
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, 
 #>     niter.BMA = 5000)
 #> 
-#> Total run time: 96.5 seconds
+#> Total run time: 100 seconds
 #> 
 #> Runtime in seconds by method:
 #> 
 #>  Method Runtime
-#>      RC     0.5
-#>     ERC    14.2
+#>      RC     0.6
+#>     ERC    16.6
 #>    MCML     1.9
-#>     FMA     6.7
-#>     BMA    73.2
+#>     FMA     6.8
+#>     BMA    74.1
 #> 
 #> Summary of coefficients by method:
 #> 
