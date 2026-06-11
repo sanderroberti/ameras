@@ -141,6 +141,52 @@ test_that("FMA returns NA estimates when all weight allocations round to zero", 
   expect_true(all(is.na(fit$FMA$vcov)))
 })
 
+test_that("FMA forwards transform arguments through fitting and sampling", {
+  # This catches regressions where the likelihood closure receives `...` during
+  # optimization but the Hessian or FMA sampling step does not.
+  require_marker <- function(marker) {
+    if (!identical(marker, "fma-transform-ok")) {
+      stop("transform marker was not forwarded")
+    }
+  }
+  transform_sigma <- function(params, marker, ...) {
+    require_marker(marker)
+    transform1(params, index.t = 3)
+  }
+  transform_sigma_jacobian <- function(params, marker, ...) {
+    require_marker(marker)
+    transform1.jacobian(params, index.t = 3)
+  }
+
+  set.seed(4)
+  n <- 80
+  dose <- seq(-1, 1, length.out = n)
+  transform_data <- data.frame(
+    Y = 1 + 2 * dose + rnorm(n, sd = 0.2),
+    V1 = dose + rnorm(n, sd = 0.02),
+    V2 = dose + rnorm(n, sd = 0.02)
+  )
+
+  fit <- suppressMessages(
+    suppressWarnings(
+      ameras(
+        Y ~ dose(V1:V2),
+        data = transform_data,
+        family = "gaussian",
+        methods = "FMA",
+        MFMA = 100,
+        transform = transform_sigma,
+        transform.jacobian = transform_sigma_jacobian,
+        marker = "fma-transform-ok"
+      )
+    )
+  )
+
+  expect_named(fit$FMA$coefficients, c("(Intercept)", "dose", "sigma"))
+  expect_true(all(is.finite(fit$FMA$coefficients)))
+  expect_true(all(is.finite(fit$FMA$vcov)))
+})
+
 expect_fma_parameter_names <- function(fit, expected) {
   # FMA names are copied into several parallel result objects. Checking all of
   # them catches cases where only one summary table was named correctly.

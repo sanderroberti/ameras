@@ -8,6 +8,61 @@ summarize_fma_realization_fit <- function(fit, npar) {
   )
 }
 
+fit_fma_realizations <- function(
+  family,
+  dosevars,
+  data,
+  inpar,
+  npar,
+  optim.method,
+  control,
+  Y = NULL,
+  M = NULL,
+  X = NULL,
+  offset = NULL,
+  entry = NULL,
+  exit = NULL,
+  status = NULL,
+  setnr = NULL,
+  doseRRmod = NULL,
+  deg = 1,
+  transform = NULL,
+  designmat = NULL,
+  ...
+) {
+  # Keep the per-realization FMA optimization path in one place so each
+  # family branch only supplies the model-specific inputs and AIC parameter
+  # count.
+  lapply(1:length(dosevars), function(Xi) {
+    loglik_fn <- make_single_realization_loglik(
+      family = family,
+      dose.col = dosevars[Xi],
+      data = data,
+      Y = Y,
+      M = M,
+      X = X,
+      offset = offset,
+      entry = entry,
+      exit = exit,
+      status = status,
+      setnr = setnr,
+      doseRRmod = doseRRmod,
+      deg = deg,
+      ERC = FALSE,
+      transform = transform,
+      designmat = designmat
+    )
+    fit <- fit_objective_with_hessian(
+      inpar,
+      loglik_fn,
+      optim.method = optim.method,
+      control = control,
+      ...
+    )
+    summarize_fma_realization_fit(fit, npar)
+  })
+}
+
 ameras.fma <- function(
   family,
   dosevars,
@@ -47,30 +102,21 @@ ameras.fma <- function(
       inpar <- rep(0, 2 + length(X) + length(M) * deg + deg)
     }
 
-    FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      loglik_fn <- make_single_realization_loglik(
-        family = "gaussian",
-        dose.col = dosevars[Xi],
-        data = data,
-        Y = Y,
-        M = M,
-        X = X,
-        deg = deg,
-        ERC = FALSE,
-        transform = transform
-      )
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik_fn,
-        optim.method = optim.method,
-        control = control,
-        ...
-      )
-      summarize_fma_realization_fit(
-        fit.FMAi,
-        2 + length(X) + length(M) * deg + deg
-      )
-    })
+    FMAfits <- fit_fma_realizations(
+      family = "gaussian",
+      dosevars = dosevars,
+      data = data,
+      inpar = inpar,
+      npar = 2 + length(X) + length(M) * deg + deg,
+      optim.method = optim.method,
+      control = control,
+      Y = Y,
+      M = M,
+      X = X,
+      deg = deg,
+      transform = transform,
+      ...
+    )
 
     parnames <- c(
       "(Intercept)",
@@ -96,31 +142,22 @@ ameras.fma <- function(
       inpar <- rep(0, 1 + length(X) + length(M) * deg + deg)
     }
 
-    FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      loglik_fn <- make_single_realization_loglik(
-        family = "binomial",
-        dose.col = dosevars[Xi],
-        data = data,
-        Y = Y,
-        M = M,
-        X = X,
-        doseRRmod = doseRRmod,
-        deg = deg,
-        ERC = FALSE,
-        transform = transform
-      )
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik_fn,
-        optim.method = optim.method,
-        control = control,
-        ...
-      )
-      summarize_fma_realization_fit(
-        fit.FMAi,
-        1 + length(X) + length(M) * deg + deg
-      )
-    })
+    FMAfits <- fit_fma_realizations(
+      family = "binomial",
+      dosevars = dosevars,
+      data = data,
+      inpar = inpar,
+      npar = 1 + length(X) + length(M) * deg + deg,
+      optim.method = optim.method,
+      control = control,
+      Y = Y,
+      M = M,
+      X = X,
+      doseRRmod = doseRRmod,
+      deg = deg,
+      transform = transform,
+      ...
+    )
 
     if (doseRRmod != "LINEXP") {
       parnames <- c(
@@ -163,31 +200,23 @@ ameras.fma <- function(
       inpar <- rep(0, 1 + length(X) + length(M) * deg + deg)
     }
 
-    FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      loglik_fn <- make_single_realization_loglik(
-        family = "poisson",
-        dose.col = dosevars[Xi],
-        data = data,
-        Y = Y,
-        M = M,
-        X = X,
-        offset = offset,
-        doseRRmod = doseRRmod,
-        deg = deg,
-        transform = transform
-      )
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik_fn,
-        optim.method = optim.method,
-        control = control,
-        ...
-      )
-      summarize_fma_realization_fit(
-        fit.FMAi,
-        1 + length(X) + length(M) * deg + deg
-      )
-    })
+    FMAfits <- fit_fma_realizations(
+      family = "poisson",
+      dosevars = dosevars,
+      data = data,
+      inpar = inpar,
+      npar = 1 + length(X) + length(M) * deg + deg,
+      optim.method = optim.method,
+      control = control,
+      Y = Y,
+      M = M,
+      X = X,
+      offset = offset,
+      doseRRmod = doseRRmod,
+      deg = deg,
+      transform = transform,
+      ...
+    )
 
     if (doseRRmod != "LINEXP") {
       parnames <- c(
@@ -235,32 +264,23 @@ ameras.fma <- function(
       inpar <- rep(0, length(X) + length(M) * deg + deg)
     }
 
-    FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      loglik_fn <- make_single_realization_loglik(
-        family = "clogit",
-        dose.col = dosevars[Xi],
-        data = data,
-        M = M,
-        X = X,
-        status = status,
-        doseRRmod = doseRRmod,
-        deg = deg,
-        ERC = FALSE,
-        transform = transform,
-        designmat = designmat
-      )
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik_fn,
-        optim.method = optim.method,
-        control = control,
-        ...
-      )
-      summarize_fma_realization_fit(
-        fit.FMAi,
-        length(X) + length(M) * deg + deg
-      )
-    })
+    FMAfits <- fit_fma_realizations(
+      family = "clogit",
+      dosevars = dosevars,
+      data = data,
+      inpar = inpar,
+      npar = length(X) + length(M) * deg + deg,
+      optim.method = optim.method,
+      control = control,
+      M = M,
+      X = X,
+      status = status,
+      doseRRmod = doseRRmod,
+      deg = deg,
+      transform = transform,
+      designmat = designmat,
+      ...
+    )
 
     if (doseRRmod != "LINEXP") {
       parnames <- c(
@@ -307,33 +327,24 @@ ameras.fma <- function(
       inpar <- rep(0, length(X) + length(M) * deg + deg)
     }
 
-    FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      loglik_fn <- make_single_realization_loglik(
-        family = "prophaz",
-        dose.col = dosevars[Xi],
-        data = data,
-        M = M,
-        X = X,
-        entry = entry,
-        exit = exit,
-        status = status,
-        doseRRmod = doseRRmod,
-        deg = deg,
-        ERC = FALSE,
-        transform = transform
-      )
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik_fn,
-        optim.method = optim.method,
-        control = control,
-        ...
-      )
-      summarize_fma_realization_fit(
-        fit.FMAi,
-        length(X) + length(M) * deg + deg
-      )
-    })
+    FMAfits <- fit_fma_realizations(
+      family = "prophaz",
+      dosevars = dosevars,
+      data = data,
+      inpar = inpar,
+      npar = length(X) + length(M) * deg + deg,
+      optim.method = optim.method,
+      control = control,
+      M = M,
+      X = X,
+      entry = entry,
+      exit = exit,
+      status = status,
+      doseRRmod = doseRRmod,
+      deg = deg,
+      transform = transform,
+      ...
+    )
 
     if (doseRRmod != "LINEXP") {
       parnames <- c(
@@ -378,31 +389,22 @@ ameras.fma <- function(
       )
     }
 
-    FMAfits <- lapply(1:length(dosevars), function(Xi) {
-      loglik_fn <- make_single_realization_loglik(
-        family = "multinomial",
-        dose.col = dosevars[Xi],
-        data = data,
-        Y = Y,
-        M = M,
-        X = X,
-        doseRRmod = doseRRmod,
-        deg = deg,
-        ERC = FALSE,
-        transform = transform
-      )
-      fit.FMAi <- fit_objective_with_hessian(
-        inpar,
-        loglik_fn,
-        optim.method = optim.method,
-        control = control,
-        ...
-      )
-      summarize_fma_realization_fit(
-        fit.FMAi,
-        1 + length(X) + length(M) * deg + deg
-      )
-    })
+    FMAfits <- fit_fma_realizations(
+      family = "multinomial",
+      dosevars = dosevars,
+      data = data,
+      inpar = inpar,
+      npar = 1 + length(X) + length(M) * deg + deg,
+      optim.method = optim.method,
+      control = control,
+      Y = Y,
+      M = M,
+      X = X,
+      doseRRmod = doseRRmod,
+      deg = deg,
+      transform = transform,
+      ...
+    )
 
     if (doseRRmod != "LINEXP") {
       parnames <- c(
