@@ -164,6 +164,24 @@ test_that("MCML one-parameter fits keep the scalar optimizer contract", {
   expect_identical(dim(fit$MCML$optim$hessian), c(1L, 1L))
 })
 
+test_that("RC one-parameter fits keep the scalar optimizer contract", {
+  guard_data <- make_refactor_guard_data()
+
+  fit <- fit_refactor_guard(
+    Y.clogit ~ dose(V1:V2, model = EXP) + strata(setnr),
+    data = guard_data,
+    family = "clogit",
+    methods = "RC"
+  )
+
+  # This is the same one-parameter conditional logistic setup as the MCML
+  # guard, but it protects RC's scalar `optimize()` path during refactoring.
+  expect_method_parameter_names(fit, "RC", "dose")
+  expect_equal(fit$RC$optim$convergence, 0)
+  expect_null(fit$RC$optim$counts)
+  expect_identical(dim(fit$RC$optim$hessian), c(1L, 1L))
+})
+
 test_that("RC and MCML multinomial names include response-level prefixes", {
   guard_data <- make_refactor_guard_data()
   methods <- c("RC", "MCML")

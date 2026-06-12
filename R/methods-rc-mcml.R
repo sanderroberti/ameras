@@ -243,28 +243,9 @@ ameras.rc <- function(
       inpar <- rep(0, 2 + length(X) + length(M) * deg + deg)
     }
 
-    fit <- optim(
-      inpar,
-      loglik.gaussian,
-      D = "rcdose_ameras",
-      X = X,
-      Y = Y,
-      M = M,
-      data = data,
-      deg = deg,
-      ERC = ERC,
-      Kmat = Kmat,
-      loglim = loglim,
-      transform = transform,
-      method = optim.method,
-      control = control,
-      ...
-    )
-    if (optim.method == "Nelder-Mead") {
-      count0 <- fit$counts
-      fit <- optim(
-        fit$par,
-        loglik.gaussian,
+    loglik.rc <- function(params, ...) {
+      loglik.gaussian(
+        params,
         D = "rcdose_ameras",
         X = X,
         Y = Y,
@@ -275,26 +256,15 @@ ameras.rc <- function(
         Kmat = Kmat,
         loglim = loglim,
         transform = transform,
-        method = "BFGS",
-        control = control,
         ...
       )
-      fit$counts <- replace(count0, is.na(count0), 0) +
-        replace(fit$counts, is.na(fit$counts), 0)
     }
-    fit$hessian <- numDeriv::hessian(
-      func = loglik.gaussian,
-      x = fit$par,
-      D = "rcdose_ameras",
-      X = X,
-      Y = Y,
-      M = M,
-      data = data,
-      deg = deg,
-      ERC = ERC,
-      Kmat = Kmat,
-      loglim = loglim,
-      transform = transform,
+    fit <- fit_objective_with_hessian(
+      start = inpar,
+      fn = loglik.rc,
+      optim.method = optim.method,
+      control = control,
+      use_optimize = FALSE,
       ...
     )
 
@@ -307,29 +277,9 @@ ameras.rc <- function(
       inpar <- rep(0, 1 + length(X) + length(M) * deg + deg)
     }
 
-    fit <- optim(
-      inpar,
-      loglik.binomial,
-      D = "rcdose_ameras",
-      X = X,
-      Y = Y,
-      M = M,
-      doseRRmod = doseRRmod,
-      data = data,
-      deg = deg,
-      ERC = ERC,
-      Kmat = Kmat,
-      loglim = loglim,
-      transform = transform,
-      method = optim.method,
-      control = control,
-      ...
-    )
-    if (optim.method == "Nelder-Mead") {
-      count0 <- fit$counts
-      fit <- optim(
-        fit$par,
-        loglik.binomial,
+    loglik.rc <- function(params, ...) {
+      loglik.binomial(
+        params,
         D = "rcdose_ameras",
         X = X,
         Y = Y,
@@ -341,28 +291,15 @@ ameras.rc <- function(
         Kmat = Kmat,
         loglim = loglim,
         transform = transform,
-        method = "BFGS",
-        control = control,
         ...
       )
-      fit$counts <- replace(count0, is.na(count0), 0) +
-        replace(fit$counts, is.na(fit$counts), 0)
     }
-
-    fit$hessian <- numDeriv::hessian(
-      func = loglik.binomial,
-      x = fit$par,
-      D = "rcdose_ameras",
-      X = X,
-      Y = Y,
-      M = M,
-      doseRRmod = doseRRmod,
-      data = data,
-      deg = deg,
-      ERC = ERC,
-      Kmat = Kmat,
-      loglim = loglim,
-      transform = transform,
+    fit <- fit_objective_with_hessian(
+      start = inpar,
+      fn = loglik.rc,
+      optim.method = optim.method,
+      control = control,
+      use_optimize = FALSE,
       ...
     )
 
@@ -517,110 +454,9 @@ ameras.rc <- function(
       inpar <- rep(0, length(X) + length(M) * deg + deg)
     }
 
-    if (length(X) + length(M) * deg + deg == 1) {
-      # Optimize 1-dimensional model: use optimize instead of optim
-
-      fit0 <- optimize(
-        f = loglik.clogit,
-        lower = -20,
-        upper = 5,
-        D = "rcdose_ameras",
-        status = status,
-        X = X,
-        M = M,
-        doseRRmod = doseRRmod,
-        designmat = designmat,
-        set_members = set_members,
-        entry = entry,
-        exit = exit,
-        data = data,
-        deg = deg,
-        ERC = ERC,
-        Kmat = Kmat,
-        loglim = loglim,
-        transform = transform,
-        ...
-      )
-
-      fit <- list(
-        par = fit0$minimum,
-        value = fit0$objective,
-        convergence = 0,
-        hessian = numDeriv::hessian(
-          func = loglik.clogit,
-          x = fit0$minimum,
-          D = "rcdose_ameras",
-          status = status,
-          X = X,
-          M = M,
-          doseRRmod = doseRRmod,
-          designmat = designmat,
-          set_members = set_members,
-          entry = entry,
-          exit = exit,
-          data = data,
-          deg = deg,
-          ERC = ERC,
-          Kmat = Kmat,
-          loglim = loglim,
-          transform = transform,
-          ...
-        )
-      )
-    } else {
-      fit <- optim(
-        inpar,
-        loglik.clogit,
-        D = "rcdose_ameras",
-        status = status,
-        X = X,
-        M = M,
-        doseRRmod = doseRRmod,
-        designmat = designmat,
-        set_members = set_members,
-        entry = entry,
-        exit = exit,
-        data = data,
-        deg = deg,
-        ERC = ERC,
-        Kmat = Kmat,
-        loglim = loglim,
-        transform = transform,
-        method = optim.method,
-        control = control,
-        ...
-      )
-
-      if (optim.method == "Nelder-Mead") {
-        count0 <- fit$counts
-        fit <- optim(
-          fit$par,
-          loglik.clogit,
-          D = "rcdose_ameras",
-          status = status,
-          X = X,
-          M = M,
-          doseRRmod = doseRRmod,
-          designmat = designmat,
-          set_members = set_members,
-          entry = entry,
-          exit = exit,
-          data = data,
-          deg = deg,
-          ERC = ERC,
-          Kmat = Kmat,
-          loglim = loglim,
-          transform = transform,
-          method = "BFGS",
-          control = control,
-          ...
-        )
-        fit$counts <- replace(count0, is.na(count0), 0) +
-          replace(fit$counts, is.na(fit$counts), 0)
-      }
-      fit$hessian <- numDeriv::hessian(
-        func = loglik.clogit,
-        x = fit$par,
+    loglik.rc <- function(params, ...) {
+      loglik.clogit(
+        params,
         D = "rcdose_ameras",
         status = status,
         X = X,
@@ -639,6 +475,14 @@ ameras.rc <- function(
         ...
       )
     }
+    fit <- fit_objective_with_hessian(
+      start = inpar,
+      fn = loglik.rc,
+      optim.method = optim.method,
+      control = control,
+      use_optimize = length(X) + length(M) * deg + deg == 1,
+      ...
+    )
 
   } else if (family == "prophaz") {
     if (is.null(exit)) {
@@ -894,29 +738,9 @@ ameras.rc <- function(
       )
     }
 
-    fit <- optim(
-      inpar,
-      loglik.multinomial,
-      D = "rcdose_ameras",
-      X = X,
-      Y = Y,
-      M = M,
-      doseRRmod = doseRRmod,
-      data = data,
-      deg = deg,
-      ERC = ERC,
-      Kmat = Kmat,
-      loglim = loglim,
-      transform = transform,
-      method = optim.method,
-      control = control,
-      ...
-    )
-    if (optim.method == "Nelder-Mead") {
-      count0 <- fit$counts
-      fit <- optim(
-        fit$par,
-        loglik.multinomial,
+    loglik.rc <- function(params, ...) {
+      loglik.multinomial(
+        params,
         D = "rcdose_ameras",
         X = X,
         Y = Y,
@@ -928,27 +752,15 @@ ameras.rc <- function(
         Kmat = Kmat,
         loglim = loglim,
         transform = transform,
-        method = "BFGS",
-        control = control,
         ...
       )
-      fit$counts <- replace(count0, is.na(count0), 0) +
-        replace(fit$counts, is.na(fit$counts), 0)
     }
-    fit$hessian <- numDeriv::hessian(
-      func = loglik.multinomial,
-      x = fit$par,
-      D = "rcdose_ameras",
-      X = X,
-      Y = Y,
-      M = M,
-      doseRRmod = doseRRmod,
-      data = data,
-      deg = deg,
-      ERC = ERC,
-      Kmat = Kmat,
-      loglim = loglim,
-      transform = transform,
+    fit <- fit_objective_with_hessian(
+      start = inpar,
+      fn = loglik.rc,
+      optim.method = optim.method,
+      control = control,
+      use_optimize = FALSE,
       ...
     )
 
