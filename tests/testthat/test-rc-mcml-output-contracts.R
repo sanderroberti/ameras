@@ -14,6 +14,7 @@ make_refactor_guard_data <- function(n = 80) {
   data.frame(
     Y.gaussian = 1 + 2 * dose + 0.4 * X1 + rnorm(n, sd = 0.25),
     Y.binomial = rbinom(n, size = 1, prob = plogis(-0.2 + 0.7 * dose)),
+    Y.poisson = pmax(0, round(exp(0.2 + 0.6 * dose + 0.2 * X1))),
     Y.multinomial = factor(
       sample(c("low", "mid", "high"), size = n, replace = TRUE),
       levels = c("low", "mid", "high")
@@ -122,6 +123,31 @@ test_that("RC, ERC, and MCML LINEXP names are set with and without modifiers", {
       "dose_exponential:Mzero"
     )
   )
+})
+
+test_that("RC and ERC Poisson fits keep the optimizer output contract", {
+  guard_data <- make_refactor_guard_data()
+
+  fit <- fit_refactor_guard(
+    Y.poisson ~ dose(V1:V2, model = EXP, deg = 2),
+    data = guard_data,
+    family = "poisson",
+    methods = c("RC", "ERC")
+  )
+
+  # ERC Poisson precomputes realization-specific residual variance terms
+  # before optimization. This guards that special setup while the optimizer
+  # itself is moved to the shared helper.
+  expect_methods_parameter_names(
+    fit,
+    c("RC", "ERC"),
+    c("(Intercept)", "dose", "dose_squared")
+  )
+  for (method in c("RC", "ERC")) {
+    expect_equal(fit[[method]]$optim$convergence, 0)
+    expect_named(fit[[method]]$optim$counts, c("function", "gradient"))
+    expect_identical(dim(fit[[method]]$optim$hessian), c(3L, 3L))
+  }
 })
 
 test_that("RC and MCML no-intercept family names start with dose terms", {

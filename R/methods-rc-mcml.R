@@ -318,51 +318,12 @@ ameras.rc <- function(
       Kmat_diag <- rowSums(Xc^2) / (ncol(dosemat_poisson) - 1)
       rm(dosemat_poisson)
       gc()
-
-      fit <- optim(
-        inpar,
-        loglik.poisson.erc,
-        D = dosevars,
-        X = X,
-        Y = Y,
-        offset = offset,
-        M = M,
-        doseRRmod = doseRRmod,
-        data = data,
-        deg = deg,
-        loglim = loglim,
-        transform = transform,
-        method = optim.method,
-        control = control,
-        Xc = Xc,
-        Kmat_diag = Kmat_diag,
-        ...
-      )
-    } else {
-      fit <- optim(
-        inpar,
-        loglik.poisson,
-        D = "rcdose_ameras",
-        X = X,
-        Y = Y,
-        offset = offset,
-        M = M,
-        doseRRmod = doseRRmod,
-        data = data,
-        deg = deg,
-        loglim = loglim,
-        transform = transform,
-        method = optim.method,
-        control = control,
-        ...
-      )
     }
-    if (optim.method == "Nelder-Mead") {
-      count0 <- fit$counts
+
+    loglik.rc <- function(params, ...) {
       if (ERC) {
-        fit <- optim(
-          fit$par,
-          loglik.poisson.erc,
+        loglik.poisson.erc(
+          params,
           D = dosevars,
           X = X,
           Y = Y,
@@ -373,16 +334,13 @@ ameras.rc <- function(
           deg = deg,
           loglim = loglim,
           transform = transform,
-          method = "BFGS",
-          control = control,
           Xc = Xc,
           Kmat_diag = Kmat_diag,
           ...
         )
       } else {
-        fit <- optim(
-          fit$par,
-          loglik.poisson,
+        loglik.poisson(
+          params,
           D = "rcdose_ameras",
           X = X,
           Y = Y,
@@ -393,50 +351,18 @@ ameras.rc <- function(
           deg = deg,
           loglim = loglim,
           transform = transform,
-          method = "BFGS",
-          control = control,
           ...
         )
       }
-      fit$counts <- replace(count0, is.na(count0), 0) +
-        replace(fit$counts, is.na(fit$counts), 0)
     }
-
-    if (ERC) {
-      fit$hessian <- numDeriv::hessian(
-        func = loglik.poisson.erc,
-        x = fit$par,
-        D = dosevars,
-        X = X,
-        Y = Y,
-        offset = offset,
-        M = M,
-        doseRRmod = doseRRmod,
-        data = data,
-        deg = deg,
-        loglim = loglim,
-        transform = transform,
-        Xc = Xc,
-        Kmat_diag = Kmat_diag,
-        ...
-      )
-    } else {
-      fit$hessian <- numDeriv::hessian(
-        func = loglik.poisson,
-        x = fit$par,
-        D = "rcdose_ameras",
-        X = X,
-        Y = Y,
-        offset = offset,
-        M = M,
-        doseRRmod = doseRRmod,
-        data = data,
-        deg = deg,
-        loglim = loglim,
-        transform = transform,
-        ...
-      )
-    }
+    fit <- fit_objective_with_hessian(
+      start = inpar,
+      fn = loglik.rc,
+      optim.method = optim.method,
+      control = control,
+      use_optimize = FALSE,
+      ...
+    )
   } else if (family %in% c("clogit")) {
     if (is.null(doseRRmod)) {
       stop("doseRRmod is required for family=prophaz")
