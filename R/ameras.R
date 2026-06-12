@@ -19,6 +19,7 @@ ameras_main <- function(
   unweightedFMA = FALSE,
   loglim = 1e-30,
   MFMA = 100000,
+  future.chunk.size.FMA = NULL,
   prophaz.numints.BMA = 10,
   ERRprior.BMA = "doubleexponential",
   nburnin.BMA = 5000,
@@ -33,6 +34,7 @@ ameras_main <- function(
   if (is.null(control)) {
     control <- list(reltol = 1e-10)
   }
+  future.chunk.size.FMA <- check_future_chunk_size_FMA(future.chunk.size.FMA)
 
   if (!is.null(transform) & is.null(transform.jacobian)) {
     stop("transform.jacobian is required when using a transformation")
@@ -249,6 +251,7 @@ ameras_main <- function(
         doseRRmod = doseRRmod,
         unweighted = unweightedFMA,
         MFMA = MFMA,
+        future.chunk.size.FMA = future.chunk.size.FMA,
         control = control,
         ...
       )
@@ -322,6 +325,7 @@ ameras <- function(
   inpar = NULL,
   loglim = 1e-30,
   MFMA = 100000,
+  future.chunk.size.FMA = NULL,
   prophaz.numints.BMA = 10,
   ERRprior.BMA = "doubleexponential",
   nburnin.BMA = 5000,
@@ -353,6 +357,7 @@ ameras <- function(
   check_df(data)
   check_family(family)
   methods <- check_methods(methods)
+  future.chunk.size.FMA <- check_future_chunk_size_FMA(future.chunk.size.FMA)
 
   if ("BMA" %in% methods) {
     message("Note: BMA may require extensive computation time")
@@ -585,6 +590,7 @@ ameras <- function(
     status = status,
     loglim = loglim,
     MFMA = MFMA,
+    future.chunk.size.FMA = future.chunk.size.FMA,
     prophaz.numints.BMA = prophaz.numints.BMA,
     ERRprior.BMA = ERRprior.BMA,
     nburnin.BMA = nburnin.BMA,

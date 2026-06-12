@@ -8,6 +8,34 @@ summarize_fma_realization_fit <- function(fit, npar) {
   )
 }
 
+fma_realization_lapply <- function(
+  X,
+  FUN,
+  ...,
+  future.chunk.size.FMA = NULL
+) {
+  check_future_chunk_size_FMA(future.chunk.size.FMA)
+
+  # future.apply respects the user's future::plan(). Its default plan is
+  # sequential, so this preserves current behavior unless the user opts into a
+  # parallel plan outside ameras().
+  if (requireNamespace("future.apply", quietly = TRUE)) {
+    return(
+      future.apply::future_lapply(
+        X,
+        FUN,
+        ...,
+        future.seed = FALSE,
+        future.chunk.size = future.chunk.size.FMA
+      )
+    )
+  }
+
+  # Keep future.apply optional. Without it, FMA realization fitting follows the
+  # historical sequential path.
+  lapply(X, FUN, ...)
+}
+
 fit_fma_realizations <- function(
   family,
   dosevars,
@@ -28,12 +56,13 @@ fit_fma_realizations <- function(
   deg = 1,
   transform = NULL,
   designmat = NULL,
+  future.chunk.size.FMA = NULL,
   ...
 ) {
   # Keep the per-realization FMA optimization path in one place so each
   # family branch only supplies the model-specific inputs and AIC parameter
   # count.
-  lapply(1:length(dosevars), function(Xi) {
+  fma_realization_lapply(seq_along(dosevars), function(Xi) {
     loglik_fn <- make_single_realization_loglik(
       family = family,
       dose.col = dosevars[Xi],
@@ -60,7 +89,7 @@ fit_fma_realizations <- function(
       ...
     )
     summarize_fma_realization_fit(fit, npar)
-  })
+  }, future.chunk.size.FMA = future.chunk.size.FMA)
 }
 
 assemble_fma_result <- function(
@@ -250,6 +279,7 @@ ameras.fma <- function(
   unweighted = NULL,
   doseRRmod = NULL,
   MFMA = 100000,
+  future.chunk.size.FMA = NULL,
   optim.method = "Nelder-Mead",
   control = list(reltol = 1e-10),
   ...
@@ -283,6 +313,7 @@ ameras.fma <- function(
       X = X,
       deg = deg,
       transform = transform,
+      future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
 
@@ -309,6 +340,7 @@ ameras.fma <- function(
       doseRRmod = doseRRmod,
       deg = deg,
       transform = transform,
+      future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
 
@@ -336,6 +368,7 @@ ameras.fma <- function(
       doseRRmod = doseRRmod,
       deg = deg,
       transform = transform,
+      future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
 
@@ -368,6 +401,7 @@ ameras.fma <- function(
       deg = deg,
       transform = transform,
       designmat = designmat,
+      future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
 
@@ -402,6 +436,7 @@ ameras.fma <- function(
       doseRRmod = doseRRmod,
       deg = deg,
       transform = transform,
+      future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
 
@@ -432,6 +467,7 @@ ameras.fma <- function(
       doseRRmod = doseRRmod,
       deg = deg,
       transform = transform,
+      future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
 

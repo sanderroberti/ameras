@@ -120,6 +120,27 @@ test_that("initial parameter checks use family-specific parameter counts", {
   )
 })
 
+test_that("FMA future chunk size checks accept positive scalar values", {
+  # This argument is passed through to future.apply when available. Validate it
+  # before fitting so invalid values fail with an ameras-specific error.
+  expect_null(ameras:::check_future_chunk_size_FMA(NULL))
+  expect_identical(ameras:::check_future_chunk_size_FMA(1), 1)
+  expect_identical(ameras:::check_future_chunk_size_FMA(Inf), Inf)
+
+  expect_error(
+    ameras:::check_future_chunk_size_FMA(0),
+    "future.chunk.size.FMA must be a positive number"
+  )
+  expect_error(
+    ameras:::check_future_chunk_size_FMA(NA_real_),
+    "future.chunk.size.FMA must be a positive number"
+  )
+  expect_error(
+    ameras:::check_future_chunk_size_FMA(c(1, 2)),
+    "future.chunk.size.FMA must be a positive number"
+  )
+})
+
 test_that("general check helpers cover representative validation branches", {
   dat <- data.frame(
     x = c(1, 2, 3),

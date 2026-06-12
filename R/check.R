@@ -172,6 +172,18 @@ check_inpar <- function(x, family, M, X, deg, multinom_levels = 0) {
   x
 }
 
+check_future_chunk_size_FMA <- function(x) {
+  if (is.null(x)) {
+    return(NULL)
+  }
+  nm <- "future.chunk.size.FMA"
+  if (!is.numeric(x) || length(x) != 1 || is.na(x) || x <= 0) {
+    stop(paste0("ERROR: ", nm, " must be a positive number or NULL"))
+  }
+
+  x
+}
+
 
 check_factor_vec <- function(x, nm, len = 0) {
   if (!is.factor(x)) {

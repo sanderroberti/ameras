@@ -26,6 +26,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
+    future,
+    future.apply,
     ggplot2,
     dplyr,
     tidyr,

@@ -31,7 +31,8 @@ flowchart TD
   L --> N
 
   G --> M["fit_fma_realizations()"]
-  M --> J
+  M --> ML["fma_realization_lapply()<br/>lapply() / future_lapply()"]
+  ML --> J
   JA -->|FMA realization objective| N
 
   N -->|MCML, RC, ERC| O["assemble_frequentist_fit_result()<br/>MCML, RC, ERC"]
@@ -117,7 +118,11 @@ coefficients and covariance matrices, stores optimizer details, and preserves
 method-specific fields such as `ERC`.
 
 FMA uses `fit_fma_realizations()` to build and fit one likelihood per dose
-realization. Each fitted realization is summarized by
+realization. The realization loop goes through `fma_realization_lapply()`,
+which uses `future.apply::future_lapply()` when available and otherwise falls
+back to `lapply()`. `ameras()` never sets a `future::plan()` internally; users
+control whether FMA runs sequentially or in parallel by setting the plan before
+calling `ameras()`. Each fitted realization is summarized by
 `summarize_fma_realization_fit()`, which calls `fit_passes_hessian_check()` to
 decide whether the realization is admissible before model averaging. This check
 is stricter than `hessian_supports_vcov()` because FMA screening also requires
