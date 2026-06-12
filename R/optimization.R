@@ -133,12 +133,8 @@ assemble_frequentist_fit_result <- function(
   names(coefs) <- parnames
   rownames(vcov) <- colnames(vcov) <- parnames
 
-  t1 <- proc.time()
-  timedif <- t1 - t0
-  runtime <- paste(
-    round(as.numeric(as.difftime(timedif["elapsed"], units = "secs")), 1),
-    "seconds"
-  )
+  fit_timing <- stop_runtime_timer(t0)
+  timing <- new_method_timing(fit = fit_timing)
 
   c(
     list(
@@ -152,7 +148,8 @@ assemble_frequentist_fit_result <- function(
         counts = fit$counts
       ),
       loglik = -1 * fit$value,
-      runtime = runtime
+      timing = timing,
+      runtime = format_runtime(timing$total$cpu)
     ),
     extra
   )

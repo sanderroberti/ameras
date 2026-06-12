@@ -112,6 +112,11 @@ samples, and packages the final FMA result. Keeping this assembly logic
 separate makes it reusable for future manual or chunked FMA workflows without
 adding exported API.
 
+Method results store structured timing in a `timing` list with separate
+`fit`, `ci`, and `total` phases. Printed runtime summaries use CPU time so they
+do not count time spent while the machine is asleep. The legacy `runtime`
+string is still kept for compatibility and mirrors the current total CPU time.
+
 ## Profile Likelihood Path
 
 `confint.amerasfit()` dispatches interval calculations by type. For
@@ -131,6 +136,11 @@ The reconstructed likelihood is then passed into `proflik()` through
 `compute_proflik_ci_one()`. For MCML profile likelihoods,
 `make_loglik_fn()` reuses `mcml_average_neg_loglik()` to average over the dose
 realizations.
+
+After each method's interval calculation, `confint.amerasfit()` records the CI
+timing for that method and updates the method's total runtime. When intervals
+are recomputed with `force = TRUE`, the previous CI timing is replaced rather
+than accumulated.
 
 ## Special Cases
 

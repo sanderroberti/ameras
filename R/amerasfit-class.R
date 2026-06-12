@@ -37,23 +37,8 @@ print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 
   coefs <- coef.amerasfit(x, ...)
 
-  runtime_table <- do.call(
-    "rbind",
-    lapply(1:length(object0), function(i) {
-      y <- object0[[i]]
-      method <- names(object0)[i]
-
-      runtime <- as.numeric(strsplit(y$runtime, " seconds")[[1]])
-
-      res <- data.frame(Method = method, Runtime = runtime)
-      rownames(res) <- NULL
-      res
-    })
-  )
-
-  total_runtime_seconds <- sum(sapply(object0, function(x) {
-    as.numeric(strsplit(x$runtime, " seconds")[[1]])
-  }))
+  runtime_table <- runtime_table_from_methods(object0)
+  total_runtime <- total_runtime_seconds(runtime_table)
 
   cat("Call:\n")
   print(x$call)
@@ -61,9 +46,14 @@ print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat(paste0("\nNumber of rows: ", x$num.rows, "\n"))
   cat(paste0("Number of dose realizations: ", x$num.realizations, "\n"))
 
-  cat(paste0("\nTotal runtime: ", total_runtime_seconds, " seconds\n\n"))
+  if ("Total" %in% names(runtime_table)) {
+    cat(paste0("\nTotal CPU runtime: ", total_runtime, " seconds\n\n"))
+    cat("CPU runtime in seconds by method:\n\n")
+  } else {
+    cat(paste0("\nTotal runtime: ", total_runtime, " seconds\n\n"))
+    cat("Runtime in seconds by method:\n\n")
+  }
 
-  cat("Runtime in seconds by method:\n\n")
   print(format(runtime_table, digits = digits, nsmall = 1), row.names = FALSE)
 
   cat("\nEstimated model parameters:\n\n")
@@ -178,29 +168,14 @@ summary.amerasfit <- function(object, ...) {
     })
   )
 
-  runtime_table <- do.call(
-    "rbind",
-    lapply(1:length(object0), function(i) {
-      y <- object0[[i]]
-      method <- names(object0)[i]
-
-      runtime <- as.numeric(strsplit(y$runtime, " seconds")[[1]])
-
-      res <- data.frame(Method = method, Runtime = runtime)
-      rownames(res) <- NULL
-      res
-    })
-  )
-
-  total_runtime_seconds <- sum(sapply(object0, function(x) {
-    as.numeric(strsplit(x$runtime, " seconds")[[1]])
-  }))
+  runtime_table <- runtime_table_from_methods(object0)
+  total_runtime <- total_runtime_seconds(runtime_table)
 
   ans <- list(
     call = object$call,
     summary_table = summary_table,
     runtime_table = runtime_table,
-    total_runtime_seconds = total_runtime_seconds,
+    total_runtime_seconds = total_runtime,
     CI.computed = object$CI.computed
   )
 
@@ -216,9 +191,15 @@ print.summary.amerasfit <- function(
 ) {
   cat("Call:\n")
   print(x$call)
-  cat(paste0("\nTotal run time: ", x$total_runtime_seconds, " seconds\n\n"))
 
-  cat("Runtime in seconds by method:\n\n")
+  if ("Total" %in% names(x$runtime_table)) {
+    cat(paste0("\nTotal CPU run time: ", x$total_runtime_seconds, " seconds\n\n"))
+    cat("CPU runtime in seconds by method:\n\n")
+  } else {
+    cat(paste0("\nTotal run time: ", x$total_runtime_seconds, " seconds\n\n"))
+    cat("Runtime in seconds by method:\n\n")
+  }
+
   print(format(x$runtime_table, digits = digits, nsmall = 1), row.names = FALSE)
 
   cat("\nSummary of coefficients by method:\n\n")
@@ -326,6 +307,7 @@ confint.amerasfit <- function(
   res <- NULL
   for (it in 1:length(fitobj)) {
     method <- names(fitobj)[it]
+    ci_timer <- start_runtime_timer()
 
     if (method %in% c("FMA", "BMA")) {
       type.i <- match.arg(
@@ -416,6 +398,11 @@ confint.amerasfit <- function(
         rm(resolved_data)
       }
     }
+
+    object[[method]] <- set_ci_timing(
+      object[[method]],
+      stop_runtime_timer(ci_timer)
+    )
   }
 
   object$CI.computed <- TRUE

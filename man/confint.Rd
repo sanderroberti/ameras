@@ -102,8 +102,10 @@
 
 \value{
   The original \code{amerasfit} object with a \code{CI} element added to
-  each fitted method result. For RC, ERC, and MCML the \code{CI} element
-  is a data frame with columns:
+  each fitted method result. The method-specific \code{timing} and
+  \code{runtime} elements are also updated so that printed runtime summaries
+  include confidence interval computation time. For RC, ERC, and MCML the
+  \code{CI} element is a data frame with columns:
   \describe{
     \item{\code{lower}}{Lower confidence bound.}
     \item{\code{upper}}{Upper confidence bound.}

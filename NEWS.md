@@ -11,6 +11,7 @@
 * FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are now internally excluded. The user is informed of the number of realizations excluded for this reason through a `message()`
 * Added an additional warning for FMA for the situation when results are based on only 1 or 2-5 realizations after exclusions.
 * Streamlined information printed by `summary()` and `confint()`: columns `pval.lower` and `pval.upper` for profile likelihood intervals are no longer printed. They are still accessible within the fit object, and warnings are still printed in case an inaccurate profile likelihood bound is suspected.
+* Added structured timing information to fitted method results, separating fitting time, confidence interval computation time, and total time. Printed runtime summaries now use CPU time, so time spent while the computer is asleep is not counted. The existing `runtime` field is retained as a compatibility summary and is updated when `confint()` adds confidence interval timing.
 
 # ameras 0.4.0
 

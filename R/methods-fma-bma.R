@@ -194,12 +194,8 @@ assemble_fma_result <- function(
     wgts <- NULL
   }
 
-  t1 <- proc.time()
-  timedif <- t1 - t0
-  runtime <- paste(
-    round(as.numeric(as.difftime(timedif["elapsed"], units = "secs")), 1),
-    "seconds"
-  )
+  fit_timing <- stop_runtime_timer(t0)
+  timing <- new_method_timing(fit = fit_timing)
 
   n_final <- length(included.realizations)
 
@@ -230,7 +226,8 @@ assemble_fma_result <- function(
     included.samples = included.samples,
     weights = wgts,
     samples = FMAsamples,
-    runtime = runtime
+    timing = timing,
+    runtime = format_runtime(timing$total$cpu)
   )
 }
 
@@ -1013,12 +1010,8 @@ ameras.bma <- function(
     )
   }
 
-  t1 <- proc.time()
-  timedif <- t1 - t0
-  runtime <- paste(
-    round(as.numeric(as.difftime(timedif["elapsed"], units = "secs")), 1),
-    "seconds"
-  )
+  fit_timing <- stop_runtime_timer(t0)
+  timing <- new_method_timing(fit = fit_timing)
 
   prc_excluded <- round(100 * (1 - length(included.realizations) / ndoses), 1)
   if (length(included.realizations) / ndoses < .8) {
@@ -1037,7 +1030,8 @@ ameras.bma <- function(
     Rhat = Rhat,
     samples = nimblesamples,
     included.realizations = included.realizations,
-    runtime = runtime
+    timing = timing,
+    runtime = format_runtime(timing$total$cpu)
   )
   if (family == "prophaz") {
     out <- c(

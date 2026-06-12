@@ -83,11 +83,15 @@
       }
     }
     \item{\code{runtime_table}}{
-      A data frame with columns \code{Method} and \code{Runtime},
-      reporting the computation time in seconds for each method.
+      A data frame reporting computation time in seconds for each method.
+      When structured timing information is available this has columns
+      \code{Method}, \code{Fit}, \code{CI}, and \code{Total}, with CPU time
+      reported for each timing component. For objects that only contain the
+      compatibility \code{runtime} field, this has columns \code{Method} and
+      \code{Runtime}.
     }
     \item{\code{total_runtime_seconds}}{
-      The total computation time in seconds across all methods.
+      The total CPU computation time in seconds across all methods.
     }
     \item{\code{CI.computed}}{
       Logical. \code{TRUE} if confidence intervals have been computed
@@ -105,10 +109,11 @@
   in the fitted object, the summary table includes columns \code{Rhat} and 
   \code{n.eff}, with \code{NA} values for all other methods.
 
-  Printing the summary prints the original call to \code{ameras}, the runtime
-  (total and by method), and the table described above. This table can also
-  be accessed directly (i.e., to retrieve confidence intervals) using
-  \code{summary_table}.
+  Printing the summary prints the original call to \code{ameras}, the CPU runtime
+  (total and by method), and the table described above. When confidence
+  intervals have been computed, CI runtime is included in the total runtime.
+  This table can also be accessed directly (i.e., to retrieve confidence
+  intervals) using \code{summary_table}.
 }
 
 \seealso{
