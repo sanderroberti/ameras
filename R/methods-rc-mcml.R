@@ -120,37 +120,14 @@ ameras.mcml <- function(
     doseRRmod = doseRRmod
   )
   t0 <- proc.time()
-  if (length(parnames) == 1) {
-    # Optimize 1-dimensional model: use optimize instead of optim
-    fit0 <- optimize(f = loglik.mcml, lower = -20, upper = 5, ...)
-    fit <- list(
-      par = fit0$minimum,
-      value = fit0$objective,
-      convergence = 0,
-      hessian = numDeriv::hessian(func = loglik.mcml, x = fit0$minimum, ...)
-    )
-  } else {
-    fit <- optim(
-      inpar,
-      loglik.mcml,
-      method = optim.method,
-      control = control,
-      ...
-    )
-    if (optim.method == "Nelder-Mead") {
-      count0 <- fit$counts
-      fit <- optim(
-        fit$par,
-        loglik.mcml,
-        method = "BFGS",
-        control = control,
-        ...
-      )
-      fit$counts <- replace(count0, is.na(count0), 0) +
-        replace(fit$counts, is.na(fit$counts), 0)
-    }
-    fit$hessian <- numDeriv::hessian(func = loglik.mcml, x = fit$par, ...)
-  }
+  fit <- fit_objective_with_hessian(
+    start = inpar,
+    fn = loglik.mcml,
+    optim.method = optim.method,
+    control = control,
+    use_optimize = length(parnames) == 1,
+    ...
+  )
 
   if (!is.null(transform) & !is.null(transform.jacobian)) {
     if (is.function(transform) & is.function(transform.jacobian)) {

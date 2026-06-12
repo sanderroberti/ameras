@@ -145,6 +145,25 @@ test_that("RC and MCML no-intercept family names start with dose terms", {
   )
 })
 
+test_that("MCML one-parameter fits keep the scalar optimizer contract", {
+  guard_data <- make_refactor_guard_data()
+
+  fit <- fit_refactor_guard(
+    Y.clogit ~ dose(V1:V2, model = EXP) + strata(setnr),
+    data = guard_data,
+    family = "clogit",
+    methods = "MCML"
+  )
+
+  # Clogit has no intercept, and with deg = 1, no X, and no M there is only
+  # one fitted parameter. MCML should therefore keep using the scalar optimizer
+  # path, whose result has no `optim()` iteration counts.
+  expect_method_parameter_names(fit, "MCML", "dose")
+  expect_equal(fit$MCML$optim$convergence, 0)
+  expect_null(fit$MCML$optim$counts)
+  expect_identical(dim(fit$MCML$optim$hessian), c(1L, 1L))
+})
+
 test_that("RC and MCML multinomial names include response-level prefixes", {
   guard_data <- make_refactor_guard_data()
   methods <- c("RC", "MCML")
