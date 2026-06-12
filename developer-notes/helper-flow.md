@@ -19,23 +19,27 @@ flowchart TD
 
   D --> I["make_mcml_loglik_fn()"]
   I --> J["make_single_realization_loglik()"]
+  I --> AB["mcml_average_neg_loglik()"]
+  I --> N["fit_objective_with_hessian()"]
+
   E --> K["family-specific RC objective"]
   F --> L["family-specific ERC objective"]
+  K --> N
+  L --> N
+
   G --> M["fit_fma_realizations()"]
   M --> J
-
-  D --> N["fit_objective_with_hessian()"]
-  E --> N
-  F --> N
   M --> N
 
   N -->|MCML, RC, ERC| O["assemble_frequentist_fit_result()<br/>MCML, RC, ERC"]
   N -->|FMA| P["summarize_fma_realization_fit()<br/>fit_passes_hessian_check()"]
 
-  P --> Q["assemble_fma_result()<br/>FMA weights and samples"]
+  G --> Q["assemble_fma_result()<br/>FMA weights and samples"]
+  P --> Q
+  Q -->|default included.realizations<br/>when FMA+BMA| H
   H --> R["NIMBLE model and MCMC samples"]
 
-  O --> S["amerasfit object"]
+  O --> S["new_amerasfit()<br/>amerasfit object"]
   Q --> S
   R --> S
 
@@ -45,7 +49,11 @@ flowchart TD
   T -->|percentile / hpd| W["compute_sample_CI()"]
 
   V --> X["make_loglik_fn()"]
+  V --> AC["compute_proflik_ci_one()"]
+  AC --> AD["proflik()"]
+  X --> AD
   X --> Y["make_base_loglik_fn()"]
+  X -->|MCML profile objective| AB
   Y --> Z["make_single_realization_loglik()<br/>ordinary RC/ERC/MCML cases"]
   Y --> AA["loglik.poisson.erc() / loglik.prophaz.erc()<br/>special ERC cases"]
 ```
@@ -65,6 +73,10 @@ adds `rcdose_ameras`, and stores enough model metadata for later methods such as
 - `ameras.fma()` fits each dose realization and performs frequentist model
   averaging.
 - `ameras.bma()` builds and samples the Bayesian model averaging model.
+
+When FMA and BMA are requested together, `ameras_main()` runs FMA first. Unless
+the user supplies `included.realizations.BMA`, the BMA fit uses the realization
+indices retained by FMA.
 
 The main likelihood construction helper is `make_single_realization_loglik()`.
 It builds a family-specific likelihood closure from raw fitting arguments. It is
@@ -116,7 +128,9 @@ That reconstruction goes through two adapter helpers:
   precomputed centered dose-realization residuals.
 
 The reconstructed likelihood is then passed into `proflik()` through
-`compute_proflik_ci_one()`.
+`compute_proflik_ci_one()`. For MCML profile likelihoods,
+`make_loglik_fn()` reuses `mcml_average_neg_loglik()` to average over the dose
+realizations.
 
 ## Special Cases
 
