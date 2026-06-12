@@ -8,3 +8,7 @@ README.html
 .DS_Store
 docs
 .positai
+src/*.o
+src/*.so
+src/*.dll
+src/*.dylib

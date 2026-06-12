@@ -13,48 +13,65 @@
 
 
 // [[Rcpp::export]]
-Eigen::RowVectorXd dldd_clogit(Eigen::Map<Eigen::MatrixXd> &designmat,
-                                        Eigen::Map<Eigen::VectorXd> &RRs) {
-  // Compute denominator vector: for each row i, sum over columns: designmat(i,j)*RRs[j]
-  Eigen::VectorXd denom = designmat * RRs;  // (nrow x 1) vector
-  
-  
-  // Create a matrix where each row i is designmat.row(i) / denom[i]
-  Eigen::MatrixXd denom_mat = denom.replicate(1, designmat.cols()); // replicate denom by cols
-  
-  Eigen::MatrixXd frac = designmat.array() / denom_mat.array();
-  
-  // Sum over rows for each column -> tmp is row vector with length ncol
-  Eigen::RowVectorXd tmp = frac.colwise().sum();
-  
-  return tmp;
+Rcpp::NumericVector dldd_clogit(SEXP designmat, SEXP RRs) {
+  Rcpp::NumericMatrix designmat_mat = Rcpp::as<Rcpp::NumericMatrix>(designmat);
+  Rcpp::NumericVector RR_vec = Rcpp::as<Rcpp::NumericVector>(RRs);
+
+  int nr = designmat_mat.nrow();
+  int nc = designmat_mat.ncol();
+
+  if (RR_vec.size() != nc) {
+    Rcpp::stop("RRs length must match the number of design matrix columns");
+  }
+
+  Rcpp::NumericVector ret(nc);
+  for (int i = 0; i < nr; ++i) {
+    double denom = 0.0;
+    for (int j = 0; j < nc; ++j) {
+      denom += designmat_mat(i, j) * RR_vec[j];
+    }
+    for (int j = 0; j < nc; ++j) {
+      ret[j] += designmat_mat(i, j) / denom;
+    }
+  }
+
+  return ret;
 }
 
 // [[Rcpp::export]]
-Eigen::RowVectorXd dldd_prophaz(Eigen::Map<Eigen::VectorXd> &entry_t,
-                                         Eigen::Map<Eigen::VectorXd> &exit_t,
-                                         Eigen::Map<Eigen::VectorXi> &status_ord,
-                                         Eigen::Map<Eigen::VectorXd> &RRs) {
-  int n = entry_t.size();  // Number of individuals
-  Eigen::RowVectorXd result(n);  // Store the result for each individual
-  result.setZero();
-  
+Rcpp::NumericVector dldd_prophaz(
+    SEXP entry_t,
+    SEXP exit_t,
+    SEXP status_ord,
+    SEXP RRs) {
+  Rcpp::NumericVector entry_vec = Rcpp::as<Rcpp::NumericVector>(entry_t);
+  Rcpp::NumericVector exit_vec = Rcpp::as<Rcpp::NumericVector>(exit_t);
+  Rcpp::NumericVector status_vec = Rcpp::as<Rcpp::NumericVector>(status_ord);
+  Rcpp::NumericVector RR_vec = Rcpp::as<Rcpp::NumericVector>(RRs);
+
+  int n = entry_vec.size();
+  if (exit_vec.size() != n || status_vec.size() != n || RR_vec.size() != n) {
+    Rcpp::stop("entry_t, exit_t, status_ord, and RRs must have equal length");
+  }
+
+  Rcpp::NumericVector result(n);
+
   // Loop through individuals who had an event (delta_i = 1)
   for (int i = 0; i < n; ++i) {
-    if (status_ord(i) == 1) {  // Only consider individuals who had an event (delta_i = 1)
+    if (status_vec[i] == 1) {  // Only consider individuals who had an event (delta_i = 1)
       double sum_RR = 0.0;
       // Compute the sum of relative risks in the risk set for individual i
       for (int j = 0; j < n; ++j) {
-        if (exit_t(i) > entry_t(j) && exit_t(i) <= exit_t(j)) {
-          sum_RR += RRs(j);
+        if (exit_vec[i] > entry_vec[j] && exit_vec[i] <= exit_vec[j]) {
+          sum_RR += RR_vec[j];
         }
       }
       
       // For each individual k, add the contribution of individual i to the result if k is in the risk set
       for (int k = 0; k < n; ++k) {
-        if (exit_t(i) > entry_t(k) && exit_t(i) <= exit_t(k)) {
+        if (exit_vec[i] > entry_vec[k] && exit_vec[i] <= exit_vec[k]) {
           // Only add if individual k is in the risk set of i
-          result(k) += 1.0 / sum_RR;
+          result[k] += 1.0 / sum_RR;
         }
       }
     }
@@ -327,55 +344,3 @@ double compute_ERCsum_prophaz(
   
   return sum_mymat_Kmat + sum_dldd_Kmat;
 }
-
-
-
-
-
-
-extern "C" {
-  void C_dldd_clogit(double *R_atriskColVec, int *R_nr, int *R_nc, double *R_RR,
-                              double *ret) {
-    
-    int nr = *R_nr;
-    int nc = *R_nc;
-    
-    Eigen::Map<Eigen::VectorXd> RRs(R_RR, nc);
-    Eigen::Map<Eigen::MatrixXd> designmat(R_atriskColVec, nr, nc);
-    
-    Eigen::RowVectorXd tmp = dldd_clogit(designmat, RRs);  //Eigen::RowVectorXd is returned
-    
-    for (int i=0; i<nc; i++) ret[i] = tmp(i);
-    
-    return;
-  }
-  
-}
-
-extern "C" {
-  void C_dldd_prophaz(double *R_entry, double *R_exit, int *R_status, double *R_RR,
-                               int *R_n, double *ret) {
-    
-    int n = *R_n;  // Number of individuals
-    
-    // Map the input data from R to Eigen vectors/matrices
-    Eigen::Map<Eigen::VectorXd> entry_t(R_entry, n);
-    Eigen::Map<Eigen::VectorXd> exit_t(R_exit, n);
-    Eigen::Map<Eigen::VectorXi> status_ord(R_status, n);
-    Eigen::Map<Eigen::VectorXd> RRs(R_RR, n);
-    
-    // Call the C++ function to compute the result
-    Eigen::RowVectorXd result = dldd_prophaz(entry_t, exit_t, status_ord, RRs);
-    
-    // Copy the result back to the output pointer (ret)
-    for (int i = 0; i < result.size(); ++i) {
-      ret[i] = result(i);
-    }
-    
-    return;
-  }
-}
-
-
-
-

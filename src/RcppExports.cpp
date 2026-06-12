@@ -12,27 +12,27 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // dldd_clogit
-Eigen::RowVectorXd dldd_clogit(Eigen::Map<Eigen::MatrixXd>& designmat, Eigen::Map<Eigen::VectorXd>& RRs);
+Rcpp::NumericVector dldd_clogit(SEXP designmat, SEXP RRs);
 RcppExport SEXP _ameras_dldd_clogit(SEXP designmatSEXP, SEXP RRsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd>& >::type designmat(designmatSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type RRs(RRsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type designmat(designmatSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type RRs(RRsSEXP);
     rcpp_result_gen = Rcpp::wrap(dldd_clogit(designmat, RRs));
     return rcpp_result_gen;
 END_RCPP
 }
 // dldd_prophaz
-Eigen::RowVectorXd dldd_prophaz(Eigen::Map<Eigen::VectorXd>& entry_t, Eigen::Map<Eigen::VectorXd>& exit_t, Eigen::Map<Eigen::VectorXi>& status_ord, Eigen::Map<Eigen::VectorXd>& RRs);
+Rcpp::NumericVector dldd_prophaz(SEXP entry_t, SEXP exit_t, SEXP status_ord, SEXP RRs);
 RcppExport SEXP _ameras_dldd_prophaz(SEXP entry_tSEXP, SEXP exit_tSEXP, SEXP status_ordSEXP, SEXP RRsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type entry_t(entry_tSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type exit_t(exit_tSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXi>& >::type status_ord(status_ordSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::VectorXd>& >::type RRs(RRsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type entry_t(entry_tSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type exit_t(exit_tSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type status_ord(status_ordSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type RRs(RRsSEXP);
     rcpp_result_gen = Rcpp::wrap(dldd_prophaz(entry_t, exit_t, status_ord, RRs));
     return rcpp_result_gen;
 END_RCPP

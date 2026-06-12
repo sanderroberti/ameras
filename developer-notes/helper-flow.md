@@ -127,6 +127,18 @@ fit object as `other.args`. Fitted-object likelihood reconstruction forwards
 `other.args` so profile-likelihood calculations use the same transform behavior
 as the original fit.
 
+## Compiled Helpers
+
+The risk-set and ERC correction helpers in `src/ameras.cpp` are exposed to R
+through Rcpp-generated `.Call` wrappers in `R/RcppExports.R` and
+`src/RcppExports.cpp`. The package registers those `.Call` entry points in
+`src/ameras_init.c`.
+
+Do not add a parallel `.C` wrapper unless there is a specific reason to keep a
+second native interface. If a new `// [[Rcpp::export]]` helper is added, run
+`Rcpp::compileAttributes()` and make sure the generated symbol is registered in
+`src/ameras_init.c`.
+
 ## Extension Checklist
 
 When adding or changing a family or method:
