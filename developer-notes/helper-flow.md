@@ -21,7 +21,7 @@ flowchart TD
   I --> J["make_single_realization_loglik()"]
   E --> K["family-specific RC objective"]
   F --> L["family-specific ERC objective"]
-  G --> M["fit_one_realization()"]
+  G --> M["fit_fma_realizations()"]
   M --> J
 
   D --> N["fit_objective_with_hessian()"]
@@ -29,10 +29,10 @@ flowchart TD
   F --> N
   M --> N
 
-  N --> O["assemble_frequentist_fit_result()<br/>MCML, RC, ERC"]
-  N --> P["fit_passes_hessian_check()<br/>FMA screening"]
+  N -->|MCML, RC, ERC| O["assemble_frequentist_fit_result()<br/>MCML, RC, ERC"]
+  N -->|FMA| P["summarize_fma_realization_fit()<br/>fit_passes_hessian_check()"]
 
-  G --> Q["FMA weights and samples"]
+  P --> Q["assemble_fma_result()<br/>FMA weights and samples"]
   H --> R["NIMBLE model and MCMC samples"]
 
   O --> S["amerasfit object"]
@@ -86,10 +86,19 @@ any transform, propagates variance through `transform.jacobian`, names
 coefficients and covariance matrices, stores optimizer details, and preserves
 method-specific fields such as `ERC`.
 
-FMA uses `fit_passes_hessian_check()` after optimization to decide whether a
-realization is admissible before computing model-averaging weights. This check
+FMA uses `fit_fma_realizations()` to build and fit one likelihood per dose
+realization. Each fitted realization is summarized by
+`summarize_fma_realization_fit()`, which calls `fit_passes_hessian_check()` to
+decide whether the realization is admissible before model averaging. This check
 is stricter than `hessian_supports_vcov()` because FMA screening also requires
 optimizer convergence.
+
+`assemble_fma_result()` takes those realization summaries, applies the
+convergence/Hessian and negligible-weight exclusions, computes AIC weights,
+allocates `MFMA` samples, draws transformed or untransformed coefficient
+samples, and packages the final FMA result. Keeping this assembly logic
+separate makes it reusable for future manual or chunked FMA workflows without
+adding exported API.
 
 ## Profile Likelihood Path
 
@@ -154,5 +163,8 @@ When adding or changing a family or method:
   `fit_objective_with_hessian()`.
 - If the method returns MCML-like or RC-like output, package it through
   `assemble_frequentist_fit_result()`.
+- If a workflow combines fitted FMA realization summaries, use
+  `assemble_fma_result()` rather than duplicating the FMA weighting and sampling
+  logic.
 - Add focused tests for parameter names, optimizer output shape, transform
   argument forwarding, and profile-likelihood reconstruction.
