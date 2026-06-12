@@ -11,6 +11,11 @@
   intervals for dose-related parameters only.
   [`confint()`](https://rdrr.io/r/stats/confint.html) now prints
   intervals for all parameters.
+- Fixed validation for proportional hazards models specified with
+  `Surv(entry, exit, status)`.
+  [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) now
+  correctly checks the observed entry and exit time values and errors
+  when any subject has `entry > exit`.
 
 ### Improvements
 

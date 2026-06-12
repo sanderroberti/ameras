@@ -52,6 +52,7 @@
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>Fixed an issue with FMA where large differences in AIC values between dose realizations caused <code>NaN</code> weights, resulting in an error.</li>
 <li>Fixed an issue where a subsequent call to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> would print intervals for dose-related parameters only. <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now prints intervals for all parameters.</li>
+<li>Fixed validation for proportional hazards models specified with <code>Surv(entry, exit, status)</code>. <code><a href="../reference/ameras.html">ameras()</a></code> now correctly checks the observed entry and exit time values and errors when any subject has <code>entry &gt; exit</code>.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>

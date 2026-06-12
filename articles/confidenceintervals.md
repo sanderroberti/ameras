@@ -104,12 +104,12 @@ summary(fit.ameras.waldorig)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("RC"))
 #> 
-#> Total CPU run time: 0.437 seconds
+#> Total CPU runtime: 0.388 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.436 0.001 0.437
+#>      RC 0.387 0.001 0.388
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -123,12 +123,12 @@ summary(fit.ameras.waldtransformed)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("RC"))
 #> 
-#> Total CPU run time: 0.437 seconds
+#> Total CPU runtime: 0.388 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.436 0.001 0.437
+#>      RC 0.387 0.001 0.388
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -142,12 +142,12 @@ summary(fit.ameras.proflik)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("RC"))
 #> 
-#> Total CPU run time: 3.311 seconds
+#> Total CPU runtime: 3.194 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.436 2.875 3.311
+#>      RC 0.387 2.807 3.194
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -196,12 +196,12 @@ summary(fit.ameras.hpd)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total CPU run time: 1.976 seconds
+#> Total CPU runtime: 1.943 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>     FMA 1.759 0.217 1.976
+#>     FMA 1.734 0.209 1.943
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -215,12 +215,12 @@ summary(fit.ameras.percentile)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total CPU run time: 1.849 seconds
+#> Total CPU runtime: 1.84 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit   CI Total
-#>     FMA 1.759 0.09 1.849
+#>  Method   Fit    CI Total
+#>     FMA 1.734 0.106  1.84
 #> 
 #> Summary of coefficients by method:
 #> 

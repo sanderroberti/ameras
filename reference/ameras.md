@@ -541,12 +541,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 0.349999999999994 seconds
+#> Total CPU runtime: 0.345000000000008 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method  Fit  CI Total
-#>      RC 0.35 0.0  0.35
+#>  Method   Fit  CI Total
+#>      RC 0.345 0.0 0.345
 #> 
 #> Estimated model parameters:
 #> 
