@@ -40,8 +40,10 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
+    <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
     <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
+    <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
     <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
   </ul>
 </li>
@@ -113,9 +115,9 @@ model definitions): <span class="math inline">\alpha_0, \mathbf \alpha,
 \beta_1, \beta_2, \mathbf \beta_{m1}, \mathbf \beta_{m2}, \sigma</span>,
 where <span class="math inline">\mathbf \alpha</span>, <span class="math inline">\mathbf\beta_{m1}</span> and <span class="math inline">\mathbf \beta_{m2}</span> can be vectors, with
 lengths matching <code>X</code> and <code>M</code>, respectively. <span class="math inline">\sigma</span> is only included for the linear model
-(Gaussian family), and no intercept is included for the Cox and
-conditional logistic models. For the multinomial model, the full
-parameter vector is the concatenation of <span class="math inline">Z-1</span> parameter vectors in the order as given
+(Gaussian family), and no intercept is included for the proportional
+hazards and conditional logistic models. For the multinomial model, the
+full parameter vector is the concatenation of <span class="math inline">Z-1</span> parameter vectors in the order as given
 above, where <span class="math inline">Z</span> is the number of outcome
 categories. When no transformation is specified and the linear ERR model
 is used, <code>transform1</code> is used for ERR parameters <span class="math inline">\beta_1</span> and <span class="math inline">\beta_2</span> by default, with lower limits <span class="math inline">-1/max(D)</span> for linear dose-response and <span class="math inline">(0,-1/max(D^2))</span> for linear-quadratic
@@ -183,7 +185,7 @@ keep the following in mind:</p>
 and <code>...</code>, where <code>params</code> is the full parameter
 vector. Parameters are in a specific order (see above), in case of doubt
 it is always possible to run <code>ameras</code> with the default
-settings to verify correct the order from the result.</li>
+settings to verify the correct order from the result.</li>
 <li>Extra arguments can be used and should be supplied when calling
 <code>ameras</code>
 </li>
@@ -261,12 +263,12 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt;     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, </span></span>
 <span><span class="co">#&gt;     index.t = 4:5)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.6 seconds</span></span>
+<span><span class="co">#&gt; Total CPU run time: 0.647 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.6</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.647 0.0 0.647</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -288,12 +290,12 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.3 seconds</span></span>
+<span><span class="co">#&gt; Total CPU run time: 0.321 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.3</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.321 0.0 0.321</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

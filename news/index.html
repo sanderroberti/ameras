@@ -19,8 +19,10 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
+    <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
     <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
+    <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
     <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -58,6 +60,7 @@
 </li>
 <li>Added an additional warning for FMA for the situation when results are based on only 1 or 2-5 realizations after exclusions.</li>
 <li>Streamlined information printed by <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>: columns <code>pval.lower</code> and <code>pval.upper</code> for profile likelihood intervals are no longer printed. They are still accessible within the fit object, and warnings are still printed in case an inaccurate profile likelihood bound is suspected.</li>
+<li>Added structured timing information to fitted method results, separating fitting time, confidence interval computation time, and total time. Printed runtime summaries now use CPU time, so time spent while the computer is asleep is not counted. The existing <code>runtime</code> field is retained as a compatibility summary and is updated when <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> adds confidence interval timing.</li>
 </ul></div>
 </div>
     <div class="section level2">

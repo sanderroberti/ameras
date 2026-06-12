@@ -43,8 +43,10 @@ Methods include regression calibration (Carroll et al. 2006 doi:10.1201/97814200
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
+    <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
     <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
+    <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
     <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -209,7 +211,7 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 <dd><p>control list passed to <code>optim</code> (default <code>list(reltol=1e-10)</code>).</p></dd>
 
 <dt id="arg-keep-data">keep.data<a class="anchor" aria-label="anchor" href="#arg-keep-data"></a></dt>
-<dd><p>whether to attach data to the output object (default <code>TRUE</code>). When the data object is large, <code>keep.data</code> can be set to <code>FALSE</code> to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied seperately when <code>keep.data=FALSE</code>. See <code><a href="confint.html">confint</a></code>.</p></dd>
+<dd><p>whether to attach data to the output object (default <code>TRUE</code>). When the data object is large, <code>keep.data</code> can be set to <code>FALSE</code> to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied separately when <code>keep.data=FALSE</code>. See <code><a href="confint.html">confint</a></code>.</p></dd>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>other arguments, passed to functions such as <code>transform</code>.</p></dd>
@@ -238,7 +240,10 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
 <dd><p>covariance matrix for the full parameter vector. Based on the observed information (negative second derivative of log-likelihood) for RC, ERC, and MCML, and on the obtained samples for FMA and BMA.</p></dd>
 
   <dt>runtime</dt>
-<dd><p>string with the runtime in seconds.</p></dd>
+<dd><p>string with the total CPU runtime currently available for the method. After fitting this is the fitting time; after <code><a href="confint.html">confint</a></code> this includes confidence interval computation time.</p></dd>
+
+  <dt>timing</dt>
+<dd><p>list with CPU and elapsed timings for fitting, confidence interval computation, and their total. CPU time is used for printed runtime summaries.</p></dd>
 
 
 </dl><p>For RC, ERC, and MCML  the following additional output is included:</p>
@@ -265,14 +270,14 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
 <dd><p>indices of realization exposures that were included to obtain the results.</p></dd>
 
   <dt>prophaz.timepoints</dt>
-<dd><p>for <code>family="prophaz"</code>, time points defining the intervals on which the estimated baseline hazards is constant; these are <code>prophaz.numints.BMA + 1</code> time points covering the interval <code>(min(entry), max(exit))</code>, based on quantiles among observed event times. See Details.</p></dd>
+<dd><p>for <code>family="prophaz"</code>, time points defining the intervals on which the estimated baseline hazard is constant; these are <code>prophaz.numints.BMA + 1</code> time points covering the interval <code>(min(entry), max(exit))</code>, based on quantiles among observed event times. See Details.</p></dd>
 
 
 </dl><p>Finally, for FMA the output additionally contains:</p>
 <dl><dt>samples</dt>
 <dd><p>data frame with samples generated from the normal distributions associated with parameters estimated for each dose realization.</p></dd>
 
-  <dt>weigths</dt>
+  <dt>weights</dt>
 <dd><p>vector of weights corresponding to the models fit to each included realization</p></dd>
 
   <dt>included.samples</dt>
@@ -282,14 +287,14 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
 <dd><p>indices of realization exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results.</p></dd>
 
 
-</dl><p>The class <code>amerasfit</code> supports the methods <code><a href="print.html">print</a></code>, <code><a href="coef.html">coef</a></code>, <code><a href="confint.html">confint</a></code>, <code><a href="summary.html">summary</a></code>, and <code><a href="traceplot.html">traceplot</a></code>.</p>
+</dl><p>The class <code>amerasfit</code> supports the methods <code><a href="print.html">print</a></code>, <code><a href="coef.html">coef</a></code>, <code><a href="confint.html">confint</a></code>, <code><a href="summary.html">summary</a></code>, <code><a href="summary.html">summary_table</a></code>, <code><a href="vcov.html">vcov</a></code>, <code><a href="residuals.html">residuals</a></code>, <code><a href="plot.html">plot</a></code>, <code><a href="traceplot.html">traceplot</a></code>, <code><a href="Rhat.html">Rhat</a></code>, and <code><a href="included_realizations.html">included_realizations</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Models are specified through formulas of the form <code>Y~dose(dose_expression, model="ERR", deg=1, modifier=M1+M2)+X1+X2</code>. Here <code>dose_expression</code> specifies the dose realization columns and is parsed by <code>eval_select</code> from the <span class="pkg">tidyselect</span> package. Useful examples are <code>D1:D1000</code> if the doses are in a sequence of columns with sequential names such as <code>D1</code>-<code>D1000</code>, and <code>all_of(dosevars)</code> where <code>dosevars</code> is a vector with the names of all dose columns. Further, <code>model</code> specifies, for non-Gaussian families, whether to use the exponential dose-response model (<code>model="EXP"</code>), the linear-exponential model (<code>model="LINEXP"</code>) or the linear ERR model (<code>model="ERR"</code>). Next, <code>deg</code> is used to specify whether a quadratic dose term should (<code>deg=2</code>) or should not (<code>deg=1</code>) be estimated for the exponential or linear ERR dose-response model. The <code>modifier</code> term is optional and used to specify binary effect modification variables. Note that interactions in the modifier term are not allowed, e.g. <code>M1*M2</code>. When <code>deg</code>, <code>modifier</code>, and <code>model</code> are not supplied, the defaults are <code>deg=1</code>, no effect modifiers, and <code>model="ERR"</code>. Finally, <code>X1</code> and <code>X2</code> above represent optional additional covariates, which can include factor variables and interactions such as <code>X1*X2</code>. The matched set variable <code>setnr</code> required for conditional logistic regression is specified on the right-hand side of the formula through a term <code>strata(setnr)</code>, and an optional offset variable <code>offset</code> for Poisson regression similarly through a term <code>offset(offset)</code>. For proportional hazards regression, the left-hand side of the formula should have the form <code>Surv(exit, status)</code> or <code>Surv(entry, exit, status)</code>.</p>
 <p>A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at <code>transform(parameters)</code>, where <code>parameters</code> are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function <code><a href="transform1.html">transform1</a></code> applies an exponential transformation to the desired parameters, see <code><a href="transform1.html">?transform1</a></code>. When supplying a function to <code>transform</code>, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \(\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma\), where \(\bm \alpha\), \(\bm\beta_{m1}\) and \(\bm \beta_{m2}\) can be vectors, with lengths matching \(\bm X\) and \(\bm M\), respectively. \(\sigma\) is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \(Z-1\) parameter vectors in the order as given above, where \(Z\) is the number of outcome categories, with the last category chosen as the referent category. See <code><a href="../articles/transformations.html">vignette("transformations", package="ameras")</a></code> for an example of how to specify a custom transformation function.</p>
-<p>When no transformation is specified and the linear ERR model is used, <code>transform1</code> is used for ERR parameters \(\beta_1\) and \(\beta_2\) by default, with lower limits \(-1/max(D)\) for \(\beta_1\) in the linear dose-response and \((0,-1/max(D^2))\) for \((\beta_1,\beta_2)\) in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \(\beta_1\), and no transformation is used for \(\beta_2\). If effect modifiers <code>M</code> are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (<code>transform.jacobian</code>) is required when using a transformation. For <code><a href="transform1.html">transform1</a></code>, the Jacobian is given by <code><a href="transform1jacobian.html">transform1.jacobian</a></code>. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given in above with variances obtained using the delta method with the provided Jacobian function.</p>
-<p>For BMA, a prior distribution for exposure-response parameters can be chosen when using linear or linear-exponential exposure-response model. The options are normal, horshoe, and double exponential priors, and the same priors truncated at 0 to yield positive values. In particular:</p>
+<p>When no transformation is specified and the linear ERR model is used, <code>transform1</code> is used for ERR parameters \(\beta_1\) and \(\beta_2\) by default, with lower limits \(-1/max(D)\) for \(\beta_1\) in the linear dose-response and \((0,-1/max(D^2))\) for \((\beta_1,\beta_2)\) in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \(\beta_1\), and no transformation is used for \(\beta_2\). If effect modifiers <code>M</code> are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (<code>transform.jacobian</code>) is required when using a transformation. For <code><a href="transform1.html">transform1</a></code>, the Jacobian is given by <code><a href="transform1jacobian.html">transform1.jacobian</a></code>. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given above with variances obtained using the delta method with the provided Jacobian function.</p>
+<p>For BMA, a prior distribution for exposure-response parameters can be chosen when using linear or linear-exponential exposure-response model. The options are normal, horseshoe, and double exponential priors, and the same priors truncated at 0 to yield positive values. In particular:</p>
 <ul><li><p>Normal: \(\beta_j \sim N(0,1000)\) for all exposure-response parameters \(\beta_j\)</p></li>
 <li><p>Horseshoe (shrinkage prior): \(\tau \sim \text{Cauchy}(0,1)^+; \lambda_j \sim \text{Cauchy}(0,1)^+; \beta_j \sim N(0, \tau^2 \lambda_j^2)\). Here \(\tau\) is shared across all parameters</p></li>
 <li><p>Double exponential (shrinkage prior): \(\lambda_j \sim \text{Cauchy}(0,1)^+; \beta_j \sim \text{DoubleExponential}(0,\lambda_j)\)</p></li>
@@ -301,7 +306,9 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
     <div class="dont-index"><p><code><a href="confint.html">confint</a></code> for computing confidence intervals,
   <code><a href="summary.html">summary</a></code> for a summary of the fitted model
   including confidence intervals if computed, <code><a href="coef.html">coef</a></code>
-  for extracting coefficients.</p></div>
+  for extracting coefficients, <code><a href="vcov.html">vcov</a></code> for extracting
+  variance-covariance matrices, and <code><a href="included_realizations.html">included_realizations</a></code>
+  for inspecting which realizations contributed to model averaging.</p></div>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -322,12 +329,12 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total runtime: 0.4 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.349999999999994 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC     0.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method  Fit  CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.35 0.0  0.35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

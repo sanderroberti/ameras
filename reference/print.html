@@ -19,8 +19,10 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
+    <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
     <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
+    <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
     <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -63,7 +65,8 @@
     <code><a href="ameras.html">ameras</a></code>.</p></dd>
 
   <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
-<dd><p>Number of significant digits to be printed. Default is `max(3, getOption("digits") - 3)`</p></dd>
+<dd><p>Number of significant digits to be printed. Default is
+    <code>max(3, getOption("digits") - 3)</code>.</p></dd>
 
   <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments, currently unused.</p></dd>
@@ -71,8 +74,10 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Prints the `ameras` call, number of rows and dose realizations in the data, runtime,
-  and model coefficients.</p>
+    <p>Prints the <code>ameras</code> call, number of rows and dose realizations in the data,
+  CPU runtime, and model coefficients. For objects with structured timing
+  information, fitting time, confidence interval computation time, and total
+  time are shown separately.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -101,13 +106,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total runtime: 14.5 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 51.929 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC     0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC    14.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit  CI  Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.049 0.0  0.049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 51.880 0.0 51.880</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -123,13 +128,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total runtime: 14.5 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 51.929 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC     0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC    14.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit  CI  Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.049 0.0  0.049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 51.880 0.0 51.880</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -147,13 +152,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total runtime: 14.5 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 51.929 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Runtime in seconds by method:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method Runtime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC     0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC    14.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit  CI  Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.049 0.0  0.049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 51.880 0.0 51.880</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

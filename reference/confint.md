@@ -109,8 +109,8 @@ confint(object, parm="dose", level=0.95,
 
 - digits:
 
-  Number of significant digits to be printed. Default is \`max(3,
-  getOption("digits") - 3)\`
+  Number of significant digits to be printed. Default is
+  `max(3, getOption("digits") - 3)`.
 
 - ...:
 
@@ -119,8 +119,10 @@ confint(object, parm="dose", level=0.95,
 ## Value
 
 The original `amerasfit` object with a `CI` element added to each fitted
-method result. For RC, ERC, and MCML the `CI` element is a data frame
-with columns:
+method result. The method-specific `timing` and `runtime` elements are
+also updated so that printed runtime summaries include confidence
+interval computation time. For RC, ERC, and MCML the `CI` element is a
+data frame with columns:
 
 - `lower`:
 
@@ -218,12 +220,12 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0 seconds
+#> Total CPU run time: 0.0300000000000011 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.0
+#>  Method  Fit  CI Total
+#>      RC 0.03 0.0  0.03
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -247,12 +249,12 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0 seconds
+#> Total CPU run time: 0.0300000000000011 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.0
+#>  Method  Fit  CI Total
+#>      RC 0.03 0.0  0.03
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -322,13 +324,13 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total run time: 93.7 seconds
+#> Total CPU run time: 94.799 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>     FMA     0.5
-#>     BMA    93.2
+#>  Method    Fit    CI  Total
+#>     FMA  0.432 0.007  0.439
+#>     BMA 94.360 0.000 94.360
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -40,8 +40,10 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
+    <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
     <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
+    <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
     <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
   </ul>
 </li>
@@ -102,13 +104,12 @@
 <code>ameras</code>, then use the <code>confint</code> method to attach
 confidence intervals. Several types of confidence intervals are
 supported, which should be supplied to the <code>type</code> argument of
-<code>confint</code>, see below. When <code>confint</code> is called
-with <code>methods</code> containing at least one of <code>RC</code>,
-<code>ERC</code>, and <code>MCML</code> and at least one of
-<code>FMA</code> and <code>BMA</code>, <code>type</code> should be a
-vector of length 2 with one method for <code>RC</code>, <code>ERC</code>
-and <code>MCML</code> and one for <code>FMA</code> and
-<code>BMA</code>.</p>
+<code>confint</code>, see below. When the fitted object contains at
+least one of <code>RC</code>, <code>ERC</code>, and <code>MCML</code>
+and at least one of <code>FMA</code> and <code>BMA</code>,
+<code>type</code> should be a vector of length 2 with one interval type
+for <code>RC</code>, <code>ERC</code> and <code>MCML</code> and one for
+<code>FMA</code> and <code>BMA</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="regression-calibration-extended-regression-calibration-and-monte-carlo-maximum-likelihood">Regression calibration, extended regression calibration, and Monte
@@ -192,12 +193,12 @@ transformations</a>).</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("RC"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.5 seconds</span></span>
+<span><span class="co">#&gt; Total CPU run time: 0.437 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.5</span></span>
+<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.436 0.001 0.437</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -211,12 +212,12 @@ transformations</a>).</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("RC"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.5 seconds</span></span>
+<span><span class="co">#&gt; Total CPU run time: 0.437 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.5</span></span>
+<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.436 0.001 0.437</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -230,12 +231,12 @@ transformations</a>).</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("RC"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.5 seconds</span></span>
+<span><span class="co">#&gt; Total CPU run time: 3.311 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.5</span></span>
+<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.436 2.875 3.311</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -282,12 +283,12 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("FMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 1.6 seconds</span></span>
+<span><span class="co">#&gt; Total CPU run time: 1.976 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;     FMA     1.6</span></span>
+<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span><span class="co">#&gt;     FMA 1.759 0.217 1.976</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -301,12 +302,12 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("FMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 1.6 seconds</span></span>
+<span><span class="co">#&gt; Total CPU run time: 1.849 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;     FMA     1.6</span></span>
+<span><span class="co">#&gt;  Method   Fit   CI Total</span></span>
+<span><span class="co">#&gt;     FMA 1.759 0.09 1.849</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

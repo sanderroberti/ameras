@@ -34,20 +34,20 @@ the model definitions): \alpha_0, \mathbf \alpha, \beta_1, \beta_2,
 \mathbf \beta\_{m1}, \mathbf \beta\_{m2}, \sigma, where \mathbf \alpha,
 \mathbf\beta\_{m1} and \mathbf \beta\_{m2} can be vectors, with lengths
 matching `X` and `M`, respectively. \sigma is only included for the
-linear model (Gaussian family), and no intercept is included for the Cox
-and conditional logistic models. For the multinomial model, the full
-parameter vector is the concatenation of Z-1 parameter vectors in the
-order as given above, where Z is the number of outcome categories. When
-no transformation is specified and the linear ERR model is used,
-`transform1` is used for ERR parameters \beta_1 and \beta_2 by default,
-with lower limits -1/max(D) for linear dose-response and (0,-1/max(D^2))
-for linear-quadratic dose-response, respectively (see below). For the
-linear-exponential model, a lower limit of 0 is used for \beta_1, and no
-transformation is used for \beta_2. If effect modifiers `M` are
-specified, no transformation is used for those parameters. When negative
-RRs are obtained during optimization, an error will be generated and a
-different transformation or bounds should be used. All output is
-returned in the original parametrization given in
+linear model (Gaussian family), and no intercept is included for the
+proportional hazards and conditional logistic models. For the
+multinomial model, the full parameter vector is the concatenation of Z-1
+parameter vectors in the order as given above, where Z is the number of
+outcome categories. When no transformation is specified and the linear
+ERR model is used, `transform1` is used for ERR parameters \beta_1 and
+\beta_2 by default, with lower limits -1/max(D) for linear dose-response
+and (0,-1/max(D^2)) for linear-quadratic dose-response, respectively
+(see below). For the linear-exponential model, a lower limit of 0 is
+used for \beta_1, and no transformation is used for \beta_2. If effect
+modifiers `M` are specified, no transformation is used for those
+parameters. When negative RRs are obtained during optimization, an error
+will be generated and a different transformation or bounds should be
+used. All output is returned in the original parametrization given in
 [`?ameras`](https://ameras.sanderroberti.com/reference/ameras.md). The
 Jacobian of the transformation (`transform.jacobian`) is required when
 using a transformation with methods other than BMA. For `transform1`,
@@ -107,7 +107,7 @@ following in mind:
 1.  At a minimum, the function should take arguments `params` and `...`,
     where `params` is the full parameter vector. Parameters are in a
     specific order (see above), in case of doubt it is always possible
-    to run `ameras` with the default settings to verify correct the
+    to run `ameras` with the default settings to verify the correct
     order from the result.
 2.  Extra arguments can be used and should be supplied when calling
     `ameras`
@@ -192,12 +192,12 @@ summary(fit.ameras.sigmoid)
 #>     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, 
 #>     index.t = 4:5)
 #> 
-#> Total run time: 0.6 seconds
+#> Total CPU run time: 0.647 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.6
+#>  Method   Fit  CI Total
+#>      RC 0.647 0.0 0.647
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -223,12 +223,12 @@ summary(fit.ameras.transform1)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0.3 seconds
+#> Total CPU run time: 0.321 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.3
+#>  Method   Fit  CI Total
+#>      RC 0.321 0.0 0.321
 #> 
 #> Summary of coefficients by method:
 #> 

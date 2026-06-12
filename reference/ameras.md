@@ -263,7 +263,7 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
   whether to attach data to the output object (default `TRUE`). When the
   data object is large, `keep.data` can be set to `FALSE` to preserve
   memory. The attached data is used to compute profile likelihood
-  confidence intervals, but can also be supplied seperately when
+  confidence intervals, but can also be supplied separately when
   `keep.data=FALSE`. See
   [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
 
@@ -306,7 +306,16 @@ components:
 
 - runtime:
 
-  string with the runtime in seconds.
+  string with the total CPU runtime currently available for the method.
+  After fitting this is the fitting time; after
+  [`confint`](https://ameras.sanderroberti.com/reference/confint.md)
+  this includes confidence interval computation time.
+
+- timing:
+
+  list with CPU and elapsed timings for fitting, confidence interval
+  computation, and their total. CPU time is used for printed runtime
+  summaries.
 
 For RC, ERC, and MCML the following additional output is included:
 
@@ -357,7 +366,7 @@ For BMA the output additionally contains:
 - prophaz.timepoints:
 
   for `family="prophaz"`, time points defining the intervals on which
-  the estimated baseline hazards is constant; these are
+  the estimated baseline hazard is constant; these are
   `prophaz.numints.BMA + 1` time points covering the interval
   `(min(entry), max(exit))`, based on quantiles among observed event
   times. See Details.
@@ -369,7 +378,7 @@ Finally, for FMA the output additionally contains:
   data frame with samples generated from the normal distributions
   associated with parameters estimated for each dose realization.
 
-- weigths:
+- weights:
 
   vector of weights corresponding to the models fit to each included
   realization
@@ -390,8 +399,14 @@ The class `amerasfit` supports the methods
 [`print`](https://ameras.sanderroberti.com/reference/print.md),
 [`coef`](https://ameras.sanderroberti.com/reference/coef.md),
 [`confint`](https://ameras.sanderroberti.com/reference/confint.md),
-[`summary`](https://ameras.sanderroberti.com/reference/summary.md), and
-[`traceplot`](https://ameras.sanderroberti.com/reference/traceplot.md).
+[`summary`](https://ameras.sanderroberti.com/reference/summary.md),
+[`summary_table`](https://ameras.sanderroberti.com/reference/summary.md),
+[`vcov`](https://ameras.sanderroberti.com/reference/vcov.md),
+[`residuals`](https://ameras.sanderroberti.com/reference/residuals.md),
+[`plot`](https://ameras.sanderroberti.com/reference/plot.md),
+[`traceplot`](https://ameras.sanderroberti.com/reference/traceplot.md),
+[`Rhat`](https://ameras.sanderroberti.com/reference/Rhat.md), and
+[`included_realizations`](https://ameras.sanderroberti.com/reference/included_realizations.md).
 
 ## Details
 
@@ -462,13 +477,13 @@ original parametrization. The Jacobian of the transformation
 the Jacobian is given by
 [`transform1.jacobian`](https://ameras.sanderroberti.com/reference/transform1jacobian.md).
 No transformations are used in BMA, and FMA is applied on the parameters
-using the parametrization as given in above with variances obtained
-using the delta method with the provided Jacobian function.
+using the parametrization as given above with variances obtained using
+the delta method with the provided Jacobian function.
 
 For BMA, a prior distribution for exposure-response parameters can be
 chosen when using linear or linear-exponential exposure-response model.
-The options are normal, horshoe, and double exponential priors, and the
-same priors truncated at 0 to yield positive values. In particular:
+The options are normal, horseshoe, and double exponential priors, and
+the same priors truncated at 0 to yield positive values. In particular:
 
 - Normal: \\\beta_j \sim N(0,1000)\\ for all exposure-response
   parameters \\\beta_j\\
@@ -500,7 +515,11 @@ computing confidence intervals,
 [`summary`](https://ameras.sanderroberti.com/reference/summary.md) for a
 summary of the fitted model including confidence intervals if computed,
 [`coef`](https://ameras.sanderroberti.com/reference/coef.md) for
-extracting coefficients.
+extracting coefficients,
+[`vcov`](https://ameras.sanderroberti.com/reference/vcov.md) for
+extracting variance-covariance matrices, and
+[`included_realizations`](https://ameras.sanderroberti.com/reference/included_realizations.md)
+for inspecting which realizations contributed to model averaging.
 
 ## References
 
@@ -522,12 +541,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total runtime: 0.4 seconds
+#> Total CPU runtime: 0.349999999999994 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.4
+#>  Method  Fit  CI Total
+#>      RC 0.35 0.0  0.35
 #> 
 #> Estimated model parameters:
 #> 

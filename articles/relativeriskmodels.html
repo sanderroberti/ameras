@@ -40,8 +40,10 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
+    <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
     <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
+    <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
     <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
   </ul>
 </li>
@@ -118,8 +120,8 @@ the same syntax applies to all other settings.</p>
 <p>The usual exponential relative risk model is given by <span class="math inline">RR_i=\exp(\beta_1 D_i+\beta_2 D_i^2+ \mathbf{M}_i^T
 \mathbf{\beta}_{m1}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2}
 D_i^2)</span>, where the quadratic and effect modification terms are
-optional (not fit by setting <code>deg=1</code> and not passing anything
-to <code>M</code>, respectively). This model is fit by setting
+optional (not fit by setting <code>deg=1</code> and not supplying
+<code>modifier</code>, respectively). This model is fit by setting
 <code>model="EXP"</code> as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.ameras.exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
@@ -130,12 +132,12 @@ to <code>M</code>, respectively). This model is fit by setting
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "EXP") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.3 seconds</span></span>
+<span><span class="co">#&gt; Total CPU run time: 0.347 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.3</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.347 0.0 0.347</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -154,7 +156,8 @@ to <code>M</code>, respectively). This model is fit by setting
 <p>The linear excess relative risk model is given by <span class="math inline">RR_i=1+\beta_1 D_i+\beta_2 D_i^2+ \mathbf{M}_i^T
 \mathbf{\beta}_{m1}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2}
 D_i^2</span>, where again the quadratic and effect modification terms
-are optional. In this case, no degree needs to be specified. This model
+are optional. The degree is specified with <code>deg</code>, as in the
+exponential model; the example below uses <code>deg=2</code>. This model
 is fit by setting <code>model="ERR"</code> as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.ameras.err</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
@@ -165,12 +168,12 @@ is fit by setting <code>model="ERR"</code> as follows:</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.3 seconds</span></span>
+<span><span class="co">#&gt; Total CPU run time: 0.338 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.3</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.338 0.0 0.338</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -200,12 +203,12 @@ as follows:</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "LINEXP") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total run time: 0.6 seconds</span></span>
+<span><span class="co">#&gt; Total CPU run time: 0.627 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Runtime</span></span>
-<span><span class="co">#&gt;      RC     0.6</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.627 0.0 0.627</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

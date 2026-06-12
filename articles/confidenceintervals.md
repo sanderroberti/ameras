@@ -22,10 +22,10 @@ library(ameras)
 To compute confidence intervals, first fit the model using `ameras`,
 then use the `confint` method to attach confidence intervals. Several
 types of confidence intervals are supported, which should be supplied to
-the `type` argument of `confint`, see below. When `confint` is called
-with `methods` containing at least one of `RC`, `ERC`, and `MCML` and at
-least one of `FMA` and `BMA`, `type` should be a vector of length 2 with
-one method for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
+the `type` argument of `confint`, see below. When the fitted object
+contains at least one of `RC`, `ERC`, and `MCML` and at least one of
+`FMA` and `BMA`, `type` should be a vector of length 2 with one interval
+type for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
 
 ## Regression calibration, extended regression calibration, and Monte Carlo maximum likelihood
 
@@ -104,12 +104,12 @@ summary(fit.ameras.waldorig)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("RC"))
 #> 
-#> Total run time: 0.5 seconds
+#> Total CPU run time: 0.437 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.5
+#>  Method   Fit    CI Total
+#>      RC 0.436 0.001 0.437
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -123,12 +123,12 @@ summary(fit.ameras.waldtransformed)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("RC"))
 #> 
-#> Total run time: 0.5 seconds
+#> Total CPU run time: 0.437 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.5
+#>  Method   Fit    CI Total
+#>      RC 0.436 0.001 0.437
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -142,12 +142,12 @@ summary(fit.ameras.proflik)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("RC"))
 #> 
-#> Total run time: 0.5 seconds
+#> Total CPU run time: 3.311 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.5
+#>  Method   Fit    CI Total
+#>      RC 0.436 2.875 3.311
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -196,12 +196,12 @@ summary(fit.ameras.hpd)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.6 seconds
+#> Total CPU run time: 1.976 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>     FMA     1.6
+#>  Method   Fit    CI Total
+#>     FMA 1.759 0.217 1.976
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -215,12 +215,12 @@ summary(fit.ameras.percentile)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
 #>     X2, data = data, family = "binomial", methods = c("FMA"))
 #> 
-#> Total run time: 1.6 seconds
+#> Total CPU run time: 1.849 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>     FMA     1.6
+#>  Method   Fit   CI Total
+#>     FMA 1.759 0.09 1.849
 #> 
 #> Summary of coefficients by method:
 #> 

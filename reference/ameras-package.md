@@ -30,7 +30,7 @@ visualize the exposure uncertainty in the dose realizations, use
 
 Sander Roberti \<sander.roberti@nih.gov\>, William Wheeler
 \<WheelerB@imsweb.com\>, Ruth Pfeiffer \<pfeiffer@mail.nih.gov\>, and
-Deukwoo Kwon \<DKwon@uams.edu
+Deukwoo Kwon \<DKwon@uams.edu\>
 
 ## References
 

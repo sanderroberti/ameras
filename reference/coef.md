@@ -2,8 +2,7 @@
 
 Returns a data frame with all the parameters of a fitted `amerasfit`
 object. The resulting object has a column for every method supplied to
-\`methods\` when calling \`ameras\`, with rows corresponding to
-parameters.
+`methods` when calling `ameras`, with rows corresponding to parameters.
 
 ## Usage
 
@@ -26,7 +25,7 @@ coef(object, ...)
 ## Value
 
 Data frame with estimated model parameters. Column names correspond to
-the \`methods\` used in the \`ameras\` call, and row names correspond to
+the `methods` used in the `ameras` call, and row names correspond to
 parameter names.
 
 ## See also

@@ -84,15 +84,17 @@ which is a list containing the following elements:
   `pval.lower`
 
   :   p-value associated with the lower bound of the profile likelihood
-      CI, the assess validity of the obtained bound. Only included if
-      profile likelihood confidence intervals were computed via
+      CI, used to assess the validity of the obtained bound. Only
+      included if profile likelihood confidence intervals were computed
+      via
       [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
 
   `pval.upper`
 
   :   p-value associated with the upper bound of the profile likelihood
-      CI, the assess validity of the obtained bound. Only included if
-      profile likelihood confidence intervals were computed via
+      CI, used to assess the validity of the obtained bound. Only
+      included if profile likelihood confidence intervals were computed
+      via
       [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
 
   `Rhat`
@@ -108,12 +110,15 @@ which is a list containing the following elements:
 
 - `runtime_table`:
 
-  A data frame with columns `Method` and `Runtime`, reporting the
-  computation time in seconds for each method.
+  A data frame reporting computation time in seconds for each method.
+  When structured timing information is available this has columns
+  `Method`, `Fit`, `CI`, and `Total`, with CPU time reported for each
+  timing component. For objects that only contain the compatibility
+  `runtime` field, this has columns `Method` and `Runtime`.
 
 - `total_runtime_seconds`:
 
-  The total computation time in seconds across all methods.
+  The total CPU computation time in seconds across all methods.
 
 - `CI.computed`:
 
@@ -130,10 +135,11 @@ intervals are only printed if they have been computed by
 BMA results are present in the fitted object, the summary table includes
 columns `Rhat` and `n.eff`, with `NA` values for all other methods.
 
-Printing the summary prints the original call to `ameras`, the runtime
-(total and by method), and the table described above. This table can
-also be accessed directly (i.e., to retrieve confidence intervals) using
-`summary_table`.
+Printing the summary prints the original call to `ameras`, the CPU
+runtime (total and by method), and the table described above. When
+confidence intervals have been computed, CI runtime is included in the
+total runtime. This table can also be accessed directly (i.e., to
+retrieve confidence intervals) using `summary_table`.
 
 ## See also
 
@@ -162,12 +168,12 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0 seconds
+#> Total CPU run time: 0.0299999999999727 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.0
+#>  Method  Fit  CI Total
+#>      RC 0.03 0.0  0.03
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -179,30 +185,30 @@ summary(fit)
 #> 
 
 ## Summary with confidence intervals
-fit <- confint(fit, method = "wald.orig")
-#> Obtaining profile likelihood CI for dose
+fit <- confint(fit, type = "wald.orig")
 #> RC confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5648 1.112
+#>               lower   upper
+#> (Intercept) -1.0293 -0.7401
+#> dose         0.5324  1.0715
 #> 
 summary(fit)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0 seconds
+#> Total CPU run time: 0.0299999999999727 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.0
+#>  Method  Fit  CI Total
+#>      RC 0.03 0.0  0.03
 #> 
 #> Summary of coefficients by method:
 #> 
 #>  Method        Term Estimate      SE CI.lower CI.upper
-#>      RC (Intercept)  -0.8847 0.07378       NA       NA
-#>      RC        dose   0.8020 0.13751   0.5648    1.112
+#>      RC (Intercept)  -0.8847 0.07378  -1.0293  -0.7401
+#>      RC        dose   0.8020 0.13751   0.5324   1.0715
 #> 
 
 ## Access the summary table directly
@@ -215,48 +221,48 @@ fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "bino
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
-fit2 <- confint(fit2, method = "wald.orig")
-#> Obtaining profile likelihood CI for dose
-#> Obtaining profile likelihood CI for dose
-#> Obtaining profile likelihood CI for dose
+fit2 <- confint(fit2, type = "wald.orig")
 #> RC confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5648 1.112
+#>               lower   upper
+#> (Intercept) -1.0293 -0.7401
+#> dose         0.5324  1.0715
 #> 
 #> ERC confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5728 1.144
+#>               lower   upper
+#> (Intercept) -1.0314 -0.7384
+#> dose         0.5411  1.1018
 #> 
 #> MCML confidence intervals:
 #> 
-#>       lower upper
-#> dose 0.5554 1.098
+#>               lower   upper
+#> (Intercept) -1.0193 -0.7323
+#> dose         0.5236  1.0584
 #> 
 summary(fit2)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("RC", "ERC", "MCML"))
 #> 
-#> Total run time: 14.4 seconds
+#> Total CPU run time: 52.4689999999999 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.0
-#>     ERC    14.2
-#>    MCML     0.2
+#>  Method    Fit  CI  Total
+#>      RC  0.030 0.0  0.030
+#>     ERC 52.115 0.0 52.115
+#>    MCML  0.324 0.0  0.324
 #> 
 #> Summary of coefficients by method:
 #> 
 #>  Method        Term Estimate      SE CI.lower CI.upper
-#>      RC (Intercept)  -0.8847 0.07378       NA       NA
-#>      RC        dose   0.8020 0.13751   0.5648    1.112
-#>     ERC (Intercept)  -0.8849 0.07477       NA       NA
-#>     ERC        dose   0.8214 0.14304   0.5728    1.144
-#>    MCML (Intercept)  -0.8758 0.07323       NA       NA
-#>    MCML        dose   0.7910 0.13644   0.5554    1.098
+#>      RC (Intercept)  -0.8847 0.07378  -1.0293  -0.7401
+#>      RC        dose   0.8020 0.13751   0.5324   1.0715
+#>     ERC (Intercept)  -0.8849 0.07477  -1.0314  -0.7384
+#>     ERC        dose   0.8214 0.14304   0.5411   1.1018
+#>    MCML (Intercept)  -0.8758 0.07323  -1.0193  -0.7323
+#>    MCML        dose   0.7910 0.13644   0.5236   1.0584
 #> 
 # }
 ```

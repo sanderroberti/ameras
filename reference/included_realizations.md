@@ -49,8 +49,9 @@ or the Hessian was not invertible or not positive definite. If more than
 20% of realizations are excluded, a warning is issued during fitting.
 
 For BMA, all realizations are included by default. A subset of
-realizations can be specified via the `included.replicates.BMA` argument
-to [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md), for
+realizations can be specified via the `included.realizations.BMA`
+argument to
+[`ameras`](https://ameras.sanderroberti.com/reference/ameras.md), for
 example by passing the indices returned by
 `included_realizations(fit, methods="FMA")` from a prior FMA fit.
 

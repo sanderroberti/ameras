@@ -18,8 +18,8 @@ print(x, digits = max(3, getOption("digits") - 3), ...)
 
 - digits:
 
-  Number of significant digits to be printed. Default is \`max(3,
-  getOption("digits") - 3)\`
+  Number of significant digits to be printed. Default is
+  `max(3, getOption("digits") - 3)`.
 
 - ...:
 
@@ -27,8 +27,10 @@ print(x, digits = max(3, getOption("digits") - 3), ...)
 
 ## Value
 
-Prints the \`ameras\` call, number of rows and dose realizations in the
-data, runtime, and model coefficients.
+Prints the `ameras` call, number of rows and dose realizations in the
+data, CPU runtime, and model coefficients. For objects with structured
+timing information, fitting time, confidence interval computation time,
+and total time are shown separately.
 
 ## See also
 
@@ -59,13 +61,13 @@ fit
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total runtime: 14.5 seconds
+#> Total CPU runtime: 51.929 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.0
-#>     ERC    14.5
+#>  Method    Fit  CI  Total
+#>      RC  0.049 0.0  0.049
+#>     ERC 51.880 0.0 51.880
 #> 
 #> Estimated model parameters:
 #> 
@@ -81,13 +83,13 @@ print(fit)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total runtime: 14.5 seconds
+#> Total CPU runtime: 51.929 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.0
-#>     ERC    14.5
+#>  Method    Fit  CI  Total
+#>      RC  0.049 0.0  0.049
+#>     ERC 51.880 0.0 51.880
 #> 
 #> Estimated model parameters:
 #> 
@@ -105,13 +107,13 @@ print(fit, digits=5)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total runtime: 14.5 seconds
+#> Total CPU runtime: 51.929 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.0
-#>     ERC    14.5
+#>  Method    Fit  CI  Total
+#>      RC  0.049 0.0  0.049
+#>     ERC 51.880 0.0 51.880
 #> 
 #> Estimated model parameters:
 #> 

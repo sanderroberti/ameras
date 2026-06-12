@@ -39,7 +39,7 @@ The usual exponential relative risk model is given by RR_i=\exp(\beta_1
 D_i+\beta_2 D_i^2+ \mathbf{M}\_i^T \mathbf{\beta}\_{m1}D_i +
 \mathbf{M}\_i^T \mathbf{\beta}\_{m2} D_i^2), where the quadratic and
 effect modification terms are optional (not fit by setting `deg=1` and
-not passing anything to `M`, respectively). This model is fit by setting
+not supplying `modifier`, respectively). This model is fit by setting
 `model="EXP"` as follows:
 
 ``` r
@@ -52,12 +52,12 @@ summary(fit.ameras.exp)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "EXP") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0.3 seconds
+#> Total CPU run time: 0.347 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.3
+#>  Method   Fit  CI Total
+#>      RC 0.347 0.0 0.347
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -76,9 +76,9 @@ summary(fit.ameras.exp)
 The linear excess relative risk model is given by RR_i=1+\beta_1
 D_i+\beta_2 D_i^2+ \mathbf{M}\_i^T \mathbf{\beta}\_{m1}D_i +
 \mathbf{M}\_i^T \mathbf{\beta}\_{m2} D_i^2, where again the quadratic
-and effect modification terms are optional. In this case, no degree
-needs to be specified. This model is fit by setting `model="ERR"` as
-follows:
+and effect modification terms are optional. The degree is specified with
+`deg`, as in the exponential model; the example below uses `deg=2`. This
+model is fit by setting `model="ERR"` as follows:
 
 ``` r
 
@@ -90,12 +90,12 @@ summary(fit.ameras.err)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0.3 seconds
+#> Total CPU run time: 0.338 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.3
+#>  Method   Fit  CI Total
+#>      RC 0.338 0.0 0.338
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -127,12 +127,12 @@ summary(fit.ameras.linexp)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "LINEXP") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Total run time: 0.6 seconds
+#> Total CPU run time: 0.627 seconds
 #> 
-#> Runtime in seconds by method:
+#> CPU runtime in seconds by method:
 #> 
-#>  Method Runtime
-#>      RC     0.6
+#>  Method   Fit  CI Total
+#>      RC 0.627 0.0 0.627
 #> 
 #> Summary of coefficients by method:
 #> 
