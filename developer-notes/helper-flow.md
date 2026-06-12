@@ -22,7 +22,7 @@ flowchart TD
   J --> JA["family-specific likelihood closure"]
   I --> JB["MCML objective closure"]
   JA -->|wrapped by MCML objective| JB
-  JB --> AB["mcml_average_neg_loglik()"]
+  JB --> AB["mcml_average_neg_loglik()<br/>scalar objective value"]
   JB --> N["fit_objective_with_hessian()"]
 
   E --> K["family-specific RC objective"]
@@ -39,8 +39,7 @@ flowchart TD
 
   G --> Q["assemble_fma_result()<br/>FMA weights and samples"]
   P --> Q
-  Q -->|default included.realizations<br/>when FMA+BMA| H
-  H --> R["NIMBLE model and MCMC samples"]
+  H --> R["NIMBLE model and MCMC samples<br/>uses included.realizations.BMA"]
 
   O --> S["new_amerasfit()<br/>amerasfit object"]
   Q --> S
@@ -62,7 +61,12 @@ flowchart TD
   AF -->|MCML profile objective| AB
   AF --> AC["compute_proflik_ci_one()"]
   V --> AC
-  AC --> AD["proflik()"]
+  AC --> AD["proflik()<br/>profile likelihood value"]
+  U --> AG["CI table"]
+  V --> AG
+  W --> AG
+  AG --> AH["confint stores CI on method result<br/>set_ci_timing()<br/>mark CI.computed"]
+  AH --> AI["updated amerasfit object"]
 ```
 
 ## Fitting Path
@@ -81,9 +85,10 @@ adds `rcdose_ameras`, and stores enough model metadata for later methods such as
   averaging.
 - `ameras.bma()` builds and samples the Bayesian model averaging model.
 
-When FMA and BMA are requested together, `ameras_main()` runs FMA first. Unless
-the user supplies `included.realizations.BMA`, the BMA fit uses the realization
-indices retained by FMA.
+When FMA and BMA are requested together, `ameras_main()` runs FMA first so the
+methods appear in a predictable order. BMA does not currently use FMA screening
+results by default; `included.realizations.BMA` controls the BMA realization
+set and defaults to all dose realizations.
 
 The main likelihood construction helper is `make_single_realization_loglik()`.
 It builds a family-specific likelihood closure from raw fitting arguments. It is
@@ -92,6 +97,9 @@ reconstruction.
 In the flowchart, arrows out of `make_single_realization_loglik()` point to the
 likelihood closures it returns; those closures are then wrapped or passed to the
 optimizer/profile-likelihood helpers.
+Leaf helper nodes such as `mcml_average_neg_loglik()` and `proflik()` represent
+values computed inside their caller rather than separate downstream package
+steps.
 
 `make_mcml_loglik_fn()` wraps `make_single_realization_loglik()` for MCML. The
 family likelihoods return one negative log likelihood per dose realization, and
@@ -150,7 +158,7 @@ realizations.
 After each method's interval calculation, `confint.amerasfit()` records the CI
 timing for that method and updates the method's total runtime. When intervals
 are recomputed with `force = TRUE`, the previous CI timing is replaced rather
-than accumulated.
+than accumulated. The updated `amerasfit` object is returned invisibly.
 
 ## Special Cases
 

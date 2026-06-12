@@ -45,7 +45,8 @@ ameras_main <- function(
   # prophaz requires status and exit and can use entry, X and M
 
   # Method in ("MCML", "RC", "ERC", "FMA", "BMA")
-  # If both FMA and BMA are to be run, run FMA first to determine the included realizations and skip that step in BMA
+  # If both FMA and BMA are to be run, run FMA first so output is ordered.
+  # BMA inclusions are controlled by included.realizations.BMA.
   if ("FMA" %in% methods & "BMA" %in% methods) {
     methods[methods %in% c("FMA", "BMA")] <- c("FMA", "BMA")
   }
