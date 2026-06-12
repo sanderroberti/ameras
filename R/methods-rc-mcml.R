@@ -129,77 +129,13 @@ ameras.mcml <- function(
     ...
   )
 
-  if (!is.null(transform) & !is.null(transform.jacobian)) {
-    if (is.function(transform) & is.function(transform.jacobian)) {
-      if ("boundcheck" %in% names(formals(transform))) {
-        coefs <- transform(fit$par, boundcheck = TRUE, ...)
-      } else {
-        coefs <- transform(fit$par, ...)
-      }
-      if (
-        det(fit$hessian) != 0 &
-          rcond(fit$hessian) > .Machine$double.eps &
-          all(eigen(fit$hessian)$values > 0)
-      ) {
-        cholH <- tryCatch(chol(fit$hessian), error = function(e) NULL)
-        if (!is.null(cholH)) {
-          jac <- transform.jacobian(fit$par, ...)
-          tmpsolve <- backsolve(cholH, t(jac), transpose = TRUE)
-          vcov <- crossprod(tmpsolve)
-          #vcov <- jac %*% MASS::ginv(fit$hessian) %*% t(jac)
-        } else {
-          warning(
-            "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
-          )
-          vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
-        }
-      } else {
-        warning(
-          "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
-        )
-        vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
-      }
-    } else {
-      stop("transform and transform.jacobian should be functions")
-    }
-  } else {
-    coefs <- fit$par
-    if (
-      det(fit$hessian) != 0 &
-        rcond(fit$hessian) > .Machine$double.eps &
-        all(eigen(fit$hessian)$values > 0)
-    ) {
-      vcov <- chol2inv(chol(fit$hessian)) #MASS::ginv(fit$hessian)
-    } else {
-      warning(
-        "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
-      )
-      vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
-    }
-  }
-
-  names(coefs) <- parnames
-  rownames(vcov) <- colnames(vcov) <- parnames
-
-  t1 <- proc.time()
-  timedif <- t1 - t0
-  runtime <- paste(
-    round(as.numeric(as.difftime(timedif["elapsed"], units = "secs")), 1),
-    "seconds"
-  )
-
-  out <- list(
-    coefficients = coefs,
-    sd = sqrt(diag(vcov)),
-    vcov = vcov,
-    optim = list(
-      par = fit$par,
-      hessian = fit$hessian,
-      convergence = fit$convergence,
-      counts = fit$counts
-    ),
-    loglik = -1 * fit$value,
-    runtime = runtime
+  out <- assemble_frequentist_fit_result(
+    fit = fit,
+    parnames = parnames,
+    t0 = t0,
+    transform = transform,
+    transform.jacobian = transform.jacobian,
+    ...
   )
   return(out)
 }
@@ -533,79 +469,14 @@ ameras.rc <- function(
     doseRRmod = doseRRmod
   )
 
-  if (!is.null(transform) & !is.null(transform.jacobian)) {
-    if (is.function(transform) & is.function(transform.jacobian)) {
-      if ("boundcheck" %in% names(formals(transform))) {
-        coefs <- transform(fit$par, boundcheck = TRUE, ...)
-      } else {
-        coefs <- transform(fit$par, ...)
-      }
-
-      if (
-        det(fit$hessian) != 0 &
-          rcond(fit$hessian) > .Machine$double.eps &
-          all(eigen(fit$hessian)$values > 0)
-      ) {
-        cholH <- tryCatch(chol(fit$hessian), error = function(e) NULL)
-        if (!is.null(cholH)) {
-          jac <- transform.jacobian(fit$par, ...)
-          tmpsolve <- backsolve(cholH, t(jac), transpose = TRUE)
-          vcov <- crossprod(tmpsolve)
-          #vcov <- jac %*% MASS::ginv(fit$hessian) %*% t(jac)
-        } else {
-          warning(
-            "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
-          )
-          vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
-        }
-      } else {
-        warning(
-          "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
-        )
-        vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
-      }
-    } else {
-      stop("transform and transform.jacobian should be functions")
-    }
-  } else {
-    coefs <- fit$par
-    if (
-      det(fit$hessian) != 0 &
-        rcond(fit$hessian) > .Machine$double.eps &
-        all(eigen(fit$hessian)$values > 0)
-    ) {
-      vcov <- chol2inv(chol(fit$hessian)) #MASS::ginv(fit$hessian)
-    } else {
-      warning(
-        "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
-      )
-      vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
-    }
-  }
-
-  names(coefs) <- parnames
-  rownames(vcov) <- colnames(vcov) <- parnames
-
-  t1 <- proc.time()
-  timedif <- t1 - t0
-  runtime <- paste(
-    round(as.numeric(as.difftime(timedif["elapsed"], units = "secs")), 1),
-    "seconds"
-  )
-
-  out <- list(
-    coefficients = coefs,
-    sd = sqrt(diag(vcov)),
-    vcov = vcov,
-    optim = list(
-      par = fit$par,
-      hessian = fit$hessian,
-      convergence = fit$convergence,
-      counts = fit$counts
-    ),
-    loglik = -1 * fit$value,
-    runtime = runtime,
-    ERC = ERC
+  out <- assemble_frequentist_fit_result(
+    fit = fit,
+    parnames = parnames,
+    t0 = t0,
+    transform = transform,
+    transform.jacobian = transform.jacobian,
+    extra = list(ERC = ERC),
+    ...
   )
 
   return(out)
