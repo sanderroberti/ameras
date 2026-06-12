@@ -69,6 +69,7 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
   maxit.profCI=NULL, tol.profCI=NULL,
   transform=NULL,
   transform.jacobian=NULL, inpar=NULL, loglim=1e-30, MFMA=100000, 
+  future.chunk.size.FMA=NULL,
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
   niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.realizations.BMA=NULL, 
   included.replicates.BMA=NULL, optim.method="Nelder-Mead", control=NULL, 
@@ -206,6 +207,14 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 
   number of samples for `"FMA"` to compute estimates and CIs (default
   100,000).
+
+- future.chunk.size.FMA:
+
+  optional positive number controlling the average number of FMA dose
+  realizations per future when future.apply is available. Parallel
+  execution is controlled by the user's current
+  [`future::plan()`](https://future.futureverse.org/reference/plan.html);
+  with the default sequential plan, FMA is fit sequentially.
 
 - prophaz.numints.BMA:
 
@@ -541,12 +550,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 0.345000000000008 seconds
+#> Total CPU runtime: 0.342000000000012 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.345 0.0 0.345
+#>      RC 0.342 0.0 0.342
 #> 
 #> Estimated model parameters:
 #> 

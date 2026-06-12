@@ -29,6 +29,12 @@
   [`message()`](https://rdrr.io/r/base/message.html)
 - Added an additional warning for FMA for the situation when results are
   based on only 1 or 2-5 realizations after exclusions.
+- FMA realization-specific fits can now use the `future` framework via
+  `future.apply` when available. Users can enable parallel execution by
+  setting a `future` plan before calling
+  [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md),
+  and `future.chunk.size.FMA` controls the chunk size passed to
+  [`future.apply::future_lapply()`](https://future.apply.futureverse.org/reference/future_lapply.html).
 - Streamlined information printed by
   [`summary()`](https://rdrr.io/r/base/summary.html) and
   [`confint()`](https://rdrr.io/r/stats/confint.html): columns

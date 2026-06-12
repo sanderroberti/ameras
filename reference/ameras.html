@@ -97,6 +97,7 @@ Methods include regression calibration (Carroll et al. 2006 doi:10.1201/97814200
 <span>  maxit.profCI<span class="op">=</span><span class="cn">NULL</span>, tol.profCI<span class="op">=</span><span class="cn">NULL</span>,</span>
 <span>  transform<span class="op">=</span><span class="cn">NULL</span>,</span>
 <span>  transform.jacobian<span class="op">=</span><span class="cn">NULL</span>, inpar<span class="op">=</span><span class="cn">NULL</span>, loglim<span class="op">=</span><span class="fl">1e-30</span>, MFMA<span class="op">=</span><span class="fl">100000</span>, </span>
+<span>  future.chunk.size.FMA<span class="op">=</span><span class="cn">NULL</span>,</span>
 <span>  prophaz.numints.BMA<span class="op">=</span><span class="fl">10</span>, ERRprior.BMA<span class="op">=</span><span class="st">"doubleexponential"</span>, nburnin.BMA<span class="op">=</span><span class="fl">5000</span>, </span>
 <span>  niter.BMA<span class="op">=</span><span class="fl">20000</span>, nchains.BMA<span class="op">=</span><span class="fl">2</span>, thin.BMA<span class="op">=</span><span class="fl">10</span>, included.realizations.BMA<span class="op">=</span><span class="cn">NULL</span>, </span>
 <span>  included.replicates.BMA<span class="op">=</span><span class="cn">NULL</span>, optim.method<span class="op">=</span><span class="st">"Nelder-Mead"</span>, control<span class="op">=</span><span class="cn">NULL</span>, </span>
@@ -178,6 +179,9 @@ If <code>methods</code> contains at least one of RC, ERC, and MCML and at least 
 
 <dt id="arg-mfma">MFMA<a class="anchor" aria-label="anchor" href="#arg-mfma"></a></dt>
 <dd><p>number of samples for <code>"FMA"</code> to compute estimates and CIs (default 100,000).</p></dd>
+
+<dt id="arg-future-chunk-size-fma">future.chunk.size.FMA<a class="anchor" aria-label="anchor" href="#arg-future-chunk-size-fma"></a></dt>
+<dd><p>optional positive number controlling the average number of FMA dose realizations per future when <span class="pkg">future.apply</span> is available. Parallel execution is controlled by the user's current <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">future::plan()</a></code>; with the default sequential plan, FMA is fit sequentially.</p></dd>
 
 <dt id="arg-prophaz-numints-bma">prophaz.numints.BMA<a class="anchor" aria-label="anchor" href="#arg-prophaz-numints-bma"></a></dt>
 <dd><p>for <code>methods="BMA"</code> with <code>family="prophaz"</code>, the number of subintervals with constant baseline hazard (default 10). Cut points are determined based on quantiles of the event time distribution among cases.</p></dd>
@@ -329,12 +333,12 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.345000000000008 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.342000000000012 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.345 0.0 0.345</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.342 0.0 0.342</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
