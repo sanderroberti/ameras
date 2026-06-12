@@ -420,6 +420,62 @@ make_single_realization_loglik <- function(
   }
 }
 
+mcml_average_neg_loglik <- function(logliks) {
+  # Preserve MCML's existing clipped log-mean-exp calculation. The clipping
+  # protects the likelihood averaging step when dose realizations differ sharply.
+  shifted <- pmax(pmin(-1 * logliks - max(-1 * logliks), 7e1), -7e1)
+  -1 * log(mean(exp(shifted))) - max(-1 * logliks)
+}
+
+make_mcml_loglik_fn <- function(
+  family,
+  dosevars,
+  data,
+  Y = NULL,
+  M = NULL,
+  X = NULL,
+  offset = NULL,
+  entry = NULL,
+  exit = NULL,
+  status = NULL,
+  setnr = NULL,
+  doseRRmod = NULL,
+  deg = 1,
+  loglim = 1e-30,
+  transform = NULL,
+  ...
+) {
+  # For MCML, the existing family likelihoods accept all dose realization
+  # columns at once and return one log likelihood per realization.
+  realization_loglik <- make_single_realization_loglik(
+    family = family,
+    dose.col = dosevars,
+    data = data,
+    Y = Y,
+    M = M,
+    X = X,
+    offset = offset,
+    entry = entry,
+    exit = exit,
+    status = status,
+    setnr = setnr,
+    doseRRmod = doseRRmod,
+    deg = deg,
+    loglim = loglim,
+    transform = transform,
+    ERC = FALSE,
+    Kmat = NULL,
+    ...
+  )
+
+  function(params, ...) {
+    # Keep `...` live at evaluation time so optimizer/transform arguments flow
+    # through exactly as they did when MCML built family-specific closures inline.
+    logliks <- realization_loglik(params, ...)
+    mcml_average_neg_loglik(logliks)
+  }
+}
+
 make_base_loglik_fn_single <- function(object, method_fit, data, dose.col) {
   m <- object$model
 
@@ -459,8 +515,7 @@ make_loglik_fn <- function(object, method_name, method_fit, data) {
   if (method_name == "MCML") {
     function(params) {
       logliks <- base_fn(params, D = m$dosevars)
-      shifted <- pmax(pmin(-logliks - max(-logliks), 7e1), -7e1)
-      -log(mean(exp(shifted))) - max(-logliks)
+      mcml_average_neg_loglik(logliks)
     }
   } else if (method_name %in% c("RC", "ERC")) {
     # Poisson ERC uses dosevars directly inside loglik.poisson.erc

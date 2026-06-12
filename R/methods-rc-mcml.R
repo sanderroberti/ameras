@@ -37,31 +37,6 @@ ameras.mcml <- function(
     if (is.null(inpar)) {
       inpar <- rep(0, 2 + length(X) + length(M) * deg + deg)
     }
-
-    loglik.mcml <- function(params, ...) {
-      logliks <- loglik.gaussian(
-        params,
-        D = dosevars,
-        X = X,
-        Y = Y,
-        M = M,
-        data = data,
-        deg = deg,
-        ERC = FALSE,
-        loglim = loglim,
-        transform = transform,
-        ...
-      )
-      return(
-        -1 *
-          log(mean(exp(pmax(
-            pmin(-1 * logliks - max(-1 * logliks), 7e1),
-            -7e1
-          )))) -
-          max(-1 * logliks)
-      ) # with explim=7e1
-      #return(mean(logliks)) # mean of log likelihoods
-    }
   } else if (family == "binomial") {
     if (is.null(Y)) {
       stop("Y is required for family=binomial")
@@ -69,33 +44,6 @@ ameras.mcml <- function(
 
     if (is.null(inpar)) {
       inpar <- rep(0, 1 + length(X) + length(M) * deg + deg)
-    }
-
-    loglik.mcml <- function(params, ...) {
-      logliks <- loglik.binomial(
-        params,
-        D = dosevars,
-        X = X,
-        Y = Y,
-        M = M,
-        doseRRmod = doseRRmod,
-        data = data,
-        deg = deg,
-        ERC = FALSE,
-        loglim = loglim,
-        transform = transform,
-        ...
-      )
-      #return(log(mean(exp(logliks-mean(logliks))))+mean(logliks)) # log of mean of likelihoods
-      return(
-        -1 *
-          log(mean(exp(pmax(
-            pmin(-1 * logliks - max(-1 * logliks), 7e1),
-            -7e1
-          )))) -
-          max(-1 * logliks)
-      ) # with explim=7e1
-      #return(mean(logliks)) # mean of log likelihoods
     }
   } else if (family == "poisson") {
     if (is.null(Y)) {
@@ -105,33 +53,6 @@ ameras.mcml <- function(
     if (is.null(inpar)) {
       inpar <- rep(0, 1 + length(X) + length(M) * deg + deg)
     }
-
-    loglik.mcml <- function(params, ...) {
-      logliks <- loglik.poisson(
-        params,
-        D = dosevars,
-        X = X,
-        Y = Y,
-        offset = offset,
-        M = M,
-        doseRRmod = doseRRmod,
-        data = data,
-        deg = deg,
-        loglim = loglim,
-        transform = transform,
-        ...
-      )
-      #return(log(mean(exp(logliks-mean(logliks))))+mean(logliks)) # log of mean of likelihoods
-      return(
-        -1 *
-          log(mean(exp(pmax(
-            pmin(-1 * logliks - max(-1 * logliks), 7e1),
-            -7e1
-          )))) -
-          max(-1 * logliks)
-      ) # with explim=7e1
-      #return(mean(logliks)) # mean of log likelihoods
-    }
   } else if (family == "clogit") {
     if (is.null(doseRRmod)) {
       stop("doseRRmod is required for family=clogit")
@@ -140,37 +61,8 @@ ameras.mcml <- function(
       stop("status is required for family=clogit")
     }
 
-    designmat <- t(model.matrix(~ as.factor(data[, setnr]) - 1))
-
     if (is.null(inpar)) {
       inpar <- rep(0, length(X) + length(M) * deg + deg)
-    }
-
-    loglik.mcml <- function(params, ...) {
-      logliks <- loglik.clogit(
-        params,
-        D = dosevars,
-        status = status,
-        X = X,
-        M = M,
-        doseRRmod = doseRRmod,
-        designmat = designmat,
-        data = data,
-        deg = deg,
-        ERC = FALSE,
-        loglim = loglim,
-        transform = transform,
-        ...
-      )
-      return(
-        -1 *
-          log(mean(exp(pmax(
-            pmin(-1 * logliks - max(-1 * logliks), 7e1),
-            -7e1
-          )))) -
-          max(-1 * logliks)
-      ) # with explim=7e1
-      #return(mean(logliks)) # mean of log likelihoods
     }
   } else if (family == "prophaz") {
     if (is.null(exit)) {
@@ -186,34 +78,6 @@ ameras.mcml <- function(
     if (is.null(inpar)) {
       inpar <- rep(0, length(X) + length(M) * deg + deg)
     }
-
-    loglik.mcml <- function(params, ...) {
-      logliks <- loglik.prophaz(
-        params,
-        D = dosevars,
-        status = status,
-        X = X,
-        M = M,
-        doseRRmod = doseRRmod,
-        entry = entry,
-        exit = exit,
-        data = data,
-        deg = deg,
-        ERC = FALSE,
-        loglim = loglim,
-        transform = transform,
-        ...
-      )
-      return(
-        -1 *
-          log(mean(exp(pmax(
-            pmin(-1 * logliks - max(-1 * logliks), 7e1),
-            -7e1
-          )))) -
-          max(-1 * logliks)
-      ) # with explim=7e1
-      #return(mean(logliks)) # mean of log likelihoods
-    }
   } else if (family == "multinomial") {
     if (is.null(Y)) {
       stop("Y is required for family=multinomial")
@@ -226,34 +90,26 @@ ameras.mcml <- function(
           (1 + length(X) + length(M) * deg + deg)
       )
     }
-
-    loglik.mcml <- function(params, ...) {
-      logliks <- loglik.multinomial(
-        params,
-        D = dosevars,
-        X = X,
-        Y = Y,
-        M = M,
-        doseRRmod = doseRRmod,
-        data = data,
-        deg = deg,
-        ERC = FALSE,
-        loglim = loglim,
-        transform = transform,
-        ...
-      )
-      #return(log(mean(exp(logliks-mean(logliks))))+mean(logliks)) # log of mean of likelihoods
-      return(
-        -1 *
-          log(mean(exp(pmax(
-            pmin(-1 * logliks - max(-1 * logliks), 7e1),
-            -7e1
-          )))) -
-          max(-1 * logliks)
-      ) # with explim=7e1
-      #return(mean(logliks)) # mean of log likelihoods
-    }
   }
+  loglik.mcml <- make_mcml_loglik_fn(
+    family = family,
+    dosevars = dosevars,
+    data = data,
+    Y = Y,
+    M = M,
+    X = X,
+    offset = offset,
+    entry = entry,
+    exit = exit,
+    status = status,
+    setnr = setnr,
+    doseRRmod = doseRRmod,
+    deg = deg,
+    loglim = loglim,
+    transform = transform,
+    ...
+  )
+
   parnames <- make_method_parnames(
     family = family,
     data = data,
