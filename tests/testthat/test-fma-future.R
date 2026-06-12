@@ -72,6 +72,71 @@ test_that("FMA fitting works with a multisession future plan", {
   expect_named(fit$FMA$coefficients, c("(Intercept)", "dose", "sigma"))
 })
 
+test_that("FMA gives the same result with sequential and multisession plans", {
+  # The realization fits should be deterministic regardless of the future plan.
+  # Resetting the seed before each call makes the downstream FMA sampling step
+  # comparable too; timing is intentionally ignored because it is plan-specific.
+  skip_on_cran()
+  skip_if_not_installed("future")
+  skip_if_not_installed("future.apply")
+
+  old_plan <- future::plan()
+  on.exit(future::plan(old_plan), add = TRUE)
+
+  set.seed(122)
+  n <- 70
+  dose <- seq(-1, 1, length.out = n)
+  dat <- data.frame(
+    Y = 1 + 0.75 * dose + rnorm(n, sd = 0.2),
+    V1 = dose + rnorm(n, sd = 0.02),
+    V2 = dose + rnorm(n, sd = 0.02),
+    V3 = dose + rnorm(n, sd = 0.02)
+  )
+
+  fit_with_plan <- function(strategy) {
+    if (identical(strategy, "multisession")) {
+      future::plan(future::multisession, workers = 2)
+    } else {
+      future::plan(future::sequential)
+    }
+
+    set.seed(123)
+    suppressWarnings(
+      suppressMessages(
+        ameras(
+          Y ~ dose(V1:V3),
+          data = dat,
+          family = "gaussian",
+          methods = "FMA",
+          unweightedFMA = TRUE,
+          MFMA = 120,
+          future.chunk.size.FMA = 1
+        )
+      )
+    )
+  }
+
+  sequential_fit <- fit_with_plan("sequential")
+  multisession_fit <- fit_with_plan("multisession")
+
+  expect_identical(
+    multisession_fit$FMA$included.realizations,
+    sequential_fit$FMA$included.realizations
+  )
+  expect_identical(
+    multisession_fit$FMA$included.samples,
+    sequential_fit$FMA$included.samples
+  )
+  expect_equal(multisession_fit$FMA$weights, sequential_fit$FMA$weights)
+  expect_equal(
+    multisession_fit$FMA$coefficients,
+    sequential_fit$FMA$coefficients
+  )
+  expect_equal(multisession_fit$FMA$sd, sequential_fit$FMA$sd)
+  expect_equal(multisession_fit$FMA$vcov, sequential_fit$FMA$vcov)
+  expect_equal(multisession_fit$FMA$samples, sequential_fit$FMA$samples)
+})
+
 test_that("FMA chunk size does not change sequential fit results", {
   # Use several well-behaved Gaussian dose realizations so all realization fits
   # are valid. Resetting the seed before each call makes the FMA sampling step
