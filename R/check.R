@@ -127,7 +127,7 @@ check_entry_exit <- function(entry, exit, data) {
   if (length(entry)) {
     vec1 <- data[, entry, drop = TRUE]
     check_num_vec(vec1, nm1)
-    tmp <- entry > exit
+    tmp <- vec1 > vec2
     tmp[is.na(tmp)] <- FALSE
     if (any(tmp)) stop(paste0("ERROR: ", nm1, " > ", nm2, " for some values"))
   }

@@ -193,10 +193,10 @@ print.summary.amerasfit <- function(
   print(x$call)
 
   if ("Total" %in% names(x$runtime_table)) {
-    cat(paste0("\nTotal CPU run time: ", x$total_runtime_seconds, " seconds\n\n"))
+    cat(paste0("\nTotal CPU runtime: ", x$total_runtime_seconds, " seconds\n\n"))
     cat("CPU runtime in seconds by method:\n\n")
   } else {
-    cat(paste0("\nTotal run time: ", x$total_runtime_seconds, " seconds\n\n"))
+    cat(paste0("\nTotal runtime: ", x$total_runtime_seconds, " seconds\n\n"))
     cat("Runtime in seconds by method:\n\n")
   }
 

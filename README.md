@@ -108,7 +108,7 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total CPU run time: 49.527 seconds
+#> Total CPU runtime: 49.527 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
@@ -174,7 +174,7 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total CPU run time: 49.534 seconds
+#> Total CPU runtime: 49.534 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
