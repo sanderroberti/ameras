@@ -1,0 +1,138 @@
+---
+title: "Standard analyses with one dose realization"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Standard analyses with one dose realization}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE
+)
+```
+
+```{r setup}
+library(ameras)
+```
+
+# Introduction
+
+The main purpose of `ameras` is to fit association models when multiple realizations of an exposure are available. The same interface can also be used for a standard analysis with a single observed dose variable.
+
+By default, `ameras()` fits regression calibration (`RC`). With a single dose realization, the regression-calibrated dose is just the supplied dose column, so the examples below omit the `methods` argument and use the default `RC` fit.
+
+For non-Gaussian families, `ameras()` defaults to a linear excess relative risk model (`model = "ERR"`). To compare with ordinary `glm()` fits, use the exponential relative risk model (`model = "EXP"`), which puts the dose coefficient on the usual logit or log-link scale.
+
+```{r data}
+data(data, package = "ameras")
+
+## Use one exposure realization as the single observed dose.
+data$D <- data$V1
+head(data[c("D", "Y.gaussian", "Y.binomial", "Y.poisson", "X1", "X2")])
+```
+
+This small helper prints matching coefficients from an `ameras` fit and a standard R model. The dose coefficient is named `dose` by `ameras` and `D` by the standard model.
+
+```{r helper}
+compare_coefficients <- function(ameras_fit, standard_fit) {
+  ameras_terms <- c("(Intercept)", "X1", "X2", "dose")
+  standard_terms <- c("(Intercept)", "X1", "X2", "D")
+
+  out <- data.frame(
+    term = ameras_terms,
+    ameras = unname(ameras_fit$RC$coefficients[ameras_terms]),
+    standard = unname(stats::coef(standard_fit)[standard_terms])
+  )
+
+  out$ameras <- round(out$ameras, 4)
+  out$standard <- round(out$standard, 4)
+  out
+}
+```
+
+# Gaussian outcome
+
+For a Gaussian outcome, a single-dose `ameras()` fit gives the same regression coefficients as `lm()`, with only a small numerical difference. The `ameras` fit also estimates `sigma`, so the comparison below only shows the regression coefficients.
+
+```{r gaussian}
+fit_ameras_gaussian <- ameras(Y.gaussian ~ dose(D) + X1 + X2,
+                              data = data,
+                              family = "gaussian")
+
+fit_lm <- lm(Y.gaussian ~ D + X1 + X2, data = data)
+
+compare_coefficients(fit_ameras_gaussian, fit_lm)
+```
+
+The usual `amerasfit` methods are available, including `summary()`, `coef()`, `vcov()`, and `confint()`.
+
+```{r gaussian-summary}
+fit_ameras_gaussian <- confint(fit_ameras_gaussian,
+                               type = "wald.orig",
+                               print = FALSE)
+summary(fit_ameras_gaussian)
+```
+
+# Binary outcome
+
+For a binary outcome, specify `model = "EXP"` to match the usual logistic regression parameterization used by `glm(..., family = binomial())`.
+
+```{r binomial}
+fit_ameras_binomial <- ameras(Y.binomial ~ dose(D, model = "EXP") + X1 + X2,
+                              data = data,
+                              family = "binomial")
+
+fit_glm_binomial <- glm(Y.binomial ~ D + X1 + X2,
+                        data = data,
+                        family = binomial())
+
+compare_coefficients(fit_ameras_binomial, fit_glm_binomial)
+```
+
+# Count outcome
+
+The same idea applies to Poisson regression. Again, `model = "EXP"` makes the `ameras` dose term directly comparable to the coefficient for `D` in `glm(..., family = poisson())`.
+
+```{r poisson}
+fit_ameras_poisson <- ameras(Y.poisson ~ dose(D, model = "EXP") + X1 + X2,
+                             data = data,
+                             family = "poisson")
+
+fit_glm_poisson <- glm(Y.poisson ~ D + X1 + X2,
+                       data = data,
+                       family = poisson())
+
+compare_coefficients(fit_ameras_poisson, fit_glm_poisson)
+```
+
+# A note on comparison with other software
+
+For a single dose realization, or for `RC` with multiple realizations after replacing the dose by its realization-specific mean, point estimates should generally agree with other software when the same likelihood, dose-response model, covariates, and parameterization are used.
+
+Standard errors and Wald confidence intervals may nevertheless differ. For `RC`, `ERC`, and `MCML`, `ameras` computes variance-covariance matrices from the observed information, using a numerical Hessian of the negative log-likelihood at the optimum. Other software may use expected Fisher information, a scoring-based approximation, a different treatment of parameter constraints, or a different internal parameter scale. These choices can lead to different standard errors even when coefficient estimates agree closely.
+
+# Moving to multiple realizations
+
+Once multiple exposure realizations are available, the formula changes only in the `dose()` term. For example, replacing `D` by `V1:V10` fits the default `RC` analysis using all 10 realizations:
+
+```{r multiple-realizations}
+fit_ameras_rc <- ameras(Y.binomial ~ dose(V1:V10, model = "EXP") + X1 + X2,
+                        data = data,
+                        family = "binomial")
+summary(fit_ameras_rc)
+```
+
+Other methods can then be added through the `methods` argument:
+
+```{r multiple-methods, eval = FALSE}
+fit_ameras_all <- ameras(Y.binomial ~ dose(V1:V10, model = "EXP") + X1 + X2,
+                         data = data,
+                         family = "binomial",
+                         methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
+```
