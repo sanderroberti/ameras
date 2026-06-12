@@ -19,8 +19,11 @@ flowchart TD
 
   D --> I["make_mcml_loglik_fn()"]
   I --> J["make_single_realization_loglik()"]
-  I --> AB["mcml_average_neg_loglik()"]
-  I --> N["fit_objective_with_hessian()"]
+  J --> JA["family-specific likelihood closure"]
+  I --> JB["MCML objective closure"]
+  JA -->|wrapped by MCML objective| JB
+  JB --> AB["mcml_average_neg_loglik()"]
+  JB --> N["fit_objective_with_hessian()"]
 
   E --> K["family-specific RC objective"]
   F --> L["family-specific ERC objective"]
@@ -29,7 +32,7 @@ flowchart TD
 
   G --> M["fit_fma_realizations()"]
   M --> J
-  M --> N
+  JA -->|FMA realization objective| N
 
   N -->|MCML, RC, ERC| O["assemble_frequentist_fit_result()<br/>MCML, RC, ERC"]
   N -->|FMA| P["summarize_fma_realization_fit()<br/>fit_passes_hessian_check()"]
@@ -49,13 +52,17 @@ flowchart TD
   T -->|percentile / hpd| W["compute_sample_CI()"]
 
   V --> X["make_loglik_fn()"]
-  V --> AC["compute_proflik_ci_one()"]
-  AC --> AD["proflik()"]
-  X --> AD
   X --> Y["make_base_loglik_fn()"]
-  X -->|MCML profile objective| AB
   Y --> Z["make_single_realization_loglik()<br/>ordinary RC/ERC/MCML cases"]
   Y --> AA["loglik.poisson.erc() / loglik.prophaz.erc()<br/>special ERC cases"]
+  Z --> AE["base likelihood closure"]
+  AA --> AE
+  X --> AF["method-specific profile objective closure"]
+  AE --> AF
+  AF -->|MCML profile objective| AB
+  AF --> AC["compute_proflik_ci_one()"]
+  V --> AC
+  AC --> AD["proflik()"]
 ```
 
 ## Fitting Path
@@ -82,6 +89,9 @@ The main likelihood construction helper is `make_single_realization_loglik()`.
 It builds a family-specific likelihood closure from raw fitting arguments. It is
 used directly by FMA and indirectly by MCML and profile-likelihood
 reconstruction.
+In the flowchart, arrows out of `make_single_realization_loglik()` point to the
+likelihood closures it returns; those closures are then wrapped or passed to the
+optimizer/profile-likelihood helpers.
 
 `make_mcml_loglik_fn()` wraps `make_single_realization_loglik()` for MCML. The
 family likelihoods return one negative log likelihood per dose realization, and
