@@ -5,7 +5,7 @@
 \description{
   Returns a data frame with all the parameters of a fitted
   \code{amerasfit} object. The resulting object has a column
-  for every method supplied to `methods` when calling `ameras`,
+  for every method supplied to \code{methods} when calling \code{ameras},
   with rows corresponding to parameters.
 }
 
@@ -25,7 +25,7 @@
 
 \value{
   Data frame with estimated model parameters. Column names correspond to the
-  `methods` used in the `ameras` call, and row names correspond to parameter
+  \code{methods} used in the \code{ameras} call, and row names correspond to parameter
   names.
 }
 

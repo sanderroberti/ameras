@@ -63,13 +63,13 @@
         }
         \item{\code{pval.lower}}{
           p-value associated with the lower bound of the profile likelihood 
-          CI, the assess validity of the obtained bound. Only included if
+          CI, used to assess the validity of the obtained bound. Only included if
           profile likelihood confidence intervals were computed via
           \code{\link[=confint.amerasfit]{confint}}.
         }
         \item{\code{pval.upper}}{
           p-value associated with the upper bound of the profile likelihood 
-          CI, the assess validity of the obtained bound. Only included if
+          CI, used to assess the validity of the obtained bound. Only included if
           profile likelihood confidence intervals were computed via
           \code{\link[=confint.amerasfit]{confint}}.
         }
@@ -130,7 +130,7 @@ fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binom
 summary(fit)
 
 ## Summary with confidence intervals
-fit <- confint(fit, method = "wald.orig")
+fit <- confint(fit, type = "wald.orig")
 summary(fit)
 
 ## Access the summary table directly
@@ -140,7 +140,7 @@ s <- summary_table(fit)
 \donttest{
 fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
               methods = c("RC", "ERC", "MCML"))
-fit2 <- confint(fit2, method = "wald.orig")
+fit2 <- confint(fit2, type = "wald.orig")
 summary(fit2)
 }
 }

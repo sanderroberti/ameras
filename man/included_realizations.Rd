@@ -48,7 +48,7 @@ included_realizations(x, \dots)
   during fitting.
 
   For BMA, all realizations are included by default. A subset of
-  realizations can be specified via the \code{included.replicates.BMA}
+  realizations can be specified via the \code{included.realizations.BMA}
   argument to \code{\link{ameras}}, for example by passing the indices
   returned by \code{included_realizations(fit, methods="FMA")} from a
   prior FMA fit.

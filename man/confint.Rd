@@ -92,7 +92,8 @@
       Logical. If \code{TRUE} (default), confidence intervals are printed to the console.
   }
   \item{digits}{
-      Number of significant digits to be printed. Default is `max(3, getOption("digits") - 3)`
+      Number of significant digits to be printed. Default is
+      \code{max(3, getOption("digits") - 3)}.
   }
   \item{\dots}{
     Additional arguments, currently unused.

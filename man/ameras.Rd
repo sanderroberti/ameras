@@ -74,7 +74,7 @@ Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncat
 \item{included.replicates.BMA}{\strong{Deprecated}. Use \code{included.realizations.BMA} instead. Indices of exposure realizations used in BMA (defaults to all realizations).}
 \item{optim.method}{method used for optimization by \code{optim}. Options are \code{"Nelder-Mead"} and \code{"BFGS"}. When using Nelder-Mead, a second optimization with BFGS is run to ensure an optimal fit.}
 \item{control}{control list passed to \code{optim} (default \code{list(reltol=1e-10)}).}
-\item{keep.data}{whether to attach data to the output object (default \code{TRUE}). When the data object is large, \code{keep.data} can be set to \code{FALSE} to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied seperately when \code{keep.data=FALSE}. See \code{\link[=confint.amerasfit]{confint}}.}
+\item{keep.data}{whether to attach data to the output object (default \code{TRUE}). When the data object is large, \code{keep.data} can be set to \code{FALSE} to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied separately when \code{keep.data=FALSE}. See \code{\link[=confint.amerasfit]{confint}}.}
 \item{\dots}{other arguments, passed to functions such as \code{transform}.}
 }
 \value{
@@ -106,15 +106,15 @@ For BMA  the output additionally contains:
   \item{samples}{MCMC posterior samples, as obtained from \code{nimble}. This is a list object with \code{nchains.BMA} components, each a named matrix with the samples from one chain in its rows, with columns corresponding to model parameters.} 
   \item{Rhat}{data frame with two columns, \code{Rhat} and \code{n.eff}. The first  column contains the Gelman-Rubin statistics \eqn{\hat R \geq 1} that can be used to assess convergence of MCMC chains. A value of 1 indicates good convergence and values \eqn{>1.05} indicate poor convergence. The effective sample size \code{n.eff} is a measure of how many independent samples the auto-correlated MCMC samples correspond to. A low effective sample size indicates high correlations and/or poor mixing.}
   \item{included.realizations}{indices of realization exposures that were included to obtain the results.}
-  \item{prophaz.timepoints}{for \code{family="prophaz"}, time points defining the intervals on which the estimated baseline hazards is constant; these are \code{prophaz.numints.BMA + 1} time points covering the interval \code{(min(entry), max(exit))}, based on quantiles among observed event times. See Details.}
+  \item{prophaz.timepoints}{for \code{family="prophaz"}, time points defining the intervals on which the estimated baseline hazard is constant; these are \code{prophaz.numints.BMA + 1} time points covering the interval \code{(min(entry), max(exit))}, based on quantiles among observed event times. See Details.}
 
 Finally, for FMA the output additionally contains:
   \item{samples}{data frame with samples generated from the normal distributions associated with parameters estimated for each dose realization.}
-  \item{weigths}{vector of weights corresponding to the models fit to each included realization}
+  \item{weights}{vector of weights corresponding to the models fit to each included realization}
   \item{included.samples}{the total number of samples included.}
   \item{included.realizations}{indices of realization exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results. }
 
-The class \code{amerasfit} supports the methods \code{\link[=print.amerasfit]{print}}, \code{\link[=coef.amerasfit]{coef}}, \code{\link[=confint.amerasfit]{confint}}, \code{\link[=summary.amerasfit]{summary}}, and \code{\link{traceplot}}.
+The class \code{amerasfit} supports the methods \code{\link[=print.amerasfit]{print}}, \code{\link[=coef.amerasfit]{coef}}, \code{\link[=confint.amerasfit]{confint}}, \code{\link[=summary.amerasfit]{summary}}, \code{\link[=summary_table.amerasfit]{summary_table}}, \code{\link[=vcov.amerasfit]{vcov}}, \code{\link[=residuals.amerasfit]{residuals}}, \code{\link[=plot.amerasfit]{plot}}, \code{\link{traceplot}}, \code{\link[=Rhat.amerasfit]{Rhat}}, and \code{\link[=included_realizations.amerasfit]{included_realizations}}.
 }
 
 \details{
@@ -122,9 +122,9 @@ Models are specified through formulas of the form \code{Y~dose(dose_expression, 
 
 A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at \code{transform(parameters)}, where \code{parameters} are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function \code{\link{transform1}} applies an exponential transformation to the desired parameters, see \code{?transform1}. When supplying a function to \code{transform}, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \eqn{\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma}, where \eqn{\bm \alpha}, \eqn{\bm\beta_{m1}} and \eqn{\bm \beta_{m2}} can be vectors, with lengths matching \eqn{\bm X} and \eqn{\bm M}, respectively. \eqn{\sigma} is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \eqn{Z-1} parameter vectors in the order as given above, where \eqn{Z} is the number of outcome categories, with the last category chosen as the referent category. See \code{vignette("transformations", package="ameras")} for an example of how to specify a custom transformation function. 
 
-When no transformation is specified and the linear ERR model is used, \code{transform1} is used for ERR parameters \eqn{\beta_1} and \eqn{\beta_2} by default, with lower limits \eqn{-1/max(D)} for \eqn{\beta_1} in the linear dose-response and \eqn{(0,-1/max(D^2))} for \eqn{(\beta_1,\beta_2)} in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \eqn{\beta_1}, and no transformation is used for \eqn{\beta_2}. If effect modifiers \code{M} are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (\code{transform.jacobian}) is required when using a transformation. For \code{\link{transform1}}, the Jacobian is given by \code{\link{transform1.jacobian}}. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given in above with variances obtained using the delta method with the provided Jacobian function.  
+When no transformation is specified and the linear ERR model is used, \code{transform1} is used for ERR parameters \eqn{\beta_1} and \eqn{\beta_2} by default, with lower limits \eqn{-1/max(D)} for \eqn{\beta_1} in the linear dose-response and \eqn{(0,-1/max(D^2))} for \eqn{(\beta_1,\beta_2)} in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \eqn{\beta_1}, and no transformation is used for \eqn{\beta_2}. If effect modifiers \code{M} are specified, no transformation is used for those parameters. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (\code{transform.jacobian}) is required when using a transformation. For \code{\link{transform1}}, the Jacobian is given by \code{\link{transform1.jacobian}}. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given above with variances obtained using the delta method with the provided Jacobian function.
 
-For BMA, a prior distribution for exposure-response parameters can be chosen when using linear or linear-exponential exposure-response model. The options are normal, horshoe, and double exponential priors, and the same priors truncated at 0 to yield positive values. In particular:
+For BMA, a prior distribution for exposure-response parameters can be chosen when using linear or linear-exponential exposure-response model. The options are normal, horseshoe, and double exponential priors, and the same priors truncated at 0 to yield positive values. In particular:
 
 \itemize{
   \item Normal: \eqn{\beta_j \sim N(0,1000)} for all exposure-response parameters \eqn{\beta_j}
@@ -140,7 +140,9 @@ Because the proportional hazards model is not available in \code{nimble}, \code{
   \code{\link[=confint.amerasfit]{confint}} for computing confidence intervals,
   \code{\link[=summary.amerasfit]{summary}} for a summary of the fitted model
   including confidence intervals if computed, \code{\link[=coef.amerasfit]{coef}} 
-  for extracting coefficients.
+  for extracting coefficients, \code{\link[=vcov.amerasfit]{vcov}} for extracting
+  variance-covariance matrices, and \code{\link[=included_realizations.amerasfit]{included_realizations}}
+  for inspecting which realizations contributed to model averaging.
 }
 
 \examples{
