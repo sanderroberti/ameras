@@ -1,3 +1,6 @@
+# Internal optimizer wrapper used by FMA/BMA, MCML, and RC/ERC. It normalizes
+# the one-dimensional optimize() path and the general optim() path to the same
+# fit object shape, then attaches a numeric Hessian for downstream checks.
 fit_objective_with_hessian <- function(
   start,
   fn,
@@ -50,6 +53,8 @@ fit_objective_with_hessian <- function(
   fit
 }
 
+# Convergence-aware Hessian screen used when deciding whether a realization is
+# admissible before model averaging.
 fit_passes_hessian_check <- function(fit) {
   if (is.null(fit$hessian) || fit$convergence != 0) {
     return(FALSE)
@@ -60,12 +65,18 @@ fit_passes_hessian_check <- function(fit) {
     all(eigen(fit$hessian)$values > 0)
 }
 
+# Variance extraction for MCML and RC/ERC only needs to know whether the Hessian
+# is usable. This deliberately does not check optimizer convergence, preserving
+# the pre-refactor result assembly behavior for those methods.
 hessian_supports_vcov <- function(hessian) {
   det(hessian) != 0 &&
     rcond(hessian) > .Machine$double.eps &&
     all(eigen(hessian)$values > 0)
 }
 
+# Shared post-fit assembly for MCML and RC/ERC. The returned list preserves the
+# public result shape of those methods; method-specific fields such as ERC are
+# appended through `extra`.
 assemble_frequentist_fit_result <- function(
   fit,
   parnames,
