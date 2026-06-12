@@ -15,6 +15,8 @@ make_refactor_guard_data <- function(n = 80) {
     Y.gaussian = 1 + 2 * dose + 0.4 * X1 + rnorm(n, sd = 0.25),
     Y.binomial = rbinom(n, size = 1, prob = plogis(-0.2 + 0.7 * dose)),
     Y.poisson = pmax(0, round(exp(0.2 + 0.6 * dose + 0.2 * X1))),
+    time = 1 + seq_len(n) / n + 0.2 * dose,
+    status = rep(c(1, 0, 1, 1), length.out = n),
     Y.multinomial = factor(
       sample(c("low", "mid", "high"), size = n, replace = TRUE),
       levels = c("low", "mid", "high")
@@ -206,6 +208,46 @@ test_that("RC one-parameter fits keep the scalar optimizer contract", {
   expect_equal(fit$RC$optim$convergence, 0)
   expect_null(fit$RC$optim$counts)
   expect_identical(dim(fit$RC$optim$hessian), c(1L, 1L))
+})
+
+test_that("RC and ERC proportional hazards scalar fits keep optimizer contract", {
+  guard_data <- make_refactor_guard_data()
+
+  fit <- fit_refactor_guard(
+    Surv(time, status) ~ dose(V1:V2, model = EXP),
+    data = guard_data,
+    family = "prophaz",
+    methods = c("RC", "ERC")
+  )
+
+  # With no intercept, no covariates, no modifiers, and deg = 1, proportional
+  # hazards RC/ERC have one fitted parameter and should use the scalar optimizer.
+  expect_methods_parameter_names(fit, c("RC", "ERC"), "dose")
+  for (method in c("RC", "ERC")) {
+    expect_equal(fit[[method]]$optim$convergence, 0)
+    expect_null(fit[[method]]$optim$counts)
+    expect_identical(dim(fit[[method]]$optim$hessian), c(1L, 1L))
+  }
+})
+
+test_that("RC and ERC proportional hazards multi-parameter fits keep optimizer contract", {
+  guard_data <- make_refactor_guard_data()
+
+  fit <- fit_refactor_guard(
+    Surv(time, status) ~ dose(V1:V2, model = EXP, deg = 2),
+    data = guard_data,
+    family = "prophaz",
+    methods = c("RC", "ERC")
+  )
+
+  # ERC proportional hazards precomputes ordered dose residual variance terms.
+  # This guards that setup while the optimizer itself moves to the shared helper.
+  expect_methods_parameter_names(fit, c("RC", "ERC"), c("dose", "dose_squared"))
+  for (method in c("RC", "ERC")) {
+    expect_equal(fit[[method]]$optim$convergence, 0)
+    expect_named(fit[[method]]$optim$counts, c("function", "gradient"))
+    expect_identical(dim(fit[[method]]$optim$hessian), c(2L, 2L))
+  }
 })
 
 test_that("RC and MCML multinomial names include response-level prefixes", {
