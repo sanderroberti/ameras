@@ -121,7 +121,7 @@ coef(fit.ameras.logreg.lin)
 
 # Poisson regression
 
-For Poisson regression, an offset can be optionally used by including an `offset` term in the formula, e.g., `Y~dose(V1:V10)~X1+offset(PYR)`.
+For Poisson regression, an offset can be optionally used by including an `offset` term in the formula, e.g., `Y~dose(V1:V10)+X1+offset(PYR)`.
 Here, we show models without using an offset, first including a quadratic exposure term:
 
 ```{r modelfit.poisson, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
@@ -159,7 +159,7 @@ coef(fit.ameras.poisson.lin)
 
 
 # Proportional hazards regression
-Proportional hazards regression uses syntax similar to the `survival` package, with models specified using formulas with `Surv(exit, status)` or `Surv(entry, exit, status)` on the left hand side. Note that BMA fits a piecewise constant baseline hazard `h0` as the proportional hazards model is not directly supported. By default, the observed time interval is divided into 10 intervals using quantiles of the observed event times among cases. This number of such intervals can be specified through the `prophaz.numints.BMA` argument. The BMA output contains the `prophaz.numints.BMA+1` cutpoints defining the intervals in addition to `h0`.
+Proportional hazards regression uses syntax similar to the `survival` package, with models specified using formulas with `Surv(exit, status)` or `Surv(entry, exit, status)` on the left-hand side. Note that BMA fits a piecewise constant baseline hazard `h0` as the proportional hazards model is not directly supported. By default, the observed time interval is divided into 10 intervals using quantiles of the observed event times among cases. The number of such intervals can be specified through the `prophaz.numints.BMA` argument. The BMA output contains the `prophaz.numints.BMA+1` cutpoints defining the intervals in addition to `h0`.
 
 
 Again, we first fit models including a quadratic exposure term by setting `deg=2`.
@@ -272,7 +272,7 @@ Without the quadratic term (`deg=1`):
 
 ```{r modelfit.clogit.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 set.seed(4401)
-fit.ameras.clogit.lin <- ameras(Y.clogit~dose(V1:V10, deg=2, model="EXP")+X1+X2+
+fit.ameras.clogit.lin <- ameras(Y.clogit~dose(V1:V10, deg=1, model="EXP")+X1+X2+
                                   strata(setnr), data=data, family="clogit", 
                                 methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                 niter.BMA = 5000, nburnin.BMA = 1000)
@@ -284,4 +284,3 @@ summary(fit.ameras.clogit.lin)
 ```{r, fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")} 
 coef(fit.ameras.clogit.lin)
 ```
-

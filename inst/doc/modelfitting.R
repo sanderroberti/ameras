@@ -159,7 +159,7 @@ coef(fit.ameras.clogit)
 
 ## ----modelfit.clogit.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")----
 set.seed(4401)
-fit.ameras.clogit.lin <- ameras(Y.clogit~dose(V1:V10, deg=2, model="EXP")+X1+X2+
+fit.ameras.clogit.lin <- ameras(Y.clogit~dose(V1:V10, deg=1, model="EXP")+X1+X2+
                                   strata(setnr), data=data, family="clogit", 
                                 methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                 niter.BMA = 5000, nburnin.BMA = 1000)
@@ -169,4 +169,3 @@ summary(fit.ameras.clogit.lin)
 
 ## ----fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")----
 coef(fit.ameras.clogit.lin)
-

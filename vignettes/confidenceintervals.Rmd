@@ -21,7 +21,7 @@ library(ameras)
 
 # Introduction
 To compute confidence intervals, first fit the model using `ameras`, then use the `confint` method to attach confidence intervals.
-Several types of confidence intervals are supported, which should be supplied to the `type` argument of `confint`, see below. When `confint` is called with `methods` containing at least one of `RC`, `ERC`, and `MCML` and at least one of `FMA` and `BMA`, `type` should be a vector of length 2 with one method for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
+Several types of confidence intervals are supported, which should be supplied to the `type` argument of `confint`, see below. When the fitted object contains at least one of `RC`, `ERC`, and `MCML` and at least one of `FMA` and `BMA`, `type` should be a vector of length 2 with one interval type for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
 
 # Regression calibration, extended regression calibration, and Monte Carlo maximum likelihood
 
