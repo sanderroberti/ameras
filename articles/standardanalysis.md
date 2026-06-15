@@ -103,12 +103,12 @@ summary(fit_ameras_gaussian)
 #> ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = data, 
 #>     family = "gaussian")
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.344 0.0 0.344
+#>      RC 0.364 0.0 0.364
 #> 
 #> Summary of coefficients by method:
 #> 
