@@ -58,6 +58,41 @@ test_that("summary uses structured timing when available", {
   expect_equal(summ$total_runtime_seconds, 1.5)
 })
 
+test_that("printed runtime totals are rounded for display", {
+  object <- ameras:::new_amerasfit(list(
+    call = quote(ameras(Y ~ dose(D), data = dat)),
+    num.rows = 1,
+    num.realizations = 1,
+    CI.computed = FALSE,
+    RC = list(
+      coefficients = c(a = 1),
+      sd = c(a = 0.1),
+      vcov = matrix(0.01, dimnames = list("a", "a")),
+      timing = ameras:::new_method_timing(
+        fit = ameras:::new_runtime_phase(cpu = 0.342000000000012)
+      )
+    )
+  ))
+
+  # The stored numeric total can contain floating-point noise, but printed
+  # output should use the same rounded display as the legacy runtime string.
+  fit_output <- capture.output(print(object))
+  summary_output <- capture.output(print(summary(object)))
+
+  expect_true(any(grepl(
+    "Total CPU runtime: 0.3 seconds",
+    fit_output,
+    fixed = TRUE
+  )))
+  expect_true(any(grepl(
+    "Total CPU runtime: 0.3 seconds",
+    summary_output,
+    fixed = TRUE
+  )))
+  expect_false(any(grepl("0.342000000000012", fit_output, fixed = TRUE)))
+  expect_false(any(grepl("0.342000000000012", summary_output, fixed = TRUE)))
+})
+
 test_that("summary falls back to legacy runtime strings", {
   object <- ameras:::new_amerasfit(list(
     call = quote(ameras(Y ~ dose(D), data = dat)),

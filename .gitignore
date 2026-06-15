@@ -12,3 +12,6 @@ src/*.o
 src/*.so
 src/*.dll
 src/*.dylib
+
+/.quarto/
+**/*.quarto_ipynb

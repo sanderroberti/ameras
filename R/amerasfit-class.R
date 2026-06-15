@@ -47,10 +47,10 @@ print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat(paste0("Number of dose realizations: ", x$num.realizations, "\n"))
 
   if ("Total" %in% names(runtime_table)) {
-    cat(paste0("\nTotal CPU runtime: ", total_runtime, " seconds\n\n"))
+    cat(paste0("\nTotal CPU runtime: ", format_runtime(total_runtime), "\n\n"))
     cat("CPU runtime in seconds by method:\n\n")
   } else {
-    cat(paste0("\nTotal runtime: ", total_runtime, " seconds\n\n"))
+    cat(paste0("\nTotal runtime: ", format_runtime(total_runtime), "\n\n"))
     cat("Runtime in seconds by method:\n\n")
   }
 
@@ -193,10 +193,18 @@ print.summary.amerasfit <- function(
   print(x$call)
 
   if ("Total" %in% names(x$runtime_table)) {
-    cat(paste0("\nTotal CPU runtime: ", x$total_runtime_seconds, " seconds\n\n"))
+    cat(paste0(
+      "\nTotal CPU runtime: ",
+      format_runtime(x$total_runtime_seconds),
+      "\n\n"
+    ))
     cat("CPU runtime in seconds by method:\n\n")
   } else {
-    cat(paste0("\nTotal runtime: ", x$total_runtime_seconds, " seconds\n\n"))
+    cat(paste0(
+      "\nTotal runtime: ",
+      format_runtime(x$total_runtime_seconds),
+      "\n\n"
+    ))
     cat("Runtime in seconds by method:\n\n")
   }
 
