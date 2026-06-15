@@ -42,6 +42,7 @@
 <li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
     <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
+    <li><a class="dropdown-item" href="../articles/parallelfma.html">Parallel FMA with future</a></li>
     <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
     <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
     <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
@@ -100,6 +101,10 @@ smaller jobs. This vignette shows the basic manual workflow: fit
 separate <code>RC</code> models for individual dose realizations, save
 the fitted summaries if desired, then compute the FMA weights and
 samples across all realization-specific fits.</p>
+<p>If the direct FMA fit is feasible in one R session and the main goal
+is to use multiple local workers, see the <a href="parallelfma.html">parallel FMA vignette</a> instead. The manual
+workflow shown here is mainly for analyses that need to be split into
+separate jobs or resumed from saved realization-specific summaries.</p>
 <p>The example uses a Gaussian model to keep the code compact and avoid
 any extra parameter transformations. The same idea applies to other
 families, provided that every realization is fit with the same formula

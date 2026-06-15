@@ -42,6 +42,7 @@
 <li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
     <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
+    <li><a class="dropdown-item" href="../articles/parallelfma.html">Parallel FMA with future</a></li>
     <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
     <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
     <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
@@ -193,12 +194,12 @@ transformations</a>).</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("RC"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.462 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.461 0.001 0.462</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.414 0.0 0.414</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -212,12 +213,12 @@ transformations</a>).</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("RC"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.462 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.461 0.001 0.462</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.414 0.0 0.414</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -231,12 +232,12 @@ transformations</a>).</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("RC"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 3.418 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 3.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.461 2.957 3.418</span></span>
+<span><span class="co">#&gt;      RC 0.414 2.708 3.122</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -283,12 +284,12 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("FMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 2.294 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 2.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Fit    CI Total</span></span>
-<span><span class="co">#&gt;     FMA 2.1 0.194 2.294</span></span>
+<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span><span class="co">#&gt;     FMA 1.909 0.212 2.121</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -302,12 +303,12 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("FMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 2.171 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Fit    CI Total</span></span>
-<span><span class="co">#&gt;     FMA 2.1 0.071 2.171</span></span>
+<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span><span class="co">#&gt;     FMA 1.909 0.083 1.992</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

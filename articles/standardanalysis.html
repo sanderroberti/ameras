@@ -42,6 +42,7 @@
 <li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
     <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
+    <li><a class="dropdown-item" href="../articles/parallelfma.html">Parallel FMA with future</a></li>
     <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
     <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
     <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
@@ -168,12 +169,12 @@ coefficients.</p>
 <span><span class="co">#&gt; ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = data, </span></span>
 <span><span class="co">#&gt;     family = "gaussian")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.361 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method  Fit    CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.36 0.001 0.361</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.344 0.0 0.344</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -263,12 +264,12 @@ analysis using all 10 realizations:</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "EXP") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.179 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.179 0.0 0.179</span></span>
+<span><span class="co">#&gt;  Method  Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.18 0.0  0.18</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

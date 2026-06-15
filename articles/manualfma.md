@@ -23,6 +23,13 @@ models for individual dose realizations, save the fitted summaries if
 desired, then compute the FMA weights and samples across all
 realization-specific fits.
 
+If the direct FMA fit is feasible in one R session and the main goal is
+to use multiple local workers, see the [parallel FMA
+vignette](https://ameras.sanderroberti.com/articles/parallelfma.md)
+instead. The manual workflow shown here is mainly for analyses that need
+to be split into separate jobs or resumed from saved
+realization-specific summaries.
+
 The example uses a Gaussian model to keep the code compact and avoid any
 extra parameter transformations. The same idea applies to other
 families, provided that every realization is fit with the same formula

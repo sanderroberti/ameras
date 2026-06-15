@@ -45,6 +45,7 @@
 <li><a class="dropdown-item" href="articles/confidenceintervals.html">Confidence intervals</a></li>
     <li><a class="dropdown-item" href="articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="articles/modelfitting.html">Fitting models and displaying output</a></li>
+    <li><a class="dropdown-item" href="articles/parallelfma.html">Parallel FMA with future</a></li>
     <li><a class="dropdown-item" href="articles/relativeriskmodels.html">Relative risk models</a></li>
     <li><a class="dropdown-item" href="articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
     <li><a class="dropdown-item" href="articles/transformations.html">Parameter transformations</a></li>
@@ -151,16 +152,16 @@
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", </span></span>
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 49.527 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 50.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method    Fit  CI  Total</span></span>
-<span><span class="co">#&gt;      RC  0.021 0.0  0.021</span></span>
-<span><span class="co">#&gt;     ERC  6.728 0.0  6.728</span></span>
-<span><span class="co">#&gt;    MCML  0.105 0.0  0.105</span></span>
-<span><span class="co">#&gt;     FMA  0.177 0.0  0.177</span></span>
-<span><span class="co">#&gt;     BMA 42.496 0.0 42.496</span></span>
+<span><span class="co">#&gt;      RC  0.022 0.0  0.022</span></span>
+<span><span class="co">#&gt;     ERC  6.926 0.0  6.926</span></span>
+<span><span class="co">#&gt;    MCML  0.104 0.0  0.104</span></span>
+<span><span class="co">#&gt;     FMA  0.176 0.0  0.176</span></span>
+<span><span class="co">#&gt;     BMA 43.026 0.0 43.026</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -214,16 +215,16 @@
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", </span></span>
 <span><span class="co">#&gt;     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 49.534 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 50.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method    Fit    CI  Total</span></span>
-<span><span class="co">#&gt;      RC  0.021 0.001  0.022</span></span>
-<span><span class="co">#&gt;     ERC  6.728 0.000  6.728</span></span>
-<span><span class="co">#&gt;    MCML  0.105 0.000  0.105</span></span>
-<span><span class="co">#&gt;     FMA  0.177 0.005  0.182</span></span>
-<span><span class="co">#&gt;     BMA 42.496 0.001 42.497</span></span>
+<span><span class="co">#&gt;      RC  0.022 0.001  0.023</span></span>
+<span><span class="co">#&gt;     ERC  6.926 0.000  6.926</span></span>
+<span><span class="co">#&gt;    MCML  0.104 0.000  0.104</span></span>
+<span><span class="co">#&gt;     FMA  0.176 0.010  0.186</span></span>
+<span><span class="co">#&gt;     BMA 43.026 0.001 43.027</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
