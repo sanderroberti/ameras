@@ -117,3 +117,73 @@ test_that("resolve_data rebuilds model matrix columns and mean dose", {
   # ERC, residuals, plots, and profile-likelihood reconstruction.
   expect_equal(resolved$rcdose_ameras, rowMeans(dat[c("D1", "D2")]))
 })
+
+test_that("select_dose_col uses best-likelihood realization for MCML", {
+  dat <- data.frame(
+    Y = c(1, 2, 3, 4),
+    D1 = c(4, 3, 2, 1),
+    D2 = c(1, 2, 3, 4)
+  )
+  object <- ameras:::new_amerasfit(list(
+    num.rows = nrow(dat),
+    transform = NULL,
+    other.args = list(),
+    model = list(
+      data = NULL,
+      family = "gaussian",
+      dosevars = c("D1", "D2"),
+      Y = "Y",
+      M = NULL,
+      M_names = NULL,
+      X = NULL,
+      X_formula = NULL,
+      offset = NULL,
+      entry = NULL,
+      exit = NULL,
+      status = NULL,
+      setnr = NULL,
+      deg = 1,
+      loglim = 1e-30
+    ),
+    MCML = list(
+      optim = list(par = c(0, 1, 1))
+    )
+  ))
+
+  # With params c(intercept = 0, dose = 1, sigma = 1), the Gaussian mean is the
+  # supplied dose. D2 exactly matches Y and should therefore have the highest
+  # realization-specific likelihood.
+  expect_identical(ameras:::select_dose_col(object, "MCML", dat), "D2")
+})
+
+test_that("select_dose_col uses highest posterior realization for BMA", {
+  object <- ameras:::new_amerasfit(list(
+    model = list(
+      dosevars = c("D1", "D2", "D3", "D4")
+    ),
+    BMA = list(
+      included.realizations = c(2L, 4L),
+      samples = cbind(
+        beta = rep(0, 5),
+        col.ind = c(1, 2, 2, 2, 1)
+      )
+    )
+  ))
+
+  # col.ind indexes the included realization set. Here index 2 is most common,
+  # which maps through included.realizations to dosevars[4].
+  expect_identical(
+    ameras:::select_dose_col(object, "BMA", data = data.frame()),
+    "D4"
+  )
+
+  object$BMA$samples <- list(
+    chain1 = cbind(beta = rep(0, 3), col.ind = c(1, 2, 2)),
+    chain2 = cbind(beta = rep(0, 3), col.ind = c(2, 1, 2))
+  )
+
+  expect_identical(
+    ameras:::select_dose_col(object, "BMA", data = data.frame()),
+    "D4"
+  )
+})
