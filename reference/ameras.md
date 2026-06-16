@@ -555,7 +555,7 @@ Studies
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.339 0.0 0.339
+#>      RC 0.343 0.0 0.343
 #> 
 #> Estimated model parameters:
 #> 
