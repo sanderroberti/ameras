@@ -185,3 +185,234 @@ test_that("general check helpers cover representative validation branches", {
     "vars contains invalid values"
   )
 })
+
+test_that("family and dose-response checks validate scalar choices", {
+  # These wrappers are thin, but they are the public-facing messages for bad
+  # family/model choices parsed from ameras() calls.
+  expect_identical(ameras:::check_family("gaussian"), "gaussian")
+  expect_identical(ameras:::check_doseRRmod("ERR"), "ERR")
+
+  expect_error(
+    ameras:::check_family(c("gaussian", "poisson")),
+    "family must have length 1"
+  )
+  expect_error(
+    ameras:::check_family("cox"),
+    "family contains invalid values"
+  )
+  expect_error(
+    ameras:::check_doseRRmod("linear"),
+    "doseRRmod contains invalid values"
+  )
+})
+
+test_that("outcome checks enforce family-specific response requirements", {
+  dat <- data.frame(
+    y_gaussian = c(0.2, 1.3, 2.1),
+    y_bad_numeric = c(0, Inf, 1),
+    y_binary = c(0, 1, 0),
+    y_bad_binary = c(0, 2, 1),
+    y_count = c(0, 1, 3),
+    y_bad_count = c(0, 1.5, 3),
+    y_factor = factor(c("a", "b", "c")),
+    y_bad_factor = factor(c("a", "b", "b"))
+  )
+
+  # The same Y argument is checked differently depending on family.
+  expect_null(ameras:::check_Y("y_gaussian", dat, family = "gaussian"))
+  expect_null(ameras:::check_Y("y_binary", dat, family = "binomial"))
+  expect_null(ameras:::check_Y("y_count", dat, family = "poisson"))
+  expect_null(ameras:::check_Y("y_binary", dat, family = "prophaz"))
+  expect_null(ameras:::check_Y("y_binary", dat, family = "clogit"))
+  expect_null(ameras:::check_Y("y_factor", dat, family = "multinomial"))
+
+  expect_error(
+    ameras:::check_Y("y_bad_numeric", dat, family = "gaussian"),
+    "Y must contain finite values"
+  )
+  expect_error(
+    ameras:::check_Y("y_bad_binary", dat, family = "binomial"),
+    "Y must contain binary"
+  )
+  expect_error(
+    ameras:::check_Y("y_bad_count", dat, family = "poisson"),
+    "Y must be integer"
+  )
+  expect_error(
+    ameras:::check_Y("y_binary", dat, family = "multinomial"),
+    "Y must be numeric"
+  )
+  expect_error(
+    ameras:::check_Y("missing_y", dat, family = "gaussian"),
+    "Y contains invalid values"
+  )
+})
+
+test_that("dose, modifier, covariate, and set checks validate data columns", {
+  dat <- data.frame(
+    D1 = c(0.1, 0.2, 0.3),
+    D2 = c(0.2, 0.4, 0.6),
+    D_bad = c(0.1, NA, 0.3),
+    M = c(0, 1, 0),
+    M_bad = c(0, 2, 1),
+    X = c(1.1, 2.2, 3.3),
+    X_bad = c(1, NaN, 3),
+    setnr = c(1, 1, 2),
+    bad_setnr = c(1, 1.5, 2)
+  )
+
+  # Non-RC methods require more than one dose realization.
+  expect_null(ameras:::check_D(c("D1", "D2"), dat, methods = "FMA"))
+  expect_null(ameras:::check_D("D1", dat, methods = "RC"))
+  expect_error(
+    ameras:::check_D("D1", dat, methods = "FMA"),
+    "Multiple exposure realizations required"
+  )
+  expect_error(
+    ameras:::check_D("D_bad", dat, methods = "RC"),
+    "dosevars:D_bad must contain finite values"
+  )
+
+  # Modifiers must be binary, while ordinary X covariates only need to be
+  # numeric and finite. NULL X is allowed because a model can have no covariates.
+  expect_null(ameras:::check_M("M", dat))
+  expect_error(ameras:::check_M("M_bad", dat), "M:M_bad must contain binary")
+  expect_null(ameras:::check_X(NULL, dat))
+  expect_null(ameras:::check_X("X", dat))
+  expect_error(ameras:::check_X("X_bad", dat), "X:X_bad must contain finite")
+
+  # Matched sets of size 1 are allowed but warned about because they do not
+  # contribute to conditional likelihood estimation.
+  expect_warning(
+    ameras:::check_setnr("setnr", dat),
+    "matched sets of size 1"
+  )
+  expect_error(
+    ameras:::check_setnr("bad_setnr", dat),
+    "setnr must be integer"
+  )
+})
+
+test_that("primitive vector checks report length, type, and bounds errors", {
+  expect_null(ameras:::check_num_vec(c(1, 2), "x", len = 2))
+  expect_error(ameras:::check_num_vec("1", "x"), "x must be numeric")
+  expect_error(
+    ameras:::check_num_vec(c(1, 2, 3), "x", len = 2),
+    "x must be a numeric vector of length 2"
+  )
+  expect_error(ameras:::check_num_vec(c(1, Inf), "x"), "finite values")
+  expect_error(
+    ameras:::check_num_vec(c(0, 2), "x", binary = 1),
+    "binary"
+  )
+  expect_error(
+    ameras:::check_num_vec(c(0, -1), "x", nonneg = 1),
+    "non-negative"
+  )
+  expect_error(
+    ameras:::check_num_vec(c(1, 1.2), "x", integer = 1),
+    "x must be integer"
+  )
+
+  expect_null(ameras:::check_integer(1:2, "idx", min = 1, max = 2))
+  expect_error(ameras:::check_integer(integer(), "idx"), "length >= 1")
+  expect_error(
+    ameras:::check_integer(c(1, 2), "idx", minlen = 1, maxlen = 1),
+    "length 1"
+  )
+  expect_error(ameras:::check_integer("1", "idx"), "idx must be integer")
+  expect_error(ameras:::check_integer(Inf, "idx"), "idx must be integer")
+  expect_error(ameras:::check_integer(1.5, "idx"), "idx must be integer")
+  expect_error(ameras:::check_integer(0, "idx", min = 1), "idx must be >= 1")
+  expect_error(ameras:::check_integer(3, "idx", max = 2), "idx must be <= 2")
+
+  expect_identical(
+    ameras:::check_char_vec(character(), "choice", def = "RC"),
+    "RC"
+  )
+  expect_identical(ameras:::check_char_vec("RC", "choice"), "RC")
+  expect_error(
+    ameras:::check_char_vec(c("RC", "FMA"), "choice", len = 1),
+    "choice must have length 1"
+  )
+  expect_error(ameras:::check_char_vec(1, "choice"), "choice must be character")
+  expect_error(
+    ameras:::check_char_vec("bad", "choice", valid = c("RC", "FMA")),
+    "choice contains invalid values"
+  )
+})
+
+test_that("variable utilities handle empty, numeric, character, and bad inputs", {
+  dat <- data.frame(x = 1:3, y = 4:6)
+
+  expect_null(ameras:::check_vars(dat, NULL, "vars"))
+  expect_error(ameras:::check_vars(dat, NULL, "vars", minlen = 1), "length >= 1")
+  expect_error(
+    ameras:::check_vars(dat, NULL, "vars", minlen = 1, maxlen = 1),
+    "length 1"
+  )
+  expect_error(
+    ameras:::check_vars(dat, matrix(1, nrow = 1), "vars", minlen = 1),
+    "must be a vector"
+  )
+  expect_error(
+    ameras:::check_vars(dat, 0, "vars", minlen = 1),
+    "vars must be >= 1"
+  )
+  expect_error(
+    ameras:::check_vars(dat, 3, "vars", minlen = 1),
+    "vars must be <= 2"
+  )
+
+  expect_null(ameras:::getVarNumbers(NULL, dat))
+  expect_identical(ameras:::getVarNumbers(2, dat), 2)
+  expect_identical(ameras:::getVarNumbers("y", dat), 2L)
+})
+
+test_that("required variable helper lists family-specific source columns", {
+  base_model <- list(
+    dosevars = c("D1", "D2"),
+    X = "X1",
+    M_names = "M1",
+    Y = "Y",
+    offset = "offset",
+    status = "status",
+    exit = "exit",
+    entry = "entry",
+    setnr = "setnr"
+  )
+
+  # required_vars() is used when data must be supplied again after the fitted
+  # object no longer stores it, so each family needs the right reconstruction
+  # columns.
+  expect_identical(
+    ameras:::required_vars(c(base_model, family = "gaussian")),
+    c("D1", "D2", "X1", "M1", "Y")
+  )
+  expect_identical(
+    ameras:::required_vars(c(base_model, family = "poisson")),
+    c("D1", "D2", "X1", "M1", "Y", "offset")
+  )
+  expect_identical(
+    ameras:::required_vars(c(base_model, family = "multinomial")),
+    c("D1", "D2", "X1", "M1", "Y")
+  )
+  expect_identical(
+    ameras:::required_vars(c(base_model, family = "prophaz")),
+    c("D1", "D2", "X1", "M1", "status", "exit", "entry")
+  )
+  expect_identical(
+    ameras:::required_vars(c(base_model, family = "clogit")),
+    c("D1", "D2", "X1", "M1", "status", "setnr")
+  )
+
+  no_optional <- base_model
+  no_optional$X <- NULL
+  no_optional$M_names <- NULL
+  no_optional$offset <- NULL
+  no_optional$entry <- NULL
+  expect_identical(
+    ameras:::required_vars(c(no_optional, family = "prophaz")),
+    c("D1", "D2", "status", "exit")
+  )
+})
