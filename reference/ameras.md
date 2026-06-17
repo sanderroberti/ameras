@@ -352,10 +352,11 @@ For BMA the output additionally contains:
 
 - samples:
 
-  MCMC posterior samples, as obtained from `nimble`. This is a list
-  object with `nchains.BMA` components, each a named matrix with the
-  samples from one chain in its rows, with columns corresponding to
-  model parameters.
+  MCMC posterior samples, as obtained from `nimble`. With
+  `nchains.BMA > 1`, this is a list with `nchains.BMA` components, each
+  a named matrix with the samples from one chain in its rows and columns
+  corresponding to model parameters. With `nchains.BMA = 1`, this is a
+  single named matrix.
 
 - Rhat:
 
@@ -366,6 +367,8 @@ For BMA the output additionally contains:
   effective sample size `n.eff` is a measure of how many independent
   samples the auto-correlated MCMC samples correspond to. A low
   effective sample size indicates high correlations and/or poor mixing.
+  For single-chain BMA fits, these diagnostics cannot be estimated and
+  are returned as `NA`.
 
 - included.realizations:
 
@@ -550,12 +553,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.343 0.0 0.343
+#>      RC 0.378 0.0 0.378
 #> 
 #> Estimated model parameters:
 #> 

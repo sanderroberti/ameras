@@ -58,12 +58,12 @@
 <div class="section level3">
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
 <ul><li>FMA no longer uses a cutoff of 20% excluded realizations before warning about potential computational issues. The user is now always warned about the number of excluded realizations.</li>
-<li>FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are now internally excluded. The user is informed of the number of realizations excluded for this reason through a <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code>
-</li>
+<li>FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are now internally excluded. The user is informed of the number of realizations excluded for this reason through a <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code>.</li>
 <li>Added an additional warning for FMA for the situation when results are based on only 1 or 2-5 realizations after exclusions.</li>
 <li>FMA realization-specific fits can now use the <code>future</code> framework via <code>future.apply</code> when available. Users can enable parallel execution by setting a <code>future</code> plan before calling <code><a href="../reference/ameras.html">ameras()</a></code>, and <code>future.chunk.size.FMA</code> controls the chunk size passed to <code><a href="https://future.apply.futureverse.org/reference/future_lapply.html" class="external-link">future.apply::future_lapply()</a></code>.</li>
 <li>Streamlined information printed by <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>: columns <code>pval.lower</code> and <code>pval.upper</code> for profile likelihood intervals are no longer printed. They are still accessible within the fit object, and warnings are still printed in case an inaccurate profile likelihood bound is suspected.</li>
 <li>Added structured timing information to fitted method results, separating fitting time, confidence interval computation time, and total time. Printed runtime summaries now use CPU time, so time spent while the computer is asleep is not counted. The existing <code>runtime</code> field is retained as a compatibility summary and is updated when <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> adds confidence interval timing.</li>
+<li>Added vignettes for standard analyses with one dose realization, manual FMA from realization-specific RC fits, and parallel FMA with the <code>future</code> framework.</li>
 </ul></div>
 </div>
     <div class="section level2">

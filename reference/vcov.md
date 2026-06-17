@@ -22,7 +22,8 @@ vcov(object, methods = c("RC", "ERC", "MCML", "FMA", "BMA"), ...)
   Character vector specifying which estimation methods to extract
   variance-covariance matrices for. One or more of `"RC"`, `"ERC"`,
   `"MCML"`, `"FMA"`, and `"BMA"`. Defaults to all. Methods that were not
-  run are silently skipped.
+  run are skipped; an error is raised if none of the requested methods
+  are present.
 
 - ...:
 

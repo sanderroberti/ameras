@@ -107,8 +107,8 @@ summary(fit_ameras_gaussian)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.311 0.0 0.311
+#>  Method  Fit  CI Total
+#>      RC 0.34 0.0  0.34
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -205,8 +205,8 @@ summary(fit_ameras_rc)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method Fit  CI Total
-#>      RC 0.2 0.0   0.2
+#>  Method   Fit  CI Total
+#>      RC 0.208 0.0 0.208
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -26,7 +26,7 @@
   Realizations with a model averaging weight yielding a sample size of 0
   are now internally excluded. The user is informed of the number of
   realizations excluded for this reason through a
-  [`message()`](https://rdrr.io/r/base/message.html)
+  [`message()`](https://rdrr.io/r/base/message.html).
 - Added an additional warning for FMA for the situation when results are
   based on only 1 or 2-5 realizations after exclusions.
 - FMA realization-specific fits can now use the `future` framework via
@@ -49,6 +49,9 @@
   field is retained as a compatibility summary and is updated when
   [`confint()`](https://rdrr.io/r/stats/confint.html) adds confidence
   interval timing.
+- Added vignettes for standard analyses with one dose realization,
+  manual FMA from realization-specific RC fits, and parallel FMA with
+  the `future` framework.
 
 ## ameras 0.4.0
 

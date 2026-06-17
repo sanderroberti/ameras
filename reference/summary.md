@@ -81,22 +81,6 @@ which is a list containing the following elements:
       computed via
       [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
 
-  `pval.lower`
-
-  :   p-value associated with the lower bound of the profile likelihood
-      CI, used to assess the validity of the obtained bound. Only
-      included if profile likelihood confidence intervals were computed
-      via
-      [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
-
-  `pval.upper`
-
-  :   p-value associated with the upper bound of the profile likelihood
-      CI, used to assess the validity of the obtained bound. Only
-      included if profile likelihood confidence intervals were computed
-      via
-      [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
-
   `Rhat`
 
   :   The Gelman-Rubin convergence diagnostic, included only when BMA
@@ -134,6 +118,9 @@ intervals are only printed if they have been computed by
 [`confint`](https://ameras.sanderroberti.com/reference/confint.md). When
 BMA results are present in the fitted object, the summary table includes
 columns `Rhat` and `n.eff`, with `NA` values for all other methods.
+Profile likelihood diagnostic columns such as `pval.lower` and
+`pval.upper` remain available in the stored `CI` component but are not
+printed in the summary table.
 
 Printing the summary prints the original call to `ameras`, the CPU
 runtime (total and by method), and the table described above. When
@@ -245,14 +232,14 @@ summary(fit2)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("RC", "ERC", "MCML"))
 #> 
-#> Total CPU runtime: 50.8 seconds
+#> Total CPU runtime: 51.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit  CI  Total
-#>      RC  0.032 0.0  0.032
-#>     ERC 50.428 0.0 50.428
-#>    MCML  0.357 0.0  0.357
+#>  Method    Fit    CI  Total
+#>      RC  0.032 0.000  0.032
+#>     ERC 51.001 0.001 51.002
+#>    MCML  0.338 0.000  0.338
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -82,7 +82,8 @@
 <dd><p>Character vector specifying which estimation methods to produce
     plots for. One or more of <code>"RC"</code>, <code>"ERC"</code>,
     <code>"MCML"</code>, <code>"FMA"</code>, and <code>"BMA"</code>. Defaults to all.
-    Methods not present in <code>x</code> are silently skipped.</p></dd>
+    Methods not present in <code>x</code> are skipped; an error is raised if
+    none of the requested methods are present.</p></dd>
 
   <dt id="arg-which">which<a class="anchor" aria-label="anchor" href="#arg-which"></a></dt>
 <dd><p>Character vector specifying which plots to produce. For non-<code>"prophaz"</code>

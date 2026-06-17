@@ -3,7 +3,8 @@
 Extracts the indices of dose realizations included in model averaging
 for FMA and/or BMA results of a fitted `amerasfit` object. Realizations
 are excluded from FMA if the optimization did not converge or the
-Hessian was not positive definite.
+Hessian was not positive definite, or if the realization receives no
+samples after integer sample allocation.
 
 ## Usage
 
@@ -45,8 +46,11 @@ realization indices.
 ## Details
 
 For FMA, realizations are excluded if the optimization did not converge
-or the Hessian was not invertible or not positive definite. If more than
-20% of realizations are excluded, a warning is issued during fitting.
+or the Hessian was not invertible or not positive definite. Realizations
+with model-averaging weights too small to receive any samples for the
+requested `MFMA` are also excluded from the final FMA result. Warnings
+and messages are issued during fitting when realizations are excluded or
+when the final FMA result is based on very few realizations.
 
 For BMA, all realizations are included by default. A subset of
 realizations can be specified via the `included.realizations.BMA`

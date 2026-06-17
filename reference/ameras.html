@@ -266,10 +266,10 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
 
 </dl><p>For BMA  the output additionally contains:</p>
 <dl><dt>samples</dt>
-<dd><p>MCMC posterior samples, as obtained from <code>nimble</code>. This is a list object with <code>nchains.BMA</code> components, each a named matrix with the samples from one chain in its rows, with columns corresponding to model parameters.</p></dd>
+<dd><p>MCMC posterior samples, as obtained from <code>nimble</code>. With <code>nchains.BMA &gt; 1</code>, this is a list with <code>nchains.BMA</code> components, each a named matrix with the samples from one chain in its rows and columns corresponding to model parameters. With <code>nchains.BMA = 1</code>, this is a single named matrix.</p></dd>
 
   <dt>Rhat</dt>
-<dd><p>data frame with two columns, <code>Rhat</code> and <code>n.eff</code>. The first  column contains the Gelman-Rubin statistics \(\hat R \geq 1\) that can be used to assess convergence of MCMC chains. A value of 1 indicates good convergence and values \(&gt;1.05\) indicate poor convergence. The effective sample size <code>n.eff</code> is a measure of how many independent samples the auto-correlated MCMC samples correspond to. A low effective sample size indicates high correlations and/or poor mixing.</p></dd>
+<dd><p>data frame with two columns, <code>Rhat</code> and <code>n.eff</code>. The first  column contains the Gelman-Rubin statistics \(\hat R \geq 1\) that can be used to assess convergence of MCMC chains. A value of 1 indicates good convergence and values \(&gt;1.05\) indicate poor convergence. The effective sample size <code>n.eff</code> is a measure of how many independent samples the auto-correlated MCMC samples correspond to. A low effective sample size indicates high correlations and/or poor mixing. For single-chain BMA fits, these diagnostics cannot be estimated and are returned as <code>NA</code>.</p></dd>
 
   <dt>included.realizations</dt>
 <dd><p>indices of realization exposures that were included to obtain the results.</p></dd>
@@ -334,12 +334,12 @@ data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.3 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.4 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.343 0.0 0.343</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.378 0.0 0.378</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

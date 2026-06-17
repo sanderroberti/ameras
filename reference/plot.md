@@ -26,7 +26,8 @@ plot(x,
 
   Character vector specifying which estimation methods to produce plots
   for. One or more of `"RC"`, `"ERC"`, `"MCML"`, `"FMA"`, and `"BMA"`.
-  Defaults to all. Methods not present in `x` are silently skipped.
+  Defaults to all. Methods not present in `x` are skipped; an error is
+  raised if none of the requested methods are present.
 
 - which:
 

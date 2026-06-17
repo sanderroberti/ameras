@@ -118,18 +118,6 @@
 <dd><p>The upper confidence bound, if confidence intervals have been
           computed via <code><a href="confint.html">confint</a></code>.</p></dd>
 
-        <dt><code>pval.lower</code></dt>
-<dd><p>p-value associated with the lower bound of the profile likelihood
-          CI, used to assess the validity of the obtained bound. Only included if
-          profile likelihood confidence intervals were computed via
-          <code><a href="confint.html">confint</a></code>.</p></dd>
-
-        <dt><code>pval.upper</code></dt>
-<dd><p>p-value associated with the upper bound of the profile likelihood
-          CI, used to assess the validity of the obtained bound. Only included if
-          profile likelihood confidence intervals were computed via
-          <code><a href="confint.html">confint</a></code>.</p></dd>
-
         <dt><code>Rhat</code></dt>
 <dd><p>The Gelman-Rubin convergence diagnostic, included only when
           BMA results are present. Values above 1.05 indicate potential convergence problems.</p></dd>
@@ -165,7 +153,10 @@
   confidence intervals are only printed if they have been computed by
   <code><a href="confint.html">confint</a></code>. When BMA results are present
   in the fitted object, the summary table includes columns <code>Rhat</code> and
-  <code>n.eff</code>, with <code>NA</code> values for all other methods.</p>
+  <code>n.eff</code>, with <code>NA</code> values for all other methods. Profile
+  likelihood diagnostic columns such as <code>pval.lower</code> and
+  <code>pval.upper</code> remain available in the stored <code>CI</code> component
+  but are not printed in the summary table.</p>
 <p>Printing the summary prints the original call to <code>ameras</code>, the CPU runtime
   (total and by method), and the table described above. When confidence
   intervals have been computed, CI runtime is included in the total runtime.
@@ -273,14 +264,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("RC", "ERC", "MCML"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 50.8 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 51.4 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit  CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.032 0.0  0.032</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 50.428 0.0 50.428</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.357 0.0  0.357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit    CI  Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.032 0.000  0.032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 51.001 0.001 51.002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.338 0.000  0.338</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

@@ -30,7 +30,8 @@ A data frame with columns `Rhat` and `n.eff`, containing the
 Gelman-Rubin statistic and effective sample size for each parameter.
 Values of `Rhat` substantially above 1.05 indicate potential convergence
 problems, in which case longer chains via `niter.BMA` and `nburnin.BMA`
-are recommended.
+are recommended. For single-chain BMA fits, convergence diagnostics
+cannot be estimated and these columns are returned as `NA`.
 
 ## See also
 
