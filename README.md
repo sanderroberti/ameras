@@ -210,4 +210,5 @@ plot(fit, methods="RC")
 <img src="man/figures/README-unnamed-chunk-5-1.png" alt="" width="100%" /><img src="man/figures/README-unnamed-chunk-5-2.png" alt="" width="100%" />
 
 See the vignettes for additional details on model fitting, confidence
-intervals, and the use of transformations.
+intervals, transformations, standard analyses with one dose realization,
+manual FMA, and parallel FMA.

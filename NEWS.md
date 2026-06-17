@@ -9,11 +9,12 @@
 ## Improvements
 
 * FMA no longer uses a cutoff of 20% excluded realizations before warning about potential computational issues. The user is now always warned about the number of excluded realizations.
-* FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are now internally excluded. The user is informed of the number of realizations excluded for this reason through a `message()`
+* FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are now internally excluded. The user is informed of the number of realizations excluded for this reason through a `message()`.
 * Added an additional warning for FMA for the situation when results are based on only 1 or 2-5 realizations after exclusions.
 * FMA realization-specific fits can now use the `future` framework via `future.apply` when available. Users can enable parallel execution by setting a `future` plan before calling `ameras()`, and `future.chunk.size.FMA` controls the chunk size passed to `future.apply::future_lapply()`.
 * Streamlined information printed by `summary()` and `confint()`: columns `pval.lower` and `pval.upper` for profile likelihood intervals are no longer printed. They are still accessible within the fit object, and warnings are still printed in case an inaccurate profile likelihood bound is suspected.
 * Added structured timing information to fitted method results, separating fitting time, confidence interval computation time, and total time. Printed runtime summaries now use CPU time, so time spent while the computer is asleep is not counted. The existing `runtime` field is retained as a compatibility summary and is updated when `confint()` adds confidence interval timing.
+* Added vignettes for standard analyses with one dose realization, manual FMA from realization-specific RC fits, and parallel FMA with the `future` framework.
 
 # ameras 0.4.0
 

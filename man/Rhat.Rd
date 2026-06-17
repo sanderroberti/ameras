@@ -29,7 +29,9 @@ Rhat(x, \dots)
   the Gelman-Rubin statistic and effective sample size for each
   parameter. Values of \code{Rhat} substantially above 1.05 indicate
   potential convergence problems, in which case longer chains via
-  \code{niter.BMA} and \code{nburnin.BMA} are recommended.
+  \code{niter.BMA} and \code{nburnin.BMA} are recommended. For
+  single-chain BMA fits, convergence diagnostics cannot be estimated
+  and these columns are returned as \code{NA}.
 }
 
 \seealso{

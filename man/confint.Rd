@@ -85,7 +85,7 @@
   \item{force}{
       Logical. If \code{TRUE}, confidence intervals are recomputed even if
       they have already been computed for this object. Defaults to
-      \code{FALSE}, in which case a warning is issued and the object is
+      \code{FALSE}, in which case a message is printed and the object is
       returned unchanged if confidence intervals are already present.
   }
   \item{print}{

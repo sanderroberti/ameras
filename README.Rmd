@@ -76,4 +76,6 @@ For visual model diagnostics using residuals, use `plot()`. For example, for reg
 plot(fit, methods="RC")
 ```
 
-See the vignettes for additional details on model fitting, confidence intervals, and the use of transformations.
+See the vignettes for additional details on model fitting, confidence
+intervals, transformations, standard analyses with one dose realization,
+manual FMA through multiple RC fits, and parallel FMA.

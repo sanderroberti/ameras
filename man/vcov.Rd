@@ -20,7 +20,8 @@
     Character vector specifying which estimation methods to extract
     variance-covariance matrices for. One or more of \code{"RC"},
     \code{"ERC"}, \code{"MCML"}, \code{"FMA"}, and \code{"BMA"}.
-    Defaults to all. Methods that were not run are silently skipped.
+    Defaults to all. Methods that were not run are skipped; an error is
+    raised if none of the requested methods are present.
   }
   \item{\dots}{
     Additional arguments, currently unused.

@@ -61,18 +61,6 @@
           The upper confidence bound, if confidence intervals have been
           computed via \code{\link[=confint.amerasfit]{confint}}.
         }
-        \item{\code{pval.lower}}{
-          p-value associated with the lower bound of the profile likelihood 
-          CI, used to assess the validity of the obtained bound. Only included if
-          profile likelihood confidence intervals were computed via
-          \code{\link[=confint.amerasfit]{confint}}.
-        }
-        \item{\code{pval.upper}}{
-          p-value associated with the upper bound of the profile likelihood 
-          CI, used to assess the validity of the obtained bound. Only included if
-          profile likelihood confidence intervals were computed via
-          \code{\link[=confint.amerasfit]{confint}}.
-        }
         \item{\code{Rhat}}{
           The Gelman-Rubin convergence diagnostic, included only when
           BMA results are present. Values above 1.05 indicate potential convergence problems.
@@ -107,7 +95,10 @@
   confidence intervals are only printed if they have been computed by
   \code{\link[=confint.amerasfit]{confint}}. When BMA results are present 
   in the fitted object, the summary table includes columns \code{Rhat} and 
-  \code{n.eff}, with \code{NA} values for all other methods.
+  \code{n.eff}, with \code{NA} values for all other methods. Profile
+  likelihood diagnostic columns such as \code{pval.lower} and
+  \code{pval.upper} remain available in the stored \code{CI} component
+  but are not printed in the summary table.
 
   Printing the summary prints the original call to \code{ameras}, the CPU runtime
   (total and by method), and the table described above. When confidence

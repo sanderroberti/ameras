@@ -1042,7 +1042,7 @@ ameras.bma <- function(
     }
   } else {
     warning(
-      "WARNING: MCMC convergence cannot be assessed using a single chains"
+      "WARNING: MCMC convergence cannot be assessed using a single chain"
     )
   }
 

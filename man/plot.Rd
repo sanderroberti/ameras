@@ -26,7 +26,8 @@
     Character vector specifying which estimation methods to produce
     plots for. One or more of \code{"RC"}, \code{"ERC"},
     \code{"MCML"}, \code{"FMA"}, and \code{"BMA"}. Defaults to all. 
-    Methods not present in \code{x} are silently skipped.
+    Methods not present in \code{x} are skipped; an error is raised if
+    none of the requested methods are present.
   }
   \item{which}{
     Character vector specifying which plots to produce. For non-\code{"prophaz"}
@@ -162,4 +163,3 @@ fit4 <- ameras(Surv(time, status) ~ dose(all_of(dosevars), model = "ERR"),
 plot(fit4)
 }
 }
-

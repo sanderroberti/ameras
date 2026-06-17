@@ -6,7 +6,7 @@
   Example Data
 }
 \description{
- Data includes outcomes of all six supported types in the appropriately named columns. For proportional hazards regression, the observed exit time is \code{time} and event status is \code{event}. For conditional logistic regression, the matched set variable is \code{setnr}. The data has 10 exposure realizations in columns \code{V1}-\code{V10}.
+ Data includes outcomes of all six supported types in the appropriately named columns. For proportional hazards regression, the observed exit time is \code{time} and event status is \code{status}. For conditional logistic regression, the matched set variable is \code{setnr}. The data has 10 exposure realizations in columns \code{V1}-\code{V10}.
 }
 %\details{}
 \examples{
@@ -19,4 +19,3 @@
 }
 \keyword{data}
 %\seealso{  }
-
