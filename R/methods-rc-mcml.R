@@ -301,14 +301,14 @@ ameras.rc <- function(
     )
   } else if (family %in% c("clogit")) {
     if (is.null(doseRRmod)) {
-      stop("doseRRmod is required for family=prophaz")
+      stop("doseRRmod is required for family=clogit")
     }
     if (is.null(status)) {
-      stop("status is required for family=prophaz")
+      stop("status is required for family=clogit")
     }
 
     designmat <- t(model.matrix(~ as.factor(data[, setnr]) - 1))
-    set_members <- lapply(sort(unique(data[, "setnr"])), function(s) {
+    set_members <- lapply(sort(unique(data[, setnr])), function(s) {
       which(data[, setnr] == s) - 1L # zero-indexed for C++
     })
 

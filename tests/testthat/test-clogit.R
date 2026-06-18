@@ -4,6 +4,27 @@ data("data", package = "ameras")
 
 # Clogit, basic model, all methods
 
+test_that("clogit supports non-default strata column names", {
+  dat <- data
+  dat$Set <- dat$setnr
+
+  # The formula parser stores the variable named inside strata(). This guards
+  # against later clogit setup accidentally assuming the column is named setnr.
+  fit_setnr <- ameras(
+    Y.clogit ~ dose(V1:V10, model = EXP, deg = 1) + strata(setnr),
+    data = dat,
+    family = "clogit"
+  )
+  fit_Set <- ameras(
+    Y.clogit ~ dose(V1:V10, model = EXP, deg = 1) + strata(Set),
+    data = dat,
+    family = "clogit"
+  )
+
+  expect_equal(coef(fit_Set), coef(fit_setnr), tolerance = 1e-8)
+  expect_equal(fit_Set$model$setnr, "Set")
+})
+
 for (method in all_methods) {
   test_that(paste("clogit snapshot:", method), {
     if (method %in% c("ERC", "MCML", "BMA")) {
