@@ -84,3 +84,39 @@ test_that("one-chain BMA fits support amerasfit methods", {
   expect_false(captured$n.eff)
   expect_false(captured$pdf)
 })
+
+test_that("one-parameter BMA fits preserve sample matrix dimensions", {
+  skip_on_cran()
+  set.seed(123)
+
+  data("data", package = "ameras")
+  small_data <- data[seq_len(20), ]
+
+  # With clogit, linear ERR, and no X or M terms, the only sampled model
+  # parameter summarized by ameras is dose. Keep this real fit to guard against
+  # R dropping one-column matrices before colMeans(), sd(), and var() summaries.
+  fit <- suppressWarnings(
+    suppressMessages(
+      ameras(
+        Y.clogit ~ dose(V1:V2, model = ERR, deg = 1) + strata(setnr),
+        data = small_data,
+        family = "clogit",
+        methods = "BMA",
+        niter.BMA = 20,
+        nburnin.BMA = 5,
+        thin.BMA = 1,
+        nchains.BMA = 2,
+        print = FALSE
+      )
+    )
+  )
+
+  expect_named(fit$BMA$coefficients, "dose")
+  expect_named(fit$BMA$sd, "dose")
+  expect_identical(dim(fit$BMA$vcov), c(1L, 1L))
+  expect_identical(rownames(fit$BMA$vcov), "dose")
+  expect_identical(colnames(fit$BMA$vcov), "dose")
+  expect_true(all(vapply(fit$BMA$samples, is.matrix, logical(1))))
+  expect_true(all(vapply(fit$BMA$samples, ncol, integer(1)) == 2L))
+  expect_identical(colnames(fit$BMA$samples[[1]]), c("dose", "col.ind"))
+})

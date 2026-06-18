@@ -1013,15 +1013,17 @@ ameras.bma <- function(
   if (nchains > 1) {
     nimblesamples.stacked <- do.call("rbind", nimblesamples)
     for (ichain in 1:length(nimblesamples)) {
-      nimblesamples[[ichain]] <- nimblesamples[[ichain]][, c(pars, "col.ind")]
+      nimblesamples[[ichain]] <- nimblesamples[[ichain]][
+        , c(pars, "col.ind"), drop = FALSE
+      ]
       colnames(nimblesamples[[ichain]]) <- c(parnames, "col.ind")
     }
   } else if (nchains == 1) {
     nimblesamples.stacked <- nimblesamples
-    nimblesamples <- nimblesamples[, c(pars, "col.ind")]
+    nimblesamples <- nimblesamples[, c(pars, "col.ind"), drop = FALSE]
     colnames(nimblesamples) <- c(parnames, "col.ind")
   }
-  nimblesamples.stacked <- nimblesamples.stacked[, pars]
+  nimblesamples.stacked <- nimblesamples.stacked[, pars, drop = FALSE]
 
   coef <- colMeans(nimblesamples.stacked)
   names(coef) <- parnames
