@@ -520,6 +520,7 @@ ameras <- function(
   }
   if (family == "clogit") {
     check_setnr(parsed$setnr, data)
+    data <- filter_clogit_sets(data, status, parsed$setnr)
   }
 
   deg <- check_deg(parsed$deg)

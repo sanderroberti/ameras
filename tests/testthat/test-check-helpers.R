@@ -286,15 +286,42 @@ test_that("dose, modifier, covariate, and set checks validate data columns", {
   expect_null(ameras:::check_X("X", dat))
   expect_error(ameras:::check_X("X_bad", dat), "X:X_bad must contain finite")
 
-  # Matched sets of size 1 are allowed but warned about because they do not
-  # contribute to conditional likelihood estimation.
-  expect_warning(
-    ameras:::check_setnr("setnr", dat),
-    "matched sets of size 1"
-  )
+  # check_setnr() validates only the set identifier column; case/set consistency
+  # is handled by filter_clogit_sets() once the outcome column is known.
+  expect_null(ameras:::check_setnr("setnr", dat))
   expect_error(
     ameras:::check_setnr("bad_setnr", dat),
     "setnr must be integer"
+  )
+})
+
+test_that("clogit set filtering drops uninformative sets and rejects multiple cases", {
+  dat <- data.frame(
+    Y = c(1, 0, 0, 0, 1, 1, 0, 1),
+    setnr = c(1, 1, 2, 2, 3, 4, 4, 5),
+    X = seq_len(8)
+  )
+
+  # Sets of size 1 and sets with no cases have no conditional likelihood
+  # contribution. They are filtered explicitly so all clogit methods agree.
+  expect_warning(
+    filtered <- ameras:::filter_clogit_sets(dat, "Y", "setnr"),
+    "Excluding 2 matched set"
+  )
+  expect_identical(filtered$setnr, c(1, 1, 4, 4))
+
+  multi_case <- data.frame(Y = c(1, 1, 0), setnr = c(1, 1, 1))
+  expect_error(
+    ameras:::filter_clogit_sets(multi_case, "Y", "setnr"),
+    "more than one case"
+  )
+
+  no_informative <- data.frame(Y = c(0, 0, 1), setnr = c(1, 1, 2))
+  expect_error(
+    suppressWarnings(
+      ameras:::filter_clogit_sets(no_informative, "Y", "setnr")
+    ),
+    "No informative matched sets remain"
   )
 })
 

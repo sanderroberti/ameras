@@ -743,11 +743,6 @@ ameras.bma <- function(
       stop("doseRRmod is required for family=clogit")
     }
 
-    # Remove sets of size 1
-    set_counts <- table(data[, setnr])
-    valid_sets <- as.numeric(names(set_counts[set_counts > 1]))
-    data <- data[data[, setnr] %in% valid_sets, ]
-
     # Reorder and determine indexing for nimble
     data <- data[order(data[, setnr]), ]
     nsets <- length(unique(data[, setnr]))

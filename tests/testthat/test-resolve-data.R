@@ -131,6 +131,46 @@ test_that("resolve_data rebuilds model matrix columns and mean dose", {
   expect_equal(resolved$rcdose_ameras, rowMeans(dat[c("D1", "D2")]))
 })
 
+test_that("resolve_data applies clogit matched set filtering before reconstruction", {
+  object <- ameras:::new_amerasfit(list(
+    num.rows = 2,
+    model = list(
+      data = NULL,
+      family = "clogit",
+      dosevars = c("D1", "D2"),
+      Y = NULL,
+      M_names = NULL,
+      X = NULL,
+      X_formula = NULL,
+      offset = NULL,
+      entry = NULL,
+      exit = NULL,
+      status = "Y",
+      setnr = "setnr"
+    )
+  ))
+  dat <- data.frame(
+    Y = c(1, 0, 0, 0, 1),
+    setnr = c(1, 1, 2, 2, 3),
+    D1 = seq(0.1, 0.5, by = 0.1),
+    D2 = seq(0.2, 0.6, by = 0.1)
+  )
+
+  # Users may supply the original data again when keep.data = FALSE. The same
+  # uninformative-set filtering should happen before helper columns are rebuilt.
+  expect_warning(
+    resolved <- ameras:::resolve_data(object, data = dat),
+    "Excluding 1 matched set"
+  )
+
+  expect_equal(nrow(resolved), 2)
+  expect_identical(resolved$setnr, c(1, 1))
+  expect_equal(
+    resolved$rcdose_ameras,
+    unname(rowMeans(resolved[c("D1", "D2")]))
+  )
+})
+
 test_that("select_dose_col uses best-likelihood realization for MCML", {
   dat <- data.frame(
     Y = c(1, 2, 3, 4),

@@ -477,6 +477,10 @@ resolve_data <- function(object, data = NULL) {
     }
   }
 
+  if (m$family == "clogit") {
+    data <- filter_clogit_sets(data, m$status, m$setnr)
+  }
+
   # Check dose columns are numeric and finite
   for (v in m$dosevars) {
     check_num_vec(data[, v, drop = TRUE], nm = paste0("dosevars:", v))

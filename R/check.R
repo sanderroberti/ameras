@@ -118,16 +118,49 @@ check_setnr <- function(v, data) {
   check_vars(data, v, nm, minlen = 1, maxlen = 1)
   check_num_vec(data[, v, drop = TRUE], nm, nonneg = 1, integer = 1)
 
-  nset_noncontributing <- sum(table(data[, v, drop = TRUE]) == 1)
-  if (nset_noncontributing > 0) {
-    warning(paste0(
-      "Data contains ",
-      nset_noncontributing,
-      " matched sets of size 1 that do not contribute to model estimation"
+  NULL
+}
+
+filter_clogit_sets <- function(data, status, setnr) {
+  y <- data[, status, drop = TRUE]
+  sets <- data[, setnr, drop = TRUE]
+  set_sizes <- table(sets)
+  cases_per_set <- tapply(y, sets, sum)
+
+  multi_case_sets <- names(cases_per_set)[cases_per_set > 1]
+  if (length(multi_case_sets)) {
+    stop(paste0(
+      "Conditional logistic regression currently requires exactly one case ",
+      "per informative matched set; ",
+      length(multi_case_sets),
+      " matched set(s) contain more than one case."
     ))
   }
 
-  NULL
+  size_one_sets <- names(set_sizes)[set_sizes == 1]
+  no_case_sets <- names(cases_per_set)[cases_per_set == 0]
+  drop_sets <- union(size_one_sets, no_case_sets)
+
+  if (length(drop_sets)) {
+    warning(paste0(
+      "Excluding ",
+      length(size_one_sets),
+      " matched set(s) of size 1 and ",
+      length(setdiff(no_case_sets, size_one_sets)),
+      " additional matched set(s) with no cases from conditional logistic ",
+      "regression."
+    ))
+    data <- data[!(sets %in% drop_sets), , drop = FALSE]
+  }
+
+  if (!nrow(data)) {
+    stop(
+      "No informative matched sets remain after excluding matched sets of ",
+      "size 1 or with no cases."
+    )
+  }
+
+  data
 }
 
 check_entry_exit <- function(entry, exit, data) {
