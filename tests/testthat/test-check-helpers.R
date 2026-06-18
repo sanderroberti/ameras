@@ -153,6 +153,11 @@ test_that("general check helpers cover representative validation branches", {
   expect_error(ameras:::check_df(list(x = 1:3)), "must be a data frame")
   expect_error(ameras:::check_df(dat[0, ]), "has no rows")
   expect_error(ameras:::check_df(dat[, 0]), "has no columns")
+  expect_null(ameras:::check_reserved_names(dat))
+  expect_error(
+    ameras:::check_reserved_names(cbind(dat, rcdose_ameras = 1:3)),
+    "reserved ameras column name"
+  )
 
   expect_identical(ameras:::check_methods(c("RC", "RC", "FMA")), c("RC", "FMA"))
   expect_error(ameras:::check_methods("BAD"), "methods contains invalid values")

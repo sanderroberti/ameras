@@ -16,6 +16,7 @@
 * Streamlined information printed by `summary()` and `confint()`: columns `pval.lower` and `pval.upper` for profile likelihood intervals are no longer printed. They are still accessible within the fit object, and warnings are still printed in case an inaccurate profile likelihood bound is suspected.
 * Added structured timing information to fitted method results, separating fitting time, confidence interval computation time, and total time. Printed runtime summaries now use CPU time, so time spent while the computer is asleep is not counted. The existing `runtime` field is retained as a compatibility summary and is updated when `confint()` adds confidence interval timing.
 * Added vignettes for standard analyses with one dose realization, manual FMA from realization-specific RC fits, and parallel FMA with the `future` framework.
+* Added validation to reject input data containing the reserved internal column name `rcdose_ameras`.
 
 # ameras 0.4.0
 

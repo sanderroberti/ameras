@@ -58,6 +58,19 @@ test_that("resolve_data requires data for keep.data FALSE objects", {
   )
 })
 
+test_that("resolve_data rejects user data with reserved internal columns", {
+  object <- make_resolve_data_object(stored_data = NULL)
+  dat <- make_resolve_data_frame()
+  dat$rcdose_ameras <- 0
+
+  # resolve_data() rebuilds rcdose_ameras itself, so a user-supplied column with
+  # that name would be overwritten and is rejected before reconstruction.
+  expect_error(
+    ameras:::resolve_data(object, data = dat),
+    "reserved ameras column name"
+  )
+})
+
 test_that("resolve_data reports missing supplied data columns by role", {
   object <- make_resolve_data_object(stored_data = NULL)
   dat <- make_resolve_data_frame()

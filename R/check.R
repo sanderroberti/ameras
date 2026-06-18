@@ -11,6 +11,19 @@ check_df <- function(x, nm = "data") {
   NULL
 }
 
+check_reserved_names <- function(data, reserved = "rcdose_ameras") {
+  used <- intersect(reserved, colnames(data))
+  if (length(used)) {
+    stop(paste0(
+      "ERROR: data contains reserved ameras column name(s): ",
+      getCharVecStr(used),
+      ". Please rename these columns before fitting."
+    ))
+  }
+
+  NULL
+}
+
 check_family <- function(x, nm = "family") {
   valid <- c(
     "gaussian",

@@ -441,6 +441,7 @@ resolve_data <- function(object, data = NULL) {
   }
 
   check_df(data)
+  check_reserved_names(data)
 
   m <- object$model
 

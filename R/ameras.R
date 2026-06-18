@@ -489,6 +489,8 @@ ameras <- function(
     X <- NULL
   }
 
+  check_reserved_names(data)
+
   if (family == "clogit") {
     Y <- NULL
     status <- parsed$Y
