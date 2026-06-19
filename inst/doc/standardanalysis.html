@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Standard analyses with one dose realization</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Standard analyses with one dose
+realization</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#gaussian-outcome" id="toc-gaussian-outcome">Gaussian
+outcome</a></li>
+<li><a href="#binary-outcome" id="toc-binary-outcome">Binary
+outcome</a></li>
+<li><a href="#count-outcome" id="toc-count-outcome">Count
+outcome</a></li>
+<li><a href="#a-note-on-comparison-with-other-software" id="toc-a-note-on-comparison-with-other-software">A note on comparison
+with other software</a></li>
+<li><a href="#moving-to-multiple-realizations" id="toc-moving-to-multiple-realizations">Moving to multiple
+realizations</a></li>
+</ul>
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ameras)</span></code></pre></div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The main purpose of <code>ameras</code> is to fit association models
+when multiple realizations of an exposure are available. The same
+interface can also be used for a standard analysis with a single
+observed dose variable.</p>
+<p>By default, <code>ameras()</code> fits regression calibration
+(<code>RC</code>). With a single dose realization, the
+regression-calibrated dose is just the supplied dose column, so the
+examples below omit the <code>methods</code> argument and use the
+default <code>RC</code> fit.</p>
+<p>For non-Gaussian families, <code>ameras()</code> defaults to a linear
+excess relative risk model (<code>model = &quot;ERR&quot;</code>). To compare with
+ordinary <code>glm()</code> fits, use the exponential relative risk
+model (<code>model = &quot;EXP&quot;</code>), which puts the dose coefficient on
+the usual logit or log-link scale.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(data, <span class="at">package =</span> <span class="st">&quot;ameras&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="do">## Use one exposure realization as the single observed dose.</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>data<span class="sc">$</span>D <span class="ot">&lt;-</span> data<span class="sc">$</span>V1</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">head</span>(data[<span class="fu">c</span>(<span class="st">&quot;D&quot;</span>, <span class="st">&quot;Y.gaussian&quot;</span>, <span class="st">&quot;Y.binomial&quot;</span>, <span class="st">&quot;Y.poisson&quot;</span>, <span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>)])</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;            D  Y.gaussian Y.binomial Y.poisson X1 X2</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 1 0.42868043 -0.32647093          0         0  0  0</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 2 0.73321154 -0.18734036          1         0  1  0</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 3 0.70369712  0.08404044          0         2  0  0</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 4 0.01845324  0.22432504          0         0  0  0</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 5 0.39389441 -0.46317255          0         0  1  0</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 6 0.01493158 -1.41036573          0         0  1  1</span></span></code></pre></div>
+<p>This small helper prints matching coefficients from an
+<code>ameras</code> fit and a standard R model. The dose coefficient is
+named <code>dose</code> by <code>ameras</code> and <code>D</code> by the
+standard model.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>compare_coefficients <span class="ot">&lt;-</span> <span class="cf">function</span>(ameras_fit, standard_fit) {</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  ameras_terms <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;(Intercept)&quot;</span>, <span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;dose&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  standard_terms <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;(Intercept)&quot;</span>, <span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;D&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    <span class="at">term =</span> ameras_terms,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    <span class="at">ameras =</span> <span class="fu">unname</span>(ameras_fit<span class="sc">$</span>RC<span class="sc">$</span>coefficients[ameras_terms]),</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="at">standard =</span> <span class="fu">unname</span>(stats<span class="sc">::</span><span class="fu">coef</span>(standard_fit)[standard_terms])</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  )</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  out<span class="sc">$</span>ameras <span class="ot">&lt;-</span> <span class="fu">round</span>(out<span class="sc">$</span>ameras, <span class="dv">4</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  out<span class="sc">$</span>standard <span class="ot">&lt;-</span> <span class="fu">round</span>(out<span class="sc">$</span>standard, <span class="dv">4</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  out</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="gaussian-outcome" class="section level1">
+<h1>Gaussian outcome</h1>
+<p>For a Gaussian outcome, a single-dose <code>ameras()</code> fit gives
+the same regression coefficients as <code>lm()</code>, with only a small
+numerical difference. The <code>ameras</code> fit also estimates
+<code>sigma</code>, so the comparison below only shows the regression
+coefficients.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>fit_ameras_gaussian <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(D) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                              <span class="at">data =</span> data,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y.gaussian <span class="sc">~</span> D <span class="sc">+</span> X1 <span class="sc">+</span> X2, <span class="at">data =</span> data)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="fu">compare_coefficients</span>(fit_ameras_gaussian, fit_lm)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;          term  ameras standard</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 1 (Intercept) -1.2903  -1.2902</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; 2          X1  0.4938   0.4937</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; 3          X2 -0.5152  -0.5152</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; 4        dose  1.0920   1.0920</span></span></code></pre></div>
+<p>The usual <code>amerasfit</code> methods are available, including
+<code>summary()</code>, <code>coef()</code>, <code>vcov()</code>, and
+<code>confint()</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>fit_ameras_gaussian <span class="ot">&lt;-</span> <span class="fu">confint</span>(fit_ameras_gaussian,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                               <span class="at">type =</span> <span class="st">&quot;wald.orig&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                               <span class="at">print =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">summary</span>(fit_ameras_gaussian)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = data, </span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt;     family = &quot;gaussian&quot;)</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.1 seconds</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;      RC 0.053 0.0 0.053</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.2903 0.03818  -1.3651  -1.2154</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4938 0.04236   0.4107   0.5768</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.5152 0.05206  -0.6172  -0.4131</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt;      RC        dose   1.0920 0.02095   1.0509   1.1330</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt;      RC       sigma   1.1597 0.01497   1.1304   1.1891</span></span></code></pre></div>
+</div>
+<div id="binary-outcome" class="section level1">
+<h1>Binary outcome</h1>
+<p>For a binary outcome, specify <code>model = &quot;EXP&quot;</code> to match the
+usual logistic regression parameterization used by
+<code>glm(..., family = binomial())</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>fit_ameras_binomial <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial <span class="sc">~</span> <span class="fu">dose</span>(D, <span class="at">model =</span> <span class="st">&quot;EXP&quot;</span>) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                              <span class="at">data =</span> data,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                              <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>fit_glm_binomial <span class="ot">&lt;-</span> <span class="fu">glm</span>(Y.binomial <span class="sc">~</span> D <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                        <span class="at">data =</span> data,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>                        <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">compare_coefficients</span>(fit_ameras_binomial, fit_glm_binomial)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;          term  ameras standard</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; 1 (Intercept) -0.9661  -0.9661</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; 2          X1  0.4513   0.4513</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 3          X2 -0.3356  -0.3355</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; 4        dose  0.4374   0.4374</span></span></code></pre></div>
+</div>
+<div id="count-outcome" class="section level1">
+<h1>Count outcome</h1>
+<p>The same idea applies to Poisson regression. Again,
+<code>model = &quot;EXP&quot;</code> makes the <code>ameras</code> dose term
+directly comparable to the coefficient for <code>D</code> in
+<code>glm(..., family = poisson())</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>fit_ameras_poisson <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.poisson <span class="sc">~</span> <span class="fu">dose</span>(D, <span class="at">model =</span> <span class="st">&quot;EXP&quot;</span>) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                             <span class="at">data =</span> data,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>                             <span class="at">family =</span> <span class="st">&quot;poisson&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>fit_glm_poisson <span class="ot">&lt;-</span> <span class="fu">glm</span>(Y.poisson <span class="sc">~</span> D <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>                       <span class="at">data =</span> data,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>                       <span class="at">family =</span> <span class="fu">poisson</span>())</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="fu">compare_coefficients</span>(fit_ameras_poisson, fit_glm_poisson)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;          term  ameras standard</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 1 (Intercept) -0.9178  -0.9178</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; 2          X1  0.5140   0.5140</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; 3          X2 -0.3569  -0.3570</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 4        dose  0.3821   0.3821</span></span></code></pre></div>
+</div>
+<div id="a-note-on-comparison-with-other-software" class="section level1">
+<h1>A note on comparison with other software</h1>
+<p>For a single dose realization, or for <code>RC</code> with multiple
+realizations after replacing the dose by its realization-specific mean,
+point estimates should generally agree with other software when the same
+likelihood, dose-response model, covariates, and parameterization are
+used.</p>
+<p>Standard errors and Wald confidence intervals may nevertheless
+differ. For <code>RC</code>, <code>ERC</code>, and <code>MCML</code>,
+<code>ameras</code> computes variance-covariance matrices from the
+observed information, using a numerical Hessian of the negative
+log-likelihood at the optimum. Other software may use expected Fisher
+information, a scoring-based approximation, a different treatment of
+parameter constraints, or a different internal parameter scale. These
+choices can lead to different standard errors even when coefficient
+estimates agree closely.</p>
+</div>
+<div id="moving-to-multiple-realizations" class="section level1">
+<h1>Moving to multiple realizations</h1>
+<p>Once multiple exposure realizations are available, the formula
+changes only in the <code>dose()</code> term. For example, replacing
+<code>D</code> by <code>V1:V10</code> fits the default <code>RC</code>
+analysis using all 10 realizations:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>fit_ameras_rc <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">model =</span> <span class="st">&quot;EXP&quot;</span>) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                        <span class="at">data =</span> data,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>                        <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="fu">summary</span>(fit_ameras_rc)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;EXP&quot;) + X1 + </span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt;     X2, data = data, family = &quot;binomial&quot;)</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.1 seconds</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;      RC 0.071 0.0 0.071</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -0.9760 0.07190</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4460 0.07667</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3359 0.09596</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.4471 0.04101</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
+<p>Other methods can then be added through the <code>methods</code>
+argument:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>fit_ameras_all <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">model =</span> <span class="st">&quot;EXP&quot;</span>) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>                         <span class="at">data =</span> data,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>                         <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>                         <span class="at">methods =</span> <span class="fu">c</span>(<span class="st">&quot;RC&quot;</span>, <span class="st">&quot;ERC&quot;</span>, <span class="st">&quot;MCML&quot;</span>, <span class="st">&quot;FMA&quot;</span>, <span class="st">&quot;BMA&quot;</span>))</span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

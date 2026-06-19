@@ -363,13 +363,12 @@ and <span class="math inline">\(\mathbf \beta_{m2}\)</span> can be
 vectors, with lengths matching <code>X</code> and <code>M</code>,
 respectively. <span class="math inline">\(\sigma\)</span> is only
 included for the linear model (Gaussian family), and no intercept is
-included for the Cox and conditional logistic models. For the
-multinomial model, the full parameter vector is the concatenation of
-<span class="math inline">\(Z-1\)</span> parameter vectors in the order
-as given above, where <span class="math inline">\(Z\)</span> is the
-number of outcome categories. When no transformation is specified and
-the linear ERR model is used, <code>transform1</code> is used for ERR
-parameters <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> by default, with lower limits
+included for the proportional hazards and conditional logistic models.
+For the multinomial model, the full parameter vector is the
+concatenation of <span class="math inline">\(Z-1\)</span> parameter
+vectors in the order as given above, where <span class="math inline">\(Z\)</span> is the number of outcome categories.
+When no transformation is specified and the linear ERR model is used,
+<code>transform1</code> is used for ERR parameters <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> by default, with lower limits
 <span class="math inline">\(-1/max(D)\)</span> for linear dose-response
 and <span class="math inline">\((0,-1/max(D^2))\)</span> for
 linear-quadratic dose-response, respectively (see below). For the
@@ -434,7 +433,7 @@ keep the following in mind:</p>
 and <code>...</code>, where <code>params</code> is the full parameter
 vector. Parameters are in a specific order (see above), in case of doubt
 it is always possible to run <code>ameras</code> with the default
-settings to verify correct the order from the result.</li>
+settings to verify the correct order from the result.</li>
 <li>Extra arguments can be used and should be supplied when calling
 <code>ameras</code></li>
 <li>Optional: if <code>boundcheck</code> is an argument to the function,
@@ -508,12 +507,12 @@ sigmoid transformation:</p>
 <span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, </span></span>
 <span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt;     index.t = 4:5)</span></span>
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Total run time: 0.2 seconds</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;      RC     0.2</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;      RC 0.182 0.0 0.182</span></span>
 <span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -534,12 +533,12 @@ sigmoid transformation:</p>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = &quot;ERR&quot;) + </span></span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;binomial&quot;, methods = &quot;RC&quot;)</span></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Total run time: 0.2 seconds</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;      RC     0.2</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;      RC 0.152 0.0 0.152</span></span>
 <span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; </span></span>

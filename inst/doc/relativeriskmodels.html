@@ -377,7 +377,7 @@ other settings.</p>
 \mathbf{M}_i^T \mathbf{\beta}_{m1}D_i + \mathbf{M}_i^T
 \mathbf{\beta}_{m2} D_i^2)\)</span>, where the quadratic and effect
 modification terms are optional (not fit by setting <code>deg=1</code>
-and not passing anything to <code>M</code>, respectively). This model is
+and not supplying <code>modifier</code>, respectively). This model is
 fit by setting <code>model=&quot;EXP&quot;</code> as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>fit.ameras.exp <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial<span class="sc">~</span><span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">deg=</span><span class="dv">2</span>, <span class="at">model=</span><span class="st">&quot;EXP&quot;</span>)<span class="sc">+</span>X1<span class="sc">+</span>X2, </span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                         <span class="at">data=</span>data, <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="st">&quot;RC&quot;</span>)</span>
@@ -387,12 +387,12 @@ fit by setting <code>model=&quot;EXP&quot;</code> as follows:</p>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = &quot;EXP&quot;) + </span></span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;binomial&quot;, methods = &quot;RC&quot;)</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; Total run time: 0.3 seconds</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.1 seconds</span></span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt;      RC     0.3</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt;      RC 0.139 0.0 0.139</span></span>
 <span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -410,7 +410,8 @@ fit by setting <code>model=&quot;EXP&quot;</code> as follows:</p>
 <p>The linear excess relative risk model is given by <span class="math inline">\(RR_i=1+\beta_1 D_i+\beta_2 D_i^2+ \mathbf{M}_i^T
 \mathbf{\beta}_{m1}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2}
 D_i^2\)</span>, where again the quadratic and effect modification terms
-are optional. In this case, no degree needs to be specified. This model
+are optional. The degree is specified with <code>deg</code>, as in the
+exponential model; the example below uses <code>deg=2</code>. This model
 is fit by setting <code>model=&quot;ERR&quot;</code> as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>fit.ameras.err <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial<span class="sc">~</span><span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">deg=</span><span class="dv">2</span>, <span class="at">model=</span><span class="st">&quot;ERR&quot;</span>)<span class="sc">+</span>X1<span class="sc">+</span>X2, </span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                         <span class="at">data=</span>data, <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="st">&quot;RC&quot;</span>)</span>
@@ -420,12 +421,12 @@ is fit by setting <code>model=&quot;ERR&quot;</code> as follows:</p>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = &quot;ERR&quot;) + </span></span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;binomial&quot;, methods = &quot;RC&quot;)</span></span>
 <span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Total run time: 0.2 seconds</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;      RC     0.2</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;      RC 0.171 0.0 0.171</span></span>
 <span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -453,12 +454,12 @@ as follows:</p>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;LINEXP&quot;) + </span></span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;binomial&quot;, methods = &quot;RC&quot;)</span></span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; Total run time: 0.2 seconds</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Runtime in seconds by method:</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;  Method Runtime</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;      RC     0.2</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;      RC 0.163 0.0 0.163</span></span>
 <span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; </span></span>

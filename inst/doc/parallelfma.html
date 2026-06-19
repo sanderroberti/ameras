@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Parallel FMA with future</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Parallel FMA with future</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#choosing-a-future-plan" id="toc-choosing-a-future-plan">Choosing a future plan</a></li>
+<li><a href="#controlling-chunk-size" id="toc-controlling-chunk-size">Controlling chunk size</a></li>
+<li><a href="#example-sequential-and-parallel-fma" id="toc-example-sequential-and-parallel-fma">Example: sequential and
+parallel FMA</a></li>
+<li><a href="#reproducibility" id="toc-reproducibility">Reproducibility</a></li>
+<li><a href="#practical-recommendations" id="toc-practical-recommendations">Practical recommendations</a></li>
+<li><a href="#parallel-fma-or-manual-fma" id="toc-parallel-fma-or-manual-fma">Parallel FMA or manual FMA?</a></li>
+</ul>
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ameras)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(data, <span class="at">package =</span> <span class="st">&quot;ameras&quot;</span>)</span></code></pre></div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Frequentist model averaging (<code>FMA</code>) fits the specified
+model once for each dose realization, computes AIC weights across those
+realization-specific fits, and then samples from the fitted normal
+approximations. The realization-specific fits are independent of one
+another, so they are a natural place to use parallel computation.</p>
+<p><code>ameras()</code> supports optional parallel FMA through the <a href="https://future.futureverse.org/reference/plan.html"><code>future</code></a>
+framework and <a href="https://future.apply.futureverse.org/reference/future_lapply.html"><code>future.apply</code></a>.
+The package does not set a future plan internally. Instead, the user
+decides whether FMA should run sequentially or in parallel by setting
+<code>future::plan()</code> before calling <code>ameras()</code>.</p>
+<p>If <code>future.apply</code> is not installed, <code>ameras()</code>
+falls back to the ordinary sequential <code>lapply()</code> path.</p>
+<p>For more detail on future plans and future-backed apply loops, see
+<code>?future::plan</code> and
+<code>?future.apply::future_lapply</code>, or the linked Futureverse
+documentation.</p>
+</div>
+<div id="choosing-a-future-plan" class="section level1">
+<h1>Choosing a future plan</h1>
+<p>The default future plan is sequential, so this call uses the ordinary
+single-process FMA path.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>              <span class="at">data =</span> data,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>)</span></code></pre></div>
+<p>For parallel FMA on a local machine, <code>multisession</code> is
+usually the most portable choice. It starts separate background R
+sessions and works across the main platforms supported by R, including
+Windows, macOS, and Linux.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>              <span class="at">data =</span> data,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span></code></pre></div>
+<p>The <code>multicore</code> backend can be efficient on systems that
+support forking, but it is not available on Windows. For code intended
+to run on multiple platforms, prefer <code>multisession</code>.</p>
+<p>For more specialized settings, the future ecosystem also supports
+cluster and HPC-oriented backends. See <code>?future::plan</code> or the
+future package documentation for details.</p>
+</div>
+<div id="controlling-chunk-size" class="section level1">
+<h1>Controlling chunk size</h1>
+<p>By default, <code>future.apply</code> chooses how to split dose
+realizations into futures. For FMA, this can be adjusted with
+<code>future.chunk.size.FMA</code>, the average number of dose
+realizations handled by each future.</p>
+<p>Let <code>K</code> be the number of dose realizations, <code>W</code>
+the number of workers, and <code>C</code> the value of
+<code>future.chunk.size.FMA</code>. <code>K</code> and <code>C</code>
+determine the approximate number of future tasks,
+<code>ceiling(K / C)</code>, and at most <code>W</code> of those tasks
+can run at the same time.</p>
+<p>For example, with <code>K = 100</code> dose realizations and
+<code>W = 4</code> workers:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right"><code>future.chunk.size.FMA</code></th>
+<th align="right">Approximate chunks</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">100</td>
+<td>many small tasks; more load balancing, more overhead</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="right">20</td>
+<td>moderate load balancing and overhead</td>
+</tr>
+<tr class="odd">
+<td align="right">25</td>
+<td align="right">4</td>
+<td>about one task per worker</td>
+</tr>
+<tr class="even">
+<td align="right">100</td>
+<td align="right">1</td>
+<td>one task; only one worker is used</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>              <span class="at">data =</span> data,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>              <span class="at">future.chunk.size.FMA =</span> <span class="dv">2</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span></code></pre></div>
+<p>Smaller chunks can improve load balancing when some realizations take
+longer to fit than others. Larger chunks can reduce overhead and may be
+preferable when each realization-specific fit is fast. If the
+realization-specific fits have similar runtimes, a reasonable starting
+point is a chunk size near <code>ceiling(K / W)</code> or somewhat
+smaller. If runtimes vary substantially across realizations, smaller
+chunks may keep workers busier.</p>
+</div>
+<div id="example-sequential-and-parallel-fma" class="section level1">
+<h1>Example: sequential and parallel FMA</h1>
+<p>The example below compares the same Gaussian FMA fit with a
+sequential plan and a two-worker multisession plan. The seed is reset
+before each call so that the final FMA sampling step is comparable.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>old_plan <span class="ot">&lt;-</span> future<span class="sc">::</span><span class="fu">plan</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">on.exit</span>(future<span class="sc">::</span><span class="fu">plan</span>(old_plan), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>sequential_elapsed <span class="ot">&lt;-</span> <span class="fu">system.time</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  sequential_fit <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>           <span class="at">data =</span> data,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>           <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>           <span class="at">MFMA =</span> <span class="dv">10000</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  )</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>)[[<span class="st">&quot;elapsed&quot;</span>]]</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>parallel_elapsed <span class="ot">&lt;-</span> <span class="fu">system.time</span>(</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  parallel_fit <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>    <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>           <span class="at">data =</span> data,</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>           <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>           <span class="at">MFMA =</span> <span class="dv">10000</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>           <span class="at">future.chunk.size.FMA =</span> <span class="dv">2</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>  )</span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>)[[<span class="st">&quot;elapsed&quot;</span>]]</span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(old_plan)</span></code></pre></div>
+<p>Compare the coefficient estimates and elapsed runtimes.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>coefficient_comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">names</span>(sequential_fit<span class="sc">$</span>FMA<span class="sc">$</span>coefficients),</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">sequential =</span> <span class="fu">unname</span>(sequential_fit<span class="sc">$</span>FMA<span class="sc">$</span>coefficients),</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">parallel =</span> <span class="fu">unname</span>(parallel_fit<span class="sc">$</span>FMA<span class="sc">$</span>coefficients),</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">NULL</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>coefficient_comparison[<span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(coefficient_comparison[<span class="sc">-</span><span class="dv">1</span>], <span class="dv">4</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>coefficient_comparison</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;          term sequential parallel</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 1 (Intercept)    -1.2802  -1.2802</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; 2          X1     0.4829   0.4829</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; 3          X2    -0.5163  -0.5163</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 4        dose     1.0793   1.0793</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 5       sigma     1.1376   1.1376</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="at">plan =</span> <span class="fu">c</span>(<span class="st">&quot;sequential&quot;</span>, <span class="st">&quot;multisession&quot;</span>),</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  <span class="at">elapsed_seconds =</span> <span class="fu">round</span>(<span class="fu">c</span>(sequential_elapsed, parallel_elapsed), <span class="dv">2</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>)</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt;           plan elapsed_seconds</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; 1   sequential            0.79</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; 2 multisession            1.13</span></span></code></pre></div>
+<p>The estimates should agree up to ordinary numerical precision.
+Parallel execution is not guaranteed to be faster for small examples
+because starting workers and transferring data have overhead. It is most
+useful when the realization-specific fits are slow enough for that
+overhead to matter less.</p>
+</div>
+<div id="reproducibility" class="section level1">
+<h1>Reproducibility</h1>
+<p>The parallelized part of FMA is the realization-specific optimization
+step, which is deterministic for ordinary model fits. The random FMA
+sampling step is performed afterward in the main R process. For
+reproducible FMA samples, set the seed before calling
+<code>ameras()</code>, just as in the sequential case.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>              <span class="at">data =</span> data,</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span></code></pre></div>
+<p>User-supplied functions passed through <code>transform</code>,
+<code>transform.jacobian</code>, or other runtime arguments should also
+be deterministic. Random number generation inside those functions is not
+recommended.</p>
+</div>
+<div id="practical-recommendations" class="section level1">
+<h1>Practical recommendations</h1>
+<p>Use parallel FMA when a direct
+<code>ameras(..., methods = &quot;FMA&quot;)</code> call is feasible in one R
+session, but the realization-specific fits are slow enough that using
+multiple workers is worthwhile.</p>
+<p>Start conservatively:</p>
+<ul>
+<li>use <code>future::plan(future::multisession, workers = 2)</code> for
+a portable local parallel plan;</li>
+<li>increase <code>workers</code> only after checking memory use;</li>
+<li>try <code>future.chunk.size.FMA = 2</code> or larger when each
+realization-specific fit is fast;</li>
+<li>reset the plan to <code>future::sequential</code> after the fit if
+the rest of the session should not use parallel futures.</li>
+</ul>
+<p>With <code>multisession</code>, each worker is a separate R process.
+Large datasets may therefore be copied to multiple workers. If memory is
+tight, use fewer workers, increase the chunk size, or consider the
+manual FMA workflow.</p>
+</div>
+<div id="parallel-fma-or-manual-fma" class="section level1">
+<h1>Parallel FMA or manual FMA?</h1>
+<p>The parallel option shown here is best when the built-in FMA workflow
+fits in memory and you want a regular <code>amerasfit</code> object
+returned by <code>ameras()</code>.</p>
+<p>The <a href="manualfma.html">manual FMA vignette</a> is intended for
+larger or more operationally complicated analyses where it is useful to
+split the realization-specific fits across separate jobs, save
+intermediate fit summaries, or resume work after partial completion.
+Manual FMA is more flexible, but it requires more bookkeeping and does
+not return a regular <code>amerasfit</code> object.</p>
+<p>In short:</p>
+<ul>
+<li>use built-in parallel FMA for ordinary analyses that benefit from
+local parallel workers;</li>
+<li>use manual FMA when the analysis must be broken into independent
+chunks or run outside a single R session.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
