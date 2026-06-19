@@ -913,8 +913,8 @@ loglik.multinomial <- function(
   a0 <- params[1, ]
 
   if (!is.null(X)) {
-    a <- params[2:(length(X) + 1), ]
-    Xlinpred <- sweep(as.matrix(data[, X]) %*% a, 2, a0, "+")
+    a <- params[2:(length(X) + 1), , drop = FALSE]
+    Xlinpred <- sweep(as.matrix(data[, X, drop = FALSE]) %*% a, 2, a0, "+")
   } else {
     Xlinpred <- matrix(a0, nrow = nrow(data), ncol = Z, byrow = TRUE)
   }
@@ -980,9 +980,13 @@ loglik.multinomial <- function(
     }
 
     RRmat <- RRmat * exp(pmin(Xlinpred, 7e1))
-    probmat <- RRmat / rowSums(RRmat)[, drop = FALSE]
+    probmat <- RRmat / matrix(rowSums(RRmat), nrow = nrow(RRmat), ncol = Z)
 
-    Ymat <- diag(Z)[as.integer(data[, Y]), ] #as.matrix(model.matrix(~data[,Y]-1))
+    Ymat <- diag(Z)[
+      as.integer(data[, Y]),
+      ,
+      drop = FALSE
+    ] #as.matrix(model.matrix(~data[,Y]-1))
     ls <- sum(log(probmat) * Ymat)
   }
 

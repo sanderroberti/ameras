@@ -164,7 +164,7 @@ ameras.rc <- function(
   ...
 ) {
   if (ERC & family != "poisson" & family != "prophaz") {
-    Kmat <- cov(t(data[, dosevars]))
+    Kmat <- cov(t(data[, dosevars, drop = FALSE]))
   } else {
     Kmat <- NULL
   }

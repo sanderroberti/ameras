@@ -1,3 +1,23 @@
+test_that("BMA requires at least two included dose realizations", {
+  data("data", package = "ameras")
+
+  # The formula has multiple dose realizations, but this explicit BMA subset
+  # would leave BMA with only one realization. That case should use RC instead.
+  expect_error(
+    suppressMessages(
+      ameras(
+        Y.gaussian ~ dose(V1:V2, deg = 1),
+        data = data[seq_len(20), ],
+        family = "gaussian",
+        methods = "BMA",
+        included.realizations.BMA = 1
+      )
+    ),
+    "BMA requires at least two included exposure realizations",
+    fixed = TRUE
+  )
+})
+
 test_that("one-chain BMA fits support amerasfit methods", {
   skip_on_cran()
   set.seed(123)
@@ -119,4 +139,14 @@ test_that("one-parameter BMA fits preserve sample matrix dimensions", {
   expect_true(all(vapply(fit$BMA$samples, is.matrix, logical(1))))
   expect_true(all(vapply(fit$BMA$samples, ncol, integer(1)) == 2L))
   expect_identical(colnames(fit$BMA$samples[[1]]), c("dose", "col.ind"))
+
+  # CI computation should preserve the single model parameter name after
+  # stacking chains and dropping the sampled realization indicator.
+  fit_percentile <- suppressMessages(
+    confint(fit, type = "percentile", print = FALSE)
+  )
+  expect_identical(rownames(fit_percentile$BMA$CI), "dose")
+
+  fit_hpd <- suppressMessages(confint(fit, type = "hpd", print = FALSE))
+  expect_identical(rownames(fit_hpd$BMA$CI), "dose")
 })

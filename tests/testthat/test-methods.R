@@ -27,6 +27,22 @@ test_that("vcov & plot & summary_table binomial", {
   )
 })
 
+test_that("plot works with supplied data when keep.data is FALSE", {
+  dat <- data
+  fit <- ameras(
+    Y.binomial ~ dose(V1:V10),
+    data = dat,
+    family = "binomial",
+    methods = "RC",
+    keep.data = FALSE
+  )
+
+  # plot() resolves the supplied data once and reuses that resolved version
+  # while computing residuals; the caller's data frame should stay untouched.
+  expect_no_error(plot(fit, data = dat, ask = FALSE))
+  expect_false("rcdose_ameras" %in% names(dat))
+})
+
 
 test_that("vcov & plot & summary_table multinomial", {
   fit <- ameras(

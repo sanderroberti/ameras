@@ -78,6 +78,26 @@ check_D <- function(vars, data, methods) {
   NULL
 }
 
+check_included_realizations_BMA <- function(x, dosevars) {
+  if (is.null(x)) {
+    return(NULL)
+  }
+
+  nm <- "included.realizations.BMA"
+  check_integer(x, nm, minlen = 0, maxlen = 0, min = 1, max = length(dosevars))
+  if (length(x) < 2) {
+    stop(
+      "ERROR: BMA requires at least two included exposure realizations. ",
+      "With a single exposure realization, use RC."
+    )
+  }
+  if (any(duplicated(x))) {
+    stop(paste0("ERROR: ", nm, " contains duplicated values"))
+  }
+
+  NULL
+}
+
 check_M <- function(vars, data) {
   nm <- "M"
   check_vars(data, vars, nm, minlen = 0, maxlen = 0)

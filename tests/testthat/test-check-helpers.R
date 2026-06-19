@@ -401,6 +401,27 @@ test_that("variable utilities handle empty, numeric, character, and bad inputs",
   expect_identical(ameras:::getVarNumbers("y", dat), 2L)
 })
 
+test_that("BMA included-realization checks validate effective dose count", {
+  dosevars <- paste0("V", 1:3)
+
+  expect_null(ameras:::check_included_realizations_BMA(1:2, dosevars))
+  expect_error(
+    ameras:::check_included_realizations_BMA(1, dosevars),
+    "BMA requires at least two included exposure realizations",
+    fixed = TRUE
+  )
+  expect_error(
+    ameras:::check_included_realizations_BMA(c(1, 4), dosevars),
+    "included.realizations.BMA must be <= 3",
+    fixed = TRUE
+  )
+  expect_error(
+    ameras:::check_included_realizations_BMA(c(1, 1), dosevars),
+    "included.realizations.BMA contains duplicated values",
+    fixed = TRUE
+  )
+})
+
 test_that("required variable helper lists family-specific source columns", {
   base_model <- list(
     dosevars = c("D1", "D2"),

@@ -335,7 +335,7 @@ confint.amerasfit <- function(
         if (is.list(samples)) {
           samples <- do.call("rbind", samples)
         }
-        samples <- samples[, pars]
+        samples <- samples[, pars, drop = FALSE]
       } else {
         samples <- fitobj[[it]]$samples
       }
@@ -428,54 +428,17 @@ summary_table.amerasfit <- function(object, ...) {
 }
 
 
-residuals.amerasfit <- function(
+compute_residuals <- function(
   object,
-  method = "RC",
-  type = NULL,
-  data = NULL,
-  dose.col = NULL,
-  scaled.schoenfeld = TRUE,
-  ...
+  method,
+  type,
+  resolved_data,
+  dose.col,
+  scaled.schoenfeld
 ) {
-  if (is.null(type)) {
-    if (object$model$family == "prophaz") {
-      type <- "schoenfeld"
-    } else {
-      type <- "pearson"
-    }
-  }
-  type <- match.arg(type, c("pearson", "response", "deviance", "schoenfeld"))
-
-  if (object$model$family == "prophaz") {
-    if (type != "schoenfeld") {
-      stop("Only schoenfeld residuals are supported for family 'prophaz'")
-    }
-  } else {
-    # Families other than prophaz
-    if (type == "schoenfeld") {
-      stop(paste0(
-        "schoenfeld residuals not supported for family='",
-        object$model$family,
-        "'"
-      ))
-    }
-  }
-  method <- match.arg(method, choices = c("RC", "ERC", "MCML", "FMA", "BMA"))
-
-  if (is.null(object[[method]])) {
-    stop("Method '", method, "' not present in fitted object")
-  }
-
-  resolved_data <- resolve_data(object, data = data)
-
-  if (is.null(dose.col)) {
-    dose.col <- select_dose_col(object, method, resolved_data)
-  } else {
-    if (!dose.col %in% colnames(resolved_data)) {
-      stop("dose.col '", dose.col, "' not found in data")
-    }
-  }
-
+  # The public residuals() method resolves and validates data before calling
+  # this helper. plot() can reuse the same resolved data without triggering a
+  # second reserved-column check on rcdose_ameras.
   m <- object$model
 
   mus <- compute_fitted(
@@ -532,6 +495,8 @@ residuals.amerasfit <- function(
     # we return an N x Z matrix of residuals rather than a vector
     Ymat <- diag(nlevels(resolved_data[, m$Y]))[
       as.integer(resolved_data[, m$Y]),
+      ,
+      drop = FALSE
     ]
     colnames(Ymat) <- levels(resolved_data[, m$Y])
 
@@ -625,6 +590,65 @@ residuals.amerasfit <- function(
   } else {
     stop("Residuals not implemented for family='", m$family, "'")
   }
+}
+
+
+residuals.amerasfit <- function(
+  object,
+  method = "RC",
+  type = NULL,
+  data = NULL,
+  dose.col = NULL,
+  scaled.schoenfeld = TRUE,
+  ...
+) {
+  if (is.null(type)) {
+    if (object$model$family == "prophaz") {
+      type <- "schoenfeld"
+    } else {
+      type <- "pearson"
+    }
+  }
+  type <- match.arg(type, c("pearson", "response", "deviance", "schoenfeld"))
+
+  if (object$model$family == "prophaz") {
+    if (type != "schoenfeld") {
+      stop("Only schoenfeld residuals are supported for family 'prophaz'")
+    }
+  } else {
+    # Families other than prophaz
+    if (type == "schoenfeld") {
+      stop(paste0(
+        "schoenfeld residuals not supported for family='",
+        object$model$family,
+        "'"
+      ))
+    }
+  }
+  method <- match.arg(method, choices = c("RC", "ERC", "MCML", "FMA", "BMA"))
+
+  if (is.null(object[[method]])) {
+    stop("Method '", method, "' not present in fitted object")
+  }
+
+  resolved_data <- resolve_data(object, data = data)
+
+  if (is.null(dose.col)) {
+    dose.col <- select_dose_col(object, method, resolved_data)
+  } else {
+    if (!dose.col %in% colnames(resolved_data)) {
+      stop("dose.col '", dose.col, "' not found in data")
+    }
+  }
+
+  compute_residuals(
+    object = object,
+    method = method,
+    type = type,
+    resolved_data = resolved_data,
+    dose.col = dose.col,
+    scaled.schoenfeld = scaled.schoenfeld
+  )
 }
 
 
@@ -724,11 +748,11 @@ plot.amerasfit <- function(
       data = resolved_data,
       dose.col = dose.col
     )
-    resids <- residuals.amerasfit(
-      x,
+    resids <- compute_residuals(
+      object = x,
       method = method,
       type = type,
-      data = resolved_data,
+      resolved_data = resolved_data,
       dose.col = dose.col,
       scaled.schoenfeld = TRUE
     )

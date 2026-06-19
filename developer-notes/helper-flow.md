@@ -165,6 +165,20 @@ timing for that method and updates the method's total runtime. When intervals
 are recomputed with `force = TRUE`, the previous CI timing is replaced rather
 than accumulated. The updated `amerasfit` object is returned invisibly.
 
+## Diagnostics Data Path
+
+For fitted objects that do not store data (`keep.data = FALSE`), diagnostic
+methods reconstruct the analysis data with `resolve_data()`. That helper
+validates user-supplied data, rebuilds expanded `X` columns when needed, and
+adds the internal mean-dose column `rcdose_ameras`.
+
+`residuals.amerasfit()` resolves data and then delegates residual calculation
+to `compute_residuals()`, which assumes the data have already been resolved.
+`plot.amerasfit()` also resolves data once, then calls `compute_fitted()` and
+`compute_residuals()` directly. This avoids re-validating an internally
+augmented data frame as if it were fresh user input, while preserving the
+reserved-column check for data supplied through public entry points.
+
 ## Special Cases
 
 Poisson ERC and proportional hazards ERC are intentionally special in

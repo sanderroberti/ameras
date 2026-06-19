@@ -1,4 +1,5 @@
 compute_sample_CI <- function(samples, type = "percentile", level = .95) {
+  samples <- as.matrix(samples)
   if (type == "percentile") {
     CIlower = apply(samples, 2, function(x) quantile(x, (1 - level) / 2))
     CIupper = apply(samples, 2, function(x) quantile(x, (1 + level) / 2))

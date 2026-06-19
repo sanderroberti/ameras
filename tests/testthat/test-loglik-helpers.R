@@ -367,6 +367,30 @@ test_that("single-dose loglik helper matches direct multinomial likelihood", {
   )
 })
 
+test_that("multinomial likelihood keeps single-X coefficient blocks as matrices", {
+  data <- make_loglik_test_data()
+
+  # With one baseline covariate and more than two outcome levels, the covariate
+  # coefficient block is one row by multiple columns. This guards against that
+  # one-row matrix being simplified to a vector before matrix multiplication.
+  expect_true(is.finite(
+    ameras:::loglik.multinomial(
+      params = c(-0.5, 0.2, 0.1, 0.1, -0.2, 0.05),
+      D = "V1",
+      X = "X1",
+      Y = "Y.multinomial",
+      M = NULL,
+      doseRRmod = "EXP",
+      data = data,
+      deg = 1,
+      ERC = FALSE,
+      Kmat = NULL,
+      loglim = 1e-30,
+      transform = NULL
+    )
+  ))
+})
+
 test_that("single-dose loglik helper matches direct clogit likelihood", {
   object <- make_loglik_test_object(
     "clogit",

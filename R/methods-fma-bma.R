@@ -564,6 +564,7 @@ ameras.bma <- function(
       "Supply included.realizations explicitly."
     )
   }
+  check_included_realizations_BMA(included.realizations, dosevars)
 
   if (family == "gaussian") {
     if (is.null(Y)) {
@@ -572,7 +573,7 @@ ameras.bma <- function(
 
     dosevars <- dosevars[included.realizations]
 
-    nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars])
+    nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars, drop = FALSE])
 
     nimbleinits <- function() {
       L <- list(
@@ -605,7 +606,7 @@ ameras.bma <- function(
 
     dosevars <- dosevars[included.realizations]
 
-    nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars])
+    nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars, drop = FALSE])
 
     nimbleinits <- function() {
       L <- list(
@@ -643,7 +644,7 @@ ameras.bma <- function(
 
     dosevars <- dosevars[included.realizations]
 
-    nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars])
+    nimbledata <- list(Y = data[, Y], dosemat = data[, dosevars, drop = FALSE])
 
     nimbleinits <- function() {
       L <- list(
@@ -709,7 +710,7 @@ ameras.bma <- function(
     nimbledata <- list(
       delta = data[, status],
       exit = data[, exit],
-      dosemat = data[, dosevars],
+      dosemat = data[, dosevars, drop = FALSE],
       zeros = rep(0, nrow(data))
     )
     if (!is.null(entry)) {
@@ -754,7 +755,7 @@ ameras.bma <- function(
 
     nimbledata <- list(
       Y = as.numeric(data[, status]),
-      dosemat = data[, dosevars]
+      dosemat = data[, dosevars, drop = FALSE]
     )
 
     nimbleinits <- function() {
@@ -786,7 +787,7 @@ ameras.bma <- function(
 
     nimbledata <- list(
       Y = model.matrix(~ data[, Y] - 1),
-      dosemat = data[, dosevars]
+      dosemat = data[, dosevars, drop = FALSE]
     )
 
     nimbleinits <- function() {
