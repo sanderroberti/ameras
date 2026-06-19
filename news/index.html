@@ -54,6 +54,10 @@
 <ul><li>Fixed an issue with FMA where large differences in AIC values between dose realizations caused <code>NaN</code> weights, resulting in an error.</li>
 <li>Fixed an issue where a subsequent call to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> would print intervals for dose-related parameters only. <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now prints intervals for all parameters.</li>
 <li>Fixed validation for proportional hazards models specified with <code>Surv(entry, exit, status)</code>. <code><a href="../reference/ameras.html">ameras()</a></code> now correctly checks the observed entry and exit time values and errors when any subject has <code>entry &gt; exit</code>.</li>
+<li>Fixed conditional logistic regression fits with <code>strata()</code> terms that use a matched set column name other than <code>setnr</code>.</li>
+<li>Fixed BMA handling for models with a single sampled model parameter by preserving one-column MCMC sample matrices internally, including during sample-based confidence interval construction.</li>
+<li>BMA now errors clearly if <code>included.realizations.BMA</code> leaves fewer than two dose realizations, since one-realization analyses should use RC.</li>
+<li>Conditional logistic regression now explicitly excludes matched sets of size 1 and matched sets with no cases, and errors for matched sets with more than one case.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
@@ -64,6 +68,7 @@
 <li>Streamlined information printed by <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>: columns <code>pval.lower</code> and <code>pval.upper</code> for profile likelihood intervals are no longer printed. They are still accessible within the fit object, and warnings are still printed in case an inaccurate profile likelihood bound is suspected.</li>
 <li>Added structured timing information to fitted method results, separating fitting time, confidence interval computation time, and total time. Printed runtime summaries now use CPU time, so time spent while the computer is asleep is not counted. The existing <code>runtime</code> field is retained as a compatibility summary and is updated when <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> adds confidence interval timing.</li>
 <li>Added vignettes for standard analyses with one dose realization, manual FMA from realization-specific RC fits, and parallel FMA with the <code>future</code> framework.</li>
+<li>Added validation to reject input data containing the reserved internal column name <code>rcdose_ameras</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">

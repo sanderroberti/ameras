@@ -444,9 +444,11 @@ interactions such as `X1*X2`. The matched set variable `setnr` required
 for conditional logistic regression is specified on the right-hand side
 of the formula through a term `strata(setnr)`, and an optional offset
 variable `offset` for Poisson regression similarly through a term
-`offset(offset)`. For proportional hazards regression, the left-hand
-side of the formula should have the form `Surv(exit, status)` or
-`Surv(entry, exit, status)`.
+`offset(offset)`. For conditional logistic regression, matched sets of
+size 1 and matched sets with no cases are excluded, and matched sets
+with more than one case are not currently supported. For proportional
+hazards regression, the left-hand side of the formula should have the
+form `Surv(exit, status)` or `Surv(entry, exit, status)`.
 
 A transformation can be used to reparametrize parameters internally
 (i.e., such that the likelihoods are evaluated at
@@ -553,12 +555,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.378 0.0 0.378
+#>      RC 0.347 0.0 0.347
 #> 
 #> Estimated model parameters:
 #> 

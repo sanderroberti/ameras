@@ -192,12 +192,12 @@ summary(fit.ameras.sigmoid)
 #>     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, 
 #>     index.t = 4:5)
 #> 
-#> Total CPU runtime: 0.7 seconds
+#> Total CPU runtime: 0.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.651 0.0 0.651
+#>      RC 0.598 0.0 0.598
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -223,12 +223,12 @@ summary(fit.ameras.transform1)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.353 0.0 0.353
+#>      RC 0.342 0.0 0.342
 #> 
 #> Summary of coefficients by method:
 #> 
