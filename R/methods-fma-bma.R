@@ -1,11 +1,95 @@
-summarize_fma_realization_fit <- function(fit, npar) {
-  list(
-    coef = fit$par,
-    hess = fit$hessian,
+summarize_fma_realization_fit <- function(
+  fit,
+  npar,
+  transform = NULL,
+  transform.jacobian = NULL,
+  ...
+) {
+  out <- list(
     AIC = 2 * fit$value + 2 * npar,
     convergence = fit$convergence,
-    include = fit_passes_hessian_check(fit)
+    include = FALSE,
+    exclude.reason = NULL,
+    sampling = NULL
   )
+
+  if (!fit_passes_hessian_check(fit)) {
+    out$exclude.reason <- "hessian"
+    return(out)
+  }
+
+  sampling <- prepare_fma_sampling_inputs(
+    params = fit$par,
+    hessian = fit$hessian,
+    transform = transform,
+    transform.jacobian = transform.jacobian,
+    ...
+  )
+
+  if (is.null(sampling)) {
+    out$exclude.reason <- "sampling"
+    return(out)
+  }
+
+  out$include <- TRUE
+  out$sampling <- sampling
+  out
+}
+
+prepare_fma_sampling_inputs <- function(
+  params,
+  hessian,
+  transform = NULL,
+  transform.jacobian = NULL,
+  ...
+) {
+  # A realization can pass the optimizer/Hessian screen but still fail when
+  # its Hessian is inverted or transformed for FMA sampling. Validate the
+  # actual mean/covariance pair before handing it to mvtnorm::rmvnorm().
+  if (!is.null(transform) && !is.null(transform.jacobian)) {
+    if (!is.function(transform) || !is.function(transform.jacobian)) {
+      stop("transform and transform.jacobian should be functions")
+    }
+
+    samplemeans <- transform(params, ...)
+    cholH <- tryCatch(chol(hessian), error = function(e) NULL)
+    if (is.null(cholH)) {
+      return(NULL)
+    }
+
+    jac <- transform.jacobian(params, ...)
+    tmpsolve <- tryCatch(
+      backsolve(cholH, t(jac), transpose = TRUE),
+      error = function(e) NULL
+    )
+    if (is.null(tmpsolve)) {
+      return(NULL)
+    }
+
+    samplevar <- crossprod(tmpsolve)
+    #samplevar <- jac %*% solve(hessian) %*% t(jac)
+  } else {
+    samplemeans <- params
+    samplevar <- tryCatch(
+      chol2inv(chol(hessian)),
+      error = function(e) NULL
+    )
+  }
+
+  if (
+    is.null(samplevar) ||
+      !is.numeric(samplemeans) ||
+      !is.numeric(samplevar) ||
+      length(dim(samplevar)) != 2 ||
+      nrow(samplevar) != ncol(samplevar) ||
+      nrow(samplevar) != length(samplemeans) ||
+      any(!is.finite(samplemeans)) ||
+      any(!is.finite(samplevar))
+  ) {
+    return(NULL)
+  }
+
+  list(mean = samplemeans, var = samplevar)
 }
 
 fma_realization_lapply <- function(
@@ -55,6 +139,7 @@ fit_fma_realizations <- function(
   doseRRmod = NULL,
   deg = 1,
   transform = NULL,
+  transform.jacobian = NULL,
   designmat = NULL,
   future.chunk.size.FMA = NULL,
   ...
@@ -88,7 +173,13 @@ fit_fma_realizations <- function(
       control = control,
       ...
     )
-    summarize_fma_realization_fit(fit, npar)
+    summarize_fma_realization_fit(
+      fit,
+      npar,
+      transform = transform,
+      transform.jacobian = transform.jacobian,
+      ...
+    )
   }, future.chunk.size.FMA = future.chunk.size.FMA)
 }
 
@@ -99,14 +190,20 @@ assemble_fma_result <- function(
   inpar,
   MFMA,
   unweighted = FALSE,
-  transform = NULL,
-  transform.jacobian = NULL,
-  t0 = proc.time(),
-  ...
+  t0 = proc.time()
 ) {
   n_total <- length(dosevars)
-  n_hess_included <- sum(sapply(FMAfits, function(x) x$include))
-  n_hess_excluded <- n_total - n_hess_included
+  exclude_reason <- vapply(
+    FMAfits,
+    function(x) x$exclude.reason %||% if (isTRUE(x$include)) NA_character_ else "hessian",
+    character(1)
+  )
+  hess_excluded <- !is.na(exclude_reason) & exclude_reason == "hessian"
+  sampling_excluded <- !is.na(exclude_reason) & exclude_reason == "sampling"
+  included <- vapply(FMAfits, function(x) isTRUE(x$include), logical(1))
+
+  n_hess_excluded <- sum(hess_excluded)
+  n_hess_included <- n_total - n_hess_excluded
 
   # First drop fits that never produced a usable optimum/covariance basis.
   if (n_hess_excluded > 0) {
@@ -119,10 +216,25 @@ assemble_fma_result <- function(
     )
   }
 
-  if (sum(sapply(FMAfits, function(x) x$include)) > 0) {
-    original_indices <- which(sapply(FMAfits, function(x) x$include))
-    FMAfits <- FMAfits[sapply(FMAfits, function(x) x$include)]
+  # Recompute model-averaging weights after this exclusion so reported weights
+  # refer only to realizations that can actually contribute draws.
+  n_sampling_excluded <- sum(sampling_excluded)
+  if (n_sampling_excluded > 0) {
+    warning(
+      n_sampling_excluded,
+      " of ",
+      n_hess_included,
+      " Hessian-eligible realization(s) excluded because FMA sampling ",
+      "means or covariance matrices contained non-finite values or could ",
+      "not be computed."
+    )
+  }
 
+  original_indices <- which(included)
+  FMAfits <- FMAfits[included]
+  sampling_inputs <- lapply(FMAfits, function(x) x$sampling)
+
+  if (length(FMAfits) > 0) {
     minAIC <- min(sapply(FMAfits, function(x) x$AIC))
 
     FMAfits <- lapply(FMAfits, function(x) {
@@ -164,29 +276,20 @@ assemble_fma_result <- function(
     }
 
     if (length(included.realizations) > 0) {
-      FMAfits <- FMAfits[sapply(FMAfits, function(x) x$include)]
-      FMAsamples <- lapply(
-        FMAfits,
-        function(fit.FMAi, ...) {
-          if (!is.null(transform) & !is.null(transform.jacobian)) {
-            if (is.function(transform) & is.function(transform.jacobian)) {
-              samplemeans <- transform(fit.FMAi$coef, ...)
-              cholH <- chol(fit.FMAi$hess)
-              jac <- transform.jacobian(fit.FMAi$coef, ...)
-              tmpsolve <- backsolve(cholH, t(jac), transpose = TRUE)
-              samplevar <- crossprod(tmpsolve)
-              #samplevar <- jac %*% solve(fit.FMAi$hess) %*% t(jac)
-            } else {
-              stop("transform and transform.jacobian should be functions")
-            }
-          } else {
-            samplemeans <- fit.FMAi$coef
-            samplevar <- chol2inv(chol(fit.FMAi$hess))
-          }
+      weight_included <- sapply(FMAfits, function(x) x$include)
+      FMAfits <- FMAfits[weight_included]
+      sampling_inputs <- sampling_inputs[weight_included]
 
-          return(rmvnorm(n = fit.FMAi$M, mean = samplemeans, sigma = samplevar))
+      FMAsamples <- Map(
+        function(fit.FMAi, sampling_input) {
+          rmvnorm(
+            n = fit.FMAi$M,
+            mean = sampling_input$mean,
+            sigma = sampling_input$var
+          )
         },
-        ...
+        FMAfits,
+        sampling_inputs
       )
 
       FMAsamples <- do.call("rbind", FMAsamples)
@@ -313,6 +416,7 @@ ameras.fma <- function(
       X = X,
       deg = deg,
       transform = transform,
+      transform.jacobian = transform.jacobian,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
@@ -340,6 +444,7 @@ ameras.fma <- function(
       doseRRmod = doseRRmod,
       deg = deg,
       transform = transform,
+      transform.jacobian = transform.jacobian,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
@@ -368,6 +473,7 @@ ameras.fma <- function(
       doseRRmod = doseRRmod,
       deg = deg,
       transform = transform,
+      transform.jacobian = transform.jacobian,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
@@ -400,6 +506,7 @@ ameras.fma <- function(
       doseRRmod = doseRRmod,
       deg = deg,
       transform = transform,
+      transform.jacobian = transform.jacobian,
       designmat = designmat,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
@@ -436,6 +543,7 @@ ameras.fma <- function(
       doseRRmod = doseRRmod,
       deg = deg,
       transform = transform,
+      transform.jacobian = transform.jacobian,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
@@ -467,6 +575,7 @@ ameras.fma <- function(
       doseRRmod = doseRRmod,
       deg = deg,
       transform = transform,
+      transform.jacobian = transform.jacobian,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
@@ -489,10 +598,7 @@ ameras.fma <- function(
     inpar = inpar,
     MFMA = MFMA,
     unweighted = unweighted,
-    transform = transform,
-    transform.jacobian = transform.jacobian,
-    t0 = t0,
-    ...
+    t0 = t0
   )
 
   return(out)

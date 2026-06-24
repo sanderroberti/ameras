@@ -48,6 +48,16 @@ test_that("fit_passes_hessian_check rejects unusable fits", {
     convergence = 0,
     hessian = matrix(-1, nrow = 1)
   )))
+  expect_false(ameras:::fit_passes_hessian_check(list(
+    convergence = 0,
+    hessian = matrix(Inf, nrow = 1)
+  )))
+  expect_false(ameras:::fit_passes_hessian_check(list(
+    convergence = 0,
+    hessian = matrix(NA_real_, nrow = 1)
+  )))
+  expect_false(ameras:::hessian_supports_vcov(matrix(Inf, nrow = 1)))
+  expect_false(ameras:::hessian_supports_vcov(matrix(NA_real_, nrow = 1)))
 })
 
 test_that("assemble_frequentist_fit_result handles untransformed fits", {

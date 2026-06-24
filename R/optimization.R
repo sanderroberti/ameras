@@ -53,10 +53,23 @@ fit_objective_with_hessian <- function(
   fit
 }
 
+is_finite_square_matrix <- function(x) {
+  !is.null(x) &&
+    is.numeric(x) &&
+    length(dim(x)) == 2 &&
+    nrow(x) == ncol(x) &&
+    nrow(x) > 0 &&
+    all(is.finite(x))
+}
+
 # Convergence-aware Hessian screen used when deciding whether a realization is
 # admissible before model averaging.
 fit_passes_hessian_check <- function(fit) {
   if (is.null(fit$hessian) || fit$convergence != 0) {
+    return(FALSE)
+  }
+
+  if (!is_finite_square_matrix(fit$hessian)) {
     return(FALSE)
   }
 
@@ -69,6 +82,10 @@ fit_passes_hessian_check <- function(fit) {
 # is usable. This deliberately does not check optimizer convergence, preserving
 # the pre-refactor result assembly behavior for those methods.
 hessian_supports_vcov <- function(hessian) {
+  if (!is_finite_square_matrix(hessian)) {
+    return(FALSE)
+  }
+
   det(hessian) != 0 &&
     rcond(hessian) > .Machine$double.eps &&
     all(eigen(hessian)$values > 0)

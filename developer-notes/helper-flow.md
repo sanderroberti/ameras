@@ -36,7 +36,7 @@ flowchart TD
   JA -->|FMA realization objective| N
 
   N -->|MCML, RC, ERC| O["assemble_frequentist_fit_result()<br/>MCML, RC, ERC"]
-  N -->|FMA| P["summarize_fma_realization_fit()<br/>fit_passes_hessian_check()"]
+  N -->|FMA| P["summarize_fma_realization_fit()<br/>fit_passes_hessian_check()<br/>prepare_fma_sampling_inputs()"]
 
   G --> Q["assemble_fma_result()<br/>FMA weights and samples"]
   P --> Q
@@ -124,14 +124,16 @@ back to `lapply()`. `ameras()` never sets a `future::plan()` internally; users
 control whether FMA runs sequentially or in parallel by setting the plan before
 calling `ameras()`. Each fitted realization is summarized by
 `summarize_fma_realization_fit()`, which calls `fit_passes_hessian_check()` to
-decide whether the realization is admissible before model averaging. This check
-is stricter than `hessian_supports_vcov()` because FMA screening also requires
-optimizer convergence.
+screen optimizer convergence and Hessian usability before model averaging.
+For Hessian-eligible realizations, `prepare_fma_sampling_inputs()` then creates
+and validates the transformed or untransformed mean/covariance pair used for
+FMA sampling. The summary object stores only these validated sampling inputs,
+not the raw optimizer coefficients and Hessian.
 
-`assemble_fma_result()` takes those realization summaries, applies the
-convergence/Hessian and negligible-weight exclusions, computes AIC weights,
-allocates `MFMA` samples, draws transformed or untransformed coefficient
-samples, and packages the final FMA result. Keeping this assembly logic
+`assemble_fma_result()` takes those realization summaries, reports the
+realization-level exclusions, applies negligible-weight exclusions, computes
+AIC weights, allocates `MFMA` samples, draws from the validated coefficient
+sampling inputs, and packages the final FMA result. Keeping this assembly logic
 separate makes it reusable for future manual or chunked FMA workflows without
 adding exported API.
 
