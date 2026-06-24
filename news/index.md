@@ -21,6 +21,10 @@
 - Fixed BMA handling for models with a single sampled model parameter by
   preserving one-column MCMC sample matrices internally, including
   during sample-based confidence interval construction.
+- Fixed an issue where an FMA realization with a finite fitted Hessian
+  but non-finite sampling covariance could trigger a low-level
+  `rmvnorm()` error. Such realizations are now excluded with a warning
+  before FMA weights and samples are computed.
 - BMA now errors clearly if `included.realizations.BMA` leaves fewer
   than two dose realizations, since one-realization analyses should use
   RC.

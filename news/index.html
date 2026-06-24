@@ -56,6 +56,7 @@
 <li>Fixed validation for proportional hazards models specified with <code>Surv(entry, exit, status)</code>. <code><a href="../reference/ameras.html">ameras()</a></code> now correctly checks the observed entry and exit time values and errors when any subject has <code>entry &gt; exit</code>.</li>
 <li>Fixed conditional logistic regression fits with <code>strata()</code> terms that use a matched set column name other than <code>setnr</code>.</li>
 <li>Fixed BMA handling for models with a single sampled model parameter by preserving one-column MCMC sample matrices internally, including during sample-based confidence interval construction.</li>
+<li>Fixed an issue where an FMA realization with a finite fitted Hessian but non-finite sampling covariance could trigger a low-level <code>rmvnorm()</code> error. Such realizations are now excluded with a warning before FMA weights and samples are computed.</li>
 <li>BMA now errors clearly if <code>included.realizations.BMA</code> leaves fewer than two dose realizations, since one-realization analyses should use RC.</li>
 <li>Conditional logistic regression now explicitly excludes matched sets of size 1 and matched sets with no cases, and errors for matched sets with more than one case.</li>
 </ul></div>
