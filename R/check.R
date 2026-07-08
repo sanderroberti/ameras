@@ -122,6 +122,95 @@ check_X <- function(vars, data) {
   NULL
 }
 
+
+warn_if_poorly_conditioned_X <- function(
+  X_matrix,
+  family,
+  mean_sd_threshold = 100,
+  sd_ratio_threshold = 1e4,
+  kappa_threshold = 1e6
+) {
+  if (is.null(X_matrix) || !length(X_matrix)) {
+    return(invisible(NULL))
+  }
+
+  X_matrix <- as.matrix(X_matrix)
+  if (!nrow(X_matrix) || !ncol(X_matrix) || !all(is.finite(X_matrix))) {
+    return(invisible(NULL))
+  }
+
+  sds <- apply(X_matrix, 2, sd)
+  means <- colMeans(X_matrix)
+  nonzero_sd <- is.finite(sds) & sds > 0
+  details <- character()
+
+  if (any(!nonzero_sd)) {
+    details <- c(
+      details,
+      paste0(
+        "near-zero variation in ",
+        paste(colnames(X_matrix)[!nonzero_sd], collapse = ", ")
+      )
+    )
+  }
+
+  if (any(nonzero_sd)) {
+    mean_sd_ratio <- abs(means[nonzero_sd]) / sds[nonzero_sd]
+    large_mean <- mean_sd_ratio > mean_sd_threshold
+    if (any(large_mean)) {
+      details <- c(
+        details,
+        paste0(
+          "large mean relative to standard deviation in ",
+          paste(names(mean_sd_ratio)[large_mean], collapse = ", ")
+        )
+      )
+    }
+
+    sd_ratio <- max(sds[nonzero_sd]) / min(sds[nonzero_sd])
+    if (is.finite(sd_ratio) && sd_ratio > sd_ratio_threshold) {
+      details <- c(
+        details,
+        paste0(
+          "standard deviations differ by a factor of ",
+          signif(sd_ratio, 4)
+        )
+      )
+    }
+  }
+
+  design <- if (family %in% c("gaussian", "binomial", "poisson", "multinomial")) {
+    cbind(`(Intercept)` = 1, X_matrix)
+  } else {
+    X_matrix
+  }
+  if (ncol(design) > 1 && nrow(design) >= ncol(design)) {
+    design_kappa <- tryCatch(kappa(design), error = function(e) NA_real_)
+    if (is.finite(design_kappa) && design_kappa > kappa_threshold) {
+      details <- c(
+        details,
+        paste0("design condition number is ", signif(design_kappa, 4))
+      )
+    }
+  }
+
+  if (length(details)) {
+    warning(
+      paste0(
+        "WARNING: X covariates appear poorly scaled or ill-conditioned (",
+        paste(unique(details), collapse = "; "),
+        "). This can make optimizer convergence unreliable. Consider ",
+        "centering/scaling continuous covariates, such as calendar year, ",
+        "before fitting."
+      ),
+      call. = FALSE
+    )
+  }
+
+  invisible(NULL)
+}
+
+
 check_offset <- function(v, data) {
   if (!length(v)) {
     return(NULL)

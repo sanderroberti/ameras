@@ -13,6 +13,7 @@ importFrom(
   "qnorm",
   "rnorm",
   "runif",
+  "sd",
   "uniroot",
   "optimize",
   ".getXlevels",
@@ -55,6 +56,7 @@ export(
   ecdfplot,
   Rhat,
   included_realizations,
+  convergence,
   summary_table
 )
 S3method(coef, amerasfit)
@@ -64,6 +66,7 @@ S3method(traceplot, amerasfit)
 S3method(print, amerasfit)
 S3method(confint, amerasfit)
 S3method(included_realizations, amerasfit)
+S3method(convergence, amerasfit)
 S3method(Rhat, amerasfit)
 S3method(residuals, amerasfit)
 S3method(plot, amerasfit)

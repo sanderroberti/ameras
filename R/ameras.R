@@ -545,6 +545,13 @@ ameras <- function(
     data <- filter_clogit_sets(data, status, parsed$setnr)
   }
 
+  if (!is.null(X)) {
+    warn_if_poorly_conditioned_X(
+      X_matrix = data[, X, drop = FALSE],
+      family = family
+    )
+  }
+
   deg <- check_deg(parsed$deg)
 
   if (!is.null(parsed$doseRRmod) && parsed$doseRRmod == "LINEXP") {

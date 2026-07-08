@@ -79,7 +79,10 @@ adds `rcdose_ameras`, and stores enough model metadata for later methods such as
 expanded through `build_X_design()`, which stores model-matrix design
 information in `model$X_design_info`. `resolve_data()` reuses that information
 so supplied data can rebuild factor, interaction, and spline basis columns
-consistently when `keep.data = FALSE`.
+consistently when `keep.data = FALSE`. After missing-value handling and any
+matched-set filtering, `warn_if_poorly_conditioned_X()` checks the fitted
+covariate design for severe scaling or conditioning problems. This is a
+diagnostic only; it does not alter the fitted data or coefficients.
 
 `ameras_main()` dispatches to the method-specific fitting functions:
 
@@ -113,13 +116,18 @@ log-mean-exp calculation.
 
 `fit_objective_with_hessian()` is the shared optimizer wrapper. It normalizes
 the scalar `optimize()` path and the general `optim()` path into one fit object
-shape, then attaches a numeric Hessian. MCML, RC/ERC, and FMA all use this
-optimizer helper.
+shape, then attaches a numeric Hessian. For general `optim()` fits, it also
+stores numerical gradient diagnostics. MCML, RC/ERC, and FMA all use this
+optimizer helper, but FMA disables the gradient check inside the
+per-realization loop to avoid extra overhead and warning noise.
 
 `assemble_frequentist_fit_result()` packages MCML and RC/ERC results. It applies
 any transform, propagates variance through `transform.jacobian`, names
-coefficients and covariance matrices, stores optimizer details, and preserves
-method-specific fields such as `ERC`.
+coefficients and covariance matrices, warns if `optim()` reported convergence
+despite a large numerical gradient, stores optimizer details, and preserves
+method-specific fields such as `ERC`. The `convergence()` method can later
+extract those stored gradient diagnostics or reconstruct the same likelihood
+to compute them for older fitted objects.
 
 FMA uses `fit_fma_realizations()` to build and fit one likelihood per dose
 realization. The realization loop goes through `fma_realization_lapply()`,

@@ -171,6 +171,7 @@ fit_fma_realizations <- function(
       loglik_fn,
       optim.method = optim.method,
       control = control,
+      gradient.check = FALSE,
       ...
     )
     summarize_fma_realization_fit(

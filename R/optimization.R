@@ -9,6 +9,7 @@ fit_objective_with_hessian <- function(
   lower = -20,
   upper = 5,
   use_optimize = length(start) == 1,
+  gradient.check = !use_optimize,
   ...
 ) {
   if (use_optimize) {
@@ -50,8 +51,126 @@ fit_objective_with_hessian <- function(
     x = fit$par,
     ...
   )
+  if (isTRUE(gradient.check)) {
+    fit <- add_optimizer_gradient_diagnostics(fit, fn, ...)
+  }
   fit
 }
+
+
+add_optimizer_gradient_diagnostics <- function(fit, fn, ...) {
+  fit$gradient <- tryCatch(
+    numDeriv::grad(
+      func = fn,
+      x = fit$par,
+      ...
+    ),
+    error = function(e) {
+      fit$gradient.error <- conditionMessage(e)
+      NULL
+    }
+  )
+
+  if (!is.null(fit$gradient) && all(is.finite(fit$gradient))) {
+    fit$gradient.max.abs <- max(abs(fit$gradient))
+    fit$gradient.rms <- sqrt(mean(fit$gradient^2))
+    fit$gradient.scaled.rms <- fit$gradient.rms / max(1, abs(fit$value))
+  }
+
+  fit
+}
+
+
+optimizer_gradient_is_large <- function(
+  fit,
+  abs.tol = 1e-3,
+  rel.tol = 1e-4
+) {
+  isTRUE(fit$convergence == 0) &&
+    is.numeric(fit$gradient.rms) &&
+    is.numeric(fit$gradient.scaled.rms) &&
+    is.finite(fit$gradient.rms) &&
+    is.finite(fit$gradient.scaled.rms) &&
+    fit$gradient.rms > abs.tol &&
+    fit$gradient.scaled.rms > rel.tol
+}
+
+
+warn_if_large_optimizer_gradient <- function(fit) {
+  if (!optimizer_gradient_is_large(fit)) {
+    return(invisible(NULL))
+  }
+
+  warning(
+    paste0(
+      "WARNING: optim() reported convergence, but the numerical gradient ",
+      "at the solution is still large (RMS gradient = ",
+      signif(fit$gradient.rms, 4),
+      ", scaled RMS gradient = ",
+      signif(fit$gradient.scaled.rms, 4),
+      ", max absolute gradient = ",
+      signif(fit$gradient.max.abs, 4),
+      "). The fit may be sensitive to covariate scaling or starting values; ",
+      "consider centering/scaling continuous covariates, supplying inpar, ",
+      "or adjusting optimizer controls."
+    ),
+    call. = FALSE
+  )
+
+  invisible(NULL)
+}
+
+
+compute_fit_gradient_diagnostics <- function(
+  object,
+  method_name,
+  method_fit,
+  data
+) {
+  fit <- list(
+    par = method_fit$optim$par,
+    value = -1 * method_fit$loglik,
+    convergence = method_fit$optim$convergence
+  )
+  loglik_fn <- make_loglik_fn(object, method_name, method_fit, data)
+  add_optimizer_gradient_diagnostics(fit, loglik_fn)
+}
+
+
+stored_gradient_diagnostics <- function(method_fit) {
+  optim <- method_fit$optim
+
+  if (
+    is.null(optim$gradient.rms) ||
+      is.null(optim$gradient.scaled.rms) ||
+      is.null(optim$gradient.max.abs)
+  ) {
+    return(NULL)
+  }
+
+  list(
+    convergence = optim$convergence,
+    gradient = optim$gradient,
+    gradient.max.abs = optim$gradient.max.abs,
+    gradient.rms = optim$gradient.rms,
+    gradient.scaled.rms = optim$gradient.scaled.rms
+  )
+}
+
+
+gradient_diagnostic_row <- function(method_name, fit) {
+  gradient_large <- optimizer_gradient_is_large(fit)
+  data.frame(
+    method = method_name,
+    convergence = fit$convergence %||% NA_integer_,
+    gradient.rms = fit$gradient.rms %||% NA_real_,
+    gradient.scaled.rms = fit$gradient.scaled.rms %||% NA_real_,
+    gradient.max.abs = fit$gradient.max.abs %||% NA_real_,
+    gradient.large = gradient_large,
+    row.names = method_name
+  )
+}
+
 
 is_finite_square_matrix <- function(x) {
   !is.null(x) &&
@@ -147,6 +266,8 @@ assemble_frequentist_fit_result <- function(
     }
   }
 
+  warn_if_large_optimizer_gradient(fit)
+
   names(coefs) <- parnames
   rownames(vcov) <- colnames(vcov) <- parnames
 
@@ -161,6 +282,10 @@ assemble_frequentist_fit_result <- function(
       optim = list(
         par = fit$par,
         hessian = fit$hessian,
+        gradient = fit$gradient,
+        gradient.max.abs = fit$gradient.max.abs,
+        gradient.rms = fit$gradient.rms,
+        gradient.scaled.rms = fit$gradient.scaled.rms,
         convergence = fit$convergence,
         counts = fit$counts
       ),

@@ -436,7 +436,7 @@ resolve_data <- function(object, data = NULL) {
   if (is.null(data)) {
     stop(
       "Data not stored on object (keep.data=FALSE). ",
-      "Please supply data argument to confint()."
+      "Please supply data argument."
     )
   }
 

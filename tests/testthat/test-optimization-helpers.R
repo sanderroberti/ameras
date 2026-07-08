@@ -19,6 +19,8 @@ test_that("fit_objective_with_hessian handles multi-parameter objectives", {
   expect_equal(fit$par, c(1, -2), tolerance = 1e-5)
   expect_equal(fit$value, 0, tolerance = 1e-8)
   expect_equal(fit$convergence, 0)
+  expect_lt(fit$gradient.rms, 1e-5)
+  expect_lt(fit$gradient.scaled.rms, 1e-5)
   expect_true(ameras:::fit_passes_hessian_check(fit))
 })
 
@@ -58,6 +60,126 @@ test_that("fit_passes_hessian_check rejects unusable fits", {
   )))
   expect_false(ameras:::hessian_supports_vcov(matrix(Inf, nrow = 1)))
   expect_false(ameras:::hessian_supports_vcov(matrix(NA_real_, nrow = 1)))
+})
+
+test_that("optimizer gradient diagnostics warn only for suspicious convergence", {
+  suspicious_fit <- list(
+    convergence = 0,
+    gradient.rms = 10,
+    gradient.scaled.rms = 1e-2,
+    gradient.max.abs = 12
+  )
+  acceptable_fit <- list(
+    convergence = 0,
+    gradient.rms = 1e-5,
+    gradient.scaled.rms = 1e-7,
+    gradient.max.abs = 2e-5
+  )
+  not_converged_fit <- suspicious_fit
+  not_converged_fit$convergence <- 1
+
+  # The diagnostic is intentionally warning-only: it flags cases where optim()
+  # reports convergence but the objective is not locally flat enough.
+  expect_warning(
+    ameras:::warn_if_large_optimizer_gradient(suspicious_fit),
+    "numerical gradient"
+  )
+  expect_silent(ameras:::warn_if_large_optimizer_gradient(acceptable_fit))
+  expect_silent(ameras:::warn_if_large_optimizer_gradient(not_converged_fit))
+})
+
+test_that("convergence extracts and recomputes optimizer gradients", {
+  set.seed(20260708)
+  D <- runif(40, 0.1, 1.5)
+  X <- seq(-1, 1, length.out = 40)
+  dat <- data.frame(
+    Y = 1 + 0.7 * D + 0.4 * X + rnorm(40, sd = 0.25),
+    D = D,
+    X = X
+  )
+  fit <- suppressWarnings(suppressMessages(
+    ameras(
+      Y ~ dose(D) + X,
+      data = dat,
+      family = "gaussian",
+      methods = "RC"
+    )
+  ))
+
+  stored <- convergence(fit)
+  expect_s3_class(stored, "data.frame")
+  expect_identical(rownames(stored), "RC")
+  expect_named(
+    stored,
+    c(
+      "method",
+      "convergence",
+      "gradient.rms",
+      "gradient.scaled.rms",
+      "gradient.max.abs",
+      "gradient.large"
+    )
+  )
+  expect_equal(stored$convergence, 0)
+  expect_true(is.finite(stored$gradient.rms))
+
+  # Simulate an object fitted before gradient diagnostics were stored. The
+  # method should reconstruct the likelihood and compute the gradient on demand.
+  old_fit <- fit
+  old_fit$RC$optim$gradient <- NULL
+  old_fit$RC$optim$gradient.max.abs <- NULL
+  old_fit$RC$optim$gradient.rms <- NULL
+  old_fit$RC$optim$gradient.scaled.rms <- NULL
+
+  recomputed <- convergence(old_fit)
+  expect_equal(recomputed$gradient.rms, stored$gradient.rms, tolerance = 1e-6)
+  expect_equal(
+    recomputed$gradient.scaled.rms,
+    stored$gradient.scaled.rms,
+    tolerance = 1e-6
+  )
+})
+
+test_that("convergence reports unsupported model-averaging methods", {
+  fit <- list(FMA = list(samples = data.frame(dose = 1:3)))
+  class(fit) <- "amerasfit"
+
+  expect_error(
+    convergence(fit, methods = "FMA"),
+    "available for RC, ERC, and MCML"
+  )
+})
+
+test_that("convergence can recompute gradients when data were not stored", {
+  set.seed(20260708)
+  D <- runif(40, 0.1, 1.5)
+  X <- seq(-1, 1, length.out = 40)
+  dat <- data.frame(
+    Y = 1 + 0.7 * D + 0.4 * X + rnorm(40, sd = 0.25),
+    D = D,
+    X = X
+  )
+  fit <- suppressWarnings(suppressMessages(
+    ameras(
+      Y ~ dose(D) + X,
+      data = dat,
+      family = "gaussian",
+      methods = "RC",
+      keep.data = FALSE
+    )
+  ))
+
+  fit$RC$optim$gradient <- NULL
+  fit$RC$optim$gradient.max.abs <- NULL
+  fit$RC$optim$gradient.rms <- NULL
+  fit$RC$optim$gradient.scaled.rms <- NULL
+
+  expect_error(
+    convergence(fit),
+    "Data not stored"
+  )
+  expect_no_error(diag <- convergence(fit, data = dat))
+  expect_true(is.finite(diag$gradient.rms))
 })
 
 test_that("assemble_frequentist_fit_result handles untransformed fits", {

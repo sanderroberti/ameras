@@ -32,6 +32,75 @@ vcov.amerasfit <- function(
   if (length(result) == 1) result[[1]] else result
 }
 
+
+convergence <- function(object, ...) {
+  UseMethod("convergence")
+}
+
+
+convergence.amerasfit <- function(
+  object,
+  methods = c("RC", "ERC", "MCML"),
+  data = NULL,
+  recompute = FALSE,
+  warn = FALSE,
+  ...
+) {
+  methods <- match.arg(
+    methods,
+    c("RC", "ERC", "MCML", "FMA", "BMA"),
+    several.ok = TRUE
+  )
+
+  unsupported <- intersect(methods, c("FMA", "BMA"))
+  available <- intersect(
+    methods,
+    names(object)[names(object) %in% c("RC", "ERC", "MCML")]
+  )
+
+  if (!length(available)) {
+    if (length(unsupported)) {
+      stop(
+        "Gradient convergence diagnostics are available for RC, ERC, and MCML ",
+        "fits only. FMA combines realization-specific fits and BMA uses MCMC ",
+        "diagnostics."
+      )
+    }
+    stop("None of the requested methods were run")
+  }
+
+  resolved_data <- NULL
+  rows <- lapply(available, function(method_name) {
+    method_fit <- object[[method_name]]
+    fit_diag <- if (isTRUE(recompute)) {
+      NULL
+    } else {
+      stored_gradient_diagnostics(method_fit)
+    }
+
+    if (is.null(fit_diag)) {
+      if (is.null(resolved_data)) {
+        resolved_data <<- resolve_data(object, data)
+      }
+      fit_diag <- compute_fit_gradient_diagnostics(
+        object = object,
+        method_name = method_name,
+        method_fit = method_fit,
+        data = resolved_data
+      )
+    }
+
+    if (isTRUE(warn)) {
+      warn_if_large_optimizer_gradient(fit_diag)
+    }
+
+    gradient_diagnostic_row(method_name, fit_diag)
+  })
+
+  do.call(rbind, rows)
+}
+
+
 print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   object0 <- x[intersect(names(x), c("RC", "ERC", "MCML", "FMA", "BMA"))]
 
