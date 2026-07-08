@@ -6,7 +6,7 @@
 * Fixed an issue where a subsequent call to `confint()` would print intervals for dose-related parameters only. `confint()` now prints intervals for all parameters.
 * Fixed validation for proportional hazards models specified with `Surv(entry, exit, status)`. `ameras()` now correctly checks the observed entry and exit time values and errors when any subject has `entry > exit`.
 * Fixed conditional logistic regression fits with `strata()` terms that use a matched set column name other than `setnr`.
-* Fixed BMA handling for models with a single sampled model parameter by preserving one-column MCMC sample matrices internally, including during sample-based confidence interval construction.
+* Fixed BMA handling for models with a single sampled model parameter, including during sample-based confidence interval construction.
 * Fixed an issue where an FMA realization with a finite fitted Hessian but non-finite sampling covariance could trigger a low-level `rmvnorm()` error. Such realizations are now excluded with a warning before FMA weights and samples are computed.
 * BMA now errors clearly if `included.realizations.BMA` leaves fewer than two dose realizations, since one-realization analyses should use RC.
 * Conditional logistic regression now explicitly excludes matched sets of size 1 and matched sets with no cases, and errors for matched sets with more than one case.
@@ -14,17 +14,18 @@
 ## Improvements
 
 * FMA no longer uses a cutoff of 20% excluded realizations before warning about potential computational issues. The user is now always warned about the number of excluded realizations.
-* `ameras()` now supports a `na.action` argument for model-input missing values after formula terms have been expanded. By default it follows `getOption("na.action")` (typically `na.omit`), stores the omitted-row action on the fitted object, and reapplies the same policy when data are supplied for `keep.data=FALSE` downstream methods. `na.fail` and `na.pass` are also supported. `na.exclude` is accepted for fitting, but residuals and diagnostic plots are returned for the fitted rows rather than padded back to the originally supplied row count.
-* FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are now internally excluded. The user is informed of the number of realizations excluded for this reason through a `message()`.
+* `ameras()` now supports a `na.action` argument for model-input missing values after formula terms have been expanded. By default it follows `getOption("na.action")` (typically `na.omit`), stores the omitted-row action on the fitted object, and reapplies the same policy when data are supplied later for objects fitted with `keep.data=FALSE`. `na.fail` and `na.pass` are also supported. `na.exclude` is accepted for fitting, but residuals and diagnostic plots are returned for the fitted rows rather than padded back to the originally supplied row count.
+* FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are excluded. The user is informed of the number of realizations excluded for this reason through a `message()`.
 * Added an additional warning for FMA for the situation when results are based on only 1 or 2-5 realizations after exclusions.
 * FMA realization-specific fits can now use the `future` framework via `future.apply` when available. Users can enable parallel execution by setting a `future` plan before calling `ameras()`, and `future.chunk.size.FMA` controls the chunk size passed to `future.apply::future_lapply()`.
-* Right-hand-side covariate terms now support namespace-qualified model-matrix basis functions such as `splines::ns()` and `splines::bs()`. For `keep.data=FALSE` fits, ameras stores fitted covariate design information so supplied data can rebuild the same expanded columns for downstream methods.
-* Added numerical diagnostics that warn when right-hand-side covariates appear poorly scaled or ill-conditioned, and when `optim()` reports convergence but the numerical gradient at the solution remains large.
+* Right-hand-side covariate terms now support namespace-qualified model-matrix basis functions such as `splines::ns()` and `splines::bs()`. For `keep.data=FALSE` fits, later calls that use supplied data apply the same expanded covariate columns as the original fit.
+* Added numerical diagnostics that warn when right-hand-side covariates appear poorly scaled or ill-conditioned, and when `optim()` reports convergence but optimizer diagnostics suggest the solution may not be fully stationary. When the Hessian is usable, the optimizer warning uses the approximate remaining objective improvement on both absolute and relative scales.
 * Added `convergence()` for `amerasfit` objects to extract or recompute optimizer gradient diagnostics for RC, ERC, and MCML fits.
+* `summary()` now reports row counts in the order applied during fitting: supplied rows, rows omitted by `na.action`, and rows used for fitting. For conditional logistic regression, it also reports rows excluded because they belong to uninformative matched sets.
 * Streamlined information printed by `summary()` and `confint()`: columns `pval.lower` and `pval.upper` for profile likelihood intervals are no longer printed. They are still accessible within the fit object, and warnings are still printed in case an inaccurate profile likelihood bound is suspected.
 * Added structured timing information to fitted method results, separating fitting time, confidence interval computation time, and total time. Printed runtime summaries now use CPU time, so time spent while the computer is asleep is not counted. The existing `runtime` field is retained as a compatibility summary and is updated when `confint()` adds confidence interval timing.
 * Added vignettes for standard analyses with one dose realization, manual FMA from realization-specific RC fits, and parallel FMA with the `future` framework.
-* Added validation to reject input data containing the reserved internal column name `rcdose_ameras`.
+* Added validation to reject input data containing the reserved ameras column name `rcdose_ameras`.
 
 # ameras 0.4.0
 
@@ -35,7 +36,7 @@
 * Fixed an issue where FMA generated an error instead of returning
   `NULL` for generated samples when all individual fits were excluded.
 * Fixed an issue where setting `keep.data=FALSE` and passing data to
-  `confint()` failed an internal check when effect modifiers were
+  `confint()` failed a validation check when effect modifiers were
   present.
 * Fixed an issue where profile likelihood confidence intervals for the
   ERC method of the proportional hazards family were computed using
@@ -139,7 +140,7 @@
 
 * Reduced memory usage for large datasets.
     - Removed the use of an N x N matrix for ERC for the Poisson family, improving both memory and computation speed.
-    - Removed internal duplication of data for RC and ERC for all families.
+    - Removed duplicate data storage for RC and ERC for all families.
 
 * `summary.amerasfit()` now only includes confidence interval columns
   after they have been computed via `confint()`. Before calling
