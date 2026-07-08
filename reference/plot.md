@@ -126,7 +126,10 @@ to the default setting for that function which applies a Kaplan–Meier
 transformation of time.
 
 The data must either be stored on the object (`keep.data=TRUE` in
-`ameras`, the default) or supplied via the `data` argument.
+`ameras`, the default) or supplied via the `data` argument. If the model
+was fitted with `na.exclude`, diagnostic plots use the fitted rows only;
+residuals and fitted values are not padded back to the originally
+supplied row count.
 
 ## See also
 

@@ -37,6 +37,15 @@
 - FMA no longer uses a cutoff of 20% excluded realizations before
   warning about potential computational issues. The user is now always
   warned about the number of excluded realizations.
+- [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) now
+  supports a `na.action` argument for model-input missing values after
+  formula terms have been expanded. By default it follows
+  `getOption("na.action")` (typically `na.omit`), stores the omitted-row
+  action on the fitted object, and reapplies the same policy when data
+  are supplied for `keep.data=FALSE` downstream methods. `na.fail` and
+  `na.pass` are also supported. `na.exclude` is accepted for fitting,
+  but residuals and diagnostic plots are returned for the fitted rows
+  rather than padded back to the originally supplied row count.
 - FMA no longer uses a minimum sample size of 1 for each realization.
   Realizations with a model averaging weight yielding a sample size of 0
   are now internally excluded. The user is informed of the number of
@@ -50,6 +59,13 @@
   [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md),
   and `future.chunk.size.FMA` controls the chunk size passed to
   [`future.apply::future_lapply()`](https://future.apply.futureverse.org/reference/future_lapply.html).
+- Right-hand-side covariate terms now support namespace-qualified
+  model-matrix basis functions such as
+  [`splines::ns()`](https://rdrr.io/r/splines/ns.html) and
+  [`splines::bs()`](https://rdrr.io/r/splines/bs.html). For
+  `keep.data=FALSE` fits, ameras stores fitted covariate design
+  information so supplied data can rebuild the same expanded columns for
+  downstream methods.
 - Streamlined information printed by
   [`summary()`](https://rdrr.io/r/base/summary.html) and
   [`confint()`](https://rdrr.io/r/stats/confint.html): columns

@@ -186,8 +186,8 @@ data.frame(
   elapsed_seconds = round(c(sequential_elapsed, parallel_elapsed), 2)
 )
 #>           plan elapsed_seconds
-#> 1   sequential            1.67
-#> 2 multisession            2.49
+#> 1   sequential            1.93
+#> 2 multisession            2.95
 ```
 
 The estimates should agree up to ordinary numerical precision. Parallel

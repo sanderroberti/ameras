@@ -185,8 +185,10 @@ default) when intervals for the other parameters are not of interest.
 
 When the model was fitted with `keep.data=FALSE` and `type="proflik"` is
 used for `confint`, the original data must be supplied via the `data`
-argument. Wald intervals do not require the data and can always be
-computed from the stored Hessian and parameter estimates alone.
+argument. The missing-value policy used during fitting is reapplied to
+the supplied data before profile likelihood evaluation. Wald intervals
+do not require the data and can always be computed from the stored
+Hessian and parameter estimates alone.
 
 ## See also
 
@@ -224,8 +226,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.031 0.001 0.032
+#>  Method   Fit  CI Total
+#>      RC 0.034 0.0 0.034
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -253,8 +255,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.031 0.001 0.032
+#>  Method   Fit  CI Total
+#>      RC 0.034 0.0 0.034
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -324,13 +326,13 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total CPU runtime: 94.7 seconds
+#> Total CPU runtime: 94.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>     FMA  0.513 0.006  0.519
-#>     BMA 94.177 0.001 94.178
+#>     FMA  0.527 0.006  0.533
+#>     BMA 93.705 0.001 93.706
 #> 
 #> Summary of coefficients by method:
 #> 

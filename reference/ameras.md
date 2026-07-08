@@ -73,7 +73,7 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
   niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.realizations.BMA=NULL, 
   included.replicates.BMA=NULL, optim.method="Nelder-Mead", control=NULL, 
-  keep.data=TRUE, ... )
+  keep.data=TRUE, na.action=getOption("na.action"), ... )
 ```
 
 ## Arguments
@@ -276,6 +276,18 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
   `keep.data=FALSE`. See
   [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
 
+- na.action:
+
+  function or function name controlling missing-value handling for model
+  inputs after formula terms have been expanded. By default,
+  `getOption("na.action")` is used, typically `na.omit`. Use `na.fail`
+  to reject missing model inputs explicitly, or `na.pass` to skip row
+  removal; missing model inputs left by `na.pass` will generally cause
+  an error during input checks or model fitting. `na.exclude` is
+  accepted for fitting, but residuals and diagnostic plots are returned
+  for the fitted rows rather than padded back to the originally supplied
+  row count.
+
 - ...:
 
   other arguments, passed to functions such as `transform`.
@@ -284,14 +296,17 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 
 The output is an object of class `amerasfit`. General components are
 `call` (the function call to `ameras`), `formula` (the formula object
-specifying the model), `num.rows` (the number of rows in `data`),
-`num.realizations` (the number of dose realizations provided),
-`transform` (the used transformation function, if applicable),
-`transform.jacobian` (the used Jacobian function for the transformation,
-if applicable), `other.args` (any other arguments passed to ...),
-`model` (a list containing the specified model components parsed from
-the formula), `CI.computed` (logical, whether confidence intervals have
-been attached by
+specifying the model), `num.rows` (the number of rows used for fitting
+after applying `na.action` and any family-specific filtering),
+`num.rows.original` (the number of rows supplied before applying
+`na.action`), `na.action` (the omitted-row object returned by the
+missing-value action, when applicable), `num.realizations` (the number
+of dose realizations provided), `transform` (the used transformation
+function, if applicable), `transform.jacobian` (the used Jacobian
+function for the transformation, if applicable), `other.args` (any other
+arguments passed to ...), `model` (a list containing the specified model
+components parsed from the formula), `CI.computed` (logical, whether
+confidence intervals have been attached by
 [`confint`](https://ameras.sanderroberti.com/reference/confint.md)), and
 `data` (either the data frame used for model fitting when
 `keep.data=TRUE` or `NULL` otherwise).
@@ -421,6 +436,18 @@ The class `amerasfit` supports the methods
 [`included_realizations`](https://ameras.sanderroberti.com/reference/included_realizations.md).
 
 ## Details
+
+Missing values in model inputs are handled by `na.action` after formula
+terms have been expanded. Thus missing values in raw variables and in
+derived covariate columns, such as factor contrasts, interactions, and
+spline bases, are handled consistently before model fitting. The
+omitted-row action is stored on the fitted object. When
+`keep.data=FALSE` and data are supplied later to downstream methods, the
+same missing-value policy is reapplied. Unlike
+[`lm`](https://rdrr.io/r/stats/lm.html) and
+[`glm`](https://rdrr.io/r/stats/glm.html), `na.exclude` does not pad
+residuals or diagnostic plots back to the originally supplied row count;
+those outputs are computed on the fitted rows.
 
 Models are specified through formulas of the form
 `Y~dose(dose_expression, model="ERR", deg=1, modifier=M1+M2)+X1+X2`.
@@ -560,7 +587,7 @@ Studies
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.366 0.0 0.366
+#>      RC 0.387 0.0 0.387
 #> 
 #> Estimated model parameters:
 #> 

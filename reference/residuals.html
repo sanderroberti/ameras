@@ -154,9 +154,11 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>For families <code>"gaussian"</code>, <code>"binomial"</code>,
   <code>"poisson"</code>, and <code>"clogit"</code>, a numeric vector of
-  length \(N\) containing the residuals.</p>
+  length \(N\) containing the residuals, where \(N\) is the number
+  of rows used for fitting after any <code>na.action</code> handling.</p>
 <p>For <code>family="multinomial"</code>, a numeric matrix of dimension
-  \(N \times Z\) where \(Z\) is the number of outcome
+  \(N \times Z\) where \(N\) is the number of rows used for fitting
+  after any <code>na.action</code> handling and \(Z\) is the number of outcome
   categories. Column names correspond to the factor levels.
   Note that when plotting via <code><a href="plot.html">plot</a></code>, the
   reference category is excluded since its residuals are a
@@ -171,6 +173,11 @@
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Fitted values are computed using the dose column specified by
   <code>dose.col</code>.</p>
+<p>If the model was fitted with <code>na.exclude</code>, residuals are returned for
+  the fitted rows only; they are not padded with <code>NA</code> values back to the
+  originally supplied row count. For proportional hazards models,
+  Schoenfeld residuals are event-level quantities and are returned only for
+  event rows.</p>
 <p>For <code>family="clogit"</code>, fitted values \(\mu_i\) are the
   conditional probabilities of being a case within each matched set,
   computed as \(R_i / \sum_{j \in \text{set}(i)} R_j\) where

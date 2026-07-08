@@ -166,7 +166,10 @@
   in contrast to the default setting for that function which applies a
   Kaplan–Meier transformation of time.</p>
 <p>The data must either be stored on the object (<code>keep.data=TRUE</code> in
-  <code>ameras</code>, the default) or supplied via the <code>data</code> argument.</p>
+  <code>ameras</code>, the default) or supplied via the <code>data</code> argument.
+  If the model was fitted with <code>na.exclude</code>, diagnostic plots use the
+  fitted rows only; residuals and fitted values are not padded back to the
+  originally supplied row count.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

@@ -217,9 +217,10 @@
   not of interest.</p>
 <p>When the model was fitted with <code>keep.data=FALSE</code> and
   <code>type="proflik"</code> is used for <code>confint</code>, the original data must be
-  supplied via the <code>data</code> argument. Wald intervals do not require the
-  data and can always be computed from the stored Hessian and parameter
-  estimates alone.</p>
+  supplied via the <code>data</code> argument. The missing-value policy used during
+  fitting is reapplied to the supplied data before profile likelihood
+  evaluation. Wald intervals do not require the data and can always be
+  computed from the stored Hessian and parameter estimates alone.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -255,8 +256,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.031 0.001 0.032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.034 0.0 0.034</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -284,8 +285,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.031 0.001 0.032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.034 0.0 0.034</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -355,13 +356,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("FMA", "BMA"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 94.7 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 94.2 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit    CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA  0.513 0.006  0.519</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA 94.177 0.001 94.178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA  0.527 0.006  0.533</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA 93.705 0.001 93.706</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

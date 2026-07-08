@@ -94,17 +94,19 @@ for each method, each being a list:
 ``` r
 
 str(fit.ameras.linreg)
-#> List of 14
+#> List of 16
 #>  $ call              : language ameras(formula = Y.gaussian ~ dose(V1:V10) + X1 + X2, data = data, family = "gaussian",      methods = c("RC", "E| __truncated__ ...
 #>  $ formula           :Class 'formula'  language Y.gaussian ~ dose(V1:V10) + X1 + X2
 #>   .. ..- attr(*, ".Environment")=<environment: base> 
 #>  $ num.rows          : int 3000
+#>  $ num.rows.original : int 3000
+#>  $ na.action         : NULL
 #>  $ num.realizations  : int 10
 #>  $ transform         :function (params, boundcheck = FALSE, ...)  
 #>  $ transform.jacobian:function (params, ...)  
 #>  $ other.args        : list()
-#>  $ model             :List of 19
-#>   ..$ data        :'data.frame': 3000 obs. of  23 variables:
+#>  $ model             :List of 22
+#>   ..$ data         :'data.frame':    3000 obs. of  23 variables:
 #>   .. ..$ Y.gaussian   : num [1:3000] -0.326 -0.187 0.084 0.224 -0.463 ...
 #>   .. ..$ Y.binomial   : int [1:3000] 0 1 0 0 0 0 1 0 0 0 ...
 #>   .. ..$ Y.poisson    : int [1:3000] 0 0 2 0 0 0 4 1 0 0 ...
@@ -128,25 +130,44 @@ str(fit.ameras.linreg)
 #>   .. ..$ V9           : num [1:3000] 0.3821 0.5336 0.9828 0.0155 0.5339 ...
 #>   .. ..$ V10          : num [1:3000] 0.458 0.494 1.061 0.016 0.56 ...
 #>   .. ..$ rcdose_ameras: num [1:3000] 0.4253 0.5379 0.7851 0.0197 0.4993 ...
-#>   ..$ keep.data   : logi TRUE
-#>   ..$ family      : chr "gaussian"
-#>   ..$ dosevars    : chr [1:10] "V1" "V2" "V3" "V4" ...
-#>   ..$ Y           : chr "Y.gaussian"
-#>   ..$ M           : NULL
-#>   ..$ M_names     : NULL
-#>   ..$ X_formula   :Class 'formula'  language ~X1 + X2
+#>   ..$ keep.data    : logi TRUE
+#>   ..$ family       : chr "gaussian"
+#>   ..$ dosevars     : chr [1:10] "V1" "V2" "V3" "V4" ...
+#>   ..$ Y            : chr "Y.gaussian"
+#>   ..$ M            : NULL
+#>   ..$ M_names      : NULL
+#>   ..$ X_formula    :Class 'formula'  language ~X1 + X2
 #>   .. .. ..- attr(*, ".Environment")=<environment: base> 
-#>   ..$ X           : int [1:2] 9 10
-#>   ..$ offset      : NULL
-#>   ..$ entry       : NULL
-#>   ..$ exit        : NULL
-#>   ..$ status      : NULL
-#>   ..$ setnr       : NULL
-#>   ..$ deg         : num 1
-#>   ..$ doseRRmod   : chr "ERR"
-#>   ..$ loglim      : num 1e-30
-#>   ..$ optim.method: chr "Nelder-Mead"
-#>   ..$ control     : NULL
+#>   ..$ X_design_info:List of 3
+#>   .. ..$ terms    :Classes 'terms', 'formula'  language ~X1 + X2
+#>   .. .. .. ..- attr(*, "variables")= language list(X1, X2)
+#>   .. .. .. ..- attr(*, "factors")= int [1:2, 1:2] 1 0 0 1
+#>   .. .. .. .. ..- attr(*, "dimnames")=List of 2
+#>   .. .. .. .. .. ..$ : chr [1:2] "X1" "X2"
+#>   .. .. .. .. .. ..$ : chr [1:2] "X1" "X2"
+#>   .. .. .. ..- attr(*, "term.labels")= chr [1:2] "X1" "X2"
+#>   .. .. .. ..- attr(*, "order")= int [1:2] 1 1
+#>   .. .. .. ..- attr(*, "intercept")= int 1
+#>   .. .. .. ..- attr(*, "response")= int 0
+#>   .. .. .. ..- attr(*, ".Environment")=<environment: 0x559052d85368> 
+#>   .. .. .. ..- attr(*, "predvars")= language list(X1, X2)
+#>   .. .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
+#>   .. .. .. .. ..- attr(*, "names")= chr [1:2] "X1" "X2"
+#>   .. ..$ contrasts: NULL
+#>   .. ..$ xlevels  : Named list()
+#>   ..$ X_names      : chr [1:2] "X1" "X2"
+#>   ..$ X            : int [1:2] 9 10
+#>   ..$ na_action_fun:function (object, ...)  
+#>   ..$ offset       : NULL
+#>   ..$ entry        : NULL
+#>   ..$ exit         : NULL
+#>   ..$ status       : NULL
+#>   ..$ setnr        : NULL
+#>   ..$ deg          : num 1
+#>   ..$ doseRRmod    : chr "ERR"
+#>   ..$ loglim       : num 1e-30
+#>   ..$ optim.method : chr "Nelder-Mead"
+#>   ..$ control      : NULL
 #>  $ CI.computed       : logi FALSE
 #>  $ RC                :List of 8
 #>   ..$ coefficients: Named num [1:5] -1.362 0.481 -0.519 1.166 1.108
@@ -166,15 +187,15 @@ str(fit.ameras.linreg)
 #>   ..$ loglik      : num -4563
 #>   ..$ timing      :List of 3
 #>   .. ..$ fit  :List of 2
-#>   .. .. ..$ cpu    : num 0.335
-#>   .. .. ..$ elapsed: num 0.336
+#>   .. .. ..$ cpu    : num 0.351
+#>   .. .. ..$ elapsed: num 0.351
 #>   .. ..$ ci   :List of 2
 #>   .. .. ..$ cpu    : num 0
 #>   .. .. ..$ elapsed: num 0
 #>   .. ..$ total:List of 2
-#>   .. .. ..$ cpu    : num 0.335
-#>   .. .. ..$ elapsed: num 0.336
-#>   ..$ runtime     : chr "0.3 seconds"
+#>   .. .. ..$ cpu    : num 0.351
+#>   .. .. ..$ elapsed: num 0.351
+#>   ..$ runtime     : chr "0.4 seconds"
 #>   ..$ ERC         : logi FALSE
 #>  $ ERC               :List of 8
 #>   ..$ coefficients: Named num [1:5] -1.361 0.48 -0.519 1.165 1.106
@@ -194,15 +215,15 @@ str(fit.ameras.linreg)
 #>   ..$ loglik      : num -4559
 #>   ..$ timing      :List of 3
 #>   .. ..$ fit  :List of 2
-#>   .. .. ..$ cpu    : num 387
-#>   .. .. ..$ elapsed: num 109
+#>   .. .. ..$ cpu    : num 381
+#>   .. .. ..$ elapsed: num 102
 #>   .. ..$ ci   :List of 2
 #>   .. .. ..$ cpu    : num 0
 #>   .. .. ..$ elapsed: num 0
 #>   .. ..$ total:List of 2
-#>   .. .. ..$ cpu    : num 387
-#>   .. .. ..$ elapsed: num 109
-#>   ..$ runtime     : chr "387.1 seconds"
+#>   .. .. ..$ cpu    : num 381
+#>   .. .. ..$ elapsed: num 102
+#>   ..$ runtime     : chr "381.1 seconds"
 #>   ..$ ERC         : logi TRUE
 #>  $ MCML              :List of 7
 #>   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138
@@ -222,15 +243,15 @@ str(fit.ameras.linreg)
 #>   ..$ loglik      : num -4646
 #>   ..$ timing      :List of 3
 #>   .. ..$ fit  :List of 2
-#>   .. .. ..$ cpu    : num 0.775
-#>   .. .. ..$ elapsed: num 0.702
+#>   .. .. ..$ cpu    : num 0.745
+#>   .. .. ..$ elapsed: num 0.672
 #>   .. ..$ ci   :List of 2
 #>   .. .. ..$ cpu    : num 0
 #>   .. .. ..$ elapsed: num 0
 #>   .. ..$ total:List of 2
-#>   .. .. ..$ cpu    : num 0.775
-#>   .. .. ..$ elapsed: num 0.702
-#>   ..$ runtime     : chr "0.8 seconds"
+#>   .. .. ..$ cpu    : num 0.745
+#>   .. .. ..$ elapsed: num 0.672
+#>   ..$ runtime     : chr "0.7 seconds"
 #>  $ FMA               :List of 9
 #>   ..$ coefficients         : Named num [1:5] -1.28 0.484 -0.517 1.079 1.138
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
@@ -252,15 +273,15 @@ str(fit.ameras.linreg)
 #>   .. ..$ sigma      : num [1:100000] 1.15 1.13 1.13 1.14 1.12 ...
 #>   ..$ timing               :List of 3
 #>   .. ..$ fit  :List of 2
-#>   .. .. ..$ cpu    : num 1.7
-#>   .. .. ..$ elapsed: num 1.63
+#>   .. .. ..$ cpu    : num 1.75
+#>   .. .. ..$ elapsed: num 1.68
 #>   .. ..$ ci   :List of 2
 #>   .. .. ..$ cpu    : num 0
 #>   .. .. ..$ elapsed: num 0
 #>   .. ..$ total:List of 2
-#>   .. .. ..$ cpu    : num 1.7
-#>   .. .. ..$ elapsed: num 1.63
-#>   ..$ runtime              : chr "1.7 seconds"
+#>   .. .. ..$ cpu    : num 1.75
+#>   .. .. ..$ elapsed: num 1.68
+#>   ..$ runtime              : chr "1.8 seconds"
 #>  $ BMA               :List of 8
 #>   ..$ coefficients         : Named num [1:5] -1.281 0.483 -0.516 1.08 1.139
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
@@ -285,15 +306,15 @@ str(fit.ameras.linreg)
 #>   ..$ included.realizations: int [1:10] 1 2 3 4 5 6 7 8 9 10
 #>   ..$ timing               :List of 3
 #>   .. ..$ fit  :List of 2
-#>   .. .. ..$ cpu    : num 78.8
-#>   .. .. ..$ elapsed: num 77.5
+#>   .. .. ..$ cpu    : num 78.3
+#>   .. .. ..$ elapsed: num 77
 #>   .. ..$ ci   :List of 2
 #>   .. .. ..$ cpu    : num 0
 #>   .. .. ..$ elapsed: num 0
 #>   .. ..$ total:List of 2
-#>   .. .. ..$ cpu    : num 78.8
-#>   .. .. ..$ elapsed: num 77.5
-#>   ..$ runtime              : chr "78.8 seconds"
+#>   .. .. ..$ cpu    : num 78.3
+#>   .. .. ..$ elapsed: num 77
+#>   ..$ runtime              : chr "78.3 seconds"
 #>  - attr(*, "class")= chr "amerasfit"
 ```
 
@@ -350,10 +371,10 @@ fit.ameras.linreg$RC
 #> $timing
 #> $timing$fit
 #> $timing$fit$cpu
-#> [1] 0.335
+#> [1] 0.351
 #> 
 #> $timing$fit$elapsed
-#> [1] 0.336
+#> [1] 0.351
 #> 
 #> 
 #> $timing$ci
@@ -366,15 +387,15 @@ fit.ameras.linreg$RC
 #> 
 #> $timing$total
 #> $timing$total$cpu
-#> [1] 0.335
+#> [1] 0.351
 #> 
 #> $timing$total$elapsed
-#> [1] 0.336
+#> [1] 0.351
 #> 
 #> 
 #> 
 #> $runtime
-#> [1] "0.3 seconds"
+#> [1] "0.4 seconds"
 #> 
 #> $ERC
 #> [1] FALSE
@@ -391,16 +412,16 @@ summary(fit.ameras.linreg)
 #>     family = "gaussian", methods = c("RC", "ERC", "MCML", "FMA", 
 #>         "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 468.7 seconds
+#> Total CPU runtime: 462.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.335 0.0   0.335
-#>     ERC 387.110 0.0 387.110
-#>    MCML   0.775 0.0   0.775
-#>     FMA   1.695 0.0   1.695
-#>     BMA  78.776 0.0  78.776
+#>      RC   0.351 0.0   0.351
+#>     ERC 381.142 0.0 381.142
+#>    MCML   0.745 0.0   0.745
+#>     FMA   1.750 0.0   1.750
+#>     BMA  78.264 0.0  78.264
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -492,16 +513,16 @@ summary(fit.ameras.logreg)
 #>     X1 + X2, data = data, family = "binomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 322.3 seconds
+#> Total CPU runtime: 298.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.289 0.0   0.289
-#>     ERC 256.889 0.0 256.889
-#>    MCML   1.285 0.0   1.285
-#>     FMA   2.996 0.0   2.996
-#>     BMA  60.871 0.0  60.871
+#>      RC   0.307 0.0   0.307
+#>     ERC 233.153 0.0 233.153
+#>    MCML   1.322 0.0   1.322
+#>     FMA   3.102 0.0   3.102
+#>     BMA  60.489 0.0  60.489
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -569,16 +590,16 @@ summary(fit.ameras.logreg.lin)
 #>     X1 + X2, data = data, family = "binomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 241.6 seconds
+#> Total CPU runtime: 258 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.157 0.0   0.157
-#>     ERC 182.262 0.0 182.262
-#>    MCML   0.818 0.0   0.818
-#>     FMA   1.724 0.0   1.724
-#>     BMA  56.677 0.0  56.677
+#>      RC   0.178 0.0   0.178
+#>     ERC 198.903 0.0 198.903
+#>    MCML   0.810 0.0   0.810
+#>     FMA   1.760 0.0   1.760
+#>     BMA  56.368 0.0  56.368
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -732,16 +753,16 @@ summary(fit.ameras.poisson)
 #>     X1 + X2, data = data, family = "poisson", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 74.8 seconds
+#> Total CPU runtime: 74.7 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.323 0.0  0.323
-#>     ERC  2.994 0.0  2.994
-#>    MCML  1.522 0.0  1.522
-#>     FMA  3.412 0.0  3.412
-#>     BMA 66.588 0.0 66.588
+#>      RC  0.358 0.0  0.358
+#>     ERC  3.189 0.0  3.189
+#>    MCML  1.490 0.0  1.490
+#>     FMA  3.413 0.0  3.413
+#>     BMA 66.228 0.0 66.228
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -809,16 +830,16 @@ summary(fit.ameras.poisson.lin)
 #>     X1 + X2, data = data, family = "poisson", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 67.6 seconds
+#> Total CPU runtime: 67.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.188 0.0  0.188
-#>     ERC  1.897 0.0  1.897
-#>    MCML  0.819 0.0  0.819
-#>     FMA  2.474 0.0  2.474
-#>     BMA 62.180 0.0 62.180
+#>      RC  0.165 0.0  0.165
+#>     ERC  1.934 0.0  1.934
+#>    MCML  0.818 0.0  0.818
+#>     FMA  1.954 0.0  1.954
+#>     BMA 62.388 0.0 62.388
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1126,16 +1147,16 @@ summary(fit.ameras.prophaz)
 #>     X1 + X2, data = data, family = "prophaz", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 128.8 seconds
+#> Total CPU runtime: 129 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.258 0.0   0.258
-#>     ERC  11.881 0.0  11.881
-#>    MCML   0.621 0.0   0.621
-#>     FMA   2.211 0.0   2.211
-#>     BMA 113.869 0.0 113.869
+#>      RC   0.280 0.0   0.280
+#>     ERC  12.099 0.0  12.099
+#>    MCML   0.627 0.0   0.627
+#>     FMA   2.234 0.0   2.234
+#>     BMA 113.748 0.0 113.748
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1230,16 +1251,16 @@ summary(fit.ameras.prophaz.lin)
 #>     X1 + X2, data = data, family = "prophaz", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 118.7 seconds
+#> Total CPU runtime: 119.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.958 0.0   0.958
-#>     ERC   5.517 0.0   5.517
-#>    MCML   0.413 0.0   0.413
-#>     FMA   1.264 0.0   1.264
-#>     BMA 110.561 0.0 110.561
+#>      RC   0.210 0.0   0.210
+#>     ERC   5.598 0.0   5.598
+#>    MCML   0.378 0.0   0.378
+#>     FMA   1.265 0.0   1.265
+#>     BMA 112.124 0.0 112.124
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1322,16 +1343,16 @@ summary(fit.ameras.multinomial)
 #>     X1 + X2, data = data, family = "multinomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 745.9 seconds
+#> Total CPU runtime: 756.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   1.199 0.0   1.199
-#>     ERC 432.427 0.0 432.427
-#>    MCML   8.491 0.0   8.491
-#>     FMA  11.484 0.0  11.484
-#>     BMA 292.290 0.0 292.290
+#>      RC   1.558 0.0   1.558
+#>     ERC 462.953 0.0 462.953
+#>    MCML   9.483 0.0   9.483
+#>     FMA  11.802 0.0  11.802
+#>     BMA 270.548 0.0 270.548
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1441,16 +1462,16 @@ summary(fit.ameras.multinomial.lin)
 #>     X1 + X2, data = data, family = "multinomial", methods = c("RC", 
 #>     "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 570.9 seconds
+#> Total CPU runtime: 574.8 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.897 0.0   0.897
-#>     ERC 309.170 0.0 309.170
-#>    MCML   6.575 0.0   6.575
-#>     FMA   8.774 0.0   8.774
-#>     BMA 245.455 0.0 245.455
+#>      RC   1.070 0.0   1.070
+#>     ERC 325.549 0.0 325.549
+#>    MCML   6.657 0.0   6.657
+#>     FMA   9.018 0.0   9.018
+#>     BMA 232.548 0.0 232.548
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1541,16 +1562,16 @@ summary(fit.ameras.clogit)
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, 
 #>     niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 171.2 seconds
+#> Total CPU runtime: 174.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  2.128 0.0  2.128
-#>     ERC 58.127 0.0 58.127
-#>    MCML  7.761 0.0  7.761
-#>     FMA 26.199 0.0 26.199
-#>     BMA 76.981 0.0 76.981
+#>      RC  2.330 0.0  2.330
+#>     ERC 60.154 0.0 60.154
+#>    MCML  7.781 0.0  7.781
+#>     FMA 27.860 0.0 27.860
+#>     BMA 76.207 0.0 76.207
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1616,16 +1637,16 @@ summary(fit.ameras.clogit.lin)
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"), nburnin.BMA = 1000, 
 #>     niter.BMA = 5000)
 #> 
-#> Total CPU runtime: 111.4 seconds
+#> Total CPU runtime: 112 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  1.299 0.0  1.299
-#>     ERC 24.473 0.0 24.473
-#>    MCML  2.975 0.0  2.975
-#>     FMA 13.184 0.0 13.184
-#>     BMA 69.426 0.0 69.426
+#>      RC  1.304 0.0  1.304
+#>     ERC 27.242 0.0 27.242
+#>    MCML  2.925 0.0  2.925
+#>     FMA 13.117 0.0 13.117
+#>     BMA 67.423 0.0 67.423
 #> 
 #> Summary of coefficients by method:
 #> 
