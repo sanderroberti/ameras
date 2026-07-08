@@ -56,6 +56,23 @@ test_that("clogit filters uninformative matched sets before fitting", {
   expect_equal(fit$num.rows, nrow(base))
   expect_false(any(fit$model$data$setnr %in% c(9, 10)))
   expect_true(all(is.finite(fit$RC$coefficients)))
+
+  summ <- summary(fit)
+  expect_equal(summ$row_info$supplied, nrow(dat))
+  expect_equal(summ$row_info$omitted.na, 0L)
+  expect_equal(summ$row_info$clogit.uninformative.rows, nrow(dat) - nrow(base))
+  expect_equal(summ$row_info$used, nrow(base))
+
+  out <- capture.output(print(summ))
+  expect_true(any(grepl(
+    paste0(
+      "Excluded as uninformative matched-set rows: ",
+      nrow(dat) - nrow(base)
+    ),
+    out,
+    fixed = TRUE
+  )))
+  expect_true(any(grepl("sets of size 1 or with no cases", out, fixed = TRUE)))
 })
 
 test_that("clogit rejects unsupported matched set case patterns", {

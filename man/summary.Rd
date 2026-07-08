@@ -45,6 +45,12 @@
     \item{\code{call}}{
       The matched call from the original call to \code{\link{ameras}}.
     }
+    \item{\code{row_info}}{
+      A list describing row handling during model fitting, including the number
+      of rows supplied, omitted by \code{na.action}, and used for fitting.
+      For conditional logistic regression, this also includes the number of
+      rows excluded because they belong to uninformative matched sets.
+    }
     \item{\code{summary_table}}{
       A data frame with one row per parameter per method, containing
       columns:
@@ -100,9 +106,14 @@
   \code{pval.upper} remain available in the stored \code{CI} component
   but are not printed in the summary table.
 
-  Printing the summary prints the original call to \code{ameras}, the CPU runtime
-  (total and by method), and the table described above. When confidence
-  intervals have been computed, CI runtime is included in the total runtime.
+  Printing the summary prints the original call to \code{ameras}, row counts,
+  the CPU runtime (total and by method), and the table described above. Row
+  counts are shown in the order applied during fitting: rows supplied, rows
+  omitted by \code{na.action}, and rows used for fitting. For conditional
+  logistic regression, the summary also reports rows excluded because they
+  belong to uninformative matched sets, i.e., matched sets of size 1 or with no
+  cases. When confidence intervals have been computed, CI runtime is included
+  in the total runtime.
   This table can also be accessed directly (i.e., to retrieve confidence
   intervals) using \code{summary_table}.
 }

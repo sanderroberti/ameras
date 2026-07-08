@@ -36,6 +36,23 @@ test_that("na.omit drops missing ordinary X values before fitting", {
   expect_s3_class(fit$na.action, "omit")
   expect_equal(as.integer(fit$na.action), 3L)
   expect_false(anyNA(fit$model$data$X))
+
+  summ <- summary(fit)
+  expect_equal(summ$row_info$supplied, nrow(dat))
+  expect_equal(summ$row_info$omitted.na, 1L)
+  expect_null(summ$row_info$clogit.uninformative.rows)
+  expect_equal(summ$row_info$used, nrow(dat) - 1)
+
+  out <- capture.output(print(summ))
+  expect_true(any(grepl("Rows:", out, fixed = TRUE)))
+  expect_true(any(grepl(paste0("Supplied: ", nrow(dat)), out, fixed = TRUE)))
+  expect_true(any(grepl("Omitted by na.action: 1", out, fixed = TRUE)))
+  expect_false(any(grepl("uninformative matched-set", out, fixed = TRUE)))
+  expect_true(any(grepl(
+    paste0("Used for fitting: ", nrow(dat) - 1),
+    out,
+    fixed = TRUE
+  )))
 })
 
 

@@ -101,6 +101,77 @@ convergence.amerasfit <- function(
 }
 
 
+row_info_from_amerasfit <- function(object) {
+  supplied <- object$num.rows.original %||% object$num.rows
+  used <- object$num.rows %||% NA_integer_
+  omitted_na <- if (!is.null(object$na.action)) {
+    length(object$na.action)
+  } else {
+    0L
+  }
+  additional_filtered <- supplied - omitted_na - used
+  if (!is.finite(additional_filtered)) {
+    additional_filtered <- NA_integer_
+  } else {
+    additional_filtered <- max(0L, additional_filtered)
+  }
+
+  family <- object$model$family %||% NA_character_
+  clogit_uninformative_rows <- NULL
+  if (isTRUE(family == "clogit")) {
+    clogit_uninformative_rows <- additional_filtered
+  }
+
+  list(
+    supplied = supplied,
+    omitted.na = omitted_na,
+    clogit.uninformative.rows = clogit_uninformative_rows,
+    used = used
+  )
+}
+
+
+print_row_info <- function(row_info, detailed = TRUE) {
+  if (isTRUE(detailed)) {
+    cat("\nRows:\n")
+    cat(paste0("  Supplied: ", row_info$supplied, "\n"))
+    cat(paste0("  Omitted by na.action: ", row_info$omitted.na, "\n"))
+    if (!is.null(row_info$clogit.uninformative.rows)) {
+      cat(paste0(
+        "  Excluded as uninformative matched-set rows: ",
+        row_info$clogit.uninformative.rows,
+        " (sets of size 1 or with no cases)\n"
+      ))
+    }
+    cat(paste0("  Used for fitting: ", row_info$used, "\n"))
+  } else {
+    cat(paste0("\nNumber of rows: ", row_info$used))
+    details <- character()
+    if (row_info$omitted.na > 0) {
+      details <- c(
+        details,
+        paste0(row_info$omitted.na, " omitted due to missingness")
+      )
+    }
+    if (isTRUE(row_info$clogit.uninformative.rows > 0)) {
+      details <- c(
+        details,
+        paste0(
+          row_info$clogit.uninformative.rows,
+          " excluded as uninformative matched-set rows"
+        )
+      )
+    }
+    if (length(details)) {
+      cat(paste0(" (", paste(details, collapse = ", "), ")"))
+    }
+    cat("\n")
+  }
+
+  invisible(row_info)
+}
+
+
 print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   object0 <- x[intersect(names(x), c("RC", "ERC", "MCML", "FMA", "BMA"))]
 
@@ -112,11 +183,7 @@ print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("Call:\n")
   print(x$call)
 
-  cat(paste0("\nNumber of rows: ", x$num.rows))
-  if (!is.null(x$na.action) && length(x$na.action)) {
-    cat(paste0(" (", length(x$na.action), " omitted due to missingness)"))
-  }
-  cat("\n")
+  print_row_info(row_info_from_amerasfit(x), detailed = FALSE)
   cat(paste0("Number of dose realizations: ", x$num.realizations, "\n"))
 
   if ("Total" %in% names(runtime_table)) {
@@ -246,6 +313,7 @@ summary.amerasfit <- function(object, ...) {
 
   ans <- list(
     call = object$call,
+    row_info = row_info_from_amerasfit(object),
     summary_table = summary_table,
     runtime_table = runtime_table,
     total_runtime_seconds = total_runtime,
@@ -264,6 +332,8 @@ print.summary.amerasfit <- function(
 ) {
   cat("Call:\n")
   print(x$call)
+
+  print_row_info(x$row_info, detailed = TRUE)
 
   if ("Total" %in% names(x$runtime_table)) {
     cat(paste0(
