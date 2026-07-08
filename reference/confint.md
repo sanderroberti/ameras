@@ -226,8 +226,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.034 0.0 0.034
+#>  Method   Fit    CI Total
+#>      RC 0.034 0.001 0.035
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -255,8 +255,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.034 0.0 0.034
+#>  Method   Fit    CI Total
+#>      RC 0.034 0.001 0.035
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -326,13 +326,13 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total CPU runtime: 94.2 seconds
+#> Total CPU runtime: 93.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>     FMA  0.527 0.006  0.533
-#>     BMA 93.705 0.001 93.706
+#>     FMA  0.529 0.006  0.535
+#>     BMA 93.035 0.001 93.036
 #> 
 #> Summary of coefficients by method:
 #> 

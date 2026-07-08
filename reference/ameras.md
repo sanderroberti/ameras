@@ -465,17 +465,29 @@ be estimated for the exponential or linear ERR dose-response model. The
 modification variables. Note that interactions in the modifier term are
 not allowed, e.g. `M1*M2`. When `deg`, `modifier`, and `model` are not
 supplied, the defaults are `deg=1`, no effect modifiers, and
-`model="ERR"`. Finally, `X1` and `X2` above represent optional
-additional covariates, which can include factor variables and
-interactions such as `X1*X2`. The matched set variable `setnr` required
-for conditional logistic regression is specified on the right-hand side
-of the formula through a term `strata(setnr)`, and an optional offset
-variable `offset` for Poisson regression similarly through a term
-`offset(offset)`. For conditional logistic regression, matched sets of
-size 1 and matched sets with no cases are excluded, and matched sets
-with more than one case are not currently supported. For proportional
-hazards regression, the left-hand side of the formula should have the
-form `Surv(exit, status)` or `Surv(entry, exit, status)`.
+`model="ERR"`.
+
+Additional right-hand-side covariates are expanded using
+[`model.matrix`](https://rdrr.io/r/stats/model.matrix.html), so standard
+formula features such as factor contrasts, interactions,
+[`I()`](https://rdrr.io/r/base/AsIs.html) terms, and basis functions can
+be used. For example, formulas can include terms such as `X1*X2`,
+`I(age^2)`, `splines::ns(age, df=3)`, or `splines::bs(age, df=4)`. These
+terms must preserve one value per row of the input data; terms that drop
+rows internally, such as `stats::na.omit(X)`, are not supported. When
+`keep.data=FALSE`, ameras stores the fitted covariate design information
+so supplied data can rebuild the same expanded covariate columns for
+downstream methods.
+
+The matched set variable `setnr` required for conditional logistic
+regression is specified on the right-hand side of the formula through a
+term `strata(setnr)`, and an optional offset variable `offset` for
+Poisson regression similarly through a term `offset(offset)`. For
+conditional logistic regression, matched sets of size 1 and matched sets
+with no cases are excluded, and matched sets with more than one case are
+not currently supported. For proportional hazards regression, the
+left-hand side of the formula should have the form `Surv(exit, status)`
+or `Surv(entry, exit, status)`.
 
 A transformation can be used to reparametrize parameters internally
 (i.e., such that the likelihoods are evaluated at
@@ -587,7 +599,7 @@ Studies
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.387 0.0 0.387
+#>      RC 0.378 0.0 0.378
 #> 
 #> Estimated model parameters:
 #> 
