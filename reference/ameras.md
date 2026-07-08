@@ -187,7 +187,8 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 
 - transform:
 
-  function for internal parameter transformation (see Details).
+  function for parameter transformation during optimization (see
+  Details).
 
 - transform.jacobian:
 
@@ -432,6 +433,7 @@ The class `amerasfit` supports the methods
 [`residuals`](https://ameras.sanderroberti.com/reference/residuals.md),
 [`plot`](https://ameras.sanderroberti.com/reference/plot.md),
 [`traceplot`](https://ameras.sanderroberti.com/reference/traceplot.md),
+[`convergence`](https://ameras.sanderroberti.com/reference/convergence.md),
 [`Rhat`](https://ameras.sanderroberti.com/reference/Rhat.md), and
 [`included_realizations`](https://ameras.sanderroberti.com/reference/included_realizations.md).
 
@@ -442,8 +444,11 @@ terms have been expanded. Thus missing values in raw variables and in
 derived covariate columns, such as factor contrasts, interactions, and
 spline bases, are handled consistently before model fitting. The
 omitted-row action is stored on the fitted object. When
-`keep.data=FALSE` and data are supplied later to downstream methods, the
-same missing-value policy is reapplied. Unlike
+`keep.data=FALSE` and data are supplied later to methods such as
+[`confint()`](https://rdrr.io/r/stats/confint.html),
+[`residuals()`](https://rdrr.io/r/stats/residuals.html), and
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html), the same
+missing-value policy is reapplied. Unlike
 [`lm`](https://rdrr.io/r/stats/lm.html) and
 [`glm`](https://rdrr.io/r/stats/glm.html), `na.exclude` does not pad
 residuals or diagnostic plots back to the originally supplied row count;
@@ -474,10 +479,12 @@ formula features such as factor contrasts, interactions,
 be used. For example, formulas can include terms such as `X1*X2`,
 `I(age^2)`, `splines::ns(age, df=3)`, or `splines::bs(age, df=4)`. These
 terms must preserve one value per row of the input data; terms that drop
-rows internally, such as `stats::na.omit(X)`, are not supported. When
-`keep.data=FALSE`, ameras stores the fitted covariate design information
-so supplied data can rebuild the same expanded covariate columns for
-downstream methods.
+rows, such as `stats::na.omit(X)`, are not supported. When
+`keep.data=FALSE`, later calls that use supplied data apply the same
+expanded covariate columns as the original fit. If covariates appear
+poorly scaled or ill-conditioned, ameras emits a diagnostic warning;
+centering or scaling continuous covariates such as calendar year can
+improve numerical optimization.
 
 The matched set variable `setnr` required for conditional logistic
 regression is specified on the right-hand side of the formula through a
@@ -489,9 +496,9 @@ not currently supported. For proportional hazards regression, the
 left-hand side of the formula should have the form `Surv(exit, status)`
 or `Surv(entry, exit, status)`.
 
-A transformation can be used to reparametrize parameters internally
-(i.e., such that the likelihoods are evaluated at
-`transform(parameters)`, where `parameters` are unconstrained), and
+A transformation can be used to reparametrize parameters for
+optimization, such that the likelihoods are evaluated at
+`transform(parameters)`, where `parameters` are unconstrained. This
 should be specified when fitting linear excess relative risk and
 linear-exponential models to ensure nonnegative odds/risk/hazard. The
 included function
@@ -599,7 +606,7 @@ Studies
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.378 0.0 0.378
+#>      RC 0.387 0.0 0.387
 #> 
 #> Estimated model parameters:
 #> 

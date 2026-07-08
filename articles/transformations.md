@@ -19,9 +19,9 @@
 
 ## Introduction
 
-A transformation can be used to reparametrize parameters internally
-(i.e., such that the likelihoods are evaluated at
-`transform(parameters)`, where `parameters` are unconstrained), and
+A transformation can be used to reparametrize parameters for
+optimization, such that the likelihoods are evaluated at
+`transform(parameters)`, where `parameters` are unconstrained. This
 should be specified when fitting linear excess relative risk and
 linear-exponential models to ensure nonnegative odds/risk/hazard. The
 included function `transform1` applies an exponential transformation to
@@ -192,12 +192,17 @@ summary(fit.ameras.sigmoid)
 #>     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, 
 #>     index.t = 4:5)
 #> 
+#> Rows:
+#>   Supplied: 3000
+#>   Omitted by na.action: 0
+#>   Used for fitting: 3000
+#> 
 #> Total CPU runtime: 0.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method  Fit  CI Total
-#>      RC 0.62 0.0  0.62
+#>  Method   Fit  CI Total
+#>      RC 0.626 0.0 0.626
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -223,12 +228,17 @@ summary(fit.ameras.transform1)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
+#> Rows:
+#>   Supplied: 3000
+#>   Omitted by na.action: 0
+#>   Used for fitting: 3000
+#> 
 #> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.363 0.0 0.363
+#>      RC 0.379 0.0 0.379
 #> 
 #> Summary of coefficients by method:
 #> 

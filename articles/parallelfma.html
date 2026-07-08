@@ -98,7 +98,7 @@ approximations. The realization-specific fits are independent of one
 another, so they are a natural place to use parallel computation.</p>
 <p><code><a href="../reference/ameras.html">ameras()</a></code> supports optional parallel FMA through the <a href="https://future.futureverse.org/reference/plan.html" class="external-link"><code>future</code></a>
 framework and <a href="https://future.apply.futureverse.org/reference/future_lapply.html" class="external-link"><code>future.apply</code></a>.
-The package does not set a future plan internally. Instead, the user
+<code><a href="../reference/ameras.html">ameras()</a></code> does not set a future plan. Instead, the user
 decides whether FMA should run sequentially or in parallel by setting
 <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">future::plan()</a></code> before calling <code><a href="../reference/ameras.html">ameras()</a></code>.</p>
 <p>If <code>future.apply</code> is not installed, <code><a href="../reference/ameras.html">ameras()</a></code>
@@ -261,8 +261,8 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span>  elapsed_seconds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sequential_elapsed</span>, <span class="va">parallel_elapsed</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;           plan elapsed_seconds</span></span>
-<span><span class="co">#&gt; 1   sequential            1.92</span></span>
-<span><span class="co">#&gt; 2 multisession            2.15</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   sequential            1.78</span></span>
+<span><span class="co">#&gt; 2 multisession            2.34</span></span></code></pre></div>
 <p>The estimates should agree up to ordinary numerical precision.
 Parallel execution is not guaranteed to be faster for small examples
 because starting workers and transferring data have overhead. It is most

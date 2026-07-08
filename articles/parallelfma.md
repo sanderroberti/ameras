@@ -23,8 +23,9 @@ supports optional parallel FMA through the
 [`future`](https://future.futureverse.org/reference/plan.html) framework
 and
 [`future.apply`](https://future.apply.futureverse.org/reference/future_lapply.html).
-The package does not set a future plan internally. Instead, the user
-decides whether FMA should run sequentially or in parallel by setting
+[`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) does
+not set a future plan. Instead, the user decides whether FMA should run
+sequentially or in parallel by setting
 [`future::plan()`](https://future.futureverse.org/reference/plan.html)
 before calling
 [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md).
@@ -186,8 +187,8 @@ data.frame(
   elapsed_seconds = round(c(sequential_elapsed, parallel_elapsed), 2)
 )
 #>           plan elapsed_seconds
-#> 1   sequential            1.92
-#> 2 multisession            2.15
+#> 1   sequential            1.78
+#> 2 multisession            2.34
 ```
 
 The estimates should agree up to ordinary numerical precision. Parallel

@@ -12,6 +12,8 @@
   : Estimated Coefficients for an amerasfit Object
 - [`confint(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/confint.md)
   : Confidence Intervals for an amerasfit Object
+- [`convergence()`](https://ameras.sanderroberti.com/reference/convergence.md)
+  : Optimizer Convergence Diagnostics
 - [`data`](https://ameras.sanderroberti.com/reference/data.md) : Example
   Data
 - [`ecdfplot()`](https://ameras.sanderroberti.com/reference/ecdfplot.md)

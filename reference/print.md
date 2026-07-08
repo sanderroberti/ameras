@@ -28,9 +28,12 @@ print(x, digits = max(3, getOption("digits") - 3), ...)
 ## Value
 
 Prints the `ameras` call, number of rows and dose realizations in the
-data, CPU runtime, and model coefficients. For objects with structured
-timing information, fitting time, confidence interval computation time,
-and total time are shown separately.
+data, CPU runtime, and model coefficients. The row count includes
+omissions due to missing values. For conditional logistic regression
+fits, it also includes rows excluded because they belong to
+uninformative matched sets. For objects with structured timing
+information, fitting time, confidence interval computation time, and
+total time are shown separately.
 
 ## See also
 
@@ -61,13 +64,13 @@ fit
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 46.9 seconds
+#> Total CPU runtime: 85.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.033 0.0  0.033
-#>     ERC 46.905 0.0 46.905
+#>      RC  0.039 0.0  0.039
+#>     ERC 85.267 0.0 85.267
 #> 
 #> Estimated model parameters:
 #> 
@@ -83,13 +86,13 @@ print(fit)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 46.9 seconds
+#> Total CPU runtime: 85.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.033 0.0  0.033
-#>     ERC 46.905 0.0 46.905
+#>      RC  0.039 0.0  0.039
+#>     ERC 85.267 0.0 85.267
 #> 
 #> Estimated model parameters:
 #> 
@@ -107,13 +110,13 @@ print(fit, digits=5)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 46.9 seconds
+#> Total CPU runtime: 85.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.033 0.0  0.033
-#>     ERC 46.905 0.0 46.905
+#>      RC  0.039 0.0  0.039
+#>     ERC 85.267 0.0 85.267
 #> 
 #> Estimated model parameters:
 #> 

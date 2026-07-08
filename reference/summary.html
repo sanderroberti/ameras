@@ -96,6 +96,12 @@
   elements:</p><dl><dt><code>call</code></dt>
 <dd><p>The matched call from the original call to <code><a href="ameras.html">ameras</a></code>.</p></dd>
 
+    <dt><code>row_info</code></dt>
+<dd><p>A list describing row handling during model fitting, including the number
+      of rows supplied, omitted by <code>na.action</code>, and used for fitting.
+      For conditional logistic regression, this also includes the number of
+      rows excluded because they belong to uninformative matched sets.</p></dd>
+
     <dt><code>summary_table</code></dt>
 <dd><p>A data frame with one row per parameter per method, containing
       columns:</p><dl><dt><code>Method</code></dt>
@@ -157,9 +163,14 @@
   likelihood diagnostic columns such as <code>pval.lower</code> and
   <code>pval.upper</code> remain available in the stored <code>CI</code> component
   but are not printed in the summary table.</p>
-<p>Printing the summary prints the original call to <code>ameras</code>, the CPU runtime
-  (total and by method), and the table described above. When confidence
-  intervals have been computed, CI runtime is included in the total runtime.
+<p>Printing the summary prints the original call to <code>ameras</code>, row counts,
+  the CPU runtime (total and by method), and the table described above. Row
+  counts are shown in the order applied during fitting: rows supplied, rows
+  omitted by <code>na.action</code>, and rows used for fitting. For conditional
+  logistic regression, the summary also reports rows excluded because they
+  belong to uninformative matched sets, i.e., matched sets of size 1 or with no
+  cases. When confidence intervals have been computed, CI runtime is included
+  in the total runtime.
   This table can also be accessed directly (i.e., to retrieve confidence
   intervals) using <code>summary_table</code>.</p>
     </div>
@@ -187,12 +198,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = "RC")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Supplied: 3000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Omitted by na.action: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Used for fitting: 3000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.046 0.0 0.046</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.049 0.0 0.049</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -216,12 +232,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = "RC")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Supplied: 3000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Omitted by na.action: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Used for fitting: 3000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.046 0.002 0.048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.049 0.001  0.05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -264,14 +285,19 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("RC", "ERC", "MCML"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 47.2 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Supplied: 3000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Omitted by na.action: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Used for fitting: 3000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 77.2 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit    CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.046 0.000  0.046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 46.844 0.001 46.845</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.348 0.000  0.348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.049 0.001  0.050</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 76.864 0.000 76.864</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.320 0.001  0.321</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

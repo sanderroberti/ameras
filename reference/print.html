@@ -76,9 +76,11 @@
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Prints the <code>ameras</code> call, number of rows and dose realizations in the data,
-  CPU runtime, and model coefficients. For objects with structured timing
-  information, fitting time, confidence interval computation time, and total
-  time are shown separately.</p>
+  CPU runtime, and model coefficients. The row count includes omissions due to
+  missing values. For conditional logistic regression fits, it also includes
+  rows excluded because they belong to uninformative matched sets. For objects
+  with structured timing information, fitting time, confidence interval
+  computation time, and total time are shown separately.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -107,13 +109,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 46.9 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 85.3 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit  CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.033 0.0  0.033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 46.905 0.0 46.905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.039 0.0  0.039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 85.267 0.0 85.267</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -129,13 +131,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 46.9 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 85.3 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit  CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.033 0.0  0.033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 46.905 0.0 46.905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.039 0.0  0.039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 85.267 0.0 85.267</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -153,13 +155,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 46.9 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 85.3 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit  CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.033 0.0  0.033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 46.905 0.0 46.905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.039 0.0  0.039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 85.267 0.0 85.267</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

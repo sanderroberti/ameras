@@ -101,10 +101,10 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>A transformation can be used to reparametrize parameters internally
-(i.e., such that the likelihoods are evaluated at
+<p>A transformation can be used to reparametrize parameters for
+optimization, such that the likelihoods are evaluated at
 <code>transform(parameters)</code>, where <code>parameters</code> are
-unconstrained), and should be specified when fitting linear excess
+unconstrained. This should be specified when fitting linear excess
 relative risk and linear-exponential models to ensure nonnegative
 odds/risk/hazard. The included function <code>transform1</code> applies
 an exponential transformation to the desired parameters, see below. When
@@ -264,12 +264,17 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt;     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, </span></span>
 <span><span class="co">#&gt;     index.t = 4:5)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Rows:</span></span>
+<span><span class="co">#&gt;   Supplied: 3000</span></span>
+<span><span class="co">#&gt;   Omitted by na.action: 0</span></span>
+<span><span class="co">#&gt;   Used for fitting: 3000</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total CPU runtime: 0.6 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method  Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.62 0.0  0.62</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.626 0.0 0.626</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -291,12 +296,17 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + </span></span>
 <span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Rows:</span></span>
+<span><span class="co">#&gt;   Supplied: 3000</span></span>
+<span><span class="co">#&gt;   Omitted by na.action: 0</span></span>
+<span><span class="co">#&gt;   Used for fitting: 3000</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.363 0.0 0.363</span></span>
+<span><span class="co">#&gt;      RC 0.379 0.0 0.379</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

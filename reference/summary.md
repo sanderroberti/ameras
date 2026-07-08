@@ -48,6 +48,13 @@ which is a list containing the following elements:
   The matched call from the original call to
   [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md).
 
+- `row_info`:
+
+  A list describing row handling during model fitting, including the
+  number of rows supplied, omitted by `na.action`, and used for fitting.
+  For conditional logistic regression, this also includes the number of
+  rows excluded because they belong to uninformative matched sets.
+
 - `summary_table`:
 
   A data frame with one row per parameter per method, containing
@@ -122,11 +129,15 @@ Profile likelihood diagnostic columns such as `pval.lower` and
 `pval.upper` remain available in the stored `CI` component but are not
 printed in the summary table.
 
-Printing the summary prints the original call to `ameras`, the CPU
-runtime (total and by method), and the table described above. When
-confidence intervals have been computed, CI runtime is included in the
-total runtime. This table can also be accessed directly (i.e., to
-retrieve confidence intervals) using `summary_table`.
+Printing the summary prints the original call to `ameras`, row counts,
+the CPU runtime (total and by method), and the table described above.
+Row counts are shown in the order applied during fitting: rows supplied,
+rows omitted by `na.action`, and rows used for fitting. For conditional
+logistic regression, the summary also reports rows excluded because they
+belong to uninformative matched sets, i.e., matched sets of size 1 or
+with no cases. When confidence intervals have been computed, CI runtime
+is included in the total runtime. This table can also be accessed
+directly (i.e., to retrieve confidence intervals) using `summary_table`.
 
 ## See also
 
@@ -155,12 +166,17 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = "RC")
 #> 
+#> Rows:
+#>   Supplied: 3000
+#>   Omitted by na.action: 0
+#>   Used for fitting: 3000
+#> 
 #> Total CPU runtime: 0 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.046 0.0 0.046
+#>      RC 0.049 0.0 0.049
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -184,12 +200,17 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = "RC")
 #> 
+#> Rows:
+#>   Supplied: 3000
+#>   Omitted by na.action: 0
+#>   Used for fitting: 3000
+#> 
 #> Total CPU runtime: 0 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.046 0.002 0.048
+#>      RC 0.049 0.001  0.05
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -232,14 +253,19 @@ summary(fit2)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("RC", "ERC", "MCML"))
 #> 
-#> Total CPU runtime: 47.2 seconds
+#> Rows:
+#>   Supplied: 3000
+#>   Omitted by na.action: 0
+#>   Used for fitting: 3000
+#> 
+#> Total CPU runtime: 77.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>      RC  0.046 0.000  0.046
-#>     ERC 46.844 0.001 46.845
-#>    MCML  0.348 0.000  0.348
+#>      RC  0.049 0.001  0.050
+#>     ERC 76.864 0.000 76.864
+#>    MCML  0.320 0.001  0.321
 #> 
 #> Summary of coefficients by method:
 #> 

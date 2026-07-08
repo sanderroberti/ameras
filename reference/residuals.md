@@ -108,9 +108,8 @@ numeric vector of length \\N\\ containing the residuals, where \\N\\ is
 the number of rows used for fitting after any `na.action` handling.
 
 For `family="multinomial"`, a numeric matrix of dimension \\N \times Z\\
-where \\N\\ is the number of rows used for fitting after any `na.action`
-handling and \\Z\\ is the number of outcome categories. Column names
-correspond to the factor levels. Note that when plotting via
+where \\Z\\ is the number of outcome categories. Column names correspond
+to the factor levels. Note that when plotting via
 [`plot`](https://ameras.sanderroberti.com/reference/plot.md), the
 reference category is excluded since its residuals are a linear
 combination of the other categories.

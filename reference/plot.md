@@ -119,10 +119,10 @@ against the observed event times to assess the proportional hazards
 assumption. Under proportional hazards, the residuals should fluctuate
 randomly around zero with no systematic trend over time. Systematic
 patterns or smooth trends may indicate time-varying covariate effects
-and violation of the proportional hazards assumption. Note that the
-implementation here corresponds to using `transform = "identity"` in
+and violation of the proportional hazards assumption. These plots
+correspond to using `transform = "identity"` in
 [`cox.zph`](https://rdrr.io/pkg/survival/man/cox.zph.html), in contrast
-to the default setting for that function which applies a Kaplan–Meier
+to the default setting for that function, which applies a Kaplan–Meier
 transformation of time.
 
 The data must either be stored on the object (`keep.data=TRUE` in

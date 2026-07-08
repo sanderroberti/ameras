@@ -222,12 +222,17 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = "RC")
 #> 
+#> Rows:
+#>   Supplied: 3000
+#>   Omitted by na.action: 0
+#>   Used for fitting: 3000
+#> 
 #> Total CPU runtime: 0 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.034 0.001 0.035
+#>  Method  Fit  CI Total
+#>      RC 0.04 0.0  0.04
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -251,12 +256,17 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = "RC")
 #> 
+#> Rows:
+#>   Supplied: 3000
+#>   Omitted by na.action: 0
+#>   Used for fitting: 3000
+#> 
 #> Total CPU runtime: 0 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.034 0.001 0.035
+#>  Method  Fit  CI Total
+#>      RC 0.04 0.0  0.04
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -326,13 +336,18 @@ summary(fit3)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
-#> Total CPU runtime: 93.6 seconds
+#> Rows:
+#>   Supplied: 3000
+#>   Omitted by na.action: 0
+#>   Used for fitting: 3000
+#> 
+#> Total CPU runtime: 89.7 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>     FMA  0.529 0.006  0.535
-#>     BMA 93.035 0.001 93.036
+#>     FMA  0.484 0.007  0.491
+#>     BMA 89.204 0.001 89.205
 #> 
 #> Summary of coefficients by method:
 #> 
