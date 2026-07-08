@@ -1,4 +1,4 @@
-test_that("X conditioning diagnostic warns for calendar-year-like covariates", {
+test_that("covariate conditioning diagnostic warns for calendar-year-like covariates", {
   year <- 2000 + seq(0, 5, length.out = 30)
 
   # Calendar-year variables can be statistically valid but numerically awkward:
@@ -14,7 +14,7 @@ test_that("X conditioning diagnostic warns for calendar-year-like covariates", {
   )
 })
 
-test_that("X conditioning diagnostic is quiet for ordinary scaled covariates", {
+test_that("covariate conditioning diagnostic is quiet for ordinary scaled covariates", {
   X <- cbind(
     age = seq(-2, 2, length.out = 30),
     group = rep(c(0, 1), length.out = 30)

@@ -124,10 +124,12 @@ per-realization loop to avoid extra overhead and warning noise.
 `assemble_frequentist_fit_result()` packages MCML and RC/ERC results. It applies
 any transform, propagates variance through `transform.jacobian`, names
 coefficients and covariance matrices, warns if `optim()` reported convergence
-despite a large numerical gradient, stores optimizer details, and preserves
-method-specific fields such as `ERC`. The `convergence()` method can later
-extract those stored gradient diagnostics or reconstruct the same likelihood
-to compute them for older fitted objects.
+despite optimizer diagnostics suggesting the solution may not be fully
+stationary, stores optimizer details, and preserves method-specific fields such
+as `ERC`. When the Hessian is usable, that warning is based on the approximate
+remaining objective improvement on both absolute and relative objective scales.
+The `convergence()` method can later extract those stored gradient diagnostics
+or reconstruct the same likelihood to compute them for older fitted objects.
 
 FMA uses `fit_fma_realizations()` to build and fit one likelihood per dose
 realization. The realization loop goes through `fma_realization_lapply()`,

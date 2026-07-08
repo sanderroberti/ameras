@@ -40,9 +40,9 @@ parallel computation.
 `ameras()` supports optional parallel FMA through the
 [`future`](https://future.futureverse.org/reference/plan.html) framework and
 [`future.apply`](https://future.apply.futureverse.org/reference/future_lapply.html).
-The package does not set a future plan internally. Instead, the user decides
-whether FMA should run sequentially or in parallel by setting
-`future::plan()` before calling `ameras()`.
+`ameras()` does not set a future plan. Instead, the user decides whether FMA
+should run sequentially or in parallel by setting `future::plan()` before
+calling `ameras()`.
 
 If `future.apply` is not installed, `ameras()` falls back to the ordinary
 sequential `lapply()` path.

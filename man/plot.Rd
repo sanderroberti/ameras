@@ -107,9 +107,9 @@
   Under proportional hazards, the residuals should fluctuate randomly around
   zero with no systematic trend over time. Systematic patterns or smooth
   trends may indicate time-varying covariate effects and violation of the
-  proportional hazards assumption. Note that the implementation here corresponds 
-  to using \code{transform = "identity"} in \code{\link[survival]{cox.zph}}, 
-  in contrast to the default setting for that function which applies a 
+  proportional hazards assumption. These plots correspond to using
+  \code{transform = "identity"} in \code{\link[survival]{cox.zph}}, 
+  in contrast to the default setting for that function, which applies a 
   Kaplan--Meier transformation of time.
 
   The data must either be stored on the object (\code{keep.data=TRUE} in 

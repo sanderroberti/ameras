@@ -197,7 +197,8 @@ warn_if_poorly_conditioned_X <- function(
   if (length(details)) {
     warning(
       paste0(
-        "WARNING: X covariates appear poorly scaled or ill-conditioned (",
+        "WARNING: right-hand-side covariates appear poorly scaled or ",
+        "ill-conditioned (",
         paste(unique(details), collapse = "; "),
         "). This can make optimizer convergence unreliable. Consider ",
         "centering/scaling continuous covariates, such as calendar year, ",

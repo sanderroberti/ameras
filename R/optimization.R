@@ -74,7 +74,27 @@ add_optimizer_gradient_diagnostics <- function(fit, fn, ...) {
   if (!is.null(fit$gradient) && all(is.finite(fit$gradient))) {
     fit$gradient.max.abs <- max(abs(fit$gradient))
     fit$gradient.rms <- sqrt(mean(fit$gradient^2))
-    fit$gradient.scaled.rms <- fit$gradient.rms / max(1, abs(fit$value))
+    fit$gradient.rms.scaled <- fit$gradient.rms / max(1, abs(fit$value))
+
+    if (
+      is_finite_square_matrix(fit$hessian) &&
+        length(fit$gradient) == ncol(fit$hessian)
+    ) {
+      cholH <- tryCatch(chol(fit$hessian), error = function(e) NULL)
+      if (!is.null(cholH)) {
+        # For a quadratic objective, half the squared Newton decrement is the
+        # approximate objective improvement still available from one Newton
+        # step. This is much less sensitive to likelihood scale and parameter
+        # units than the raw gradient norm.
+        z <- backsolve(cholH, fit$gradient, transpose = TRUE)
+        newton_step <- backsolve(cholH, z)
+        fit$newton.decrement <- sqrt(sum(z^2))
+        fit$newton.improvement <- 0.5 * sum(z^2)
+        fit$newton.improvement.relative <-
+          fit$newton.improvement / max(1, abs(fit$value))
+        fit$newton.step.max.abs <- max(abs(newton_step))
+      }
+    }
   }
 
   fit
@@ -83,16 +103,34 @@ add_optimizer_gradient_diagnostics <- function(fit, fn, ...) {
 
 optimizer_gradient_is_large <- function(
   fit,
+  newton.improvement.tol = 1e-2,
+  newton.relative.improvement.tol = 1e-6,
   abs.tol = 1e-3,
   rel.tol = 1e-4
 ) {
-  isTRUE(fit$convergence == 0) &&
-    is.numeric(fit$gradient.rms) &&
-    is.numeric(fit$gradient.scaled.rms) &&
+  if (!isTRUE(fit$convergence == 0)) {
+    return(FALSE)
+  }
+
+  if (
+    is.numeric(fit$newton.improvement) &&
+      is.finite(fit$newton.improvement) &&
+      is.numeric(fit$newton.improvement.relative) &&
+      is.finite(fit$newton.improvement.relative)
+  ) {
+    return(
+      fit$newton.improvement > newton.improvement.tol &&
+        fit$newton.improvement.relative >
+          newton.relative.improvement.tol
+    )
+  }
+
+  is.numeric(fit$gradient.rms) &&
+    is.numeric(fit$gradient.rms.scaled) &&
     is.finite(fit$gradient.rms) &&
-    is.finite(fit$gradient.scaled.rms) &&
+    is.finite(fit$gradient.rms.scaled) &&
     fit$gradient.rms > abs.tol &&
-    fit$gradient.scaled.rms > rel.tol
+    fit$gradient.rms.scaled > rel.tol
 }
 
 
@@ -103,13 +141,33 @@ warn_if_large_optimizer_gradient <- function(fit) {
 
   warning(
     paste0(
-      "WARNING: optim() reported convergence, but the numerical gradient ",
-      "at the solution is still large (RMS gradient = ",
+      "WARNING: optim() reported convergence, but optimizer diagnostics ",
+      "suggest the solution may not be fully stationary ",
+      "(RMS gradient = ",
       signif(fit$gradient.rms, 4),
       ", scaled RMS gradient = ",
-      signif(fit$gradient.scaled.rms, 4),
+      signif(fit$gradient.rms.scaled, 4),
       ", max absolute gradient = ",
-      signif(fit$gradient.max.abs, 4),
+      signif(fit$gradient.max.abs %||% NA_real_, 4),
+      if (
+        is.numeric(fit$newton.decrement) &&
+          is.finite(fit$newton.decrement) &&
+          is.numeric(fit$newton.improvement) &&
+          is.finite(fit$newton.improvement) &&
+          is.numeric(fit$newton.improvement.relative) &&
+          is.finite(fit$newton.improvement.relative)
+      ) {
+        paste0(
+          ", Newton decrement = ",
+          signif(fit$newton.decrement, 4),
+          ", approximate objective improvement = ",
+          signif(fit$newton.improvement, 4),
+          ", relative improvement = ",
+          signif(fit$newton.improvement.relative, 4)
+        )
+      } else {
+        ""
+      },
       "). The fit may be sensitive to covariate scaling or starting values; ",
       "consider centering/scaling continuous covariates, supplying inpar, ",
       "or adjusting optimizer controls."
@@ -130,7 +188,8 @@ compute_fit_gradient_diagnostics <- function(
   fit <- list(
     par = method_fit$optim$par,
     value = -1 * method_fit$loglik,
-    convergence = method_fit$optim$convergence
+    convergence = method_fit$optim$convergence,
+    hessian = method_fit$optim$hessian
   )
   loglik_fn <- make_loglik_fn(object, method_name, method_fit, data)
   add_optimizer_gradient_diagnostics(fit, loglik_fn)
@@ -142,31 +201,63 @@ stored_gradient_diagnostics <- function(method_fit) {
 
   if (
     is.null(optim$gradient.rms) ||
-      is.null(optim$gradient.scaled.rms) ||
-      is.null(optim$gradient.max.abs)
+      is.null(optim$gradient.rms.scaled)
   ) {
     return(NULL)
   }
 
-  list(
+  out <- list(
     convergence = optim$convergence,
     gradient = optim$gradient,
     gradient.max.abs = optim$gradient.max.abs,
     gradient.rms = optim$gradient.rms,
-    gradient.scaled.rms = optim$gradient.scaled.rms
+    gradient.rms.scaled = optim$gradient.rms.scaled,
+    newton.decrement = optim$newton.decrement,
+    newton.improvement = optim$newton.improvement,
+    newton.improvement.relative = optim$newton.improvement.relative,
+    newton.step.max.abs = optim$newton.step.max.abs
   )
+
+  if (
+    is.null(out$newton.improvement) &&
+      !is.null(out$gradient) &&
+      is_finite_square_matrix(optim$hessian) &&
+      length(out$gradient) == ncol(optim$hessian)
+  ) {
+    cholH <- tryCatch(chol(optim$hessian), error = function(e) NULL)
+    if (!is.null(cholH)) {
+      z <- backsolve(cholH, out$gradient, transpose = TRUE)
+      newton_step <- backsolve(cholH, z)
+      out$newton.decrement <- sqrt(sum(z^2))
+      out$newton.improvement <- 0.5 * sum(z^2)
+      out$newton.improvement.relative <-
+        out$newton.improvement / max(1, abs(method_fit$loglik))
+      out$newton.step.max.abs <- max(abs(newton_step))
+    }
+  }
+
+  if (
+    is.null(out$newton.improvement.relative) &&
+      !is.null(out$newton.improvement)
+  ) {
+    out$newton.improvement.relative <-
+      out$newton.improvement / max(1, abs(method_fit$loglik))
+  }
+
+  out
 }
 
 
 gradient_diagnostic_row <- function(method_name, fit) {
-  gradient_large <- optimizer_gradient_is_large(fit)
+  convergence_warning <- optimizer_gradient_is_large(fit)
   data.frame(
     method = method_name,
-    convergence = fit$convergence %||% NA_integer_,
+    optim.convergence = fit$convergence %||% NA_integer_,
     gradient.rms = fit$gradient.rms %||% NA_real_,
-    gradient.scaled.rms = fit$gradient.scaled.rms %||% NA_real_,
-    gradient.max.abs = fit$gradient.max.abs %||% NA_real_,
-    gradient.large = gradient_large,
+    gradient.rms.scaled = fit$gradient.rms.scaled %||% NA_real_,
+    newton.improvement = fit$newton.improvement %||% NA_real_,
+    newton.improvement.relative = fit$newton.improvement.relative %||% NA_real_,
+    convergence.warning = convergence_warning,
     row.names = method_name
   )
 }
@@ -285,7 +376,11 @@ assemble_frequentist_fit_result <- function(
         gradient = fit$gradient,
         gradient.max.abs = fit$gradient.max.abs,
         gradient.rms = fit$gradient.rms,
-        gradient.scaled.rms = fit$gradient.scaled.rms,
+        gradient.rms.scaled = fit$gradient.rms.scaled,
+        newton.decrement = fit$newton.decrement,
+        newton.improvement = fit$newton.improvement,
+        newton.improvement.relative = fit$newton.improvement.relative,
+        newton.step.max.abs = fit$newton.step.max.abs,
         convergence = fit$convergence,
         counts = fit$counts
       ),

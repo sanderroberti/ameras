@@ -278,7 +278,7 @@ test_that("dose, modifier, covariate, and set checks validate data columns", {
     "dosevars:D_bad must contain finite values"
   )
 
-  # Modifiers must be binary, while ordinary X covariates only need to be
+  # Modifiers must be binary, while ordinary covariates only need to be
   # numeric and finite. NULL X is allowed because a model can have no covariates.
   expect_null(ameras:::check_M("M", dat))
   expect_error(ameras:::check_M("M_bad", dat), "M:M_bad must contain binary")

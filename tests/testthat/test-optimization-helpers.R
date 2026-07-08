@@ -20,7 +20,7 @@ test_that("fit_objective_with_hessian handles multi-parameter objectives", {
   expect_equal(fit$value, 0, tolerance = 1e-8)
   expect_equal(fit$convergence, 0)
   expect_lt(fit$gradient.rms, 1e-5)
-  expect_lt(fit$gradient.scaled.rms, 1e-5)
+  expect_lt(fit$gradient.rms.scaled, 1e-5)
   expect_true(ameras:::fit_passes_hessian_check(fit))
 })
 
@@ -66,25 +66,53 @@ test_that("optimizer gradient diagnostics warn only for suspicious convergence",
   suspicious_fit <- list(
     convergence = 0,
     gradient.rms = 10,
-    gradient.scaled.rms = 1e-2,
-    gradient.max.abs = 12
+    gradient.rms.scaled = 1e-2,
+    gradient.max.abs = 12,
+    newton.decrement = 0.2,
+    newton.improvement = 0.02,
+    newton.improvement.relative = 2e-5
   )
   acceptable_fit <- list(
     convergence = 0,
-    gradient.rms = 1e-5,
-    gradient.scaled.rms = 1e-7,
-    gradient.max.abs = 2e-5
+    gradient.rms = 10,
+    gradient.rms.scaled = 1e-2,
+    gradient.max.abs = 12,
+    newton.decrement = 0.05531,
+    newton.improvement = 0.5 * 0.05531^2,
+    newton.improvement.relative = 1e-6
+  )
+  scaled_fit <- list(
+    convergence = 0,
+    gradient.rms = 10,
+    gradient.rms.scaled = 1e-2,
+    gradient.max.abs = 12,
+    newton.decrement = 0.2,
+    newton.improvement = 0.02,
+    newton.improvement.relative = 1e-8
+  )
+  fallback_fit <- list(
+    convergence = 0,
+    gradient.rms = 10,
+    gradient.rms.scaled = 1e-2,
+    gradient.max.abs = 12
   )
   not_converged_fit <- suspicious_fit
   not_converged_fit$convergence <- 1
 
-  # The diagnostic is intentionally warning-only: it flags cases where optim()
-  # reports convergence but the objective is not locally flat enough.
+  # The diagnostic is intentionally warning-only. When available, it uses a
+  # curvature-scaled approximate objective improvement so large raw gradients do
+  # not warn if the remaining improvement is negligible in absolute terms or
+  # relative to the objective scale.
   expect_warning(
     ameras:::warn_if_large_optimizer_gradient(suspicious_fit),
-    "numerical gradient"
+    "not be fully stationary"
   )
   expect_silent(ameras:::warn_if_large_optimizer_gradient(acceptable_fit))
+  expect_silent(ameras:::warn_if_large_optimizer_gradient(scaled_fit))
+  expect_warning(
+    ameras:::warn_if_large_optimizer_gradient(fallback_fit),
+    "not be fully stationary"
+  )
   expect_silent(ameras:::warn_if_large_optimizer_gradient(not_converged_fit))
 })
 
@@ -113,15 +141,17 @@ test_that("convergence extracts and recomputes optimizer gradients", {
     stored,
     c(
       "method",
-      "convergence",
+      "optim.convergence",
       "gradient.rms",
-      "gradient.scaled.rms",
-      "gradient.max.abs",
-      "gradient.large"
+      "gradient.rms.scaled",
+      "newton.improvement",
+      "newton.improvement.relative",
+      "convergence.warning"
     )
   )
-  expect_equal(stored$convergence, 0)
+  expect_equal(stored$optim.convergence, 0)
   expect_true(is.finite(stored$gradient.rms))
+  expect_true(is.finite(stored$newton.improvement))
 
   # Simulate an object fitted before gradient diagnostics were stored. The
   # method should reconstruct the likelihood and compute the gradient on demand.
@@ -129,13 +159,23 @@ test_that("convergence extracts and recomputes optimizer gradients", {
   old_fit$RC$optim$gradient <- NULL
   old_fit$RC$optim$gradient.max.abs <- NULL
   old_fit$RC$optim$gradient.rms <- NULL
-  old_fit$RC$optim$gradient.scaled.rms <- NULL
+  old_fit$RC$optim$gradient.rms.scaled <- NULL
 
   recomputed <- convergence(old_fit)
   expect_equal(recomputed$gradient.rms, stored$gradient.rms, tolerance = 1e-6)
   expect_equal(
-    recomputed$gradient.scaled.rms,
-    stored$gradient.scaled.rms,
+    recomputed$gradient.rms.scaled,
+    stored$gradient.rms.scaled,
+    tolerance = 1e-6
+  )
+  expect_equal(
+    recomputed$newton.improvement,
+    stored$newton.improvement,
+    tolerance = 1e-6
+  )
+  expect_equal(
+    recomputed$newton.improvement.relative,
+    stored$newton.improvement.relative,
     tolerance = 1e-6
   )
 })
@@ -172,7 +212,7 @@ test_that("convergence can recompute gradients when data were not stored", {
   fit$RC$optim$gradient <- NULL
   fit$RC$optim$gradient.max.abs <- NULL
   fit$RC$optim$gradient.rms <- NULL
-  fit$RC$optim$gradient.scaled.rms <- NULL
+  fit$RC$optim$gradient.rms.scaled <- NULL
 
   expect_error(
     convergence(fit),
