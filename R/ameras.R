@@ -472,12 +472,12 @@ ameras <- function(
     )
   }
 
-  if (!is.null(parsed$X_formula)) {
-    X_matrix <- model.matrix(parsed$X_formula, data = data)[, -1, drop = FALSE]
+  X_design <- build_X_design(parsed$X_formula, data)
+  if (!is.null(X_design$matrix)) {
+    X_matrix <- X_design$matrix
     X_colnames <- colnames(X_matrix)
 
     # Add expanded columns to data, avoiding name conflicts
-    existing <- intersect(X_colnames, colnames(data))
     new_cols <- setdiff(X_colnames, colnames(data))
 
     if (length(new_cols)) {
@@ -560,6 +560,7 @@ ameras <- function(
     M = M,
     M_names = parsed$M, # names for resolve_data and required_vars
     X_formula = X_formula_to_store,
+    X_design_info = X_design$X_design_info,
     X = X,
     offset = parsed$offset,
     entry = parsed$entry,

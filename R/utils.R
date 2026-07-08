@@ -498,7 +498,12 @@ resolve_data <- function(object, data = NULL) {
 
   # Re-expand X formula on supplied data
   if (!is.null(m$X_formula)) {
-    X_matrix <- model.matrix(m$X_formula, data = data)[, -1, drop = FALSE]
+    X_design <- build_X_design(
+      m$X_formula,
+      data,
+      X_design_info = m$X_design_info
+    )
+    X_matrix <- X_design$matrix
     X_colnames <- colnames(X_matrix)
     new_cols <- setdiff(X_colnames, colnames(data))
     if (length(new_cols)) {

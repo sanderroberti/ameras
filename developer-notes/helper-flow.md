@@ -8,7 +8,7 @@ internal implementation details, not user-facing API.
 
 ```mermaid
 flowchart TD
-  A["ameras()"] --> B["parse/check inputs<br/>build transforms<br/>add rcdose_ameras"]
+  A["ameras()"] --> B["parse/check inputs<br/>build transforms<br/>build X design info<br/>add rcdose_ameras"]
   B --> C["ameras_main()"]
 
   C -->|MCML| D["ameras.mcml()"]
@@ -75,7 +75,11 @@ flowchart TD
 `ameras()` handles the public interface. It parses the formula or legacy
 arguments, validates inputs, constructs default transformations where needed,
 adds `rcdose_ameras`, and stores enough model metadata for later methods such as
-`confint()`, `residuals()`, and `plot()`.
+`confint()`, `residuals()`, and `plot()`. Formula right-hand-side covariates are
+expanded through `build_X_design()`, which stores model-matrix design
+information in `model$X_design_info`. `resolve_data()` reuses that information
+so supplied data can rebuild factor, interaction, and spline basis columns
+consistently when `keep.data = FALSE`.
 
 `ameras_main()` dispatches to the method-specific fitting functions:
 
