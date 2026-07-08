@@ -14,6 +14,7 @@
 ## Improvements
 
 * FMA no longer uses a cutoff of 20% excluded realizations before warning about potential computational issues. The user is now always warned about the number of excluded realizations.
+* `ameras()` now supports a `na.action` argument for model-input missing values after formula terms have been expanded. By default it follows `getOption("na.action")` (typically `na.omit`), stores the omitted-row action on the fitted object, and reapplies the same policy when data are supplied for `keep.data=FALSE` downstream methods. `na.fail` and `na.pass` are also supported. `na.exclude` is accepted for fitting, but residuals and diagnostic plots are returned for the fitted rows rather than padded back to the originally supplied row count.
 * FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are now internally excluded. The user is informed of the number of realizations excluded for this reason through a `message()`.
 * Added an additional warning for FMA for the situation when results are based on only 1 or 2-5 realizations after exclusions.
 * FMA realization-specific fits can now use the `future` framework via `future.apply` when available. Users can enable parallel execution by setting a `future` plan before calling `ameras()`, and `future.chunk.size.FMA` controls the chunk size passed to `future.apply::future_lapply()`.

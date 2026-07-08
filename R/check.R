@@ -363,7 +363,7 @@ check_char_vec <- function(x, nm, valid = NULL, def = NULL, len = 0) {
 
 
 required_vars <- function(m) {
-  vars <- c(m$dosevars, m$X, m$M_names)
+  vars <- c(m$dosevars, model_X_vars(m), m$M_names)
 
   if (m$family %in% c("gaussian", "binomial", "poisson", "multinomial")) {
     vars <- c(vars, m$Y)
@@ -384,6 +384,128 @@ required_vars <- function(m) {
 
   vars[!is.null(vars)]
 }
+
+
+model_X_vars <- function(m) {
+  if (!is.null(m$X_names)) {
+    return(m$X_names)
+  }
+  if (is.character(m$X)) {
+    return(m$X)
+  }
+  character()
+}
+
+
+resolve_na_action <- function(na.action, env = parent.frame()) {
+  if (is.null(na.action)) {
+    na.action <- getOption("na.action")
+  }
+  if (is.null(na.action)) {
+    na.action <- "na.omit"
+  }
+
+  if (is.character(na.action)) {
+    if (length(na.action) != 1) {
+      stop("ERROR: na.action must be a function or a single function name")
+    }
+    if (!exists(na.action, envir = env, mode = "function", inherits = TRUE)) {
+      stop("ERROR: na.action function not found: ", na.action)
+    }
+    na.action <- get(na.action, envir = env, mode = "function", inherits = TRUE)
+  }
+
+  if (!is.function(na.action)) {
+    stop("ERROR: na.action must be a function or a single function name")
+  }
+
+  na.action
+}
+
+
+model_na_vars <- function(
+  family,
+  dosevars,
+  Y = NULL,
+  status = NULL,
+  M = NULL,
+  X = NULL,
+  offset = NULL,
+  entry = NULL,
+  exit = NULL,
+  setnr = NULL
+) {
+  vars <- c(dosevars, M, X)
+
+  if (family %in% c("gaussian", "binomial", "poisson", "multinomial")) {
+    vars <- c(vars, Y)
+  }
+
+  if (family == "poisson") {
+    vars <- c(vars, offset)
+  }
+
+  if (family == "prophaz") {
+    vars <- c(vars, status, exit, entry)
+  }
+
+  if (family == "clogit") {
+    vars <- c(vars, status, setnr)
+  }
+
+  vars <- vars[!is.na(vars)]
+  vars <- vars[nzchar(vars)]
+  unique(vars)
+}
+
+
+model_na_vars_from_model <- function(m) {
+  model_na_vars(
+    family = m$family,
+    dosevars = m$dosevars,
+    Y = m$Y,
+    status = m$status,
+    M = m$M_names,
+    X = model_X_vars(m),
+    offset = m$offset,
+    entry = m$entry,
+    exit = m$exit,
+    setnr = m$setnr
+  )
+}
+
+
+apply_na_action_to_data <- function(data, vars, na.action) {
+  vars <- unique(vars)
+  vars <- vars[vars %in% colnames(data)]
+
+  if (!length(vars)) {
+    return(list(data = data, na.action = NULL))
+  }
+
+  na_frame <- data[, vars, drop = FALSE]
+  row_id <- ".ameras_row_id"
+  while (row_id %in% colnames(na_frame)) {
+    row_id <- paste0(".", row_id)
+  }
+  na_frame[[row_id]] <- seq_len(nrow(data))
+
+  acted <- na.action(na_frame)
+  if (!is.data.frame(acted) || !row_id %in% colnames(acted)) {
+    stop("ERROR: na.action must return a data frame with rows preserved or removed")
+  }
+
+  keep <- acted[[row_id]]
+  if (!length(keep)) {
+    stop("ERROR: no complete observations remain after applying na.action")
+  }
+
+  list(
+    data = data[keep, , drop = FALSE],
+    na.action = attr(acted, "na.action")
+  )
+}
+
 
 check_integer <- function(
   x,

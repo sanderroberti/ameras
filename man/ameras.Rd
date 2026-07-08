@@ -35,7 +35,7 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
   niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.realizations.BMA=NULL, 
   included.replicates.BMA=NULL, optim.method="Nelder-Mead", control=NULL, 
-  keep.data=TRUE, ... )
+  keep.data=TRUE, na.action=getOption("na.action"), ... )
 }
 \arguments{
 \item{formula}{an object of class \code{"formula"} containing the model specification. See Details.}
@@ -77,13 +77,18 @@ Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncat
 \item{optim.method}{method used for optimization by \code{optim}. Options are \code{"Nelder-Mead"} and \code{"BFGS"}. When using Nelder-Mead, a second optimization with BFGS is run to ensure an optimal fit.}
 \item{control}{control list passed to \code{optim} (default \code{list(reltol=1e-10)}).}
 \item{keep.data}{whether to attach data to the output object (default \code{TRUE}). When the data object is large, \code{keep.data} can be set to \code{FALSE} to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied separately when \code{keep.data=FALSE}. See \code{\link[=confint.amerasfit]{confint}}.}
+\item{na.action}{function or function name controlling missing-value handling for model inputs after formula terms have been expanded. By default, \code{getOption("na.action")} is used, typically \code{na.omit}. Use \code{na.fail} to reject missing model inputs explicitly, or \code{na.pass} to skip row removal; missing model inputs left by \code{na.pass} will generally cause an error during input checks or model fitting. \code{na.exclude} is accepted for fitting, but residuals and diagnostic plots are returned for the fitted rows rather than padded back to the originally supplied row count.}
 \item{\dots}{other arguments, passed to functions such as \code{transform}.}
 }
 \value{
 The output is an object of class \code{amerasfit}. General components are \code{call} 
 (the function call to \code{ameras}), \code{formula} (the formula object specifying 
-the model), \code{num.rows} (the number of rows in \code{data}), \code{num.realizations} 
-(the number of dose realizations provided), \code{transform} (the used transformation 
+the model), \code{num.rows} (the number of rows used for fitting after applying
+\code{na.action} and any family-specific filtering), \code{num.rows.original} (the
+number of rows supplied before applying \code{na.action}), \code{na.action} (the
+omitted-row object returned by the missing-value action, when applicable),
+\code{num.realizations} (the number of dose realizations provided),
+\code{transform} (the used transformation 
 function, if applicable), \code{transform.jacobian} (the used Jacobian function for 
 the transformation, if applicable), \code{other.args} (any other arguments passed to 
 \dots), \code{model} (a list containing the specified model components parsed from 
@@ -121,6 +126,16 @@ The class \code{amerasfit} supports the methods \code{\link[=print.amerasfit]{pr
 }
 
 \details{
+Missing values in model inputs are handled by \code{na.action} after formula
+terms have been expanded. Thus missing values in raw variables and in derived
+covariate columns, such as factor contrasts, interactions, and spline bases,
+are handled consistently before model fitting. The omitted-row action is stored
+on the fitted object. When \code{keep.data=FALSE} and data are supplied later to
+downstream methods, the same missing-value policy is reapplied. Unlike
+\code{\link[stats]{lm}} and \code{\link[stats]{glm}}, \code{na.exclude} does not
+pad residuals or diagnostic plots back to the originally supplied row count;
+those outputs are computed on the fitted rows.
+
 Models are specified through formulas of the form \code{Y~dose(dose_expression, model="ERR", deg=1, modifier=M1+M2)+X1+X2}. Here \code{dose_expression} specifies the dose realization columns and is parsed by \code{eval_select} from the \pkg{tidyselect} package. Useful examples are \code{D1:D1000} if the doses are in a sequence of columns with sequential names such as \code{D1}-\code{D1000}, and \code{all_of(dosevars)} where \code{dosevars} is a vector with the names of all dose columns. Further, \code{model} specifies, for non-Gaussian families, whether to use the exponential dose-response model (\code{model="EXP"}), the linear-exponential model (\code{model="LINEXP"}) or the linear ERR model (\code{model="ERR"}). Next, \code{deg} is used to specify whether a quadratic dose term should (\code{deg=2}) or should not (\code{deg=1}) be estimated for the exponential or linear ERR dose-response model. The \code{modifier} term is optional and used to specify binary effect modification variables. Note that interactions in the modifier term are not allowed, e.g. \code{M1*M2}. When \code{deg}, \code{modifier}, and \code{model} are not supplied, the defaults are \code{deg=1}, no effect modifiers, and \code{model="ERR"}. Finally, \code{X1} and \code{X2} above represent optional additional covariates, which can include factor variables and interactions such as \code{X1*X2}. The matched set variable \code{setnr} required for conditional logistic regression is specified on the right-hand side of the formula through a term \code{strata(setnr)}, and an optional offset variable \code{offset} for Poisson regression similarly through a term \code{offset(offset)}. For conditional logistic regression, matched sets of size 1 and matched sets with no cases are excluded, and matched sets with more than one case are not currently supported. For proportional hazards regression, the left-hand side of the formula should have the form \code{Surv(exit, status)} or \code{Surv(entry, exit, status)}.
 
 A transformation can be used to reparametrize parameters internally (i.e., such that the likelihoods are evaluated at \code{transform(parameters)}, where \code{parameters} are unconstrained), and should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function \code{\link{transform1}} applies an exponential transformation to the desired parameters, see \code{?transform1}. When supplying a function to \code{transform}, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \eqn{\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma}, where \eqn{\bm \alpha}, \eqn{\bm\beta_{m1}} and \eqn{\bm \beta_{m2}} can be vectors, with lengths matching \eqn{\bm X} and \eqn{\bm M}, respectively. \eqn{\sigma} is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \eqn{Z-1} parameter vectors in the order as given above, where \eqn{Z} is the number of outcome categories, with the last category chosen as the referent category. See \code{vignette("transformations", package="ameras")} for an example of how to specify a custom transformation function. 

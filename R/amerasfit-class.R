@@ -43,7 +43,11 @@ print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("Call:\n")
   print(x$call)
 
-  cat(paste0("\nNumber of rows: ", x$num.rows, "\n"))
+  cat(paste0("\nNumber of rows: ", x$num.rows))
+  if (!is.null(x$na.action) && length(x$na.action)) {
+    cat(paste0(" (", length(x$na.action), " omitted due to missingness)"))
+  }
+  cat("\n")
   cat(paste0("Number of dose realizations: ", x$num.realizations, "\n"))
 
   if ("Total" %in% names(runtime_table)) {

@@ -163,9 +163,10 @@
 
   When the model was fitted with \code{keep.data=FALSE} and
   \code{type="proflik"} is used for \code{confint}, the original data must be
-  supplied via the \code{data} argument. Wald intervals do not require the
-  data and can always be computed from the stored Hessian and parameter
-  estimates alone.
+  supplied via the \code{data} argument. The missing-value policy used during
+  fitting is reapplied to the supplied data before profile likelihood
+  evaluation. Wald intervals do not require the data and can always be
+  computed from the stored Hessian and parameter estimates alone.
 }
 
 \seealso{

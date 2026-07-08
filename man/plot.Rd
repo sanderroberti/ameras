@@ -114,6 +114,9 @@
 
   The data must either be stored on the object (\code{keep.data=TRUE} in 
   \code{ameras}, the default) or supplied via the \code{data} argument.
+  If the model was fitted with \code{na.exclude}, diagnostic plots use the
+  fitted rows only; residuals and fitted values are not padded back to the
+  originally supplied row count.
 
 }
 

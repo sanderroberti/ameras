@@ -456,7 +456,7 @@ resolve_data <- function(object, data = NULL) {
 
   # Check remaining required variables excluding X and dose
   # X is checked separately via X_formula, dose already checked above
-  needed <- setdiff(required_vars(m), c(m$dosevars, m$X))
+  needed <- setdiff(required_vars(m), c(m$dosevars, model_X_vars(m)))
   missing_vars <- setdiff(needed, colnames(data))
   if (length(missing_vars)) {
     stop(
@@ -477,6 +477,30 @@ resolve_data <- function(object, data = NULL) {
     }
   }
 
+  # Re-expand X formula on supplied data
+  if (!is.null(m$X_formula)) {
+    X_design <- build_X_design(
+      m$X_formula,
+      data,
+      X_design_info = m$X_design_info
+    )
+    X_matrix <- X_design$matrix
+    X_colnames <- colnames(X_matrix)
+    new_cols <- setdiff(X_colnames, colnames(data))
+    if (length(new_cols)) {
+      data[, new_cols] <- X_matrix[, new_cols, drop = FALSE]
+    }
+  }
+
+  if (!is.null(m$na_action_fun)) {
+    na_result <- apply_na_action_to_data(
+      data,
+      model_na_vars_from_model(m),
+      m$na_action_fun
+    )
+    data <- na_result$data
+  }
+
   if (m$family == "clogit") {
     data <- filter_clogit_sets(data, m$status, m$setnr)
   }
@@ -494,21 +518,6 @@ resolve_data <- function(object, data = NULL) {
       object$num.rows,
       " rows."
     )
-  }
-
-  # Re-expand X formula on supplied data
-  if (!is.null(m$X_formula)) {
-    X_design <- build_X_design(
-      m$X_formula,
-      data,
-      X_design_info = m$X_design_info
-    )
-    X_matrix <- X_design$matrix
-    X_colnames <- colnames(X_matrix)
-    new_cols <- setdiff(X_colnames, colnames(data))
-    if (length(new_cols)) {
-      data[, new_cols] <- X_matrix[, new_cols, drop = FALSE]
-    }
   }
 
   data$rcdose_ameras <- rowMeans(data[, m$dosevars, drop = FALSE])

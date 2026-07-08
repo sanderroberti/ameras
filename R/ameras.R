@@ -337,6 +337,7 @@ ameras <- function(
   optim.method = "Nelder-Mead",
   control = NULL,
   keep.data = TRUE,
+  na.action = getOption("na.action"),
   ...
 ) {
   call_env <- parent.frame()
@@ -356,6 +357,8 @@ ameras <- function(
   # Check for errors
   check_df(data)
   check_family(family)
+  na_action_fun <- resolve_na_action(na.action, env = call_env)
+  num.rows.original <- nrow(data)
   methods <- check_methods(methods)
   future.chunk.size.FMA <- check_future_chunk_size_FMA(future.chunk.size.FMA)
 
@@ -502,6 +505,25 @@ ameras <- function(
     status <- NULL
   }
 
+  na_vars <- model_na_vars(
+    family = family,
+    dosevars = parsed$dosevars,
+    Y = Y,
+    status = status,
+    M = parsed$M,
+    X = X,
+    offset = parsed$offset,
+    entry = parsed$entry,
+    exit = parsed$exit,
+    setnr = parsed$setnr
+  )
+  na_result <- apply_na_action_to_data(data, na_vars, na_action_fun)
+  data <- na_result$data
+  fit_na_action <- na_result$na.action
+  if (!nrow(data)) {
+    stop("ERROR: no rows remain after applying na.action")
+  }
+
   # Checks that depend on parsed formula
   if (family != "gaussian") {
     check_doseRRmod(parsed$doseRRmod)
@@ -529,6 +551,7 @@ ameras <- function(
     deg <- 2
   }
 
+  X_names <- X
   M <- getVarNumbers(parsed$M, data)
   X <- getVarNumbers(X, data)
 
@@ -561,7 +584,9 @@ ameras <- function(
     M_names = parsed$M, # names for resolve_data and required_vars
     X_formula = X_formula_to_store,
     X_design_info = X_design$X_design_info,
+    X_names = X_names,
     X = X,
+    na_action_fun = na_action_fun,
     offset = parsed$offset,
     entry = parsed$entry,
     exit = parsed$exit,
@@ -616,6 +641,8 @@ ameras <- function(
       call = match.call(),
       formula = formula_to_store,
       num.rows = nrow(data),
+      num.rows.original = num.rows.original,
+      na.action = fit_na_action,
       num.realizations = length(parsed$dosevars),
       transform = result$transform,
       transform.jacobian = result$transform.jacobian,
