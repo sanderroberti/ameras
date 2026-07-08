@@ -194,6 +194,15 @@ compute_proflik_CI <- function(
 }
 
 
+format_profile_boundary <- function(x, digits = 4) {
+  if (!is.finite(x)) {
+    return(as.character(x))
+  }
+
+  format(signif(x, digits), trim = TRUE, scientific = FALSE)
+}
+
+
 compute_proflik_ci_one <- function(
   index,
   inpar,
@@ -241,18 +250,17 @@ compute_proflik_ci_one <- function(
         "Consider rescaling the variable."
       )
     } else {
+      transformed_boundary <- do.call(
+        transform,
+        c(list(params = rep(15, length(inpar))), other.args)
+      )[index]
       warning(
-        "Upper bound for ",
+        "Upper profile bound for ",
         parname,
-        " is > ",
-        round(
-          do.call(
-            transform,
-            c(list(params = rep(15, length(inpar))), other.args)
-          )[index],
-          1
-        ),
-        " and may not exist. ",
+        " was not found before the upper profile search boundary (",
+        "corresponding parameter value: ",
+        format_profile_boundary(transformed_boundary),
+        ") and may not be finite. ",
         "Consider rescaling the variable."
       )
     }
@@ -294,18 +302,17 @@ compute_proflik_ci_one <- function(
         "Consider rescaling the variable."
       )
     } else {
+      transformed_boundary <- do.call(
+        transform,
+        c(list(params = rep(-10, length(inpar))), other.args)
+      )[index]
       warning(
-        "Lower bound for ",
+        "Lower profile bound for ",
         parname,
-        " is < ",
-        round(
-          do.call(
-            transform,
-            c(list(params = rep(-10, length(inpar))), other.args)
-          )[index],
-          1
-        ),
-        " and may not exist. ",
+        " was not found before the lower profile search boundary (",
+        "corresponding parameter value: ",
+        format_profile_boundary(transformed_boundary),
+        ") and may not be finite. ",
         "Consider rescaling the variable or using a different transformation."
       )
     }
