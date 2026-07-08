@@ -109,8 +109,7 @@
   of rows used for fitting after any \code{na.action} handling.
 
   For \code{family="multinomial"}, a numeric matrix of dimension
-  \eqn{N \times Z} where \eqn{N} is the number of rows used for fitting
-  after any \code{na.action} handling and \eqn{Z} is the number of outcome
+  \eqn{N \times Z} where \eqn{Z} is the number of outcome
   categories. Column names correspond to the factor levels.
   Note that when plotting via \code{\link[=plot.amerasfit]{plot}}, the 
   reference category is excluded since its residuals are a 
