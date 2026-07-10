@@ -16,6 +16,8 @@
   : Optimizer Convergence Diagnostics
 - [`data`](https://ameras.sanderroberti.com/reference/data.md) : Example
   Data
+- [`dose_lrt()`](https://ameras.sanderroberti.com/reference/dose_lrt.md)
+  : Likelihood-ratio tests for dose-related parameters
 - [`ecdfplot()`](https://ameras.sanderroberti.com/reference/ecdfplot.md)
   : Visualize Multiple Dose Realizations
 - [`included_realizations()`](https://ameras.sanderroberti.com/reference/included_realizations.md)

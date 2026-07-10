@@ -76,6 +76,10 @@
   [`convergence()`](https://ameras.sanderroberti.com/reference/convergence.md)
   for `amerasfit` objects to extract or recompute optimizer gradient
   diagnostics for RC, ERC, and MCML fits.
+- Added
+  [`dose_lrt()`](https://ameras.sanderroberti.com/reference/dose_lrt.md)
+  for global and individual likelihood-ratio tests of dose-related
+  parameters in RC, ERC, and MCML fits.
 - [`summary()`](https://rdrr.io/r/base/summary.html) now reports row
   counts in the order applied during fitting: supplied rows, rows
   omitted by `na.action`, and rows used for fitting. For conditional
