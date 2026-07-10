@@ -10,6 +10,7 @@ fit_objective_with_hessian <- function(
   upper = 5,
   use_optimize = length(start) == 1,
   gradient.check = !use_optimize,
+  compute.hessian = TRUE,
   ...
 ) {
   if (use_optimize) {
@@ -46,12 +47,16 @@ fit_objective_with_hessian <- function(
     }
   }
 
-  fit$hessian <- numDeriv::hessian(
-    func = fn,
-    x = fit$par,
-    ...
-  )
-  if (isTRUE(gradient.check)) {
+  if (isTRUE(compute.hessian)) {
+    fit$hessian <- numDeriv::hessian(
+      func = fn,
+      x = fit$par,
+      ...
+    )
+  } else {
+    fit$hessian <- NULL
+  }
+  if (isTRUE(gradient.check) && isTRUE(compute.hessian)) {
     fit <- add_optimizer_gradient_diagnostics(fit, fn, ...)
   }
   fit

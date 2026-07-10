@@ -47,11 +47,13 @@ flowchart TD
   R --> S
 
   S --> T["confint.amerasfit()"]
+  S --> AJ["dose_lrt.amerasfit()"]
   T -->|wald.orig / wald.transformed| U["compute_wald_CI()"]
   T -->|proflik| V["compute_proflik_CI()"]
   T -->|percentile / hpd| W["compute_sample_CI()"]
 
   V --> X["make_loglik_fn()"]
+  AJ --> X
   X --> Y["make_base_loglik_fn()"]
   Y --> Z["make_single_realization_loglik()<br/>ordinary RC/ERC/MCML cases"]
   Y --> AA["loglik.poisson.erc() / loglik.prophaz.erc()<br/>special ERC cases"]
@@ -63,6 +65,10 @@ flowchart TD
   AF --> AC["compute_proflik_ci_one()"]
   V --> AC
   AC --> AD["proflik()<br/>profile likelihood value"]
+  AJ --> AK["make_constrained_lrt_objective()<br/>fix dose parameters at zero"]
+  X --> AK
+  AK --> AL["fit_constrained_lrt_objective()<br/>fit_objective_with_hessian(compute.hessian = FALSE)"]
+  AL --> AM["dose LRT table"]
   U --> AG["CI table"]
   V --> AG
   W --> AG
@@ -130,6 +136,12 @@ as `ERC`. When the Hessian is usable, that warning is based on the approximate
 remaining objective improvement on both absolute and relative objective scales.
 The `convergence()` method can later extract those stored gradient diagnostics
 or reconstruct the same likelihood to compute them for older fitted objects.
+`dose_lrt()` also reuses the fitted-object likelihood builders for RC, ERC, and
+MCML. It evaluates constrained null fits by applying the fitted transformation
+to nuisance parameters, fixing selected dose parameters to zero on the reported
+scale, and then evaluating an otherwise identical likelihood with
+`transform = NULL`. These constrained fits skip Hessian and numerical-gradient
+diagnostics; their optimizer convergence codes are reported in the LRT table.
 
 FMA uses `fit_fma_realizations()` to build and fit one likelihood per dose
 realization. The realization loop goes through `fma_realization_lapply()`,

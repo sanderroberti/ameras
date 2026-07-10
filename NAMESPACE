@@ -54,6 +54,7 @@ export(
   transform1.jacobian,
   traceplot,
   ecdfplot,
+  dose_lrt,
   Rhat,
   included_realizations,
   convergence,
@@ -65,6 +66,7 @@ S3method(print, summary.amerasfit)
 S3method(traceplot, amerasfit)
 S3method(print, amerasfit)
 S3method(confint, amerasfit)
+S3method(dose_lrt, amerasfit)
 S3method(included_realizations, amerasfit)
 S3method(convergence, amerasfit)
 S3method(Rhat, amerasfit)

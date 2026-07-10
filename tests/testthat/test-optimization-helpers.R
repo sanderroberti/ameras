@@ -24,6 +24,21 @@ test_that("fit_objective_with_hessian handles multi-parameter objectives", {
   expect_true(ameras:::fit_passes_hessian_check(fit))
 })
 
+
+test_that("fit_objective_with_hessian can skip expensive Hessian work", {
+  fit <- ameras:::fit_objective_with_hessian(
+    start = c(x = 1, y = -1),
+    fn = function(par) sum((par - c(0.5, 0.25))^2),
+    compute.hessian = FALSE,
+    gradient.check = FALSE
+  )
+
+  expect_equal(unname(fit$par), c(0.5, 0.25), tolerance = 1e-6)
+  expect_equal(fit$value, 0, tolerance = 1e-8)
+  expect_null(fit$hessian)
+  expect_null(fit$gradient)
+})
+
 test_that("fit_objective_with_hessian forwards objective arguments to hessian", {
   fit <- ameras:::fit_objective_with_hessian(
     start = c(0, 0),
