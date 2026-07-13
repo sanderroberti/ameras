@@ -53,7 +53,10 @@ which is a list containing the following elements:
   A list describing row handling during model fitting, including the
   number of rows supplied, omitted by `na.action`, and used for fitting.
   For conditional logistic regression, this also includes the number of
-  rows excluded because they belong to uninformative matched sets.
+  rows excluded because they belong to uninformative matched sets. For
+  proportional hazards regression with entry times, this also includes
+  the number of rows excluded because they have zero follow-up time
+  (`entry == exit`).
 
 - `summary_table`:
 
@@ -131,13 +134,17 @@ printed in the summary table.
 
 Printing the summary prints the original call to `ameras`, row counts,
 the CPU runtime (total and by method), and the table described above.
-Row counts are shown in the order applied during fitting: rows supplied,
-rows omitted by `na.action`, and rows used for fitting. For conditional
-logistic regression, the summary also reports rows excluded because they
-belong to uninformative matched sets, i.e., matched sets of size 1 or
-with no cases. When confidence intervals have been computed, CI runtime
-is included in the total runtime. This table can also be accessed
-directly (i.e., to retrieve confidence intervals) using `summary_table`.
+Row counts are shown in the order applied during fitting. The supplied
+row count is always shown. Omitted or excluded row counts are shown only
+when nonzero, and the rows used for fitting are shown when this differs
+from the supplied row count. For conditional logistic regression, the
+summary reports rows excluded because they belong to uninformative
+matched sets, i.e., matched sets of size 1 or with no cases. For
+proportional hazards regression with entry times, the summary reports
+rows excluded because they have zero follow-up time (`entry == exit`).
+When confidence intervals have been computed, CI runtime is included in
+the total runtime. This table can also be accessed directly (i.e., to
+retrieve confidence intervals) using `summary_table`.
 
 ## See also
 
@@ -168,8 +175,6 @@ summary(fit)
 #> 
 #> Rows:
 #>   Supplied: 3000
-#>   Omitted by na.action: 0
-#>   Used for fitting: 3000
 #> 
 #> Total CPU runtime: 0 seconds
 #> 
@@ -202,15 +207,13 @@ summary(fit)
 #> 
 #> Rows:
 #>   Supplied: 3000
-#>   Omitted by na.action: 0
-#>   Used for fitting: 3000
 #> 
 #> Total CPU runtime: 0 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.038 0.001 0.039
+#>  Method   Fit  CI Total
+#>      RC 0.038 0.0 0.038
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -255,17 +258,15 @@ summary(fit2)
 #> 
 #> Rows:
 #>   Supplied: 3000
-#>   Omitted by na.action: 0
-#>   Used for fitting: 3000
 #> 
-#> Total CPU runtime: 61.8 seconds
+#> Total CPU runtime: 77.9 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit  CI  Total
-#>      RC  0.040 0.0  0.040
-#>     ERC 61.370 0.0 61.370
-#>    MCML  0.401 0.0  0.401
+#>  Method    Fit    CI  Total
+#>      RC  0.038 0.000  0.038
+#>     ERC 77.572 0.000 77.572
+#>    MCML  0.304 0.001  0.305
 #> 
 #> Summary of coefficients by method:
 #> 

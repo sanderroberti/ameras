@@ -494,7 +494,9 @@ conditional logistic regression, matched sets of size 1 and matched sets
 with no cases are excluded, and matched sets with more than one case are
 not currently supported. For proportional hazards regression, the
 left-hand side of the formula should have the form `Surv(exit, status)`
-or `Surv(entry, exit, status)`.
+or `Surv(entry, exit, status)`. When entry times are supplied, rows with
+`entry == exit` are excluded because they have zero follow-up time under
+the `entry < t <= exit` risk-set convention.
 
 A transformation can be used to reparametrize parameters for
 optimization, such that the likelihoods are evaluated at
@@ -601,12 +603,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 0.5 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.466 0.0 0.466
+#>      RC 0.425 0.0 0.425
 #> 
 #> Estimated model parameters:
 #> 

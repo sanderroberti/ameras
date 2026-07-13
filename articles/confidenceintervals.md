@@ -106,15 +106,13 @@ summary(fit.ameras.waldorig)
 #> 
 #> Rows:
 #>   Supplied: 3000
-#>   Omitted by na.action: 0
-#>   Used for fitting: 3000
 #> 
-#> Total CPU runtime: 0.5 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.477 0.001 0.478
+#>      RC 0.422 0.001 0.423
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -130,15 +128,13 @@ summary(fit.ameras.waldtransformed)
 #> 
 #> Rows:
 #>   Supplied: 3000
-#>   Omitted by na.action: 0
-#>   Used for fitting: 3000
 #> 
-#> Total CPU runtime: 0.5 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.477 0.001 0.478
+#>      RC 0.422 0.001 0.423
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -154,15 +150,13 @@ summary(fit.ameras.proflik)
 #> 
 #> Rows:
 #>   Supplied: 3000
-#>   Omitted by na.action: 0
-#>   Used for fitting: 3000
 #> 
 #> Total CPU runtime: 3.5 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.477 3.039 3.516
+#>      RC 0.422 3.114 3.536
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -213,15 +207,13 @@ summary(fit.ameras.hpd)
 #> 
 #> Rows:
 #>   Supplied: 3000
-#>   Omitted by na.action: 0
-#>   Used for fitting: 3000
 #> 
-#> Total CPU runtime: 2.2 seconds
+#> Total CPU runtime: 2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>     FMA 2.055 0.189 2.244
+#>     FMA 2.007 0.034 2.041
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -237,15 +229,13 @@ summary(fit.ameras.percentile)
 #> 
 #> Rows:
 #>   Supplied: 3000
-#>   Omitted by na.action: 0
-#>   Used for fitting: 3000
 #> 
-#> Total CPU runtime: 2.1 seconds
+#> Total CPU runtime: 2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>     FMA 2.055 0.073 2.128
+#>     FMA 2.007 0.018 2.025
 #> 
 #> Summary of coefficients by method:
 #> 

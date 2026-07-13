@@ -30,6 +30,9 @@
 - Conditional logistic regression now explicitly excludes matched sets
   of size 1 and matched sets with no cases, and errors for matched sets
   with more than one case.
+- Proportional hazards regression now explicitly excludes rows with
+  `entry == exit`, which have zero follow-up time under the
+  `entry < t <= exit` risk-set convention.
 
 ### Improvements
 
@@ -81,10 +84,13 @@
   for global and individual likelihood-ratio tests of dose-related
   parameters in RC, ERC, and MCML fits.
 - [`summary()`](https://rdrr.io/r/base/summary.html) now reports row
-  counts in the order applied during fitting: supplied rows, rows
-  omitted by `na.action`, and rows used for fitting. For conditional
-  logistic regression, it also reports rows excluded because they belong
-  to uninformative matched sets.
+  counts in the order applied during fitting: supplied rows, nonzero
+  omissions by `na.action`, nonzero family-specific exclusions, and rows
+  used for fitting when this differs from the supplied row count. For
+  conditional logistic regression, it reports rows excluded because they
+  belong to uninformative matched sets. For proportional hazards
+  regression with entry times, it reports rows excluded because they
+  have zero follow-up time.
 - Streamlined information printed by
   [`summary()`](https://rdrr.io/r/base/summary.html) and
   [`confint()`](https://rdrr.io/r/stats/confint.html): columns

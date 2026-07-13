@@ -105,15 +105,13 @@ summary(fit_ameras_gaussian)
 #> 
 #> Rows:
 #>   Supplied: 3000
-#>   Omitted by na.action: 0
-#>   Used for fitting: 3000
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.396 0.001 0.397
+#>      RC 0.313 0.001 0.314
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -208,15 +206,13 @@ summary(fit_ameras_rc)
 #> 
 #> Rows:
 #>   Supplied: 3000
-#>   Omitted by na.action: 0
-#>   Used for fitting: 3000
 #> 
 #> Total CPU runtime: 0.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.216 0.0 0.216
+#>      RC 0.207 0.0 0.207
 #> 
 #> Summary of coefficients by method:
 #> 

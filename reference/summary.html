@@ -100,7 +100,10 @@
 <dd><p>A list describing row handling during model fitting, including the number
       of rows supplied, omitted by <code>na.action</code>, and used for fitting.
       For conditional logistic regression, this also includes the number of
-      rows excluded because they belong to uninformative matched sets.</p></dd>
+      rows excluded because they belong to uninformative matched sets. For
+      proportional hazards regression with entry times, this also includes the
+      number of rows excluded because they have zero follow-up time
+      (<code>entry == exit</code>).</p></dd>
 
     <dt><code>summary_table</code></dt>
 <dd><p>A data frame with one row per parameter per method, containing
@@ -165,12 +168,15 @@
   but are not printed in the summary table.</p>
 <p>Printing the summary prints the original call to <code>ameras</code>, row counts,
   the CPU runtime (total and by method), and the table described above. Row
-  counts are shown in the order applied during fitting: rows supplied, rows
-  omitted by <code>na.action</code>, and rows used for fitting. For conditional
-  logistic regression, the summary also reports rows excluded because they
-  belong to uninformative matched sets, i.e., matched sets of size 1 or with no
-  cases. When confidence intervals have been computed, CI runtime is included
-  in the total runtime.
+  counts are shown in the order applied during fitting. The supplied row count
+  is always shown. Omitted or excluded row counts are shown only when nonzero,
+  and the rows used for fitting are shown when this differs from the supplied
+  row count. For conditional logistic regression, the summary reports rows
+  excluded because they belong to uninformative matched sets, i.e., matched sets
+  of size 1 or with no cases. For proportional hazards regression with entry
+  times, the summary reports rows excluded because they have zero follow-up time
+  (<code>entry == exit</code>). When confidence intervals have been computed, CI
+  runtime is included in the total runtime.
   This table can also be accessed directly (i.e., to retrieve confidence
   intervals) using <code>summary_table</code>.</p>
     </div>
@@ -200,8 +206,6 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Supplied: 3000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Omitted by na.action: 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Used for fitting: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -234,15 +238,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Supplied: 3000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Omitted by na.action: 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Used for fitting: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.038 0.001 0.039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.038 0.0 0.038</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -287,17 +289,15 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Supplied: 3000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Omitted by na.action: 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Used for fitting: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 61.8 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 77.9 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit  CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.040 0.0  0.040</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 61.370 0.0 61.370</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.401 0.0  0.401</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit    CI  Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.038 0.000  0.038</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 77.572 0.000 77.572</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.304 0.001  0.305</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
