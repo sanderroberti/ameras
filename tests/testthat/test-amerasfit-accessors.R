@@ -58,6 +58,24 @@ test_that("vcov reports when requested methods are absent", {
   )
 })
 
+test_that("row-info printing omits zero-count exclusions", {
+  row_info <- list(
+    supplied = 10L,
+    omitted.na = 0L,
+    clogit.uninformative.rows = NULL,
+    prophaz.zero.followup.rows = NULL,
+    used = 10L
+  )
+
+  out <- capture.output(ameras:::print_row_info(row_info, detailed = TRUE))
+
+  expect_true(any(grepl("Rows:", out, fixed = TRUE)))
+  expect_true(any(grepl("Supplied: 10", out, fixed = TRUE)))
+  expect_false(any(grepl("Omitted by na.action", out, fixed = TRUE)))
+  expect_false(any(grepl("Excluded as", out, fixed = TRUE)))
+  expect_false(any(grepl("Used for fitting", out, fixed = TRUE)))
+})
+
 test_that("traceplot requires BMA output", {
   fit <- ameras:::new_amerasfit(list(RC = list()))
 

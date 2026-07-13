@@ -10,6 +10,7 @@
 * Fixed an issue where an FMA realization with a finite fitted Hessian but non-finite sampling covariance could trigger a low-level `rmvnorm()` error. Such realizations are now excluded with a warning before FMA weights and samples are computed.
 * BMA now errors clearly if `included.realizations.BMA` leaves fewer than two dose realizations, since one-realization analyses should use RC.
 * Conditional logistic regression now explicitly excludes matched sets of size 1 and matched sets with no cases, and errors for matched sets with more than one case.
+* Proportional hazards regression now explicitly excludes rows with `entry == exit`, which have zero follow-up time under the `entry < t <= exit` risk-set convention.
 
 ## Improvements
 
@@ -22,7 +23,7 @@
 * Added numerical diagnostics that warn when right-hand-side covariates appear poorly scaled or ill-conditioned, and when `optim()` reports convergence but optimizer diagnostics suggest the solution may not be fully stationary. When the Hessian is usable, the optimizer warning uses the approximate remaining objective improvement on both absolute and relative scales.
 * Added `convergence()` for `amerasfit` objects to extract or recompute optimizer gradient diagnostics for RC, ERC, and MCML fits.
 * Added `dose_lrt()` for global and individual likelihood-ratio tests of dose-related parameters in RC, ERC, and MCML fits.
-* `summary()` now reports row counts in the order applied during fitting: supplied rows, rows omitted by `na.action`, and rows used for fitting. For conditional logistic regression, it also reports rows excluded because they belong to uninformative matched sets.
+* `summary()` now reports row counts in the order applied during fitting: supplied rows, nonzero omissions by `na.action`, nonzero family-specific exclusions, and rows used for fitting when this differs from the supplied row count. For conditional logistic regression, it reports rows excluded because they belong to uninformative matched sets. For proportional hazards regression with entry times, it reports rows excluded because they have zero follow-up time.
 * Streamlined information printed by `summary()` and `confint()`: columns `pval.lower` and `pval.upper` for profile likelihood intervals are no longer printed. They are still accessible within the fit object, and warnings are still printed in case an inaccurate profile likelihood bound is suspected.
 * Added structured timing information to fitted method results, separating fitting time, confidence interval computation time, and total time. Printed runtime summaries now use CPU time, so time spent while the computer is asleep is not counted. The existing `runtime` field is retained as a compatibility summary and is updated when `confint()` adds confidence interval timing.
 * Added vignettes for standard analyses with one dose realization, manual FMA from realization-specific RC fits, and parallel FMA with the `future` framework.

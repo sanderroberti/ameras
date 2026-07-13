@@ -503,6 +503,8 @@ resolve_data <- function(object, data = NULL) {
 
   if (m$family == "clogit") {
     data <- filter_clogit_sets(data, m$status, m$setnr)
+  } else if (m$family == "prophaz") {
+    data <- filter_prophaz_zero_followup(data, m$entry, m$exit, m$status)
   }
 
   # Check dose columns are numeric and finite

@@ -539,6 +539,12 @@ ameras <- function(
   }
   if (family == "prophaz") {
     check_entry_exit(parsed$entry, parsed$exit, data)
+    data <- filter_prophaz_zero_followup(
+      data,
+      parsed$entry,
+      parsed$exit,
+      status
+    )
   }
   if (family == "clogit") {
     check_setnr(parsed$setnr, data)

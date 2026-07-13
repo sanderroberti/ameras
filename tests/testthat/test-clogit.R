@@ -73,6 +73,12 @@ test_that("clogit filters uninformative matched sets before fitting", {
     fixed = TRUE
   )))
   expect_true(any(grepl("sets of size 1 or with no cases", out, fixed = TRUE)))
+  expect_false(any(grepl("Omitted by na.action: 0", out, fixed = TRUE)))
+  expect_true(any(grepl(
+    paste0("Used for fitting: ", nrow(base)),
+    out,
+    fixed = TRUE
+  )))
 })
 
 test_that("clogit rejects unsupported matched set case patterns", {

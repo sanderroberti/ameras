@@ -121,36 +121,55 @@ row_info_from_amerasfit <- function(object) {
   if (isTRUE(family == "clogit")) {
     clogit_uninformative_rows <- additional_filtered
   }
+  prophaz_zero_followup_rows <- NULL
+  if (isTRUE(family == "prophaz") && !is.null(object$model$entry)) {
+    prophaz_zero_followup_rows <- additional_filtered
+  }
 
   list(
     supplied = supplied,
     omitted.na = omitted_na,
     clogit.uninformative.rows = clogit_uninformative_rows,
+    prophaz.zero.followup.rows = prophaz_zero_followup_rows,
     used = used
   )
 }
 
 
 print_row_info <- function(row_info, detailed = TRUE) {
+  omitted_na <- row_info$omitted.na %||% 0L
+  used_differs <- isTRUE(row_info$used != row_info$supplied)
+
   if (isTRUE(detailed)) {
     cat("\nRows:\n")
     cat(paste0("  Supplied: ", row_info$supplied, "\n"))
-    cat(paste0("  Omitted by na.action: ", row_info$omitted.na, "\n"))
-    if (!is.null(row_info$clogit.uninformative.rows)) {
+    if (omitted_na > 0) {
+      cat(paste0("  Omitted by na.action: ", omitted_na, "\n"))
+    }
+    if (isTRUE(row_info$clogit.uninformative.rows > 0)) {
       cat(paste0(
         "  Excluded as uninformative matched-set rows: ",
         row_info$clogit.uninformative.rows,
         " (sets of size 1 or with no cases)\n"
       ))
     }
-    cat(paste0("  Used for fitting: ", row_info$used, "\n"))
+    if (isTRUE(row_info$prophaz.zero.followup.rows > 0)) {
+      cat(paste0(
+        "  Excluded as zero-follow-up proportional hazards rows: ",
+        row_info$prophaz.zero.followup.rows,
+        " (entry == exit)\n"
+      ))
+    }
+    if (used_differs) {
+      cat(paste0("  Used for fitting: ", row_info$used, "\n"))
+    }
   } else {
     cat(paste0("\nNumber of rows: ", row_info$used))
     details <- character()
-    if (row_info$omitted.na > 0) {
+    if (omitted_na > 0) {
       details <- c(
         details,
-        paste0(row_info$omitted.na, " omitted due to missingness")
+        paste0(omitted_na, " omitted due to missingness")
       )
     }
     if (isTRUE(row_info$clogit.uninformative.rows > 0)) {
@@ -159,6 +178,15 @@ print_row_info <- function(row_info, detailed = TRUE) {
         paste0(
           row_info$clogit.uninformative.rows,
           " excluded as uninformative matched-set rows"
+        )
+      )
+    }
+    if (isTRUE(row_info$prophaz.zero.followup.rows > 0)) {
+      details <- c(
+        details,
+        paste0(
+          row_info$prophaz.zero.followup.rows,
+          " excluded as zero-follow-up proportional hazards rows"
         )
       )
     }

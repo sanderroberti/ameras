@@ -179,7 +179,9 @@ warn_if_poorly_conditioned_X <- function(
     }
   }
 
-  design <- if (family %in% c("gaussian", "binomial", "poisson", "multinomial")) {
+  design <- if (
+    family %in% c("gaussian", "binomial", "poisson", "multinomial")
+  ) {
     cbind(`(Intercept)` = 1, X_matrix)
   } else {
     X_matrix
@@ -267,6 +269,49 @@ filter_clogit_sets <- function(data, status, setnr) {
     stop(
       "No informative matched sets remain after excluding matched sets of ",
       "size 1 or with no cases."
+    )
+  }
+
+  data
+}
+
+filter_prophaz_zero_followup <- function(data, entry, exit, status = NULL) {
+  if (is.null(entry) || !length(entry)) {
+    return(data)
+  }
+
+  entry_vec <- data[, entry, drop = TRUE]
+  exit_vec <- data[, exit, drop = TRUE]
+  zero_followup <- entry_vec == exit_vec
+  zero_followup[is.na(zero_followup)] <- FALSE
+
+  if (any(zero_followup)) {
+    n_excluded <- sum(zero_followup)
+    n_events <- if (!is.null(status) && length(status)) {
+      sum(data[zero_followup, status, drop = TRUE] == 1, na.rm = TRUE)
+    } else {
+      NA_integer_
+    }
+
+    event_note <- if (is.na(n_events)) {
+      ""
+    } else {
+      paste0(" Of these, ", n_events, " had status = 1.")
+    }
+
+    warning(paste0(
+      "Excluding ",
+      n_excluded,
+      " row(s) with entry == exit since they have zero follow-up time.",
+      event_note
+    ))
+    data <- data[!zero_followup, , drop = FALSE]
+  }
+
+  if (!nrow(data)) {
+    stop(
+      "No rows remain after excluding rows with entry == exit from ",
+      "proportional hazards regression."
     )
   }
 
@@ -582,7 +627,9 @@ apply_na_action_to_data <- function(data, vars, na.action) {
 
   acted <- na.action(na_frame)
   if (!is.data.frame(acted) || !row_id %in% colnames(acted)) {
-    stop("ERROR: na.action must return a data frame with rows preserved or removed")
+    stop(
+      "ERROR: na.action must return a data frame with rows preserved or removed"
+    )
   }
 
   keep <- acted[[row_id]]

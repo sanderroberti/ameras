@@ -325,6 +325,49 @@ test_that("clogit set filtering drops uninformative sets and rejects multiple ca
   )
 })
 
+test_that("prophaz filtering drops zero-follow-up rows", {
+  dat <- data.frame(
+    entry = c(0, 0, 2, 4),
+    exit = c(1, 0, 3, 4),
+    status = c(1, 1, 0, 0),
+    X = seq_len(4)
+  )
+
+  # With counting-process risk sets, subjects enter immediately after entry
+  # and are at risk for times entry < t <= exit. Rows with entry == exit
+  # therefore have no follow-up interval and are filtered before fitting.
+  expect_warning(
+    filtered <- ameras:::filter_prophaz_zero_followup(
+      dat,
+      "entry",
+      "exit",
+      "status"
+    ),
+    "entry == exit"
+  )
+  expect_identical(filtered$X, c(1L, 3L))
+
+  expect_identical(
+    ameras:::filter_prophaz_zero_followup(dat, NULL, "exit", "status"),
+    dat
+  )
+
+  no_remaining <- data.frame(
+    entry = c(1, 2),
+    exit = c(1, 2),
+    status = c(0, 1)
+  )
+  expect_error(
+    suppressWarnings(ameras:::filter_prophaz_zero_followup(
+      no_remaining,
+      "entry",
+      "exit",
+      "status"
+    )),
+    "No rows remain"
+  )
+})
+
 test_that("primitive vector checks report length, type, and bounds errors", {
   expect_null(ameras:::check_num_vec(c(1, 2), "x", len = 2))
   expect_error(ameras:::check_num_vec("1", "x"), "x must be numeric")
