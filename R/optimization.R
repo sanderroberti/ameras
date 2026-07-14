@@ -284,13 +284,7 @@ fit_passes_hessian_check <- function(fit) {
     return(FALSE)
   }
 
-  if (!is_finite_square_matrix(fit$hessian)) {
-    return(FALSE)
-  }
-
-  det(fit$hessian) != 0 &&
-    rcond(fit$hessian) > .Machine$double.eps &&
-    all(eigen(fit$hessian)$values > 0)
+  hessian_supports_vcov(fit$hessian)
 }
 
 # Variance extraction for MCML and RC/ERC only needs to know whether the Hessian
@@ -301,9 +295,21 @@ hessian_supports_vcov <- function(hessian) {
     return(FALSE)
   }
 
-  det(hessian) != 0 &&
-    rcond(hessian) > .Machine$double.eps &&
-    all(eigen(hessian)$values > 0)
+  det_hessian <- tryCatch(det(hessian), error = function(e) NA_real_)
+  rcond_hessian <- tryCatch(rcond(hessian), error = function(e) NA_real_)
+  eigen_values <- tryCatch(
+    eigen(hessian, symmetric = TRUE, only.values = TRUE)$values,
+    error = function(e) NA_real_
+  )
+
+  isTRUE(
+    is.finite(det_hessian) &&
+      det_hessian != 0 &&
+      is.finite(rcond_hessian) &&
+      rcond_hessian > .Machine$double.eps &&
+      all(is.finite(eigen_values)) &&
+      all(eigen_values > 0)
+  )
 }
 
 # Shared post-fit assembly for MCML and RC/ERC. The returned list preserves the

@@ -31,9 +31,7 @@ compute_wald_CI <- function(
 
   if (type == "transformed") {
     # Check invertibility
-    invertible <- det(hessian) != 0 &&
-      rcond(hessian) > .Machine$double.eps &&
-      all(eigen(hessian)$values > 0)
+    invertible <- hessian_supports_vcov(hessian)
 
     if (!invertible) {
       warning(
@@ -111,9 +109,7 @@ compute_proflik_CI <- function(
 
   # Use stored hessian to get sensible search bounds
   hessian <- method_fit$optim$hessian
-  invertible <- det(hessian) != 0 &&
-    rcond(hessian) > .Machine$double.eps &&
-    all(eigen(hessian)$values > 0)
+  invertible <- hessian_supports_vcov(hessian)
 
   if (invertible) {
     se <- sqrt(diag(chol2inv(chol(hessian))))

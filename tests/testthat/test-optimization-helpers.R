@@ -75,6 +75,9 @@ test_that("fit_passes_hessian_check rejects unusable fits", {
   )))
   expect_false(ameras:::hessian_supports_vcov(matrix(Inf, nrow = 1)))
   expect_false(ameras:::hessian_supports_vcov(matrix(NA_real_, nrow = 1)))
+  expect_false(ameras:::hessian_supports_vcov(matrix(numeric(0), nrow = 0)))
+  expect_false(ameras:::hessian_supports_vcov(matrix(1:2, nrow = 1)))
+  expect_false(ameras:::hessian_supports_vcov(matrix(c(1, 2, 2, 1), nrow = 2)))
 })
 
 test_that("optimizer gradient diagnostics warn only for suspicious convergence", {
