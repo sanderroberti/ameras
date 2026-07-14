@@ -261,8 +261,8 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span>  elapsed_seconds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sequential_elapsed</span>, <span class="va">parallel_elapsed</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;           plan elapsed_seconds</span></span>
-<span><span class="co">#&gt; 1   sequential            1.82</span></span>
-<span><span class="co">#&gt; 2 multisession            2.38</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   sequential            1.31</span></span>
+<span><span class="co">#&gt; 2 multisession            1.68</span></span></code></pre></div>
 <p>The estimates should agree up to ordinary numerical precision.
 Parallel execution is not guaranteed to be faster for small examples
 because starting workers and transferring data have overhead. It is most
