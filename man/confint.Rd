@@ -159,7 +159,11 @@
   re-evaluating the likelihood repeatedly and can be time-consuming.
   The \code{parm} argument can be used to restrict computation to dose
   parameters only (the default) when intervals for the other parameters are
-  not of interest.
+  not of interest. If a profile likelihood bound cannot be reliably
+  bracketed or solved, the corresponding bound is returned as \code{NA}
+  with a warning that reports the last attempted parameter value and its
+  p-value. For transformed fits, the warning also reports the corresponding
+  internal optimizer-scale value.
 
   When the model was fitted with \code{keep.data=FALSE} and
   \code{type="proflik"} is used for \code{confint}, the original data must be

@@ -191,11 +191,305 @@ compute_proflik_CI <- function(
 
 
 format_profile_boundary <- function(x, digits = 4) {
-  if (!is.finite(x)) {
+  if (is.na(x) || !is.finite(x)) {
     return(as.character(x))
   }
 
   format(signif(x, digits), trim = TRUE, scientific = FALSE)
+}
+
+
+make_profile_target_fn <- function(
+  index,
+  inpar,
+  optval,
+  loglik_fn,
+  alpha,
+  optim.method,
+  control
+) {
+  cache <- new.env(parent = emptyenv())
+
+  function(par) {
+    vapply(par, function(mypar) {
+      key <- format(mypar, digits = 17, scientific = TRUE)
+      if (exists(key, envir = cache, inherits = FALSE)) {
+        return(get(key, envir = cache, inherits = FALSE))
+      }
+
+      value <- tryCatch(
+        1 -
+          pchisq(
+            2 *
+              (proflik(
+                parvalue = mypar,
+                index = index,
+                fun = loglik_fn,
+                inpar = inpar,
+                optim.method = optim.method,
+                control = control
+              ) -
+                optval),
+            df = 1
+          ) -
+          alpha,
+        error = function(e) NA_real_
+      )
+      assign(key, value, envir = cache)
+      value
+    }, numeric(1))
+  }
+}
+
+
+profile_reported_value <- function(
+  par,
+  index,
+  inpar,
+  transform = NULL,
+  other.args = NULL
+) {
+  if (is.null(transform)) {
+    return(par)
+  }
+
+  params <- inpar
+  params[index] <- par
+  tryCatch(
+    do.call(transform, c(list(params = params), other.args))[index],
+    error = function(e) NA_real_
+  )
+}
+
+
+warn_profile_bound_failure <- function(
+  parname,
+  direction,
+  reason,
+  par,
+  target,
+  alpha,
+  index,
+  inpar,
+  transform = NULL,
+  other.args = NULL
+) {
+  pval <- target + alpha
+  reported <- profile_reported_value(
+    par = par,
+    index = index,
+    inpar = inpar,
+    transform = transform,
+    other.args = other.args
+  )
+
+  warning(
+    paste0(
+      "Profile likelihood ",
+      direction,
+      " bound for ",
+      parname,
+      " ",
+      reason,
+      "; returning NA for this bound. Last attempted value: ",
+      format_profile_boundary(reported),
+      if (!is.null(transform)) {
+        paste0(
+          " (internal optimizer-scale value: ",
+          format_profile_boundary(par),
+          ")"
+        )
+      } else {
+        ""
+      },
+      ", p-value at last attempted value: ",
+      format_profile_boundary(pval),
+      ", target p-value: ",
+      format_profile_boundary(alpha),
+      "."
+    ),
+    call. = FALSE
+  )
+}
+
+
+find_profile_bracket <- function(
+  target_fn,
+  center,
+  initial,
+  direction,
+  max_expand = 12L
+) {
+  center_value <- target_fn(center)
+  if (!is.finite(center_value) || center_value <= 0) {
+    return(list(
+      found = FALSE,
+      lower = NA_real_,
+      upper = NA_real_,
+      last.par = center,
+      last.target = center_value
+    ))
+  }
+
+  if (!is.finite(initial) || direction * (initial - center) <= 0) {
+    initial <- center + direction
+  }
+
+  step <- abs(initial - center)
+  if (!is.finite(step) || step <= sqrt(.Machine$double.eps)) {
+    step <- 1
+  }
+
+  candidate <- initial
+  last_candidate <- candidate
+  last_value <- NA_real_
+  for (i in 0:max_expand) {
+    if (!is.finite(candidate)) {
+      break
+    }
+
+    last_candidate <- candidate
+    last_value <- target_fn(candidate)
+    if (is.finite(last_value) && last_value <= 0) {
+      if (direction < 0) {
+        return(list(
+          found = TRUE,
+          lower = candidate,
+          upper = center,
+          last.par = candidate,
+          last.target = last_value
+        ))
+      }
+
+      return(list(
+        found = TRUE,
+        lower = center,
+        upper = candidate,
+        last.par = candidate,
+        last.target = last_value
+      ))
+    }
+
+    step <- step * 2
+    candidate <- center + direction * step
+  }
+
+  list(
+    found = FALSE,
+    lower = NA_real_,
+    upper = NA_real_,
+    last.par = last_candidate,
+    last.target = last_value
+  )
+}
+
+
+solve_profile_bound <- function(
+  target_fn,
+  center,
+  initial,
+  direction,
+  direction_name,
+  parname,
+  alpha,
+  maxit.profCI,
+  tol.profCI,
+  index,
+  inpar,
+  transform = NULL,
+  other.args = NULL,
+  target.tol = 0.005
+) {
+  bracket <- find_profile_bracket(
+    target_fn = target_fn,
+    center = center,
+    initial = initial,
+    direction = direction
+  )
+
+  if (!isTRUE(bracket$found)) {
+    warn_profile_bound_failure(
+      parname = parname,
+      direction = direction_name,
+      reason = "could not be bracketed",
+      par = bracket$last.par,
+      target = bracket$last.target,
+      alpha = alpha,
+      index = index,
+      inpar = inpar,
+      transform = transform,
+      other.args = other.args
+    )
+    return(list(
+      root = NA_real_,
+      f.root = bracket$last.target,
+      iter = NA_integer_
+    ))
+  }
+
+  root_warning <- NULL
+  root_error <- NULL
+  root <- tryCatch(
+    withCallingHandlers(
+      uniroot(
+        target_fn,
+        lower = bracket$lower,
+        upper = bracket$upper,
+        maxiter = maxit.profCI,
+        tol = tol.profCI
+      ),
+      warning = function(w) {
+        root_warning <<- conditionMessage(w)
+        invokeRestart("muffleWarning")
+      }
+    ),
+    error = function(e) {
+      root_error <<- conditionMessage(e)
+      NULL
+    }
+  )
+
+  if (is.null(root)) {
+    warn_profile_bound_failure(
+      parname = parname,
+      direction = direction_name,
+      reason = paste0("could not be solved", if (!is.null(root_error)) {
+        paste0(" (", root_error, ")")
+      } else {
+        ""
+      }),
+      par = bracket$last.par,
+      target = bracket$last.target,
+      alpha = alpha,
+      index = index,
+      inpar = inpar,
+      transform = transform,
+      other.args = other.args
+    )
+    return(list(root = NA_real_, f.root = bracket$last.target, iter = NA_integer_))
+  }
+
+  if (
+    !is.null(root_warning) ||
+      is.na(root$f.root) ||
+      abs(root$f.root) > target.tol
+  ) {
+    warn_profile_bound_failure(
+      parname = parname,
+      direction = direction_name,
+      reason = "was not solved accurately",
+      par = root$root,
+      target = root$f.root,
+      alpha = alpha,
+      index = index,
+      inpar = inpar,
+      transform = transform,
+      other.args = other.args
+    )
+    return(list(root = NA_real_, f.root = root$f.root, iter = root$iter))
+  }
+
+  root
 }
 
 
@@ -215,129 +509,47 @@ compute_proflik_ci_one <- function(
   transform = NULL,
   other.args = NULL
 ) {
-  profCI_fn <- function(par) {
-    sapply(par, function(mypar) {
-      1 -
-        pchisq(
-          2 *
-            (proflik(
-              parvalue = mypar,
-              index = index,
-              fun = loglik_fn,
-              inpar = inpar,
-              optim.method = optim.method,
-              control = control
-            ) -
-              optval),
-          df = 1
-        ) -
-        alpha
-    })
-  }
+  profCI_fn <- make_profile_target_fn(
+    index = index,
+    inpar = inpar,
+    optval = optval,
+    loglik_fn = loglik_fn,
+    alpha = alpha,
+    optim.method = optim.method,
+    control = control
+  )
 
-  # Upper bound
-  val_at_15 <- profCI_fn(15)
-  if (val_at_15 > 0) {
-    if (is.null(transform)) {
-      warning(
-        "Upper bound for ",
-        parname,
-        " is > 15 and may not exist. ",
-        "Consider rescaling the variable."
-      )
-    } else {
-      transformed_boundary <- do.call(
-        transform,
-        c(list(params = rep(15, length(inpar))), other.args)
-      )[index]
-      warning(
-        "Upper profile bound for ",
-        parname,
-        " was not found before the upper profile search boundary (",
-        "corresponding parameter value: ",
-        format_profile_boundary(transformed_boundary),
-        ") and may not be finite. ",
-        "Consider rescaling the variable."
-      )
-    }
+  lowroot <- solve_profile_bound(
+    target_fn = profCI_fn,
+    center = inpar[index],
+    initial = lowlim,
+    direction = -1,
+    direction_name = "lower",
+    parname = parname,
+    alpha = alpha,
+    maxit.profCI = maxit.profCI,
+    tol.profCI = tol.profCI,
+    index = index,
+    inpar = inpar,
+    transform = transform,
+    other.args = other.args
+  )
 
-    uproot <- list(root = Inf, f.root = val_at_15, iter = NA_integer_)
-  } else {
-    uproot <- tryCatch(
-      uniroot(
-        profCI_fn,
-        lower = inpar[index],
-        upper = uplim,
-        extendInt = "downX",
-        maxiter = maxit.profCI,
-        tol = tol.profCI
-      ),
-      error = function(e) {
-        list(root = NA_real_, f.root = NA_real_, iter = NA_integer_)
-      }
-    )
-    if (!is.na(uproot$f.root) && abs(uproot$f.root) > 0.005) {
-      warning(
-        "P-value for ",
-        parname,
-        " upper bound is more than 0.005 from ",
-        alpha,
-        ". Consider reducing tol.profCI or increasing maxit.profCI."
-      )
-    }
-  }
-
-  # Lower bound
-  val_at_minus10 <- profCI_fn(-10)
-  if (val_at_minus10 > 0) {
-    if (is.null(transform)) {
-      warning(
-        "Lower bound for ",
-        parname,
-        " is < -10 and may not exist. ",
-        "Consider rescaling the variable."
-      )
-    } else {
-      transformed_boundary <- do.call(
-        transform,
-        c(list(params = rep(-10, length(inpar))), other.args)
-      )[index]
-      warning(
-        "Lower profile bound for ",
-        parname,
-        " was not found before the lower profile search boundary (",
-        "corresponding parameter value: ",
-        format_profile_boundary(transformed_boundary),
-        ") and may not be finite. ",
-        "Consider rescaling the variable or using a different transformation."
-      )
-    }
-
-    lowroot <- list(root = -Inf, f.root = val_at_minus10, iter = NA_integer_)
-  } else {
-    lowroot <- tryCatch(
-      uniroot(
-        profCI_fn,
-        lower = lowlim,
-        upper = inpar[index],
-        extendInt = "upX",
-        maxiter = maxit.profCI,
-        tol = tol.profCI
-      ),
-      error = function(e) {
-        list(root = NA_real_, f.root = NA_real_, iter = NA_integer_)
-      }
-    )
-    if (!is.na(lowroot$f.root) && abs(lowroot$f.root) > 0.005) {
-      warning(
-        "P-value for ",
-        parname,
-        " lower bound is more than 0.005 from ",
-        alpha,
-        ". Consider reducing tol.profCI or increasing maxit.profCI."
-      )
-    }
-  }
+  uproot <- solve_profile_bound(
+    target_fn = profCI_fn,
+    center = inpar[index],
+    initial = uplim,
+    direction = 1,
+    direction_name = "upper",
+    parname = parname,
+    alpha = alpha,
+    maxit.profCI = maxit.profCI,
+    tol.profCI = tol.profCI,
+    index = index,
+    inpar = inpar,
+    transform = transform,
+    other.args = other.args
+  )
 
   list(
     lower = lowroot$root,

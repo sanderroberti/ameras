@@ -12,6 +12,7 @@
 * Conditional logistic regression now explicitly excludes matched sets of size 1 and matched sets with no cases, and errors for matched sets with more than one case.
 * Proportional hazards regression now explicitly excludes rows with `entry == exit`, which have zero follow-up time under the `entry < t <= exit` risk-set convention.
 * Profile likelihood confidence intervals now handle unusable Hessian matrices more robustly, falling back to default search bounds when needed.
+* Profile likelihood confidence intervals now use explicit adaptive bracketing and return `NA` with diagnostic warnings when a bound cannot be reliably solved.
 
 ## Improvements
 

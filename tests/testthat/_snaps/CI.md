@@ -11,9 +11,9 @@
 
 ---
 
-    structure(list(lower = c(0, 0.124824485619196), upper = c(0.481936149545829, 
-    0.388528138266399), pval.lower = c(0.86103023251831, 0.049785273193913
-    ), pval.upper = c(0.0500507010332296, 0.0493297310517574), iter.lower = c(NA, 
+    structure(list(lower = c(NA, 0.124824485619156), upper = c(0.481936149545665,
+    0.388528138266399), pval.lower = c(0.860852703348517, 0.0497852731937511
+    ), pval.upper = c(0.0500507010336095, 0.0493297310517574), iter.lower = c(NA,
     7L), iter.upper = c(11L, 7L)), row.names = c("dose", "dose_squared"
     ), class = "data.frame")
 
@@ -24,7 +24,7 @@
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1     RC  (Intercept)   -0.696 0.085       NA       NA
-      2     RC         dose    0.036 0.205     0.00     0.48
+      2     RC         dose    0.036 0.205       NA     0.48
       3     RC dose_squared    0.274 0.078     0.12     0.39
 
 ---
@@ -68,11 +68,10 @@
 
 ---
 
-    structure(list(lower = c(0, 0.23166893036439), upper = c(NA, 
-    0.420152375346261), pval.lower = c(0.992315558085395, 0.0493096605911812
-    ), pval.upper = c(NA, 0.0494652222864629), iter.lower = c(NA, 
-    6L), iter.upper = c(NA, 4L)), row.names = c("dose", "dose_squared"
-    ), class = "data.frame")
+    structure(list(lower = c(NA, 0.23166893036439), upper = c(NA, 
+    0.420152375346261), pval.lower = c(1, 0.0493096605911812), pval.upper = c(0, 
+    0.0494652222864629), iter.lower = c(NA, 6L), iter.upper = c(20, 
+    4)), row.names = c("dose", "dose_squared"), class = "data.frame")
 
 ---
 
@@ -81,7 +80,7 @@
     Output
         Method         Term Estimate      SE CI.lower CI.upper
       1    ERC  (Intercept) -6.9e-01 0.05255       NA       NA
-      2    ERC         dose  5.3e-08 0.00023     0.00       NA
+      2    ERC         dose  5.3e-08 0.00023       NA       NA
       3    ERC dose_squared  3.2e-01 0.04694     0.23     0.42
 
 ---
@@ -124,9 +123,9 @@
 
 ---
 
-    structure(list(lower = c(0, 0.131427164024257), upper = c(0.441921125360596, 
-    0.38098269776637), pval.lower = c(0.966228359151512, 0.0498346194362645
-    ), pval.upper = c(0.0500763939116691, 0.0494530130996915), iter.lower = c(NA, 
+    structure(list(lower = c(NA, 0.13142716402424), upper = c(0.44192112536042, 
+    0.380982697766377), pval.lower = c(0.966049218072967, 0.049834619436305
+    ), pval.upper = c(0.0500763939119137, 0.0494530130995442), iter.lower = c(NA, 
     7L), iter.upper = c(14L, 7L)), row.names = c("dose", "dose_squared"
     ), class = "data.frame")
 
@@ -137,7 +136,7 @@
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1   MCML  (Intercept)  -0.6781 0.084       NA       NA
-      2   MCML         dose   0.0084 0.198     0.00     0.44
+      2   MCML         dose   0.0084 0.198       NA     0.44
       3   MCML dose_squared   0.2756 0.075     0.13     0.38
 
 ---

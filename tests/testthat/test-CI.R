@@ -2,6 +2,33 @@ set.seed(123)
 data("data", package = "ameras")
 
 
+test_that("public profile likelihood CIs hit target p-values for stable RC fits", {
+  fit <- fit_combination(
+    family = "gaussian",
+    Y = "Y.gaussian",
+    doseRRmod = NULL,
+    deg = 1,
+    X = NULL,
+    M = NULL,
+    data = data,
+    methods = "RC"
+  )
+  fit <- suppressMessages(confint(
+    fit,
+    type = "proflik",
+    parm = "dose",
+    maxit.profCI = 100,
+    tol.profCI = 1e-8,
+    print = FALSE
+  ))
+
+  ci <- fit$RC$CI["dose", , drop = FALSE]
+  expect_true(all(is.finite(as.matrix(ci[, c("lower", "upper")]))))
+  expect_equal(ci$pval.lower, 0.05, tolerance = 0.005)
+  expect_equal(ci$pval.upper, 0.05, tolerance = 0.005)
+})
+
+
 for (method in c("RC", "ERC", "MCML")) {
   test_that(paste("proflik/wald.transformed snapshot:", method), {
     if (method %in% c("ERC", "MCML")) {
@@ -18,7 +45,14 @@ for (method in c("RC", "ERC", "MCML")) {
       data = data,
       methods = method
     )
-    fit1 <- confint(fit, type = c("proflik"))
+    if (method == "RC") {
+      expect_warning(
+        fit1 <- confint(fit, type = c("proflik")),
+        "Profile likelihood lower bound for dose could not be bracketed"
+      )
+    } else {
+      fit1 <- confint(fit, type = c("proflik"))
+    }
     expect_snapshot_value(
       coef(fit1),
       tolerance = 1e-4,
