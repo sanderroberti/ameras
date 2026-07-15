@@ -68,7 +68,7 @@ test_that("RC, ERC, and MCML Gaussian names include modifiers and sigma", {
   methods <- c("RC", "ERC", "MCML")
 
   fit <- fit_refactor_guard(
-    Y.gaussian ~ dose(V1:V2, deg = 2, modifier = M1),
+    Y.gaussian ~ dose(V1:V2, deg = 2, modifier = ~ M1),
     data = guard_data,
     family = "gaussian",
     methods = methods
@@ -106,7 +106,7 @@ test_that("RC, ERC, and MCML LINEXP names are set with and without modifiers", {
   )
 
   fit_with_modifier <- fit_refactor_guard(
-    Y.binomial ~ dose(V1:V2, model = LINEXP, modifier = Mzero),
+    Y.binomial ~ dose(V1:V2, model = LINEXP, modifier = ~ Mzero),
     data = guard_data,
     family = "binomial",
     methods = methods
@@ -157,7 +157,7 @@ test_that("RC and MCML no-intercept family names start with dose terms", {
   methods <- c("RC", "MCML")
 
   fit <- fit_refactor_guard(
-    Y.clogit ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1) +
+    Y.clogit ~ dose(V1:V2, model = EXP, deg = 2, modifier = ~ M1) +
       strata(setnr),
     data = guard_data,
     family = "clogit",
@@ -255,7 +255,7 @@ test_that("RC and MCML multinomial names include response-level prefixes", {
   methods <- c("RC", "MCML")
 
   fit <- fit_refactor_guard(
-    Y.multinomial ~ dose(V1:V2, model = LINEXP, modifier = Mzero),
+    Y.multinomial ~ dose(V1:V2, model = LINEXP, modifier = ~ Mzero),
     data = guard_data,
     family = "multinomial",
     methods = methods

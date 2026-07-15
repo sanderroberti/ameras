@@ -8,8 +8,10 @@ internal implementation details, not user-facing API.
 
 ```mermaid
 flowchart TD
-  A["ameras()"] --> B["parse/check inputs<br/>build transforms<br/>build X design info<br/>add rcdose_ameras"]
-  B --> C["ameras_main()"]
+  A["ameras()"] --> B["parse formula / legacy args<br/>build X design info"]
+  B --> BA["prepare_modifier_inputs()<br/>source vars -> numeric modifier design columns"]
+  BA --> BB["check inputs<br/>build transforms<br/>add rcdose_ameras"]
+  BB --> C["ameras_main()"]
 
   C -->|MCML| D["ameras.mcml()"]
   C -->|RC| E["ameras.rc(ERC = FALSE)"]
@@ -55,8 +57,9 @@ flowchart TD
   V --> X["make_loglik_fn()"]
   AJ --> X
   X --> Y["make_base_loglik_fn()"]
-  Y --> Z["make_single_realization_loglik()<br/>ordinary RC/ERC/MCML cases"]
-  Y --> AA["loglik.poisson.erc() / loglik.prophaz.erc()<br/>special ERC cases"]
+  Y --> AN["make_modifier_loglik_transform()<br/>subgroup effects -> contrast scale"]
+  AN --> Z["make_single_realization_loglik()<br/>ordinary RC/ERC/MCML cases"]
+  AN --> AA["loglik.poisson.erc() / loglik.prophaz.erc()<br/>special ERC cases"]
   Z --> AE["base likelihood closure"]
   AA --> AE
   X --> AF["method-specific profile objective closure"]
@@ -89,6 +92,25 @@ consistently when `keep.data = FALSE`. After missing-value handling and any
 matched-set filtering, `warn_if_poorly_conditioned_X()` checks the fitted
 covariate design for severe scaling or conditioning problems. This is a
 diagnostic only; it does not alter the fitted data or coefficients.
+
+Formula-based dose modifiers are prepared by `prepare_modifier_inputs()` after
+missing-value handling and before model-specific row filtering. That helper
+keeps the original modifier variables in `modifier_info$source_vars`, creates
+numeric internal design columns in `modifier_info$design_vars`, and stores the
+labels used for reported coefficients and intervals. This separation matters
+for `keep.data = FALSE`: user-supplied data are checked against the original
+source variables, then `resolve_data()` regenerates the same internal design
+columns before rebuilding likelihoods.
+
+For ordinary `modifier = ~ M` formulas, the prepared design columns are still
+used in the existing reference-plus-contrast likelihood parameterization. For
+subgroup-coded formulas such as `modifier = ~ 0 + M` or `modifier = ~ M - 1`,
+the fitted and reported coefficients are subgroup-specific effects. The
+low-level likelihoods still use the original contrast parameterization, so
+`make_modifier_loglik_transform()` maps reported subgroup effects to the
+equivalent contrast scale immediately before likelihood evaluation. BMA is not
+yet wired for subgroup-coded modifiers and errors before fitting if that
+combination is requested.
 
 `ameras_main()` dispatches to the method-specific fitting functions:
 
@@ -183,6 +205,12 @@ That reconstruction goes through two adapter helpers:
   Poisson ERC and proportional hazards ERC stay explicit because they use
   precomputed centered dose-realization residuals.
 
+When a fitted object used subgroup-coded modifiers, `make_base_loglik_fn()` also
+recreates the modifier log-likelihood transform. That keeps profile likelihood
+intervals, `dose_lrt()`, and other fitted-object diagnostics on the same
+reported parameter scale as `coef()` while still evaluating the old contrast
+likelihood internally.
+
 The reconstructed likelihood is then passed into `proflik()` through
 `compute_proflik_ci_one()`. For MCML profile likelihoods,
 `make_loglik_fn()` reuses `mcml_average_neg_loglik()` to average over the dose
@@ -198,7 +226,8 @@ than accumulated. The updated `amerasfit` object is returned invisibly.
 For fitted objects that do not store data (`keep.data = FALSE`), diagnostic
 methods reconstruct the analysis data with `resolve_data()`. That helper
 validates user-supplied data, rebuilds expanded `X` columns when needed, and
-adds the internal mean-dose column `rcdose_ameras`.
+regenerates formula-modifier design columns before adding the internal mean-dose
+column `rcdose_ameras`.
 
 `residuals.amerasfit()` resolves data and then delegates residual calculation
 to `compute_residuals()`, which assumes the data have already been resolved.

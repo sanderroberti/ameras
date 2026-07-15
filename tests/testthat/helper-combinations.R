@@ -44,7 +44,7 @@ fit_combination <- function(
   ...
 ) {
   if (length(M) > 0) {
-    Mstring <- paste(M, collapse = "+")
+    Mstring <- paste0("~", paste(M, collapse = "+"))
   } else {
     Mstring <- "NULL"
   }

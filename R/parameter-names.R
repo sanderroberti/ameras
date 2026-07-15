@@ -7,7 +7,8 @@ make_method_parnames <- function(
   deg = 1,
   doseRRmod = NULL,
   include_sigma = identical(family, "gaussian"),
-  prophaz_numints = NULL
+  prophaz_numints = NULL,
+  modifier_info = NULL
 ) {
   # Most families have an intercept-like parameter; conditional logistic and
   # proportional hazards methods do not. Keep that distinction explicit because
@@ -19,31 +20,17 @@ make_method_parnames <- function(
   }
 
   x_names <- names(data[, X, drop = FALSE])
-  m_names <- names(data[, M, drop = FALSE])
-
-  if (identical(doseRRmod, "LINEXP")) {
-    parnames <- c(
-      parnames,
-      x_names,
-      c("dose_linear", "dose_exponential")
+  parnames <- c(
+    parnames,
+    x_names,
+    modifier_dose_names(
+      doseRRmod = doseRRmod,
+      deg = deg,
+      data = data,
+      M = M,
+      modifier_info = modifier_info
     )
-    if (!is.null(M)) {
-      parnames <- c(parnames, paste0("dose_linear:", m_names))
-      parnames <- c(parnames, paste0("dose_exponential:", m_names))
-    }
-  } else {
-    parnames <- c(
-      parnames,
-      x_names,
-      c("dose", "dose_squared")[1:deg]
-    )
-    if (!is.null(M)) {
-      parnames <- c(parnames, paste0("dose:", m_names))
-      if (deg == 2) {
-        parnames <- c(parnames, paste0("dose_squared:", m_names))
-      }
-    }
-  }
+  )
 
   if (include_sigma) {
     parnames <- c(parnames, "sigma")

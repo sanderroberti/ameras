@@ -8,6 +8,16 @@ make_base_loglik_fn <- function(object, method_fit, data) {
   if (is.null(other_args)) {
     other_args <- list()
   }
+  loglik_transform <- make_modifier_loglik_transform(
+    transform = object$transform,
+    modifier_info = m$modifier_info,
+    family = m$family,
+    X = m$X,
+    M = m$M,
+    deg = m$deg,
+    Y = m$Y,
+    data = data
+  )
 
   if (ERC && m$family == "prophaz") {
     ord_exit <- order(data[[m$exit]])
@@ -54,7 +64,7 @@ make_base_loglik_fn <- function(object, method_fit, data) {
               data = data,
               deg = m$deg,
               loglim = m$loglim,
-              transform = object$transform,
+              transform = loglik_transform,
               Xc_ord = Xc_ord,
               Kmat_diag_ord = Kmat_diag_ord
             ),
@@ -81,7 +91,7 @@ make_base_loglik_fn <- function(object, method_fit, data) {
               data = data,
               deg = m$deg,
               loglim = m$loglim,
-              transform = object$transform,
+              transform = loglik_transform,
               Xc = Xc_poisson,
               Kmat_diag = Kmat_diag_poisson
             ),
@@ -110,7 +120,7 @@ make_base_loglik_fn <- function(object, method_fit, data) {
         doseRRmod = m$doseRRmod,
         deg = m$deg,
         loglim = m$loglim,
-        transform = object$transform,
+        transform = loglik_transform,
         ERC = ERC,
         Kmat = Kmat
       ),
@@ -377,6 +387,16 @@ make_base_loglik_fn_single <- function(object, method_fit, data, dose.col) {
   if (is.null(other_args)) {
     other_args <- list()
   }
+  loglik_transform <- make_modifier_loglik_transform(
+    transform = object$transform,
+    modifier_info = m$modifier_info,
+    family = m$family,
+    X = m$X,
+    M = m$M,
+    deg = m$deg,
+    Y = m$Y,
+    data = data
+  )
 
   # Reuse the raw-argument helper so fitted objects and in-progress fits build
   # single-realization likelihoods through the same family-specific code path.
@@ -398,7 +418,7 @@ make_base_loglik_fn_single <- function(object, method_fit, data, dose.col) {
         doseRRmod = m$doseRRmod,
         deg = m$deg,
         loglim = m$loglim,
-        transform = object$transform,
+        transform = loglik_transform,
         ERC = FALSE,
         Kmat = NULL
       ),
@@ -501,6 +521,11 @@ resolve_data <- function(object, data = NULL) {
     data <- na_result$data
   }
 
+  # Recreate generated modifier columns before rebuilding likelihoods for
+  # fitted objects that were saved without their original data.
+  modifier_inputs <- prepare_modifier_inputs(data, m$modifier_info)
+  data <- modifier_inputs$data
+
   if (m$family == "clogit") {
     data <- filter_clogit_sets(data, m$status, m$setnr)
   } else if (m$family == "prophaz") {
@@ -547,6 +572,16 @@ compute_fitted <- function(
 ) {
   m <- object$model
   coefs <- object[[method]]$coefficients
+  coefs <- modifier_reported_to_internal_params(
+    params = coefs,
+    family = m$family,
+    X = m$X,
+    M = m$M,
+    deg = m$deg,
+    modifier_info = m$modifier_info,
+    Y = m$Y,
+    data = data
+  )
 
   if (m$family %in% c("prophaz", "clogit")) {
     # For prophaz we return the vector relative risks

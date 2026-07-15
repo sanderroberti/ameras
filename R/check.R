@@ -498,7 +498,7 @@ check_char_vec <- function(x, nm, valid = NULL, def = NULL, len = 0) {
 
 
 required_vars <- function(m) {
-  vars <- c(m$dosevars, model_X_vars(m), m$M_names)
+  vars <- c(m$dosevars, model_X_vars(m), modifier_source_vars(m))
 
   if (m$family %in% c("gaussian", "binomial", "poisson", "multinomial")) {
     vars <- c(vars, m$Y)
@@ -600,7 +600,7 @@ model_na_vars_from_model <- function(m) {
     dosevars = m$dosevars,
     Y = m$Y,
     status = m$status,
-    M = m$M_names,
+    M = modifier_source_vars(m),
     X = model_X_vars(m),
     offset = m$offset,
     entry = m$entry,

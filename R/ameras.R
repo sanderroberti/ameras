@@ -9,6 +9,7 @@ ameras_main <- function(
   transform.jacobian = NULL,
   Y = NULL,
   M = NULL,
+  modifier_info = NULL,
   X = NULL,
   offset = NULL,
   inpar = NULL,
@@ -81,7 +82,9 @@ ameras_main <- function(
     )
   }
 
-  # For linear ERR models, if no transformation is specified, use transform1 with lower limits -1/max(dose) for linear dose-response and (0,-1/max(dose^2)) for linear and linear-quadratic parameters, respectively. If effect modifiers M are specified, no transformation is used for those parameters. If negative RRs are evaluated, the program will produce an error and the user should specify a different transformation or bounds
+  # If the user did not provide a transformation, add default bounds for the
+  # dose-response parameters that need them. The helper returns the parameter
+  # positions and lower limits used by make_transform().
   if (family != "gaussian") {
     if (doseRRmod == "ERR" & is.null(transform)) {
       if (deg == 1) {
@@ -89,62 +92,45 @@ ameras_main <- function(
       } else {
         lwlmt <- c(0, -1 / max(data[, dosevars]^2))
       }
-      if (family != "multinomial") {
-        indx <- (1 *
-          (!(family %in% c("prophaz", "clogit"))) +
-          length(X) +
-          1):(1 *
-          (!(family %in% c("prophaz", "clogit"))) +
-          length(X) +
-          deg)
-        transform <- make_transform(index.t = indx, lowlimit = lwlmt)
-        transform.jacobian <- make_transform.jacobian(
-          index.t = indx,
-          lowlimit = lwlmt
-        )
-      } else {
-        lwlmt <- rep(lwlmt, length(levels(data[, Y])) - 1)
-        indx <- do.call(
-          "c",
-          lapply(0:(length(levels(data[, Y])) - 2), function(xx) {
-            xx *
-              (1 + length(X) + length(M) * deg + deg) +
-              ((1 + length(X) + 1):(1 + length(X) + deg))
-          })
-        )
-        transform <- make_transform(index.t = indx, lowlimit = lwlmt)
-        transform.jacobian <- make_transform.jacobian(
-          index.t = indx,
-          lowlimit = lwlmt
-        )
-      }
+      transform_settings <- err_default_transform_settings(
+        family = family,
+        X = X,
+        M = M,
+        deg = deg,
+        modifier_info = modifier_info,
+        Y = Y,
+        data = data,
+        lowlimit = lwlmt
+      )
+      transform <- make_transform(
+        index.t = transform_settings$index.t,
+        lowlimit = transform_settings$lowlimit
+      )
+      transform.jacobian <- make_transform.jacobian(
+        index.t = transform_settings$index.t,
+        lowlimit = transform_settings$lowlimit
+      )
     } else if (doseRRmod == "LINEXP" & is.null(transform)) {
       lwlmt <- 0 # Lower bound of 0 for beta1, no bound for beta2
 
-      if (family != "multinomial") {
-        indx <- (1 *
-          (!(family %in% c("prophaz", "clogit"))) +
-          length(X) +
-          1)
-        transform <- make_transform(index.t = indx, lowlimit = lwlmt)
-        transform.jacobian <- make_transform.jacobian(
-          index.t = indx,
-          lowlimit = lwlmt
-        )
-      } else {
-        lwlmt <- rep(lwlmt, length(levels(data[, Y])) - 1)
-        indx <- do.call(
-          "c",
-          lapply(0:(length(levels(data[, Y])) - 2), function(xx) {
-            xx * (1 + length(X) + length(M) * deg + deg) + (1 + length(X) + 1)
-          })
-        )
-        transform <- make_transform(index.t = indx, lowlimit = lwlmt)
-        transform.jacobian <- make_transform.jacobian(
-          index.t = indx,
-          lowlimit = lwlmt
-        )
-      }
+      transform_settings <- linexp_default_transform_settings(
+        family = family,
+        X = X,
+        M = M,
+        deg = deg,
+        modifier_info = modifier_info,
+        Y = Y,
+        data = data,
+        lowlimit = lwlmt
+      )
+      transform <- make_transform(
+        index.t = transform_settings$index.t,
+        lowlimit = transform_settings$lowlimit
+      )
+      transform.jacobian <- make_transform.jacobian(
+        index.t = transform_settings$index.t,
+        lowlimit = transform_settings$lowlimit
+      )
     }
   }
 
@@ -164,6 +150,7 @@ ameras_main <- function(
         transform.jacobian = transform.jacobian,
         Y = Y,
         M = M,
+        modifier_info = modifier_info,
         X = X,
         offset = offset,
         inpar = inpar,
@@ -190,6 +177,7 @@ ameras_main <- function(
         transform.jacobian = transform.jacobian,
         Y = Y,
         M = M,
+        modifier_info = modifier_info,
         X = X,
         offset = offset,
         inpar = inpar,
@@ -216,6 +204,7 @@ ameras_main <- function(
         transform.jacobian = transform.jacobian,
         Y = Y,
         M = M,
+        modifier_info = modifier_info,
         X = X,
         offset = offset,
         inpar = inpar,
@@ -241,6 +230,7 @@ ameras_main <- function(
         transform.jacobian = transform.jacobian,
         Y = Y,
         M = M,
+        modifier_info = modifier_info,
         X = X,
         offset = offset,
         inpar = inpar,
@@ -257,6 +247,12 @@ ameras_main <- function(
       )
       results <- c(results, list(FMA = fit))
     } else if (method == "BMA") {
+      if (modifier_is_group_coded(modifier_info)) {
+        stop(
+          "BMA does not yet support subgroup-coded modifiers. ",
+          "Use modifier = ~ M or omit BMA."
+        )
+      }
       message("Fitting BMA")
       if (!is.null(included.realizations.BMA)) {
         increps <- included.realizations.BMA
@@ -273,6 +269,7 @@ ameras_main <- function(
         transform = transform,
         Y = Y,
         M = M,
+        modifier_info = modifier_info,
         X = X,
         offset = offset,
         inpar = inpar,
@@ -464,6 +461,12 @@ ameras <- function(
       doseRRmod = doseRRmod %||% if (family != "gaussian") "ERR" else NULL,
       deg = deg %||% 1,
       M = M,
+      modifier_info = new_modifier_info(
+        source_vars = M,
+        coding = if (!is.null(M)) "legacy" else "none",
+        design_vars = M,
+        parameter_names = M
+      ),
       X = X,
       X_formula = if (!is.null(X)) {
         as.formula(paste("~", paste(X, collapse = "+")))
@@ -524,6 +527,13 @@ ameras <- function(
     stop("ERROR: no rows remain after applying na.action")
   }
 
+  # Formula modifiers can be factors/logicals. Convert them once to numeric
+  # design columns, while keeping source-variable metadata for reconstruction.
+  modifier_inputs <- prepare_modifier_inputs(data, parsed$modifier_info)
+  data <- modifier_inputs$data
+  parsed$modifier_info <- modifier_inputs$modifier_info
+  modifier_design_vars <- modifier_inputs$design_vars
+
   # Checks that depend on parsed formula
   if (family != "gaussian") {
     check_doseRRmod(parsed$doseRRmod)
@@ -531,7 +541,7 @@ ameras <- function(
 
   check_Y(Y %||% status, data, family)
   check_D(parsed$dosevars, data, methods)
-  check_M(parsed$M, data)
+  check_M(modifier_design_vars, data)
   check_X(X, data)
 
   if (family == "poisson") {
@@ -565,7 +575,7 @@ ameras <- function(
   }
 
   X_names <- X
-  M <- getVarNumbers(parsed$M, data)
+  M <- getVarNumbers(modifier_design_vars, data)
   X <- getVarNumbers(X, data)
 
   if (family != "multinomial") {
@@ -595,6 +605,7 @@ ameras <- function(
     Y = Y,
     M = M,
     M_names = parsed$M, # names for resolve_data and required_vars
+    modifier_info = parsed$modifier_info,
     X_formula = X_formula_to_store,
     X_design_info = X_design$X_design_info,
     X_names = X_names,
@@ -624,6 +635,7 @@ ameras <- function(
     setnr = parsed$setnr,
     Y = Y,
     M = M,
+    modifier_info = parsed$modifier_info,
     X = X,
     offset = parsed$offset,
     inpar = inpar,

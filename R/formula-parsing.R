@@ -17,6 +17,7 @@ parse_ameras_formula <- function(formula, data, family, env = parent.frame()) {
       doseRRmod = dose$doseRRmod,
       deg = dose$deg,
       M = dose$M,
+      modifier_info = dose$modifier_info,
       X_formula = X_formula,
       offset = NULL,
       setnr = NULL
@@ -39,6 +40,7 @@ parse_ameras_formula <- function(formula, data, family, env = parent.frame()) {
       doseRRmod = dose$doseRRmod,
       deg = dose$deg,
       M = dose$M,
+      modifier_info = dose$modifier_info,
       X_formula = X_formula,
       offset = NULL,
       setnr = strata$setnr
@@ -57,6 +59,7 @@ parse_ameras_formula <- function(formula, data, family, env = parent.frame()) {
       doseRRmod = dose$doseRRmod,
       deg = dose$deg,
       M = dose$M,
+      modifier_info = dose$modifier_info,
       X_formula = X_formula,
       offset = off$offset,
       setnr = NULL
@@ -74,6 +77,7 @@ parse_ameras_formula <- function(formula, data, family, env = parent.frame()) {
       doseRRmod = dose$doseRRmod,
       deg = dose$deg,
       M = dose$M,
+      modifier_info = dose$modifier_info,
       X_formula = X_formula,
       offset = NULL,
       setnr = NULL
@@ -107,37 +111,19 @@ parse_dose_term <- function(tt, data, env = parent.frame()) {
     "ERR"
   }
   deg <- if (!is.null(named_args$deg)) as.integer(named_args$deg) else 1
-  M <- if (!is.null(named_args$modifier)) {
-    parse_modifier(named_args$modifier)
+  modifier_info <- if (!is.null(named_args$modifier)) {
+    parse_modifier(named_args$modifier, env = env)
   } else {
-    NULL
+    new_modifier_info()
   }
 
   list(
     dosevars = dosevars,
     doseRRmod = doseRRmod,
     deg = deg,
-    M = M
+    M = modifier_info$source_vars,
+    modifier_info = modifier_info
   )
-}
-
-
-parse_modifier <- function(expr) {
-  if (is.null(expr)) {
-    return(NULL)
-  }
-  if (is.call(expr)) {
-    fn <- as.character(expr[[1]])
-    if (fn %in% c("*", ":", "^")) {
-      stop(
-        "Interactions in modifier are not currently supported. ",
-        "Please create interaction terms manually as new columns in your ",
-        "data frame before calling ameras(). ",
-        "For example: data$M1M2 <- data$M1 * data$M2"
-      )
-    }
-  }
-  all.vars(expr)
 }
 
 
@@ -157,12 +143,6 @@ collect_X <- function(formula, env = parent.frame()) {
   specials <- c("dose", "strata", "offset", "Surv")
   rhs <- formula[[3]]
   formula_env <- environment(formula) %||% env
-
-  if (has_no_intercept(rhs)) {
-    stop(
-      "Removing the intercept via -1 or +0 is not currently supported. "
-    )
-  }
 
   remove_specials <- function(expr) {
     if (is.symbol(expr)) {
@@ -191,6 +171,11 @@ collect_X <- function(formula, env = parent.frame()) {
   cleaned_rhs <- remove_specials(rhs)
   if (is.null(cleaned_rhs)) {
     return(NULL)
+  }
+  if (has_no_intercept(cleaned_rhs)) {
+    stop(
+      "Removing the intercept via -1 or +0 is not currently supported. "
+    )
   }
 
   # Return the cleaned RHS as a formula for later use by model.matrix.

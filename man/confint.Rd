@@ -163,7 +163,10 @@
   bracketed or solved, the corresponding bound is returned as \code{NA}
   with a warning that reports the last attempted parameter value and its
   p-value. For transformed fits, the warning also reports the corresponding
-  internal optimizer-scale value.
+  internal optimizer-scale value. For models with binary effect modifiers,
+  subgroup-specific profile likelihood intervals can be obtained by fitting
+  subgroup-specific dose coefficients with \code{modifier=~0+M} or
+  \code{modifier=~M-1}.
 
   When the model was fitted with \code{keep.data=FALSE} and
   \code{type="proflik"} is used for \code{confint}, the original data must be

@@ -15,6 +15,7 @@ ameras.mcml <- function(
   status = NULL,
   setnr = setnr,
   doseRRmod = NULL,
+  modifier_info = NULL,
   loglim = 1e-30,
   optim.method = "Nelder-Mead",
   control = list(reltol = 1e-10),
@@ -91,6 +92,19 @@ ameras.mcml <- function(
       )
     }
   }
+  # Group-coded modifiers are reported on the subgroup scale, but the
+  # low-level likelihoods still use reference-plus-contrast parameters.
+  loglik_transform <- make_modifier_loglik_transform(
+    transform = transform,
+    modifier_info = modifier_info,
+    family = family,
+    X = X,
+    M = M,
+    deg = deg,
+    Y = Y,
+    data = data
+  )
+
   loglik.mcml <- make_mcml_loglik_fn(
     family = family,
     dosevars = dosevars,
@@ -106,7 +120,7 @@ ameras.mcml <- function(
     doseRRmod = doseRRmod,
     deg = deg,
     loglim = loglim,
-    transform = transform,
+    transform = loglik_transform,
     ...
   )
 
@@ -117,7 +131,8 @@ ameras.mcml <- function(
     X = X,
     M = M,
     deg = deg,
-    doseRRmod = doseRRmod
+    doseRRmod = doseRRmod,
+    modifier_info = modifier_info
   )
   t0 <- proc.time()
   fit <- fit_objective_with_hessian(
@@ -158,6 +173,7 @@ ameras.rc <- function(
   status = NULL,
   setnr = NULL,
   doseRRmod = NULL,
+  modifier_info = NULL,
   loglim = 1e-30,
   optim.method = "Nelder-Mead",
   control = list(reltol = 1e-10),
@@ -168,6 +184,18 @@ ameras.rc <- function(
   } else {
     Kmat <- NULL
   }
+  # Group-coded modifiers are reported on the subgroup scale, but the
+  # low-level likelihoods still use reference-plus-contrast parameters.
+  loglik_transform <- make_modifier_loglik_transform(
+    transform = transform,
+    modifier_info = modifier_info,
+    family = family,
+    X = X,
+    M = M,
+    deg = deg,
+    Y = Y,
+    data = data
+  )
 
   t0 <- proc.time()
   if (family == "gaussian") {
@@ -191,7 +219,7 @@ ameras.rc <- function(
         ERC = ERC,
         Kmat = Kmat,
         loglim = loglim,
-        transform = transform,
+        transform = loglik_transform,
         ...
       )
     }
@@ -226,7 +254,7 @@ ameras.rc <- function(
         ERC = ERC,
         Kmat = Kmat,
         loglim = loglim,
-        transform = transform,
+        transform = loglik_transform,
         ...
       )
     }
@@ -269,7 +297,7 @@ ameras.rc <- function(
           data = data,
           deg = deg,
           loglim = loglim,
-          transform = transform,
+          transform = loglik_transform,
           Xc = Xc,
           Kmat_diag = Kmat_diag,
           ...
@@ -286,7 +314,7 @@ ameras.rc <- function(
           data = data,
           deg = deg,
           loglim = loglim,
-          transform = transform,
+          transform = loglik_transform,
           ...
         )
       }
@@ -333,7 +361,7 @@ ameras.rc <- function(
         ERC = ERC,
         Kmat = Kmat,
         loglim = loglim,
-        transform = transform,
+        transform = loglik_transform,
         ...
       )
     }
@@ -387,7 +415,7 @@ ameras.rc <- function(
           data = data,
           deg = deg,
           loglim = loglim,
-          transform = transform,
+          transform = loglik_transform,
           Xc_ord = Xc_ord,
           Kmat_diag_ord = Kmat_diag_ord,
           ...
@@ -405,7 +433,7 @@ ameras.rc <- function(
           data = data,
           deg = deg,
           loglim = loglim,
-          transform = transform,
+          transform = loglik_transform,
           ...
         )
       }
@@ -445,7 +473,7 @@ ameras.rc <- function(
         ERC = ERC,
         Kmat = Kmat,
         loglim = loglim,
-        transform = transform,
+        transform = loglik_transform,
         ...
       )
     }
@@ -466,7 +494,8 @@ ameras.rc <- function(
     X = X,
     M = M,
     deg = deg,
-    doseRRmod = doseRRmod
+    doseRRmod = doseRRmod,
+    modifier_info = modifier_info
   )
 
   out <- assemble_frequentist_fit_result(

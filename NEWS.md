@@ -16,6 +16,7 @@
 
 ## Improvements
 
+* Added formula-based binary effect modifier syntax. Use `modifier = ~ M` for reference-plus-contrast coding and `modifier = ~ 0 + M` or `modifier = ~ M - 1` for subgroup-specific dose-effect parameters. The older `modifier = M1 + M2` syntax is deprecated.
 * FMA no longer uses a cutoff of 20% excluded realizations before warning about potential computational issues. The user is now always warned about the number of excluded realizations.
 * `ameras()` now supports a `na.action` argument for model-input missing values after formula terms have been expanded. By default it follows `getOption("na.action")` (typically `na.omit`), stores the omitted-row action on the fitted object, and reapplies the same policy when data are supplied later for objects fitted with `keep.data=FALSE`. `na.fail` and `na.pass` are also supported. `na.exclude` is accepted for fitting, but residuals and diagnostic plots are returned for the fitted rows rather than padded back to the originally supplied row count.
 * FMA no longer uses a minimum sample size of 1 for each realization. Realizations with a model averaging weight yielding a sample size of 0 are excluded. The user is informed of the number of realizations excluded for this reason through a `message()`.

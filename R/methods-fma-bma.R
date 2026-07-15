@@ -140,6 +140,7 @@ fit_fma_realizations <- function(
   deg = 1,
   transform = NULL,
   transform.jacobian = NULL,
+  modifier_info = NULL,
   designmat = NULL,
   future.chunk.size.FMA = NULL,
   ...
@@ -148,6 +149,18 @@ fit_fma_realizations <- function(
   # family branch only supplies the model-specific inputs and AIC parameter
   # count.
   fma_realization_lapply(seq_along(dosevars), function(Xi) {
+    # Keep each realization fit on the reported subgroup scale when modifiers
+    # use no-intercept coding, while evaluating the existing contrast likelihood.
+    loglik_transform <- make_modifier_loglik_transform(
+      transform = transform,
+      modifier_info = modifier_info,
+      family = family,
+      X = X,
+      M = M,
+      deg = deg,
+      Y = Y,
+      data = data
+    )
     loglik_fn <- make_single_realization_loglik(
       family = family,
       dose.col = dosevars[Xi],
@@ -163,7 +176,7 @@ fit_fma_realizations <- function(
       doseRRmod = doseRRmod,
       deg = deg,
       ERC = FALSE,
-      transform = transform,
+      transform = loglik_transform,
       designmat = designmat
     )
     fit <- fit_objective_with_hessian(
@@ -382,6 +395,7 @@ ameras.fma <- function(
   setnr = setnr,
   unweighted = NULL,
   doseRRmod = NULL,
+  modifier_info = NULL,
   MFMA = 100000,
   future.chunk.size.FMA = NULL,
   optim.method = "Nelder-Mead",
@@ -418,6 +432,7 @@ ameras.fma <- function(
       deg = deg,
       transform = transform,
       transform.jacobian = transform.jacobian,
+      modifier_info = modifier_info,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
@@ -446,6 +461,7 @@ ameras.fma <- function(
       deg = deg,
       transform = transform,
       transform.jacobian = transform.jacobian,
+      modifier_info = modifier_info,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
@@ -475,6 +491,7 @@ ameras.fma <- function(
       deg = deg,
       transform = transform,
       transform.jacobian = transform.jacobian,
+      modifier_info = modifier_info,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
@@ -508,6 +525,7 @@ ameras.fma <- function(
       deg = deg,
       transform = transform,
       transform.jacobian = transform.jacobian,
+      modifier_info = modifier_info,
       designmat = designmat,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
@@ -545,6 +563,7 @@ ameras.fma <- function(
       deg = deg,
       transform = transform,
       transform.jacobian = transform.jacobian,
+      modifier_info = modifier_info,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
@@ -577,6 +596,7 @@ ameras.fma <- function(
       deg = deg,
       transform = transform,
       transform.jacobian = transform.jacobian,
+      modifier_info = modifier_info,
       future.chunk.size.FMA = future.chunk.size.FMA,
       ...
     )
@@ -589,7 +609,8 @@ ameras.fma <- function(
     X = X,
     M = M,
     deg = deg,
-    doseRRmod = doseRRmod
+    doseRRmod = doseRRmod,
+    modifier_info = modifier_info
   )
 
   out <- assemble_fma_result(
@@ -622,6 +643,7 @@ ameras.bma <- function(
   transform = NULL,
   inpar = NULL,
   doseRRmod = NULL,
+  modifier_info = NULL,
   ERRprior = "doubleexponential",
   prophaz_numints = 10,
   nburnin = 1000,
@@ -1110,7 +1132,8 @@ ameras.bma <- function(
     M = M,
     deg = deg,
     doseRRmod = doseRRmod,
-    prophaz_numints = if (family == "prophaz") prophaz_numints else NULL
+    prophaz_numints = if (family == "prophaz") prophaz_numints else NULL,
+    modifier_info = modifier_info
   )
 
   if (nchains > 1) {

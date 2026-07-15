@@ -255,7 +255,7 @@ test_that("FMA LINEXP parameter names are set with and without modifiers", {
   )
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Y.binomial ~ dose(V1:V2, model = LINEXP, modifier = Mzero),
+      Y.binomial ~ dose(V1:V2, model = LINEXP, modifier = ~ Mzero),
       data = linexp_data,
       family = "binomial"
     ),
@@ -272,7 +272,7 @@ test_that("FMA LINEXP parameter names are set with and without modifiers", {
   )
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Y.poisson ~ dose(V1:V2, model = LINEXP, modifier = Mzero),
+      Y.poisson ~ dose(V1:V2, model = LINEXP, modifier = ~ Mzero),
       data = linexp_data,
       family = "poisson"
     ),
@@ -290,7 +290,7 @@ test_that("FMA LINEXP parameter names are set with and without modifiers", {
   )
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Y.clogit ~ dose(V1:V2, model = LINEXP, modifier = Mzero) + strata(setnr),
+      Y.clogit ~ dose(V1:V2, model = LINEXP, modifier = ~ Mzero) + strata(setnr),
       data = linexp_data,
       family = "clogit"
     ),
@@ -307,7 +307,7 @@ test_that("FMA LINEXP parameter names are set with and without modifiers", {
   )
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Surv(time, status) ~ dose(V1:V2, model = LINEXP, modifier = Mzero),
+      Surv(time, status) ~ dose(V1:V2, model = LINEXP, modifier = ~ Mzero),
       data = linexp_data,
       family = "prophaz"
     ),
@@ -337,7 +337,7 @@ test_that("FMA non-LINEXP parameter names include modifier terms", {
 
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Y.gaussian ~ dose(V1:V2, deg = 2, modifier = M1),
+      Y.gaussian ~ dose(V1:V2, deg = 2, modifier = ~ M1),
       data = data,
       family = "gaussian"
     ),
@@ -346,7 +346,7 @@ test_that("FMA non-LINEXP parameter names include modifier terms", {
 
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Y.binomial ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1),
+      Y.binomial ~ dose(V1:V2, model = EXP, deg = 2, modifier = ~ M1),
       data = data,
       family = "binomial"
     ),
@@ -355,7 +355,7 @@ test_that("FMA non-LINEXP parameter names include modifier terms", {
 
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Y.poisson ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1),
+      Y.poisson ~ dose(V1:V2, model = EXP, deg = 2, modifier = ~ M1),
       data = data,
       family = "poisson"
     ),
@@ -364,7 +364,7 @@ test_that("FMA non-LINEXP parameter names include modifier terms", {
 
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Y.clogit ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1) +
+      Y.clogit ~ dose(V1:V2, model = EXP, deg = 2, modifier = ~ M1) +
         strata(setnr),
       data = data,
       family = "clogit"
@@ -374,7 +374,7 @@ test_that("FMA non-LINEXP parameter names include modifier terms", {
 
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Surv(time, status) ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1),
+      Surv(time, status) ~ dose(V1:V2, model = EXP, deg = 2, modifier = ~ M1),
       data = data,
       family = "prophaz"
     ),
@@ -420,7 +420,7 @@ test_that("FMA multinomial LINEXP parameter names include level prefixes", {
   )
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Y.multinomial ~ dose(V1:V2, model = LINEXP, modifier = Mzero),
+      Y.multinomial ~ dose(V1:V2, model = LINEXP, modifier = ~ Mzero),
       data = linexp_data,
       family = "multinomial"
     ),
@@ -449,7 +449,7 @@ test_that("FMA multinomial non-LINEXP names include modifiers and prefixes", {
 
   expect_fma_parameter_names(
     fit_fma_quietly(
-      Y.multinomial ~ dose(V1:V2, model = EXP, deg = 2, modifier = M1),
+      Y.multinomial ~ dose(V1:V2, model = EXP, deg = 2, modifier = ~ M1),
       data = data,
       family = "multinomial"
     ),

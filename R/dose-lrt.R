@@ -7,6 +7,11 @@ dose_parameter_indices <- function(parnames) {
 
   which(
     base_names %in% dose_terms |
+      # Subgroup-coded modifier names look like dose[M=level].
+      grepl(
+        paste0("^(", paste(dose_terms, collapse = "|"), ")\\["),
+        base_names
+      ) |
       grepl(
         paste0("^(", paste(dose_terms, collapse = "|"), "):"),
         base_names
