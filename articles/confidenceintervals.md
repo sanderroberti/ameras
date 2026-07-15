@@ -61,6 +61,10 @@ a regression calibration analysis using the example data, using a linear
 excess relative risk model with the default exponential transformation
 (see [Parameter
 transformations](https://ameras.sanderroberti.com/articles/transformations.md)).
+For subgroup-specific intervals in models with effect modifiers, fit
+subgroup-specific dose coefficients with `modifier = ~ 0 + M` or
+`modifier = ~ M - 1`; see [Effect
+modification](https://ameras.sanderroberti.com/articles/effectmodification.md).
 
 ``` r
 
@@ -112,7 +116,7 @@ summary(fit.ameras.waldorig)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.404 0.0 0.404
+#>      RC 0.443 0.0 0.443
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -134,7 +138,7 @@ summary(fit.ameras.waldtransformed)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.404 0.0 0.404
+#>      RC 0.443 0.0 0.443
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -151,12 +155,12 @@ summary(fit.ameras.proflik)
 #> Rows:
 #>   Supplied: 3000
 #> 
-#> Total CPU runtime: 2 seconds
+#> Total CPU runtime: 2.5 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.404 1.634 2.038
+#>  Method   Fit   CI Total
+#>      RC 0.443 2.05 2.493
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -208,12 +212,12 @@ summary(fit.ameras.hpd)
 #> Rows:
 #>   Supplied: 3000
 #> 
-#> Total CPU runtime: 1.6 seconds
+#> Total CPU runtime: 2.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>     FMA 1.582 0.028  1.61
+#>     FMA 2.163 0.235 2.398
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -230,12 +234,12 @@ summary(fit.ameras.percentile)
 #> Rows:
 #>   Supplied: 3000
 #> 
-#> Total CPU runtime: 1.6 seconds
+#> Total CPU runtime: 2.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>     FMA 1.582 0.019 1.601
+#>     FMA 2.163 0.256 2.419
 #> 
 #> Summary of coefficients by method:
 #> 

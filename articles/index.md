@@ -4,6 +4,8 @@
 
 - [Confidence
   intervals](https://ameras.sanderroberti.com/articles/confidenceintervals.md):
+- [Effect
+  modification](https://ameras.sanderroberti.com/articles/effectmodification.md):
 - [Manual FMA from regression calibration
   fits](https://ameras.sanderroberti.com/articles/manualfma.md):
 - [Fitting models and displaying

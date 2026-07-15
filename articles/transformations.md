@@ -25,29 +25,40 @@ optimization, such that the likelihoods are evaluated at
 should be specified when fitting linear excess relative risk and
 linear-exponential models to ensure nonnegative odds/risk/hazard. The
 included function `transform1` applies an exponential transformation to
-the desired parameters, see below. When supplying a function to
-`transform`, this should be a function of the full parameter vector,
-returning a full (transformed) parameter vector. In particular, the full
-parameter vector contains parameters in the following order (see
-[`?ameras`](https://ameras.sanderroberti.com/reference/ameras.md) for
-the model definitions): \alpha_0, \mathbf \alpha, \beta_1, \beta_2,
-\mathbf \beta\_{m1}, \mathbf \beta\_{m2}, \sigma, where \mathbf \alpha,
-\mathbf\beta\_{m1} and \mathbf \beta\_{m2} can be vectors, with lengths
-matching `X` and `M`, respectively. \sigma is only included for the
-linear model (Gaussian family), and no intercept is included for the
-proportional hazards and conditional logistic models. For the
-multinomial model, the full parameter vector is the concatenation of Z-1
-parameter vectors in the order as given above, where Z is the number of
-outcome categories. When no transformation is specified and the linear
-ERR model is used, `transform1` is used for ERR parameters \beta_1 and
-\beta_2 by default, with lower limits -1/max(D) for linear dose-response
-and (0,-1/max(D^2)) for linear-quadratic dose-response, respectively
-(see below). For the linear-exponential model, a lower limit of 0 is
-used for \beta_1, and no transformation is used for \beta_2. If effect
-modifiers `M` are specified, no transformation is used for those
-parameters. When negative RRs are obtained during optimization, an error
-will be generated and a different transformation or bounds should be
-used. All output is returned in the original parametrization given in
+the desired parameters, see below.
+
+When supplying a function to `transform`, this should be a function of
+the full parameter vector, returning a full transformed parameter
+vector. The parameter order is the same order used by
+[`coef()`](https://rdrr.io/r/stats/coef.html) for the fitted method. For
+models without subgroup-coded modifiers, this order is \alpha_0, \mathbf
+\alpha, \beta_1, \beta_2, \mathbf \beta\_{m1}, \mathbf \beta\_{m2},
+\sigma, where \mathbf \alpha, \mathbf\beta\_{m1} and \mathbf \beta\_{m2}
+can be vectors, with lengths matching the covariates and modifier design
+columns, respectively. \sigma is only included for the linear model
+(Gaussian family), and no intercept is included for the proportional
+hazards and conditional logistic models. For multinomial models, the
+full parameter vector is the concatenation of the parameter vectors for
+the non-reference outcome levels. For subgroup-coded modifiers,
+user-specified transformations act on the reported subgroup-effect scale
+before ameras maps those subgroup effects to the internal
+reference-plus-contrast scale used by the likelihood.
+
+When no transformation is specified and the linear ERR model is used,
+`transform1` is used for ERR parameters \beta_1 and \beta_2 by default,
+with lower limits -1/max(D) for linear dose-response and (0,-1/max(D^2))
+for linear-quadratic dose-response, respectively (see below). For the
+linear-exponential model, a lower limit of 0 is used for \beta_1, and no
+transformation is used for \beta_2. If reference-plus-contrast effect
+modifiers are specified, no default transformation is used for modifier
+contrast parameters. With subgroup-specific modifier coding, the default
+transformation is applied to the subgroup dose-effect parameters. When
+negative RRs are obtained during optimization, an error will be
+generated and a different transformation or bounds should be used; for
+ERR and linear-exponential models with effect modifiers,
+subgroup-specific coding can be more numerically robust because bounds
+are applied directly to each subgroup dose-effect parameter. All output
+is returned in the original parametrization given in
 [`?ameras`](https://ameras.sanderroberti.com/reference/ameras.md). The
 Jacobian of the transformation (`transform.jacobian`) is required when
 using a transformation with methods other than BMA. For `transform1`,
@@ -200,7 +211,7 @@ summary(fit.ameras.sigmoid)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.559 0.0 0.559
+#>      RC 0.641 0.0 0.641
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -229,12 +240,12 @@ summary(fit.ameras.transform1)
 #> Rows:
 #>   Supplied: 3000
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.295 0.0 0.295
+#>      RC 0.382 0.0 0.382
 #> 
 #> Summary of coefficients by method:
 #> 

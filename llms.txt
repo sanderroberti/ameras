@@ -208,8 +208,8 @@ plot(fit, methods="RC")
 ![](reference/figures/README-unnamed-chunk-5-1.png)![](reference/figures/README-unnamed-chunk-5-2.png)
 
 See the vignettes for additional details on model fitting, confidence
-intervals, transformations, standard analyses with one dose realization,
-manual FMA, and parallel FMA.
+intervals, transformations, effect modification, standard analyses with
+one dose realization, manual FMA, and parallel FMA.
 
 # Package index
 
@@ -262,6 +262,8 @@ manual FMA, and parallel FMA.
 
 - [Confidence
   intervals](https://ameras.sanderroberti.com/articles/confidenceintervals.md):
+- [Effect
+  modification](https://ameras.sanderroberti.com/articles/effectmodification.md):
 - [Manual FMA from regression calibration
   fits](https://ameras.sanderroberti.com/articles/manualfma.md):
 - [Fitting models and displaying

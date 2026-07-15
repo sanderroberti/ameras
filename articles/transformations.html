@@ -40,6 +40,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
+    <li><a class="dropdown-item" href="../articles/effectmodification.html">Effect modification</a></li>
     <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
     <li><a class="dropdown-item" href="../articles/parallelfma.html">Parallel FMA with future</a></li>
@@ -107,28 +108,37 @@ optimization, such that the likelihoods are evaluated at
 unconstrained. This should be specified when fitting linear excess
 relative risk and linear-exponential models to ensure nonnegative
 odds/risk/hazard. The included function <code>transform1</code> applies
-an exponential transformation to the desired parameters, see below. When
-supplying a function to <code>transform</code>, this should be a
-function of the full parameter vector, returning a full (transformed)
-parameter vector. In particular, the full parameter vector contains
-parameters in the following order (see <code><a href="../reference/ameras.html">?ameras</a></code> for the
-model definitions): <span class="math inline">\alpha_0, \mathbf \alpha,
-\beta_1, \beta_2, \mathbf \beta_{m1}, \mathbf \beta_{m2}, \sigma</span>,
-where <span class="math inline">\mathbf \alpha</span>, <span class="math inline">\mathbf\beta_{m1}</span> and <span class="math inline">\mathbf \beta_{m2}</span> can be vectors, with
-lengths matching <code>X</code> and <code>M</code>, respectively. <span class="math inline">\sigma</span> is only included for the linear model
-(Gaussian family), and no intercept is included for the proportional
-hazards and conditional logistic models. For the multinomial model, the
-full parameter vector is the concatenation of <span class="math inline">Z-1</span> parameter vectors in the order as given
-above, where <span class="math inline">Z</span> is the number of outcome
-categories. When no transformation is specified and the linear ERR model
-is used, <code>transform1</code> is used for ERR parameters <span class="math inline">\beta_1</span> and <span class="math inline">\beta_2</span> by default, with lower limits <span class="math inline">-1/max(D)</span> for linear dose-response and <span class="math inline">(0,-1/max(D^2))</span> for linear-quadratic
+an exponential transformation to the desired parameters, see below.</p>
+<p>When supplying a function to <code>transform</code>, this should be a
+function of the full parameter vector, returning a full transformed
+parameter vector. The parameter order is the same order used by
+<code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> for the fitted method. For models without
+subgroup-coded modifiers, this order is <span class="math inline">\alpha_0, \mathbf \alpha, \beta_1, \beta_2, \mathbf
+\beta_{m1}, \mathbf \beta_{m2}, \sigma</span>, where <span class="math inline">\mathbf \alpha</span>, <span class="math inline">\mathbf\beta_{m1}</span> and <span class="math inline">\mathbf \beta_{m2}</span> can be vectors, with
+lengths matching the covariates and modifier design columns,
+respectively. <span class="math inline">\sigma</span> is only included
+for the linear model (Gaussian family), and no intercept is included for
+the proportional hazards and conditional logistic models. For
+multinomial models, the full parameter vector is the concatenation of
+the parameter vectors for the non-reference outcome levels. For
+subgroup-coded modifiers, user-specified transformations act on the
+reported subgroup-effect scale before ameras maps those subgroup effects
+to the internal reference-plus-contrast scale used by the
+likelihood.</p>
+<p>When no transformation is specified and the linear ERR model is used,
+<code>transform1</code> is used for ERR parameters <span class="math inline">\beta_1</span> and <span class="math inline">\beta_2</span> by default, with lower limits <span class="math inline">-1/max(D)</span> for linear dose-response and <span class="math inline">(0,-1/max(D^2))</span> for linear-quadratic
 dose-response, respectively (see below). For the linear-exponential
 model, a lower limit of 0 is used for <span class="math inline">\beta_1</span>, and no transformation is used for
-<span class="math inline">\beta_2</span>. If effect modifiers
-<code>M</code> are specified, no transformation is used for those
+<span class="math inline">\beta_2</span>. If reference-plus-contrast
+effect modifiers are specified, no default transformation is used for
+modifier contrast parameters. With subgroup-specific modifier coding,
+the default transformation is applied to the subgroup dose-effect
 parameters. When negative RRs are obtained during optimization, an error
 will be generated and a different transformation or bounds should be
-used. All output is returned in the original parametrization given in
+used; for ERR and linear-exponential models with effect modifiers,
+subgroup-specific coding can be more numerically robust because bounds
+are applied directly to each subgroup dose-effect parameter. All output
+is returned in the original parametrization given in
 <code><a href="../reference/ameras.html">?ameras</a></code>. The Jacobian of the transformation
 (<code>transform.jacobian</code>) is required when using a
 transformation with methods other than BMA. For <code>transform1</code>,
@@ -272,7 +282,7 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.559 0.0 0.559</span></span>
+<span><span class="co">#&gt;      RC 0.641 0.0 0.641</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -297,12 +307,12 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt; Rows:</span></span>
 <span><span class="co">#&gt;   Supplied: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.295 0.0 0.295</span></span>
+<span><span class="co">#&gt;      RC 0.382 0.0 0.382</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

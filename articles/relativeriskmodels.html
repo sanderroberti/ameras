@@ -40,6 +40,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
+    <li><a class="dropdown-item" href="../articles/effectmodification.html">Effect modification</a></li>
     <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
     <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
     <li><a class="dropdown-item" href="../articles/parallelfma.html">Parallel FMA with future</a></li>
@@ -113,7 +114,8 @@ D_i^2),</span> the linear(-quadratic) excess relative risk (ERR) model
 \mathbf{\beta}_{m1}) D_i \exp\{(\beta_2+  \mathbf{M}_i^T
 \mathbf{\beta}_{m2})D_i\}. </span> This vignette illustrates fitting the
 three models using regression calibration for logistic regression, but
-the same syntax applies to all other settings.</p>
+the same syntax applies to all other settings. See <a href="effectmodification.html">Effect modification</a> for details on
+reference-plus-contrast and subgroup-specific modifier coding.</p>
 </div>
 <div class="section level2">
 <h2 id="exponential-relative-risk">Exponential relative risk<a class="anchor" aria-label="anchor" href="#exponential-relative-risk"></a>
@@ -136,12 +138,12 @@ optional (not fit by setting <code>deg=1</code> and not supplying
 <span><span class="co">#&gt; Rows:</span></span>
 <span><span class="co">#&gt;   Supplied: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.307 0.0 0.307</span></span>
+<span><span class="co">#&gt;      RC 0.389 0.0 0.389</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -180,7 +182,7 @@ is fit by setting <code>model="ERR"</code> as follows:</p>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.375 0.0 0.375</span></span>
+<span><span class="co">#&gt;      RC 0.405 0.0 0.405</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -213,12 +215,12 @@ as follows:</p>
 <span><span class="co">#&gt; Rows:</span></span>
 <span><span class="co">#&gt;   Supplied: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.347 0.0 0.347</span></span>
+<span><span class="co">#&gt;      RC 0.432 0.0 0.432</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

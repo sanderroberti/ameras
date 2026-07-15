@@ -31,7 +31,11 @@ excess relative risk (ERR) model RR_i= 1+\beta_1 D_i+\beta_2 D_i^2 +
 1+(\beta_1 + \mathbf{M}\_i^T \mathbf{\beta}\_{m1}) D_i \exp\\(\beta_2+
 \mathbf{M}\_i^T \mathbf{\beta}\_{m2})D_i\\. This vignette illustrates
 fitting the three models using regression calibration for logistic
-regression, but the same syntax applies to all other settings.
+regression, but the same syntax applies to all other settings. See
+[Effect
+modification](https://ameras.sanderroberti.com/articles/effectmodification.md)
+for details on reference-plus-contrast and subgroup-specific modifier
+coding.
 
 ## Exponential relative risk
 
@@ -55,12 +59,12 @@ summary(fit.ameras.exp)
 #> Rows:
 #>   Supplied: 3000
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.307 0.0 0.307
+#>      RC 0.389 0.0 0.389
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -101,7 +105,7 @@ summary(fit.ameras.err)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.375 0.0 0.375
+#>      RC 0.405 0.0 0.405
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -136,12 +140,12 @@ summary(fit.ameras.linexp)
 #> Rows:
 #>   Supplied: 3000
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.347 0.0 0.347
+#>      RC 0.432 0.0 0.432
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -539,8 +539,12 @@ model, a lower limit of 0 is used for \\\beta_1\\, and no transformation
 is used for \\\beta_2\\. If reference-plus-contrast effect modifiers are
 specified, no transformation is used for modifier contrast parameters.
 With subgroup-specific modifier coding, the default transformation is
-applied to the subgroup dose-effect parameters. When negative RRs are
-obtained during optimization, an error will be generated and a different
+applied to the subgroup dose-effect parameters. For ERR and
+linear-exponential models with effect modifiers, subgroup-specific
+coding can therefore be more numerically robust than
+reference-plus-contrast coding, because bounds are applied directly to
+each subgroup dose-effect parameter. When negative RRs are obtained
+during optimization, an error will be generated and a different
 transformation or bounds should be used. All output is returned in the
 original parametrization. The Jacobian of the transformation
 (`transform.jacobian`) is required when using a transformation. For
@@ -616,12 +620,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.5 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.384 0.0 0.384
+#>      RC 0.472 0.0 0.472
 #> 
 #> Estimated model parameters:
 #> 
