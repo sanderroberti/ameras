@@ -97,10 +97,12 @@ Formula-based dose modifiers are prepared by `prepare_modifier_inputs()` after
 missing-value handling and before model-specific row filtering. That helper
 keeps the original modifier variables in `modifier_info$source_vars`, creates
 numeric internal design columns in `modifier_info$design_vars`, and stores the
-labels used for reported coefficients and intervals. This separation matters
-for `keep.data = FALSE`: user-supplied data are checked against the original
-source variables, then `resolve_data()` regenerates the same internal design
-columns before rebuilding likelihoods.
+labels used for reported coefficients and intervals. Binary numeric/logical
+modifiers become one numeric design column; factor modifiers use treatment
+coding with the existing first level as reference. This separation matters for
+`keep.data = FALSE`: user-supplied data are checked against the original source
+variables, then `resolve_data()` regenerates the same internal design columns
+before rebuilding likelihoods.
 
 For ordinary `modifier = ~ M` formulas, the prepared design columns are still
 used in the existing reference-plus-contrast likelihood parameterization. For

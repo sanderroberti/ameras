@@ -54,7 +54,7 @@ parse_modifier_formula <- function(expr) {
   if (!identical(term_labels, vars)) {
     stop(
       "Interactions and transformed terms in modifier formulas are not ",
-      "currently supported. Use only additive binary variables, such as ",
+      "currently supported. Use only additive modifier variables, such as ",
       "modifier = ~ M1 + M2 or modifier = ~ 0 + M.",
       call. = FALSE
     )
@@ -63,7 +63,7 @@ parse_modifier_formula <- function(expr) {
   coding <- if (has_intercept) "contrast" else "group"
   if (identical(coding, "group") && length(vars) != 1) {
     stop(
-      "Subgroup-coded modifiers currently support exactly one binary ",
+      "Subgroup-coded modifiers currently support exactly one ",
       "modifier variable.",
       call. = FALSE
     )
@@ -124,34 +124,54 @@ parse_modifier <- function(expr, env = parent.frame()) {
 }
 
 
-encode_binary_modifier <- function(x, var) {
+encode_modifier_variable <- function(x, var) {
   # Store formula modifiers as 0/1 columns because the existing likelihoods
-  # already operate on a numeric M matrix.
+  # already operate on a numeric M matrix. Factors use treatment coding with
+  # the first level as reference; numeric/logical modifiers remain binary-only.
   if (is.factor(x)) {
     lv <- levels(x)
-    if (length(lv) != 2) {
+    if (length(lv) < 2) {
       stop(
         "ERROR: modifier variable ",
         var,
-        " must have exactly two levels.",
+        " must have at least two levels.",
         call. = FALSE
       )
     }
-    return(list(values = as.integer(x == lv[2]), levels = lv))
+    values <- sapply(lv[-1], function(level) as.integer(x == level))
+    values <- as.matrix(values)
+    colnames(values) <- paste0(var, "=", lv[-1])
+    return(list(
+      values = values,
+      levels = lv,
+      parameter_names = colnames(values)
+    ))
   }
 
   if (is.logical(x)) {
-    return(list(values = as.integer(x), levels = c("FALSE", "TRUE")))
+    values <- matrix(as.integer(x), ncol = 1L)
+    colnames(values) <- var
+    return(list(
+      values = values,
+      levels = c("FALSE", "TRUE"),
+      parameter_names = var
+    ))
   }
 
-  if (is.numeric(x) && all(x %in% c(0, 1))) {
-    return(list(values = as.numeric(x), levels = c("0", "1")))
+  if (is.numeric(x) && all(!is.na(x) & x %in% c(0, 1))) {
+    values <- matrix(as.numeric(x), ncol = 1L)
+    colnames(values) <- var
+    return(list(
+      values = values,
+      levels = c("0", "1"),
+      parameter_names = var
+    ))
   }
 
   stop(
     "ERROR: modifier variable ",
     var,
-    " must be binary numeric/logical or a factor with exactly two levels.",
+    " must be binary numeric/logical or a factor.",
     call. = FALSE
   )
 }
@@ -203,26 +223,38 @@ prepare_modifier_inputs <- function(data, modifier_info) {
     ))
   }
 
+  encoded <- lapply(
+    modifier_info$source_vars,
+    function(var) encode_modifier_variable(data[[var]], var)
+  )
+  names(encoded) <- modifier_info$source_vars
+
+  n_design_vars <- sum(vapply(encoded, function(x) ncol(x$values), integer(1)))
   design_vars <- make_modifier_design_names(
     data,
-    length(modifier_info$source_vars),
+    n_design_vars,
     existing = modifier_info$design_vars
   )
   levels <- vector("list", length(modifier_info$source_vars))
   names(levels) <- modifier_info$source_vars
+  parameter_names <- character(n_design_vars)
 
   # Formula modifiers keep source-variable names for reporting, but use
   # generated numeric columns for fitting.
+  design_offset <- 0L
   for (i in seq_along(modifier_info$source_vars)) {
     var <- modifier_info$source_vars[i]
-    encoded <- encode_binary_modifier(data[[var]], var)
-    data[[design_vars[i]]] <- encoded$values
-    levels[[var]] <- encoded$levels
+    n_cols <- ncol(encoded[[i]]$values)
+    idx <- design_offset + seq_len(n_cols)
+    data[, design_vars[idx]] <- encoded[[i]]$values
+    levels[[var]] <- encoded[[i]]$levels
+    parameter_names[idx] <- encoded[[i]]$parameter_names
+    design_offset <- design_offset + n_cols
   }
 
   modifier_info$design_vars <- design_vars
   modifier_info$levels <- levels
-  modifier_info$parameter_names <- modifier_info$source_vars
+  modifier_info$parameter_names <- parameter_names
 
   if (modifier_is_group_coded(modifier_info)) {
     var <- modifier_info$source_vars[1]
@@ -264,18 +296,14 @@ modifier_dose_names <- function(
     # the likelihood still receives the equivalent reference/contrast
     # parameterization.
     labs <- modifier_info$group_labels
-    if (identical(doseRRmod, "LINEXP")) {
-      return(c(
-        paste0("dose_linear[", labs[1], "]"),
-        paste0("dose_exponential[", labs[1], "]"),
-        paste0("dose_linear[", labs[2], "]"),
-        paste0("dose_exponential[", labs[2], "]")
-      ))
+    components <- if (identical(doseRRmod, "LINEXP")) {
+      c("dose_linear", "dose_exponential")
+    } else {
+      c("dose", "dose_squared")[seq_len(deg)]
     }
-    base <- c("dose", "dose_squared")[seq_len(deg)]
-    return(c(
-      paste0(base, "[", labs[1], "]"),
-      paste0(base, "[", labs[2], "]")
+    return(unlist(
+      lapply(labs, function(lab) paste0(components, "[", lab, "]")),
+      use.names = FALSE
     ))
   }
 
@@ -312,27 +340,44 @@ modifier_reported_to_internal_params <- function(
   }
 
   # Existing likelihood functions expect the legacy parameterization:
-  #   first subgroup effect, then contrast = second - first.
-  # Subgroup-coded fits report and optimize both subgroup effects directly, so
-  # map only the internal contrast slot before evaluating the likelihood.
+  #   reference subgroup effect, then contrasts for non-reference groups.
+  # Subgroup-coded fits report and optimize all subgroup effects directly, so
+  # map each reported subgroup block to the internal contrast block before
+  # evaluating the likelihood.
   intercept <- as.integer(!(family %in% c("prophaz", "clogit")))
   x_len <- length(X)
-  block_size <- intercept + x_len + 2 * deg
+  n_modifier_cols <- length(M)
+  n_groups <- length(modifier_info$group_labels)
+  if (!n_groups) {
+    n_groups <- n_modifier_cols + 1L
+  }
+  block_size <- intercept + x_len + deg + n_modifier_cols * deg
   if (identical(family, "gaussian")) {
     block_size <- block_size + 1L
   }
   n_blocks <- 1L
   if (identical(family, "multinomial")) {
     n_blocks <- length(levels(data[, Y])) - 1L
-    block_size <- 1L + x_len + 2 * deg
+    block_size <- 1L + x_len + n_groups * deg
   }
 
   out <- params
   for (block in seq_len(n_blocks)) {
     offset <- (block - 1L) * block_size
-    dose_pos <- offset + intercept + x_len + seq_len(deg)
-    group2_pos <- dose_pos + deg
-    out[group2_pos] <- params[group2_pos] - params[dose_pos]
+    dose_pos <- offset + intercept + x_len + seq_len(n_groups * deg)
+    group_effects <- matrix(
+      params[dose_pos],
+      nrow = n_groups,
+      ncol = deg,
+      byrow = TRUE
+    )
+    group_contrasts <- sweep(
+      group_effects[-1L, , drop = FALSE],
+      2,
+      group_effects[1L, ],
+      "-"
+    )
+    out[dose_pos] <- c(group_effects[1L, ], as.vector(group_contrasts))
   }
 
   out
@@ -402,8 +447,9 @@ err_default_transform_settings <- function(
   }
 
   if (modifier_is_group_coded(modifier_info)) {
-    within_block <- x_len + intercept + seq_len(2 * deg)
-    lowlimit <- rep(lowlimit, 2)
+    n_groups <- length(modifier_info$group_labels)
+    within_block <- x_len + intercept + seq_len(n_groups * deg)
+    lowlimit <- rep(lowlimit, n_groups)
   } else {
     within_block <- x_len + intercept + seq_len(deg)
   }
@@ -447,8 +493,9 @@ linexp_default_transform_settings <- function(
 
   within_block <- x_len + intercept + 1L
   if (modifier_is_group_coded(modifier_info)) {
-    within_block <- c(within_block, within_block + deg)
-    lowlimit <- rep(lowlimit, 2)
+    n_groups <- length(modifier_info$group_labels)
+    within_block <- x_len + intercept + seq(1L, by = deg, length.out = n_groups)
+    lowlimit <- rep(lowlimit, n_groups)
   }
 
   index <- do.call(
