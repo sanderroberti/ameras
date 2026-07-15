@@ -44,7 +44,7 @@ $$
 where $\ell$ is the log (partial) likelihood. Next, profile confidence intervals $(\theta_p^l, \theta_p^h)$ are obtained for parameter $\theta_p$ at significance level $\alpha$ by solving 
 $-2 \{PL_p(\theta_p^*) - \ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}$ using the bisection method, with $\hat{\mathbf{\theta}}$ the maximum likelihood estimate. Note that profile likelihoods are more computationally intensive to obtain. For this reason, `confint` offers the option to only determine them for the exposure-related parameters, which is the default setting. To obtain profile likelihood intervals for all parameters, use `parm = "all"`.
 
-To illustrate, we determine the three types of confidence intervals for a regression calibration analysis using the example data, using a linear excess relative risk model with the default exponential transformation (see [Parameter transformations](transformations.html)).
+To illustrate, we determine the three types of confidence intervals for a regression calibration analysis using the example data, using a linear excess relative risk model with the default exponential transformation (see [Parameter transformations](transformations.html)). For subgroup-specific intervals in models with effect modifiers, fit subgroup-specific dose coefficients with `modifier = ~ 0 + M` or `modifier = ~ M - 1`; see [Effect modification](effectmodification.html).
 
 ```{r fits1, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 data(data, package="ameras")

@@ -1,0 +1,202 @@
+---
+title: "Effect modification"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Effect modification}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE
+)
+```
+
+```{r setup}
+library(ameras)
+data(data, package = "ameras")
+```
+
+# Introduction
+
+Effect modification is specified inside `dose()` with the `modifier` argument.
+Formula modifiers can be binary numeric/logical variables or factors. Character
+variables are not accepted as modifiers; convert them to factors first so the
+level order is explicit.
+
+There are two useful ways to code effect modification:
+
+- `modifier = ~ M` uses reference-plus-contrast coding.
+- `modifier = ~ 0 + M` or `modifier = ~ M - 1` uses subgroup-specific coding.
+
+These are reparameterizations of the same model. They give the same fitted
+likelihood when the same model and data are used, but the coefficients answer
+different questions directly.
+
+# Reference-plus-contrast coding
+
+Reference-plus-contrast coding is the default formula-modifier coding. For a
+binary modifier `M1`, the coefficient named `dose` is the dose effect in the
+reference group, and `dose:M1` is the difference between the non-reference group
+and the reference group.
+
+```{r contrast-fit}
+fit_contrast <- ameras(
+  Y.gaussian ~ dose(V1:V10, modifier = ~ M1) + X1 + X2,
+  data = data,
+  family = "gaussian",
+  methods = "RC"
+)
+
+coef(fit_contrast)
+```
+
+This coding is convenient when the effect-modification contrast is the main
+quantity of interest.
+
+# Subgroup-specific coding
+
+Subgroup-specific coding reports one dose-effect parameter per subgroup. For
+the same binary modifier `M1`, the coefficient names are `dose[M1=0]` and
+`dose[M1=1]`.
+
+```{r subgroup-fit}
+fit_subgroup <- ameras(
+  Y.gaussian ~ dose(V1:V10, modifier = ~ 0 + M1) + X1 + X2,
+  data = data,
+  family = "gaussian",
+  methods = "RC"
+)
+
+coef(fit_subgroup)
+```
+
+The two codings are equivalent. The non-reference subgroup effect is the
+reference effect plus the contrast:
+
+```{r coding-equivalence}
+contrast_coef <- fit_contrast$RC$coefficients
+subgroup_coef <- fit_subgroup$RC$coefficients
+
+data.frame(
+  term = c("reference group", "non-reference group"),
+  from_contrast = c(
+    contrast_coef["dose"],
+    contrast_coef["dose"] + contrast_coef["dose:M1"]
+  ),
+  from_subgroup = c(
+    subgroup_coef["dose[M1=0]"],
+    subgroup_coef["dose[M1=1]"]
+  ),
+  row.names = NULL
+)
+```
+
+Subgroup-specific coding is usually the cleaner choice when subgroup-specific
+effect estimates and confidence intervals are the main goal. For linear ERR and
+linear-exponential models, it can also be more numerically robust because
+default bounds are applied directly to each subgroup dose-effect parameter.
+With reference-plus-contrast coding, contrast parameters are not bounded by the
+default transformation.
+
+# Factor modifiers
+
+Factor modifiers use the existing level order of the factor. The first level is
+the reference level.
+
+```{r factor-setup}
+data$M_factor <- factor(
+  ifelse(data$M1 == 0, "unexposed modifier group", "modifier group"),
+  levels = c("unexposed modifier group", "modifier group")
+)
+```
+
+With `modifier = ~ M_factor`, ameras reports contrast terms for the
+non-reference levels.
+
+```{r factor-contrast}
+fit_factor_contrast <- ameras(
+  Y.gaussian ~ dose(V1:V10, modifier = ~ M_factor) + X1 + X2,
+  data = data,
+  family = "gaussian",
+  methods = "RC"
+)
+
+coef(fit_factor_contrast)
+```
+
+With `modifier = ~ 0 + M_factor`, ameras reports subgroup-specific effects for
+all levels.
+
+```{r factor-subgroup}
+fit_factor_subgroup <- ameras(
+  Y.gaussian ~ dose(V1:V10, modifier = ~ 0 + M_factor) + X1 + X2,
+  data = data,
+  family = "gaussian",
+  methods = "RC"
+)
+
+coef(fit_factor_subgroup)
+```
+
+Multi-level factors are supported. With reference-plus-contrast coding, ameras
+reports one contrast for each non-reference level. With subgroup-specific
+coding, ameras reports one dose-effect parameter for each factor level.
+
+```{r three-level-factor}
+data$M3 <- factor(
+  rep(c("low", "middle", "high"), length.out = nrow(data)),
+  levels = c("low", "middle", "high")
+)
+
+fit_three_level <- ameras(
+  Y.gaussian ~ dose(V1:V10, modifier = ~ 0 + M3) + X1 + X2,
+  data = data,
+  family = "gaussian",
+  methods = "RC"
+)
+
+coef(fit_three_level)
+```
+
+# Confidence intervals
+
+For subgroup-specific confidence intervals, fit the model using
+subgroup-specific coding and then call `confint()` as usual. For `RC`, `ERC`,
+and `MCML`, profile likelihood intervals treat subgroup effects as ordinary
+coefficient rows.
+
+```{r subgroup-ci, eval = FALSE}
+fit_subgroup <- confint(
+  fit_subgroup,
+  type = "proflik",
+  parm = "dose"
+)
+
+summary(fit_subgroup)
+```
+
+For `FMA` and `BMA`, sample-based confidence or credible intervals are computed
+from the sampled coefficients. When subgroup-specific coding is used, BMA
+priors and MCMC sampling remain on the internal reference-plus-contrast scale,
+but stored samples, summaries, diagnostics, trace plots, and sample-based
+intervals are reported on the subgroup-specific scale.
+
+# Choosing a coding
+
+Use reference-plus-contrast coding when the contrast itself is the main
+estimand. Use subgroup-specific coding when subgroup effects are the main
+estimands, when subgroup-specific profile likelihood intervals are desired, or
+when ERR/LINEXP optimization is sensitive to the unbounded contrast
+parameterization.
+
+Testing whether effect modification improves the model is a model-comparison
+question. Fit a model without the modifier and a model with the modifier, then
+compare the fitted likelihoods using the appropriate degrees of freedom.
+`dose_lrt()` tests dose-related parameters, but its global dose test is not the
+same as a test for effect modification.

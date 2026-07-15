@@ -24,7 +24,7 @@ data(data, package="ameras")
 
 # Introduction
 
-For non-Gaussian families, three relative risk models for the main exposure are supported, the usual exponential model $$RR_i=\exp(\beta_1 D_i+\beta_2 D_i^2+ \mathbf{M}_i^T \mathbf{\beta}_{m1}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2} D_i^2),$$ the linear(-quadratic) excess relative risk (ERR) model $$RR_i= 1+\beta_1 D_i+\beta_2 D_i^2 + \mathbf{M}_i^T \mathbf{\beta_{m1}}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2}D_i^2,$$ and the linear-exponential model $$ RR_i= 1+(\beta_1 + \mathbf{M}_i^T \mathbf{\beta}_{m1}) D_i \exp\{(\beta_2+  \mathbf{M}_i^T \mathbf{\beta}_{m2})D_i\}. $$ This vignette illustrates fitting the three models using regression calibration for logistic regression, but the same syntax applies to all other settings.
+For non-Gaussian families, three relative risk models for the main exposure are supported, the usual exponential model $$RR_i=\exp(\beta_1 D_i+\beta_2 D_i^2+ \mathbf{M}_i^T \mathbf{\beta}_{m1}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2} D_i^2),$$ the linear(-quadratic) excess relative risk (ERR) model $$RR_i= 1+\beta_1 D_i+\beta_2 D_i^2 + \mathbf{M}_i^T \mathbf{\beta_{m1}}D_i + \mathbf{M}_i^T \mathbf{\beta}_{m2}D_i^2,$$ and the linear-exponential model $$ RR_i= 1+(\beta_1 + \mathbf{M}_i^T \mathbf{\beta}_{m1}) D_i \exp\{(\beta_2+  \mathbf{M}_i^T \mathbf{\beta}_{m2})D_i\}. $$ This vignette illustrates fitting the three models using regression calibration for logistic regression, but the same syntax applies to all other settings. See [Effect modification](effectmodification.html) for details on reference-plus-contrast and subgroup-specific modifier coding.
 
 # Exponential relative risk
 
