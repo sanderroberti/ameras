@@ -214,7 +214,14 @@
   re-evaluating the likelihood repeatedly and can be time-consuming.
   The <code>parm</code> argument can be used to restrict computation to dose
   parameters only (the default) when intervals for the other parameters are
-  not of interest.</p>
+  not of interest. If a profile likelihood bound cannot be reliably
+  bracketed or solved, the corresponding bound is returned as <code>NA</code>
+  with a warning that reports the last attempted parameter value and its
+  p-value. For transformed fits, the warning also reports the corresponding
+  internal optimizer-scale value. For models with formula effect modifiers,
+  subgroup-specific profile likelihood intervals can be obtained by fitting
+  subgroup-specific dose coefficients with <code>modifier=~0+M</code> or
+  <code>modifier=~M-1</code>.</p>
 <p>When the model was fitted with <code>keep.data=FALSE</code> and
   <code>type="proflik"</code> is used for <code>confint</code>, the original data must be
   supplied via the <code>data</code> argument. The missing-value policy used during
@@ -259,8 +266,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.035 0.0 0.035</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method  Fit  CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.03 0.0  0.03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -291,8 +298,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.035 0.0 0.035</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method  Fit  CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.03 0.0  0.03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -365,13 +372,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Supplied: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 72 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 75.2 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit    CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA  0.432 0.007  0.439</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA 71.546 0.001 71.547</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA  0.394 0.005  0.399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA 74.775 0.001 74.776</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

@@ -181,7 +181,15 @@ samples.
 Profile likelihood intervals (`type="proflik"`) require re-evaluating
 the likelihood repeatedly and can be time-consuming. The `parm` argument
 can be used to restrict computation to dose parameters only (the
-default) when intervals for the other parameters are not of interest.
+default) when intervals for the other parameters are not of interest. If
+a profile likelihood bound cannot be reliably bracketed or solved, the
+corresponding bound is returned as `NA` with a warning that reports the
+last attempted parameter value and its p-value. For transformed fits,
+the warning also reports the corresponding internal optimizer-scale
+value. For models with formula effect modifiers, subgroup-specific
+profile likelihood intervals can be obtained by fitting
+subgroup-specific dose coefficients with `modifier=~0+M` or
+`modifier=~M-1`.
 
 When the model was fitted with `keep.data=FALSE` and `type="proflik"` is
 used for `confint`, the original data must be supplied via the `data`
@@ -229,8 +237,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.035 0.0 0.035
+#>  Method  Fit  CI Total
+#>      RC 0.03 0.0  0.03
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -261,8 +269,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.035 0.0 0.035
+#>  Method  Fit  CI Total
+#>      RC 0.03 0.0  0.03
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -335,13 +343,13 @@ summary(fit3)
 #> Rows:
 #>   Supplied: 3000
 #> 
-#> Total CPU runtime: 72 seconds
+#> Total CPU runtime: 75.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>     FMA  0.432 0.007  0.439
-#>     BMA 71.546 0.001 71.547
+#>     FMA  0.394 0.005  0.399
+#>     BMA 74.775 0.001 74.776
 #> 
 #> Summary of coefficients by method:
 #> 

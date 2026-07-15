@@ -36,9 +36,22 @@
 - Profile likelihood confidence intervals now handle unusable Hessian
   matrices more robustly, falling back to default search bounds when
   needed.
+- Profile likelihood confidence intervals now use explicit adaptive
+  bracketing and return `NA` with diagnostic warnings when a bound
+  cannot be reliably solved.
 
 ### Improvements
 
+- Added formula-based effect modifier syntax. Use `modifier = ~ M` for
+  reference-plus-contrast coding and `modifier = ~ 0 + M` or
+  `modifier = ~ M - 1` for subgroup-specific dose-effect parameters.
+  Formula modifiers support binary numeric/logical variables and factors
+  with treatment coding based on the factor level order. The older
+  `modifier = M1 + M2` syntax is deprecated.
+- BMA now supports subgroup-specific formula modifiers. Priors and MCMC
+  sampling remain on the internal reference-plus-contrast scale, while
+  reported summaries, stored samples, diagnostics, and sample-based
+  intervals use the subgroup-specific scale.
 - FMA no longer uses a cutoff of 20% excluded realizations before
   warning about potential computational issues. The user is now always
   warned about the number of excluded realizations.

@@ -7,7 +7,7 @@ supported. The first is the Gaussian family for continuous outcomes,
 \bm \alpha +\beta_1 D_i+\beta_2 D_i^2 + \bm M_i^T \bm \beta\_{m1}D_i +
 \bm M_i^T \bm \beta\_{m2}D_i^2\\. Here \\\bm X_i\\ are covariates,
 \\D_i\\ is the exposure with measurement error, and \\\bm M_i\\ are
-binary effect modifiers. The quadratic exposure terms and effect
+effect modifier design columns. The quadratic exposure terms and effect
 modification are optional.
 
 For non-Gaussian families, three relative risk models for the main
@@ -455,7 +455,7 @@ residuals or diagnostic plots back to the originally supplied row count;
 those outputs are computed on the fitted rows.
 
 Models are specified through formulas of the form
-`Y~dose(dose_expression, model="ERR", deg=1, modifier=M1+M2)+X1+X2`.
+`Y~dose(dose_expression, model="ERR", deg=1, modifier=~M1+M2)+X1+X2`.
 Here `dose_expression` specifies the dose realization columns and is
 parsed by `eval_select` from the tidyselect package. Useful examples are
 `D1:D1000` if the doses are in a sequence of columns with sequential
@@ -466,9 +466,16 @@ model (`model="EXP"`), the linear-exponential model (`model="LINEXP"`)
 or the linear ERR model (`model="ERR"`). Next, `deg` is used to specify
 whether a quadratic dose term should (`deg=2`) or should not (`deg=1`)
 be estimated for the exponential or linear ERR dose-response model. The
-`modifier` term is optional and used to specify binary effect
-modification variables. Note that interactions in the modifier term are
-not allowed, e.g. `M1*M2`. When `deg`, `modifier`, and `model` are not
+`modifier` term is optional and used to specify effect modification
+variables through a formula. Use `modifier=~M` for
+reference-plus-contrast coding, and `modifier=~0+M` or `modifier=~M-1`
+for subgroup-specific dose coefficients. Formula modifiers may be binary
+numeric/logical variables or factors; factor modifiers use the existing
+factor level order, with the first level as the reference. Interactions,
+transformed modifier terms, continuous numeric modifiers, character
+modifiers, and no-intercept coding with multiple modifier variables are
+not currently supported. The older syntax `modifier=M1+M2` is deprecated
+and remains binary-only. When `deg`, `modifier`, and `model` are not
 supplied, the defaults are `deg=1`, no effect modifiers, and
 `model="ERR"`.
 
@@ -529,8 +536,10 @@ default, with lower limits \\-1/max(D)\\ for \\\beta_1\\ in the linear
 dose-response and \\(0,-1/max(D^2))\\ for \\(\beta_1,\beta_2)\\ in the
 linear-quadratic dose-response, respectively. For the linear-exponential
 model, a lower limit of 0 is used for \\\beta_1\\, and no transformation
-is used for \\\beta_2\\. If effect modifiers `M` are specified, no
-transformation is used for those parameters. When negative RRs are
+is used for \\\beta_2\\. If reference-plus-contrast effect modifiers are
+specified, no transformation is used for modifier contrast parameters.
+With subgroup-specific modifier coding, the default transformation is
+applied to the subgroup dose-effect parameters. When negative RRs are
 obtained during optimization, an error will be generated and a different
 transformation or bounds should be used. All output is returned in the
 original parametrization. The Jacobian of the transformation
@@ -561,7 +570,11 @@ the same priors truncated at 0 to yield positive values. In particular:
 For all other parameters, and when using the exponential
 exposure-response model or the Gaussian outcome family, the prior is
 \\N(0, 1000)\\. For the parameter \\\sigma\\ in the Gaussian family,
-this prior is truncated at 0.
+this prior is truncated at 0. When subgroup-specific modifier coding is
+used in BMA, priors and MCMC sampling remain on the internal
+reference-plus-contrast scale; reported coefficients, variance matrices,
+samples, diagnostics, and sample-based intervals are converted to the
+subgroup-specific scale.
 
 Because the proportional hazards model is not available in `nimble`,
 `ameras` uses a piecewise constant baseline hazard for Bayesian model
@@ -594,21 +607,21 @@ Studies
 ``` r
 # \donttest{
   data(data, package="ameras")
-  ameras(Y.gaussian~dose(V1:V10, modifier=M1+M2)+X1+X2, data=data, family="gaussian") 
+  ameras(Y.gaussian~dose(V1:V10, modifier=~M1+M2)+X1+X2, data=data, family="gaussian")
 #> Fitting RC
 #> Call:
-#> ameras(formula = Y.gaussian ~ dose(V1:V10, modifier = M1 + M2) + 
+#> ameras(formula = Y.gaussian ~ dose(V1:V10, modifier = ~M1 + M2) + 
 #>     X1 + X2, data = data, family = "gaussian")
 #> 
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.326 0.0 0.326
+#>      RC 0.384 0.0 0.384
 #> 
 #> Estimated model parameters:
 #> 
