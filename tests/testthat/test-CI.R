@@ -2,6 +2,25 @@ set.seed(123)
 data("data", package = "ameras")
 
 
+canonicalize_unresolved_profile_ci <- function(ci) {
+  # Failed profile-likelihood bounds can retain best-available diagnostic
+  # p-values/iteration counts. Those diagnostics are useful for users but can
+  # differ across optimizers/platforms, so snapshot only diagnostics for bounds
+  # that were actually resolved.
+  if ("lower" %in% names(ci)) {
+    unresolved_lower <- is.na(ci$lower)
+    ci$pval.lower[unresolved_lower] <- NA_real_
+    ci$iter.lower[unresolved_lower] <- NA_integer_
+  }
+  if ("upper" %in% names(ci)) {
+    unresolved_upper <- is.na(ci$upper)
+    ci$pval.upper[unresolved_upper] <- NA_real_
+    ci$iter.upper[unresolved_upper] <- NA_integer_
+  }
+  ci
+}
+
+
 test_that("public profile likelihood CIs hit target p-values for stable RC fits", {
   fit <- fit_combination(
     family = "gaussian",
@@ -64,7 +83,7 @@ for (method in c("RC", "ERC", "MCML")) {
       style = "deparse"
     )
     expect_snapshot_value(
-      fit1[[method]]$CI,
+      canonicalize_unresolved_profile_ci(fit1[[method]]$CI),
       tolerance = 1e-4,
       style = "deparse"
     )
