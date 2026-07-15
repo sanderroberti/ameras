@@ -56,15 +56,14 @@ summary(fit.ameras.exp)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "EXP") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Rows:
-#>   Supplied: 3000
+#> Rows: 3000
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.389 0.0 0.389
+#>  Method Fit  CI Total
+#>      RC 0.3 0.0   0.3
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -97,15 +96,14 @@ summary(fit.ameras.err)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Rows:
-#>   Supplied: 3000
+#> Rows: 3000
 #> 
 #> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.405 0.0 0.405
+#>      RC 0.371 0.0 0.371
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -137,15 +135,14 @@ summary(fit.ameras.linexp)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "LINEXP") + 
 #>     X1 + X2, data = data, family = "binomial", methods = "RC")
 #> 
-#> Rows:
-#>   Supplied: 3000
+#> Rows: 3000
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.432 0.0 0.432
+#>      RC 0.337 0.0 0.337
 #> 
 #> Summary of coefficients by method:
 #> 

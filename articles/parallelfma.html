@@ -36,19 +36,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
-    <li><a class="dropdown-item" href="../articles/effectmodification.html">Effect modification</a></li>
-    <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
-    <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
-    <li><a class="dropdown-item" href="../articles/parallelfma.html">Parallel FMA with future</a></li>
-    <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
-    <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
-    <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
-  </ul>
-</li>
+<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -262,8 +250,8 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span>  elapsed_seconds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sequential_elapsed</span>, <span class="va">parallel_elapsed</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;           plan elapsed_seconds</span></span>
-<span><span class="co">#&gt; 1   sequential            1.97</span></span>
-<span><span class="co">#&gt; 2 multisession            2.25</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   sequential            1.53</span></span>
+<span><span class="co">#&gt; 2 multisession            1.83</span></span></code></pre></div>
 <p>The estimates should agree up to ordinary numerical precision.
 Parallel execution is not guaranteed to be faster for small examples
 because starting workers and transferring data have overhead. It is most

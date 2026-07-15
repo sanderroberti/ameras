@@ -103,15 +103,14 @@ summary(fit_ameras_gaussian)
 #> ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = data, 
 #>     family = "gaussian")
 #> 
-#> Rows:
-#>   Supplied: 3000
+#> Rows: 3000
 #> 
 #> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.344 0.001 0.345
+#>  Method   Fit  CI Total
+#>      RC 0.313 0.0 0.313
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -204,15 +203,14 @@ summary(fit_ameras_rc)
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "EXP") + X1 + 
 #>     X2, data = data, family = "binomial")
 #> 
-#> Rows:
-#>   Supplied: 3000
+#> Rows: 3000
 #> 
 #> Total CPU runtime: 0.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.228 0.0 0.228
+#>      RC 0.242 0.0 0.242
 #> 
 #> Summary of coefficients by method:
 #> 

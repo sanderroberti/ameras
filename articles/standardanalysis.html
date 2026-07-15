@@ -36,19 +36,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
-    <li><a class="dropdown-item" href="../articles/effectmodification.html">Effect modification</a></li>
-    <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
-    <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
-    <li><a class="dropdown-item" href="../articles/parallelfma.html">Parallel FMA with future</a></li>
-    <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
-    <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
-    <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
-  </ul>
-</li>
+<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -170,15 +158,14 @@ coefficients.</p>
 <span><span class="co">#&gt; ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = data, </span></span>
 <span><span class="co">#&gt;     family = "gaussian")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Rows:</span></span>
-<span><span class="co">#&gt;   Supplied: 3000</span></span>
+<span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.344 0.001 0.345</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.313 0.0 0.313</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -268,15 +255,14 @@ analysis using all 10 realizations:</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "EXP") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Rows:</span></span>
-<span><span class="co">#&gt;   Supplied: 3000</span></span>
+<span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.228 0.0 0.228</span></span>
+<span><span class="co">#&gt;      RC 0.242 0.0 0.242</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

@@ -20,17 +20,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
-    <li><a class="dropdown-item" href="../articles/effectmodification.html">Effect modification</a></li>
-    <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
-    <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
-    <li><a class="dropdown-item" href="../articles/parallelfma.html">Parallel FMA with future</a></li>
-    <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
-    <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
-    <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
-  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -169,13 +159,11 @@
   but are not printed in the summary table.</p>
 <p>Printing the summary prints the original call to <code>ameras</code>, row counts,
   the CPU runtime (total and by method), and the table described above. Row
-  counts are shown in the order applied during fitting. The supplied row count
-  is always shown. Omitted or excluded row counts are shown only when nonzero,
-  and the rows used for fitting are shown when this differs from the supplied
-  row count. For conditional logistic regression, the summary reports rows
-  excluded because they belong to uninformative matched sets, i.e., matched sets
-  of size 1 or with no cases. For proportional hazards regression with entry
-  times, the summary reports rows excluded because they have zero follow-up time
+  counts reflect omissions due to missing values and model-specific exclusions,
+  when applicable. For conditional logistic regression, model-specific
+  exclusions are rows in uninformative matched sets, i.e., matched sets of size
+  1 or with no cases. For proportional hazards regression with entry times,
+  model-specific exclusions are rows with zero follow-up time
   (<code>entry == exit</code>). When confidence intervals have been computed, CI
   runtime is included in the total runtime.
   This table can also be accessed directly (i.e., to retrieve confidence
@@ -205,15 +193,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = "RC")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Rows:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Supplied: 3000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method  Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.04 0.0  0.04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.03 0.0  0.03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -237,15 +224,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = "RC")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Rows:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Supplied: 3000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method  Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.04 0.0  0.04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.03 0.0  0.03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -288,17 +274,16 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("RC", "ERC", "MCML"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Rows:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Supplied: 3000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 57.8 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 54.9 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit    CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.042 0.000  0.042</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 57.366 0.001 57.367</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.440 0.000  0.440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.030 0.001  0.031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 54.499 0.000 54.499</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.389 0.000  0.389</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

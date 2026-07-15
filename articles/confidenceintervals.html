@@ -36,19 +36,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/confidenceintervals.html">Confidence intervals</a></li>
-    <li><a class="dropdown-item" href="../articles/effectmodification.html">Effect modification</a></li>
-    <li><a class="dropdown-item" href="../articles/manualfma.html">Manual FMA from regression calibration fits</a></li>
-    <li><a class="dropdown-item" href="../articles/modelfitting.html">Fitting models and displaying output</a></li>
-    <li><a class="dropdown-item" href="../articles/parallelfma.html">Parallel FMA with future</a></li>
-    <li><a class="dropdown-item" href="../articles/relativeriskmodels.html">Relative risk models</a></li>
-    <li><a class="dropdown-item" href="../articles/standardanalysis.html">Standard analyses with one dose realization</a></li>
-    <li><a class="dropdown-item" href="../articles/transformations.html">Parameter transformations</a></li>
-  </ul>
-</li>
+<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -198,15 +186,14 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("RC"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Rows:</span></span>
-<span><span class="co">#&gt;   Supplied: 3000</span></span>
+<span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.443 0.0 0.443</span></span>
+<span><span class="co">#&gt;      RC 0.418 0.0 0.418</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -220,15 +207,14 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("RC"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Rows:</span></span>
-<span><span class="co">#&gt;   Supplied: 3000</span></span>
+<span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.443 0.0 0.443</span></span>
+<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.418 0.001 0.419</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -242,15 +228,14 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("RC"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Rows:</span></span>
-<span><span class="co">#&gt;   Supplied: 3000</span></span>
+<span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 2.5 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 2.1 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method   Fit   CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.443 2.05 2.493</span></span>
+<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.418 1.649 2.067</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -297,15 +282,14 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("FMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Rows:</span></span>
-<span><span class="co">#&gt;   Supplied: 3000</span></span>
+<span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 2.4 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 1.6 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span><span class="co">#&gt;     FMA 2.163 0.235 2.398</span></span>
+<span><span class="co">#&gt;     FMA 1.587 0.028 1.615</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -319,15 +303,14 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + </span></span>
 <span><span class="co">#&gt;     X2, data = data, family = "binomial", methods = c("FMA"))</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Rows:</span></span>
-<span><span class="co">#&gt;   Supplied: 3000</span></span>
+<span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 2.4 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 1.6 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span><span class="co">#&gt;     FMA 2.163 0.256 2.419</span></span>
+<span><span class="co">#&gt;     FMA 1.587 0.018 1.605</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

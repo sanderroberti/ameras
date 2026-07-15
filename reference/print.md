@@ -28,14 +28,10 @@ print(x, digits = max(3, getOption("digits") - 3), ...)
 ## Value
 
 Prints the `ameras` call, number of rows and dose realizations in the
-data, CPU runtime, and model coefficients. The row count includes
-omissions due to missing values. For conditional logistic regression
-fits, it also includes rows excluded because they belong to
-uninformative matched sets. For proportional hazards regression with
-entry times, it also includes rows excluded because they have zero
-follow-up time. For objects with structured timing information, fitting
-time, confidence interval computation time, and total time are shown
-separately.
+data, CPU runtime, and model coefficients. Row counts reflect omissions
+due to missing values and model-specific exclusions, when applicable.
+For objects with structured timing information, fitting time, confidence
+interval computation time, and total time are shown separately.
 
 ## See also
 
@@ -66,13 +62,13 @@ fit
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 57.6 seconds
+#> Total CPU runtime: 60.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.041 0.0  0.041
-#>     ERC 57.524 0.0 57.524
+#>      RC  0.032 0.0  0.032
+#>     ERC 60.131 0.0 60.131
 #> 
 #> Estimated model parameters:
 #> 
@@ -88,13 +84,13 @@ print(fit)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 57.6 seconds
+#> Total CPU runtime: 60.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.041 0.0  0.041
-#>     ERC 57.524 0.0 57.524
+#>      RC  0.032 0.0  0.032
+#>     ERC 60.131 0.0 60.131
 #> 
 #> Estimated model parameters:
 #> 
@@ -112,13 +108,13 @@ print(fit, digits=5)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 57.6 seconds
+#> Total CPU runtime: 60.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.041 0.0  0.041
-#>     ERC 57.524 0.0 57.524
+#>      RC  0.032 0.0  0.032
+#>     ERC 60.131 0.0 60.131
 #> 
 #> Estimated model parameters:
 #> 
