@@ -69,8 +69,8 @@ test_that("row-info printing omits zero-count exclusions", {
 
   out <- capture.output(ameras:::print_row_info(row_info, detailed = TRUE))
 
-  expect_true(any(grepl("Rows:", out, fixed = TRUE)))
-  expect_true(any(grepl("Supplied: 10", out, fixed = TRUE)))
+  expect_equal(out[nzchar(out)], "Rows: 10")
+  expect_false(any(grepl("Supplied:", out, fixed = TRUE)))
   expect_false(any(grepl("Omitted by na.action", out, fixed = TRUE)))
   expect_false(any(grepl("Excluded as", out, fixed = TRUE)))
   expect_false(any(grepl("Used for fitting", out, fixed = TRUE)))

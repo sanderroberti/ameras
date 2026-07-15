@@ -111,13 +111,11 @@
 
   Printing the summary prints the original call to \code{ameras}, row counts,
   the CPU runtime (total and by method), and the table described above. Row
-  counts are shown in the order applied during fitting. The supplied row count
-  is always shown. Omitted or excluded row counts are shown only when nonzero,
-  and the rows used for fitting are shown when this differs from the supplied
-  row count. For conditional logistic regression, the summary reports rows
-  excluded because they belong to uninformative matched sets, i.e., matched sets
-  of size 1 or with no cases. For proportional hazards regression with entry
-  times, the summary reports rows excluded because they have zero follow-up time
+  counts reflect omissions due to missing values and model-specific exclusions,
+  when applicable. For conditional logistic regression, model-specific
+  exclusions are rows in uninformative matched sets, i.e., matched sets of size
+  1 or with no cases. For proportional hazards regression with entry times,
+  model-specific exclusions are rows with zero follow-up time
   (\code{entry == exit}). When confidence intervals have been computed, CI
   runtime is included in the total runtime.
   This table can also be accessed directly (i.e., to retrieve confidence

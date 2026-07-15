@@ -139,8 +139,17 @@ row_info_from_amerasfit <- function(object) {
 print_row_info <- function(row_info, detailed = TRUE) {
   omitted_na <- row_info$omitted.na %||% 0L
   used_differs <- isTRUE(row_info$used != row_info$supplied)
+  has_exclusions <- omitted_na > 0 ||
+    isTRUE(row_info$clogit.uninformative.rows > 0) ||
+    isTRUE(row_info$prophaz.zero.followup.rows > 0) ||
+    used_differs
 
   if (isTRUE(detailed)) {
+    if (!has_exclusions) {
+      cat(paste0("\nRows: ", row_info$supplied, "\n"))
+      return(invisible(row_info))
+    }
+
     cat("\nRows:\n")
     cat(paste0("  Supplied: ", row_info$supplied, "\n"))
     if (omitted_na > 0) {

@@ -26,11 +26,9 @@
 
 \value{
   Prints the \code{ameras} call, number of rows and dose realizations in the data,
-  CPU runtime, and model coefficients. The row count includes omissions due to
-  missing values. For conditional logistic regression fits, it also includes
-  rows excluded because they belong to uninformative matched sets. For
-  proportional hazards regression with entry times, it also includes rows
-  excluded because they have zero follow-up time. For objects with structured
+  CPU runtime, and model coefficients. Row counts reflect omissions due to
+  missing values and model-specific exclusions, when applicable. For objects
+  with structured
   timing information, fitting time, confidence interval
   computation time, and total time are shown separately.
 }
