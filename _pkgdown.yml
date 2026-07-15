@@ -4,3 +4,20 @@ template:
   math-rendering: katex
   light-switch: true
 
+articles:
+- title: Getting started
+  contents:
+  - modelfitting
+  - standardanalysis
+- title: Model specification
+  contents:
+  - relativeriskmodels
+  - effectmodification
+  - transformations
+- title: Inference
+  contents:
+  - confidenceintervals
+- title: FMA workflows
+  contents:
+  - manualfma
+  - parallelfma
