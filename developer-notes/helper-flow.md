@@ -110,9 +110,10 @@ subgroup-coded formulas such as `modifier = ~ 0 + M` or `modifier = ~ M - 1`,
 the fitted and reported coefficients are subgroup-specific effects. The
 low-level likelihoods still use the original contrast parameterization, so
 `make_modifier_loglik_transform()` maps reported subgroup effects to the
-equivalent contrast scale immediately before likelihood evaluation. BMA is not
-yet wired for subgroup-coded modifiers and errors before fitting if that
-combination is requested.
+equivalent contrast scale immediately before likelihood evaluation. BMA keeps
+the NIMBLE model and priors on that same internal contrast scale, then converts
+the stored posterior samples to the reported subgroup scale before summaries,
+diagnostics, trace plots, and sample-based intervals are computed.
 
 `ameras_main()` dispatches to the method-specific fitting functions:
 

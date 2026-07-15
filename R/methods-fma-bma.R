@@ -1136,20 +1136,42 @@ ameras.bma <- function(
     modifier_info = modifier_info
   )
 
+  format_bma_samples <- function(samples, include_col_ind = TRUE) {
+    param_samples <- samples[, pars, drop = FALSE]
+    param_samples <- modifier_internal_to_reported_sample_matrix(
+      samples = param_samples,
+      family = family,
+      X = X,
+      M = M,
+      deg = deg,
+      modifier_info = modifier_info,
+      Y = Y,
+      data = data
+    )
+    colnames(param_samples) <- parnames
+
+    if (include_col_ind) {
+      param_samples <- cbind(
+        param_samples,
+        col.ind = samples[, "col.ind", drop = TRUE]
+      )
+      colnames(param_samples)[ncol(param_samples)] <- "col.ind"
+    }
+
+    param_samples
+  }
+
   if (nchains > 1) {
     nimblesamples.stacked <- do.call("rbind", nimblesamples)
-    for (ichain in 1:length(nimblesamples)) {
-      nimblesamples[[ichain]] <- nimblesamples[[ichain]][
-        , c(pars, "col.ind"), drop = FALSE
-      ]
-      colnames(nimblesamples[[ichain]]) <- c(parnames, "col.ind")
-    }
+    nimblesamples <- lapply(nimblesamples, format_bma_samples)
   } else if (nchains == 1) {
     nimblesamples.stacked <- nimblesamples
-    nimblesamples <- nimblesamples[, c(pars, "col.ind"), drop = FALSE]
-    colnames(nimblesamples) <- c(parnames, "col.ind")
+    nimblesamples <- format_bma_samples(nimblesamples)
   }
-  nimblesamples.stacked <- nimblesamples.stacked[, pars, drop = FALSE]
+  nimblesamples.stacked <- format_bma_samples(
+    nimblesamples.stacked,
+    include_col_ind = FALSE
+  )
 
   coef <- colMeans(nimblesamples.stacked)
   names(coef) <- parnames

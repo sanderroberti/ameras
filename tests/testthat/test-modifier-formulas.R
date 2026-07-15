@@ -268,6 +268,81 @@ test_that("subgroup-coded multi-level factors match contrast-coded fits", {
 })
 
 
+test_that("BMA subgroup sample conversion maps contrasts to subgroup effects", {
+  modifier_info <- ameras:::new_modifier_info(
+    coding = "group",
+    design_vars = c(".ameras_modifier_1", ".ameras_modifier_2"),
+    parameter_names = c("F3=mid", "F3=high"),
+    group_labels = c("F3=low", "F3=mid", "F3=high")
+  )
+
+  # Internal BMA samples are ordered as base dose components followed by
+  # contrast components. Reported subgroup samples should be group-major:
+  # reference subgroup first, then reference + each contrast.
+  samples <- matrix(
+    c(
+      0, 1, 2, 0.5, 1.5, 0.25, 0.75, 3,
+      10, 2, 4, -1, 3, -2, 4, 5
+    ),
+    nrow = 2,
+    byrow = TRUE
+  )
+
+  out <- ameras:::modifier_internal_to_reported_sample_matrix(
+    samples = samples,
+    family = "gaussian",
+    M = 1:2,
+    deg = 2,
+    modifier_info = modifier_info
+  )
+
+  expect_equal(
+    out[, 2:7],
+    matrix(
+      c(
+        1, 2, 1.5, 2.25, 2.5, 2.75,
+        2, 4, 1, 2, 5, 8
+      ),
+      nrow = 2,
+      byrow = TRUE
+    )
+  )
+  expect_equal(out[, c(1, 8)], samples[, c(1, 8)])
+})
+
+
+test_that("BMA subgroup sample conversion handles multinomial blocks", {
+  modifier_info <- ameras:::new_modifier_info(
+    coding = "group",
+    design_vars = c(".ameras_modifier_1", ".ameras_modifier_2"),
+    parameter_names = c("F3=mid", "F3=high"),
+    group_labels = c("F3=low", "F3=mid", "F3=high")
+  )
+  dat <- data.frame(Y = factor(c("a", "b", "c")))
+
+  # Two modeled multinomial response levels repeat the same parameter block.
+  samples <- matrix(
+    c(
+      0, 1, 0.5, 1.5,
+      10, 2, -1, 3
+    ),
+    nrow = 1
+  )
+
+  out <- ameras:::modifier_internal_to_reported_sample_matrix(
+    samples = samples,
+    family = "multinomial",
+    M = 1:2,
+    deg = 1,
+    modifier_info = modifier_info,
+    Y = "Y",
+    data = dat
+  )
+
+  expect_equal(out, matrix(c(0, 1, 1.5, 2.5, 10, 2, 1, 5), nrow = 1))
+})
+
+
 test_that("subgroup-coded multinomial modifiers keep response-level prefixes", {
   data <- three_level_modifier_data()
 
@@ -317,7 +392,7 @@ test_that("subgroup-coded modifiers work for profile CIs with keep.data FALSE", 
 })
 
 
-test_that("subgroup-coded modifiers smoke-test ERC, MCML, FMA, and BMA guard", {
+test_that("subgroup-coded modifiers smoke-test ERC, MCML, and FMA", {
   data <- three_level_modifier_data()
 
   fit_freq <- suppressWarnings(suppressMessages(ameras(
@@ -338,31 +413,53 @@ test_that("subgroup-coded modifiers smoke-test ERC, MCML, FMA, and BMA guard", {
   )))
   expect_true("FMA" %in% names(fit_fma))
   expect_true(all(grepl("^dose\\[F3=", names(fit_fma$FMA$coefficients)[2:4])))
+})
 
-  expect_error(
-    suppressMessages(ameras(
-      Y.gaussian ~ dose(V1:V2, modifier = ~ 0 + F3),
-      data = data,
-      family = "gaussian",
-      methods = "BMA",
-      niter.BMA = 20,
-      nburnin.BMA = 5,
-      nchains.BMA = 1
-    )),
-    "BMA does not yet support subgroup-coded modifiers"
+
+test_that("subgroup-coded modifiers report subgroup BMA samples", {
+  skip_on_cran()
+  set.seed(123)
+  data <- three_level_modifier_data()
+
+  # BMA still samples the NIMBLE model on the internal contrast scale. The
+  # stored samples and summaries should be post-processed back to the subgroup
+  # scale used by coef(), vcov(), summary(), confint(), and traceplot().
+  fit <- suppressWarnings(suppressMessages(ameras(
+    Y.gaussian ~ dose(V1:V2, modifier = ~ 0 + F3),
+    data = data[seq_len(24), ],
+    family = "gaussian",
+    methods = "BMA",
+    niter.BMA = 20,
+    nburnin.BMA = 5,
+    nchains.BMA = 1,
+    thin.BMA = 1,
+    print = FALSE
+  )))
+
+  expected <- c(
+    "(Intercept)",
+    "dose[F3=low]", "dose[F3=mid]", "dose[F3=high]",
+    "sigma"
   )
+  expect_named(fit$BMA$coefficients, expected)
+  expect_named(fit$BMA$sd, expected)
+  expect_identical(rownames(fit$BMA$vcov), expected)
+  expect_identical(colnames(fit$BMA$samples), c(expected, "col.ind"))
+
+  fit_ci <- suppressMessages(confint(fit, type = "percentile", print = FALSE))
+  expect_identical(rownames(fit_ci$BMA$CI), expected)
 })
 
 
 test_that("formula contrast modifiers remain supported for BMA", {
   skip_on_cran()
-  data("data", package = "ameras")
+  data <- three_level_modifier_data()
 
   # BMA still uses the existing reference-plus-contrast parameterization. This
   # keeps the new formula syntax compatible with the current BMA model code.
   fit <- suppressWarnings(suppressMessages(ameras(
-    Y.gaussian ~ dose(V1:V2, modifier = ~ M1),
-    data = data[seq_len(20), ],
+    Y.gaussian ~ dose(V1:V2, modifier = ~ F3),
+    data = data[seq_len(24), ],
     family = "gaussian",
     methods = "BMA",
     niter.BMA = 20,
@@ -373,7 +470,7 @@ test_that("formula contrast modifiers remain supported for BMA", {
 
   expect_named(
     fit$BMA$coefficients,
-    c("(Intercept)", "dose", "dose:M1", "sigma")
+    c("(Intercept)", "dose", "dose:F3=mid", "dose:F3=high", "sigma")
   )
 })
 

@@ -384,6 +384,71 @@ modifier_reported_to_internal_params <- function(
 }
 
 
+modifier_internal_to_reported_sample_matrix <- function(
+  samples,
+  family,
+  X = NULL,
+  M = NULL,
+  deg = 1,
+  modifier_info = NULL,
+  Y = NULL,
+  data = NULL
+) {
+  if (!modifier_is_group_coded(modifier_info) || is.null(M)) {
+    return(as.matrix(samples))
+  }
+
+  # BMA samples are drawn on the internal reference/contrast scale because the
+  # NIMBLE model is unchanged. Reported subgroup-coded fits need the inverse
+  # mapping: reference effect, then each non-reference subgroup effect equals
+  # reference + contrast.
+  samples <- as.matrix(samples)
+  out <- samples
+  intercept <- as.integer(!(family %in% c("prophaz", "clogit")))
+  x_len <- length(X)
+  n_modifier_cols <- length(M)
+  n_groups <- length(modifier_info$group_labels)
+  if (!n_groups) {
+    n_groups <- n_modifier_cols + 1L
+  }
+  block_size <- intercept + x_len + deg + n_modifier_cols * deg
+  if (identical(family, "gaussian")) {
+    block_size <- block_size + 1L
+  }
+  n_blocks <- 1L
+  if (identical(family, "multinomial")) {
+    n_blocks <- length(levels(data[, Y])) - 1L
+    block_size <- 1L + x_len + deg + n_modifier_cols * deg
+  }
+
+  for (block in seq_len(n_blocks)) {
+    offset <- (block - 1L) * block_size
+    dose_pos <- offset + intercept + x_len + seq_len(n_groups * deg)
+    internal_effects <- samples[, dose_pos, drop = FALSE]
+    reference <- internal_effects[, seq_len(deg), drop = FALSE]
+    reported_effects <- matrix(
+      NA_real_,
+      nrow = nrow(samples),
+      ncol = n_groups * deg
+    )
+    reported_effects[, seq_len(deg)] <- reference
+
+    for (group in seq_len(n_modifier_cols)) {
+      for (component in seq_len(deg)) {
+        internal_col <- deg + (component - 1L) * n_modifier_cols + group
+        reported_col <- group * deg + component
+        reported_effects[, reported_col] <-
+          reference[, component] + internal_effects[, internal_col]
+      }
+    }
+
+    out[, dose_pos] <- reported_effects
+  }
+
+  out
+}
+
+
 make_modifier_loglik_transform <- function(
   transform = NULL,
   modifier_info = NULL,

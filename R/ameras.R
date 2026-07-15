@@ -247,12 +247,6 @@ ameras_main <- function(
       )
       results <- c(results, list(FMA = fit))
     } else if (method == "BMA") {
-      if (modifier_is_group_coded(modifier_info)) {
-        stop(
-          "BMA does not yet support subgroup-coded modifiers. ",
-          "Use modifier = ~ M or omit BMA."
-        )
-      }
       message("Fitting BMA")
       if (!is.null(included.realizations.BMA)) {
         increps <- included.realizations.BMA
