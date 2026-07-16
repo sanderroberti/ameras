@@ -13,6 +13,8 @@ for (combo in binomial_combos) {
   label <- sprintf("%s_%s_deg%d", combo$family, combo$doseRRmod, combo$deg)
 
   test_that(paste("snapshot:", label), {
+    skip_on_cran()
+
     fit <- fit_combination(
       family = combo$family,
       Y = combo$Y,
@@ -38,9 +40,7 @@ for (combo in binomial_combos) {
 # Test all non-RC methods with snapshot for a basic model
 for (method in setdiff(all_methods, "RC")) {
   test_that(paste("binomial snapshot:", method), {
-    if (method %in% c("ERC", "MCML", "BMA")) {
-      skip_on_cran()
-    }
+    skip_on_cran()
 
     fit <- fit_combination(
       family = "binomial",
@@ -91,6 +91,8 @@ for (combo in binomial_combos) {
     )
 
     test_that(label, {
+      skip_on_cran()
+
       expect_no_error({
         if (length(cov_combo$M) > 0) {
           fit_combination(

@@ -77,9 +77,7 @@ test_that("prophaz filters zero-follow-up rows before fitting", {
 
 for (method in all_methods) {
   test_that(paste("prophaz snapshot:", method), {
-    if (method %in% c("ERC", "MCML", "BMA")) {
-      skip_on_cran()
-    }
+    skip_on_cran()
 
     fit <- fit_combination(
       family = "prophaz",

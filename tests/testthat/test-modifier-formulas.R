@@ -155,6 +155,8 @@ test_that("formula modifier validation rejects unsupported terms", {
 
 
 test_that("legacy modifier syntax is deprecated but preserves RC output", {
+  skip_on_cran()
+
   data("data", package = "ameras")
 
   lifecycle::expect_deprecated(
@@ -179,6 +181,8 @@ test_that("legacy modifier syntax is deprecated but preserves RC output", {
 
 
 test_that("subgroup-coded modifiers report subgroup dose coefficients", {
+  skip_on_cran()
+
   data("data", package = "ameras")
 
   contrast <- suppressMessages(ameras(
@@ -223,6 +227,8 @@ test_that("subgroup-coded modifiers report subgroup dose coefficients", {
 
 
 test_that("subgroup-coded multi-level factors match contrast-coded fits", {
+  skip_on_cran()
+
   data <- three_level_modifier_data()
 
   contrast <- suppressMessages(ameras(
@@ -344,6 +350,8 @@ test_that("BMA subgroup sample conversion handles multinomial blocks", {
 
 
 test_that("subgroup-coded multinomial modifiers keep response-level prefixes", {
+  skip_on_cran()
+
   data <- three_level_modifier_data()
 
   fit <- suppressMessages(ameras(
@@ -366,6 +374,8 @@ test_that("subgroup-coded multinomial modifiers keep response-level prefixes", {
 
 
 test_that("subgroup-coded modifiers work for profile CIs with keep.data FALSE", {
+  skip_on_cran()
+
   data <- three_level_modifier_data()
 
   fit <- suppressMessages(ameras(
@@ -393,6 +403,8 @@ test_that("subgroup-coded modifiers work for profile CIs with keep.data FALSE", 
 
 
 test_that("subgroup-coded modifiers smoke-test ERC, MCML, and FMA", {
+  skip_on_cran()
+
   data <- three_level_modifier_data()
 
   fit_freq <- suppressWarnings(suppressMessages(ameras(

@@ -38,6 +38,8 @@ make_extreme_aic_data <- function(two_good = TRUE) {
 }
 
 test_that("FMA weights are finite with extreme AIC differences", {
+  skip_on_cran()
+
   # This reproduces the numerical shape behind the original NaN-weight bug:
   # a few realizations have much smaller AIC values than the rest.
   edge_data <- make_extreme_aic_data(two_good = TRUE)
@@ -70,6 +72,8 @@ test_that("FMA weights are finite with extreme AIC differences", {
 })
 
 test_that("FMA warns when weight filtering leaves a single realization", {
+  skip_on_cran()
+
   # With only one good realization, the noisy realizations are allocated zero
   # samples and FMA should warn that model averaging uncertainty is not present.
   edge_data <- make_extreme_aic_data(two_good = FALSE)
@@ -100,6 +104,8 @@ test_that("FMA warns when weight filtering leaves a single realization", {
 })
 
 test_that("FMA returns NA estimates when all weight allocations round to zero", {
+  skip_on_cran()
+
   # Unweighted FMA with MFMA = 1 assigns round(1 / 3) = 0 samples to each
   # realization. The fit should return empty FMA samples and NA summaries.
   set.seed(3)
@@ -142,6 +148,8 @@ test_that("FMA returns NA estimates when all weight allocations round to zero", 
 })
 
 test_that("FMA forwards transform arguments through fitting and sampling", {
+  skip_on_cran()
+
   # This catches regressions where the likelihood closure receives `...` during
   # optimization but the Hessian or FMA sampling step does not.
   require_marker <- function(marker) {
@@ -219,6 +227,8 @@ fit_fma_quietly <- function(formula, data, family) {
 }
 
 test_that("FMA LINEXP parameter names are set with and without modifiers", {
+  skip_on_cran()
+
   data("data", package = "ameras")
   linexp_data <- data
   # A zero modifier is intentionally inert: it makes M non-null so the modifier
@@ -316,6 +326,8 @@ test_that("FMA LINEXP parameter names are set with and without modifiers", {
 })
 
 test_that("FMA non-LINEXP parameter names include modifier terms", {
+  skip_on_cran()
+
   data("data", package = "ameras")
 
   # EXP reaches the doseRRmod != "LINEXP" parname branch without the lower-bound
@@ -383,6 +395,8 @@ test_that("FMA non-LINEXP parameter names include modifier terms", {
 })
 
 test_that("FMA multinomial LINEXP parameter names include level prefixes", {
+  skip_on_cran()
+
   data("data", package = "ameras")
   linexp_data <- data
   # As above, this safely reaches the non-null M branch for LINEXP parnames.
@@ -435,6 +449,8 @@ test_that("FMA multinomial LINEXP parameter names include level prefixes", {
 })
 
 test_that("FMA multinomial non-LINEXP names include modifiers and prefixes", {
+  skip_on_cran()
+
   data("data", package = "ameras")
 
   expected_base_m <- c(

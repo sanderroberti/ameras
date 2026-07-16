@@ -2,6 +2,8 @@ set.seed(123)
 data("data", package = "ameras")
 
 test_that("vcov & plot & summary_table binomial", {
+  skip_on_cran()
+
   fit <- ameras(
     Y.binomial ~ dose(V1:V10) + X1 * X2,
     data = data,

@@ -115,9 +115,7 @@ test_that("clogit rejects unsupported matched set case patterns", {
 
 for (method in all_methods) {
   test_that(paste("clogit snapshot:", method), {
-    if (method %in% c("ERC", "MCML", "BMA")) {
-      skip_on_cran()
-    }
+    skip_on_cran()
 
     fit <- fit_combination(
       family = "clogit",

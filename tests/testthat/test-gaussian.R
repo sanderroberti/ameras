@@ -6,6 +6,8 @@ data("data", package = "ameras")
 
 for (method in all_methods) {
   test_that(paste("gaussian snapshot:", method), {
+    skip_on_cran()
+
     if (method == "BMA") {
       skip_on_cran()
     }
