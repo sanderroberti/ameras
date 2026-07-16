@@ -35,3 +35,18 @@ The old effect-modifier syntax, for example `modifier = M1 + M2` inside
 emits a lifecycle deprecation warning.
 
 No previously deprecated arguments were removed in this release.
+
+
+## Resubmission
+
+This submission addresses the CRAN NOTE on
+`r-devel-windows-x86_64`:
+
+```
+Check: Overall checktime, Result: NOTE
+Overall checktime 31 min > 10 min
+```
+
+We reduced CRAN check time by skipping slower broad integration and stochastic
+tests on CRAN. These tests continue to run locally and in GitHub Actions; fast
+unit tests and representative API checks still run on CRAN.
