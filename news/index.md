@@ -4,8 +4,9 @@
 
 ### Bug fixes
 
-- Fixed an issue with FMA where large differences in AIC values between
-  dose realizations caused `NaN` weights, resulting in an error.
+- Fixed an issue where large differences in AIC values between dose
+  realizations could cause FMA weights to become `NaN`, resulting in an
+  error.
 - Fixed an issue where a subsequent call to
   [`confint()`](https://rdrr.io/r/stats/confint.html) would print
   intervals for dose-related parameters only.
@@ -14,8 +15,8 @@
 - Fixed validation for proportional hazards models specified with
   `Surv(entry, exit, status)`.
   [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) now
-  correctly checks the observed entry and exit time values and errors
-  when any subject has `entry > exit`.
+  checks the observed entry and exit time values and errors when any
+  subject has `entry > exit`.
 - Fixed conditional logistic regression fits with `strata()` terms that
   use a matched set column name other than `setnr`.
 - Fixed BMA handling for models with a single sampled model parameter,
@@ -34,13 +35,11 @@
   `entry == exit`, which have zero follow-up time under the
   `entry < t <= exit` risk-set convention.
 - Profile likelihood confidence intervals now handle unusable Hessian
-  matrices more robustly, falling back to default search bounds when
-  needed.
-- Profile likelihood confidence intervals now use explicit adaptive
-  bracketing and return `NA` with diagnostic warnings when a bound
-  cannot be reliably solved.
+  matrices and difficult bounds more robustly. The search uses explicit
+  adaptive bracketing and returns `NA` with diagnostic warnings when a
+  bound cannot be reliably solved.
 
-### Improvements
+### New features
 
 - Added formula-based effect modifier syntax. Use `modifier = ~ M` for
   reference-plus-contrast coding and `modifier = ~ 0 + M` or
@@ -52,9 +51,6 @@
   sampling remain on the internal reference-plus-contrast scale, while
   reported summaries, stored samples, diagnostics, and sample-based
   intervals use the subgroup-specific scale.
-- FMA no longer uses a cutoff of 20% excluded realizations before
-  warning about potential computational issues. The user is now always
-  warned about the number of excluded realizations.
 - [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) now
   supports a `na.action` argument for model-input missing values after
   formula terms have been expanded. By default it follows
@@ -65,13 +61,6 @@
   for fitting, but residuals and diagnostic plots are returned for the
   fitted rows rather than padded back to the originally supplied row
   count.
-- FMA no longer uses a minimum sample size of 1 for each realization.
-  Realizations with a model averaging weight yielding a sample size of 0
-  are excluded. The user is informed of the number of realizations
-  excluded for this reason through a
-  [`message()`](https://rdrr.io/r/base/message.html).
-- Added an additional warning for FMA for the situation when results are
-  based on only 1 or 2-5 realizations after exclusions.
 - FMA realization-specific fits can now use the `future` framework via
   `future.apply` when available. Users can enable parallel execution by
   setting a `future` plan before calling
@@ -84,13 +73,6 @@
   [`splines::bs()`](https://rdrr.io/r/splines/bs.html). For
   `keep.data=FALSE` fits, later calls that use supplied data apply the
   same expanded covariate columns as the original fit.
-- Added numerical diagnostics that warn when right-hand-side covariates
-  appear poorly scaled or ill-conditioned, and when
-  [`optim()`](https://rdrr.io/r/stats/optim.html) reports convergence
-  but optimizer diagnostics suggest the solution may not be fully
-  stationary. When the Hessian is usable, the optimizer warning uses the
-  approximate remaining objective improvement on both absolute and
-  relative scales.
 - Added
   [`convergence()`](https://ameras.sanderroberti.com/reference/convergence.md)
   for `amerasfit` objects to extract or recompute optimizer gradient
@@ -99,6 +81,27 @@
   [`dose_lrt()`](https://ameras.sanderroberti.com/reference/dose_lrt.md)
   for global and individual likelihood-ratio tests of dose-related
   parameters in RC, ERC, and MCML fits.
+- Added vignettes for standard analyses with one dose realization,
+  effect modification, manual FMA from realization-specific RC fits, and
+  parallel FMA with the `future` framework.
+
+### Improvements
+
+- FMA now always reports the number of excluded realizations, rather
+  than warning only when more than 20% of realizations are excluded.
+- FMA no longer assigns a minimum sample size of 1 to every realization.
+  Realizations with model-averaging weights that round to 0 samples are
+  excluded, and the number excluded for this reason is reported with a
+  message.
+- FMA now warns when results are based on only 1 or 2-5 realizations
+  after exclusions.
+- Added numerical diagnostics that warn when right-hand-side covariates
+  appear poorly scaled or ill-conditioned, and when
+  [`optim()`](https://rdrr.io/r/stats/optim.html) reports convergence
+  but optimizer diagnostics suggest the solution may not be fully
+  stationary. When the Hessian is usable, the optimizer warning uses the
+  approximate remaining objective improvement on both absolute and
+  relative scales.
 - [`summary()`](https://rdrr.io/r/base/summary.html) now reports row
   counts in the order applied during fitting: supplied rows, nonzero
   omissions by `na.action`, nonzero family-specific exclusions, and rows
@@ -121,9 +124,6 @@
   field is retained as a compatibility summary and is updated when
   [`confint()`](https://rdrr.io/r/stats/confint.html) adds confidence
   interval timing.
-- Added vignettes for standard analyses with one dose realization,
-  manual FMA from realization-specific RC fits, and parallel FMA with
-  the `future` framework.
 - Added validation to reject input data containing the reserved ameras
   column name `rcdose_ameras`.
 
