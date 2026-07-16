@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ameras</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,13 +35,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/sanderroberti/ameras/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/sanderroberti/ameras/blob/v0.5.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.0" id="ameras-050">ameras 0.5.0<a class="anchor" aria-label="anchor" href="#ameras-050"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.5.1" id="ameras-051">ameras 0.5.1<a class="anchor" aria-label="anchor" href="#ameras-051"></a></h2>
 <div class="section level3">
-<h3 id="bug-fixes-0-5-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-5-0"></a></h3>
+<h3 id="bug-fixes-0-5-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-5-1"></a></h3>
 <ul><li>Fixed an issue where large differences in AIC values between dose realizations could cause FMA weights to become <code>NaN</code>, resulting in an error.</li>
 <li>Fixed an issue where a subsequent call to <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> would print intervals for dose-related parameters only. <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now prints intervals for all parameters.</li>
 <li>Fixed validation for proportional hazards models specified with <code>Surv(entry, exit, status)</code>. <code><a href="../reference/ameras.html">ameras()</a></code> now checks the observed entry and exit time values and errors when any subject has <code>entry &gt; exit</code>.</li>
@@ -54,7 +54,7 @@
 <li>Profile likelihood confidence intervals now handle unusable Hessian matrices and difficult bounds more robustly. The search uses explicit adaptive bracketing and returns <code>NA</code> with diagnostic warnings when a bound cannot be reliably solved.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-0-5-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-5-0"></a></h3>
+<h3 id="new-features-0-5-1">New features<a class="anchor" aria-label="anchor" href="#new-features-0-5-1"></a></h3>
 <ul><li>Added formula-based effect modifier syntax. Use <code>modifier = ~ M</code> for reference-plus-contrast coding and <code>modifier = ~ 0 + M</code> or <code>modifier = ~ M - 1</code> for subgroup-specific dose-effect parameters. Formula modifiers support binary numeric/logical variables and factors with treatment coding based on the factor level order. The older <code>modifier = M1 + M2</code> syntax is deprecated.</li>
 <li>BMA now supports subgroup-specific formula modifiers. Priors and MCMC sampling remain on the internal reference-plus-contrast scale, while reported summaries, stored samples, diagnostics, and sample-based intervals use the subgroup-specific scale.</li>
 <li>
@@ -66,7 +66,7 @@
 <li>Added vignettes for standard analyses with one dose realization, effect modification, manual FMA from realization-specific RC fits, and parallel FMA with the <code>future</code> framework.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="improvements-0-5-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-5-0"></a></h3>
+<h3 id="improvements-0-5-1">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-5-1"></a></h3>
 <ul><li>FMA now always reports the number of excluded realizations, rather than warning only when more than 20% of realizations are excluded.</li>
 <li>FMA no longer assigns a minimum sample size of 1 to every realization. Realizations with model-averaging weights that round to 0 samples are excluded, and the number excluded for this reason is reported with a message.</li>
 <li>FMA now warns when results are based on only 1 or 2-5 realizations after exclusions.</li>

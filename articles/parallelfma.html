@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ameras</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Parallel FMA with future</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/sanderroberti/ameras/blob/main/vignettes/parallelfma.Rmd" class="external-link"><code>vignettes/parallelfma.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sanderroberti/ameras/blob/v0.5.1/vignettes/parallelfma.Rmd" class="external-link"><code>vignettes/parallelfma.Rmd</code></a></small>
       <div class="d-none name"><code>parallelfma.Rmd</code></div>
     </div>
 
@@ -250,8 +250,8 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span>  elapsed_seconds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sequential_elapsed</span>, <span class="va">parallel_elapsed</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;           plan elapsed_seconds</span></span>
-<span><span class="co">#&gt; 1   sequential            2.08</span></span>
-<span><span class="co">#&gt; 2 multisession            2.33</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   sequential            1.85</span></span>
+<span><span class="co">#&gt; 2 multisession            2.21</span></span></code></pre></div>
 <p>The estimates should agree up to ordinary numerical precision.
 Parallel execution is not guaranteed to be faster for small examples
 because starting workers and transferring data have overhead. It is most

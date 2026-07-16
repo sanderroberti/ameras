@@ -17,16 +17,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/sanderroberti/ameras/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/sanderroberti/ameras/blob/v0.5.1/DESCRIPTION)
 
 Roberti S, Wheeler W, Kwon D (2026). *ameras: Analyze Multiple Exposure
-Realizations in Association Studies*. R package version 0.5.0,
+Realizations in Association Studies*. R package version 0.5.1,
 <https://ameras.sanderroberti.com>.
 
     @Manual{,
       title = {ameras: Analyze Multiple Exposure Realizations in Association Studies},
       author = {Sander Roberti and William Wheeler and Deukwoo Kwon},
       year = {2026},
-      note = {R package version 0.5.0},
+      note = {R package version 0.5.1},
       url = {https://ameras.sanderroberti.com},
     }
