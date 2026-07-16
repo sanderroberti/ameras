@@ -364,7 +364,7 @@ approximations. The realization-specific fits are independent of one
 another, so they are a natural place to use parallel computation.</p>
 <p><code>ameras()</code> supports optional parallel FMA through the <a href="https://future.futureverse.org/reference/plan.html"><code>future</code></a>
 framework and <a href="https://future.apply.futureverse.org/reference/future_lapply.html"><code>future.apply</code></a>.
-The package does not set a future plan internally. Instead, the user
+<code>ameras()</code> does not set a future plan. Instead, the user
 decides whether FMA should run sequentially or in parallel by setting
 <code>future::plan()</code> before calling <code>ameras()</code>.</p>
 <p>If <code>future.apply</code> is not installed, <code>ameras()</code>
@@ -521,8 +521,8 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  <span class="at">elapsed_seconds =</span> <span class="fu">round</span>(<span class="fu">c</span>(sequential_elapsed, parallel_elapsed), <span class="dv">2</span>)</span>
 <span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>)</span>
 <span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt;           plan elapsed_seconds</span></span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; 1   sequential            0.79</span></span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; 2 multisession            1.13</span></span></code></pre></div>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; 1   sequential            0.85</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; 2 multisession            1.15</span></span></code></pre></div>
 <p>The estimates should agree up to ordinary numerical precision.
 Parallel execution is not guaranteed to be faster for small examples
 because starting workers and transferring data have overhead. It is most

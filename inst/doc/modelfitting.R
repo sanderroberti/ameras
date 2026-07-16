@@ -169,3 +169,4 @@ summary(fit.ameras.clogit.lin)
 
 ## ----fig.fullwidth=TRUE, fig.show="hold", out.width='100%', fig.width=6, fig.height=8, eval = identical(Sys.getenv("NOT_CRAN"), "true")----
 coef(fit.ameras.clogit.lin)
+

@@ -408,7 +408,10 @@ profile likelihood intervals for all parameters, use
 for a regression calibration analysis using the example data, using a
 linear excess relative risk model with the default exponential
 transformation (see <a href="transformations.html">Parameter
-transformations</a>).</p>
+transformations</a>). For subgroup-specific intervals in models with
+effect modifiers, fit subgroup-specific dose coefficients with
+<code>modifier = ~ 0 + M</code> or <code>modifier = ~ M - 1</code>; see
+<a href="effectmodification.html">Effect modification</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(data, <span class="at">package=</span><span class="st">&quot;ameras&quot;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>dosevars <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>fit.ameras <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial<span class="sc">~</span><span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">model=</span><span class="st">&quot;ERR&quot;</span>)<span class="sc">+</span>X1<span class="sc">+</span>X2, <span class="at">data=</span>data, </span>
@@ -449,58 +452,64 @@ transformations</a>).</p>
 <span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
 <span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt;     X2, data = data, family = &quot;binomial&quot;, methods = c(&quot;RC&quot;))</span></span>
 <span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
 <span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt;      RC 0.191 0.0 0.191</span></span>
-<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt;      RC 0.192 0.001 0.193</span></span>
 <span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
-<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788  -1.2363  -0.8918</span></span>
-<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628   0.2914   0.5904</span></span>
-<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544  -0.5230  -0.1489</span></span>
-<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517   0.5663   1.1353</span></span>
-<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.waldtransformed)</span>
-<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
-<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a><span class="co">#&gt;     X2, data = data, family = &quot;binomial&quot;, methods = c(&quot;RC&quot;))</span></span>
-<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788  -1.2363  -0.8918</span></span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628   0.2914   0.5904</span></span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544  -0.5230  -0.1489</span></span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517   0.5663   1.1353</span></span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.waldtransformed)</span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a><span class="co">#&gt;     X2, data = data, family = &quot;binomial&quot;, methods = c(&quot;RC&quot;))</span></span>
 <span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
 <span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a><span class="co">#&gt;      RC 0.191 0.001 0.192</span></span>
-<span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
-<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
-<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788  -1.2363  -0.8918</span></span>
-<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628   0.2914   0.5904</span></span>
-<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544  -0.5230  -0.1489</span></span>
-<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517   0.6050   1.1827</span></span>
-<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.proflik)</span>
-<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
-<span id="cb2-77"><a href="#cb2-77" tabindex="-1"></a><span class="co">#&gt;     X2, data = data, family = &quot;binomial&quot;, methods = c(&quot;RC&quot;))</span></span>
-<span id="cb2-78"><a href="#cb2-78" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-79"><a href="#cb2-79" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 1.5 seconds</span></span>
-<span id="cb2-80"><a href="#cb2-80" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-81"><a href="#cb2-81" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
+<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a><span class="co">#&gt;      RC 0.192 0.001 0.193</span></span>
+<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
+<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788  -1.2363  -0.8918</span></span>
+<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628   0.2914   0.5904</span></span>
+<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544  -0.5230  -0.1489</span></span>
+<span id="cb2-77"><a href="#cb2-77" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517   0.6050   1.1827</span></span>
+<span id="cb2-78"><a href="#cb2-78" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.proflik)</span>
+<span id="cb2-79"><a href="#cb2-79" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb2-80"><a href="#cb2-80" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
+<span id="cb2-81"><a href="#cb2-81" tabindex="-1"></a><span class="co">#&gt;     X2, data = data, family = &quot;binomial&quot;, methods = c(&quot;RC&quot;))</span></span>
 <span id="cb2-82"><a href="#cb2-82" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-83"><a href="#cb2-83" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span id="cb2-84"><a href="#cb2-84" tabindex="-1"></a><span class="co">#&gt;      RC 0.191 1.332 1.523</span></span>
-<span id="cb2-85"><a href="#cb2-85" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-86"><a href="#cb2-86" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
-<span id="cb2-87"><a href="#cb2-87" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-88"><a href="#cb2-88" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
-<span id="cb2-89"><a href="#cb2-89" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788  -1.2391  -0.8971</span></span>
-<span id="cb2-90"><a href="#cb2-90" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628   0.2908   0.5917</span></span>
-<span id="cb2-91"><a href="#cb2-91" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544  -0.5256  -0.1490</span></span>
-<span id="cb2-92"><a href="#cb2-92" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517   0.6009   1.1784</span></span></code></pre></div>
+<span id="cb2-83"><a href="#cb2-83" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
+<span id="cb2-84"><a href="#cb2-84" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-85"><a href="#cb2-85" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 1.1 seconds</span></span>
+<span id="cb2-86"><a href="#cb2-86" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-87"><a href="#cb2-87" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb2-88"><a href="#cb2-88" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-89"><a href="#cb2-89" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span id="cb2-90"><a href="#cb2-90" tabindex="-1"></a><span class="co">#&gt;      RC 0.192 0.892 1.084</span></span>
+<span id="cb2-91"><a href="#cb2-91" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-92"><a href="#cb2-92" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb2-93"><a href="#cb2-93" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-94"><a href="#cb2-94" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
+<span id="cb2-95"><a href="#cb2-95" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788  -1.2391  -0.8971</span></span>
+<span id="cb2-96"><a href="#cb2-96" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628   0.2908   0.5917</span></span>
+<span id="cb2-97"><a href="#cb2-97" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544  -0.5256  -0.1490</span></span>
+<span id="cb2-98"><a href="#cb2-98" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517   0.6009   1.1784</span></span></code></pre></div>
 </div>
 <div id="frequentist-and-bayesian-model-averaging" class="section level1">
 <h1>Frequentist and Bayesian model averaging</h1>
@@ -537,39 +546,43 @@ either the FMA samples or Bayesian posterior samples.</p>
 <span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
 <span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt;     X2, data = data, family = &quot;binomial&quot;, methods = c(&quot;FMA&quot;))</span></span>
 <span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.9 seconds</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
 <span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.9 seconds</span></span>
 <span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt;     FMA 0.905 0.017 0.922</span></span>
-<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt;     FMA 0.883 0.017   0.9</span></span>
 <span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
-<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt;     FMA (Intercept)  -1.0576 0.08770  -1.2284  -0.8856</span></span>
-<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt;     FMA          X1   0.4429 0.07652   0.2939   0.5937</span></span>
-<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt;     FMA          X2  -0.3378 0.09572  -0.5260  -0.1530</span></span>
-<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt;     FMA        dose   0.8447 0.14494   0.5640   1.1317</span></span>
-<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.percentile)</span>
-<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
-<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt;     X2, data = data, family = &quot;binomial&quot;, methods = c(&quot;FMA&quot;))</span></span>
-<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.9 seconds</span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt;     FMA (Intercept)  -1.0576 0.08770  -1.2284  -0.8856</span></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt;     FMA          X1   0.4429 0.07652   0.2939   0.5937</span></span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt;     FMA          X2  -0.3378 0.09572  -0.5260  -0.1530</span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt;     FMA        dose   0.8447 0.14494   0.5640   1.1317</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.percentile)</span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt;     X2, data = data, family = &quot;binomial&quot;, methods = c(&quot;FMA&quot;))</span></span>
 <span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
 <span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">#&gt;     FMA 0.905 0.012 0.917</span></span>
-<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
-<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
-<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a><span class="co">#&gt;     FMA (Intercept)  -1.0576 0.08770  -1.2290  -0.8860</span></span>
-<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a><span class="co">#&gt;     FMA          X1   0.4429 0.07652   0.2938   0.5935</span></span>
-<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a><span class="co">#&gt;     FMA          X2  -0.3378 0.09572  -0.5250  -0.1518</span></span>
-<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a><span class="co">#&gt;     FMA        dose   0.8447 0.14494   0.5616   1.1298</span></span></code></pre></div>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.9 seconds</span></span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a><span class="co">#&gt;     FMA 0.883 0.012 0.895</span></span>
+<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
+<span id="cb3-61"><a href="#cb3-61" tabindex="-1"></a><span class="co">#&gt;     FMA (Intercept)  -1.0576 0.08770  -1.2290  -0.8860</span></span>
+<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a><span class="co">#&gt;     FMA          X1   0.4429 0.07652   0.2938   0.5935</span></span>
+<span id="cb3-63"><a href="#cb3-63" tabindex="-1"></a><span class="co">#&gt;     FMA          X2  -0.3378 0.09572  -0.5250  -0.1518</span></span>
+<span id="cb3-64"><a href="#cb3-64" tabindex="-1"></a><span class="co">#&gt;     FMA        dose   0.8447 0.14494   0.5616   1.1298</span></span></code></pre></div>
 </div>
 
 

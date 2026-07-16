@@ -108,16 +108,18 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total CPU runtime: 50.3 seconds
+#> Rows: 3000
+#> 
+#> Total CPU runtime: 51.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.022 0.0  0.022
-#>     ERC  6.926 0.0  6.926
-#>    MCML  0.104 0.0  0.104
-#>     FMA  0.176 0.0  0.176
-#>     BMA 43.026 0.0 43.026
+#>      RC  0.028 0.0  0.028
+#>     ERC  7.951 0.0  7.951
+#>    MCML  0.110 0.0  0.110
+#>     FMA  0.311 0.0  0.311
+#>     BMA 42.780 0.0 42.780
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -174,16 +176,18 @@ summary(fit)
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
 #>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 #> 
-#> Total CPU runtime: 50.3 seconds
+#> Rows: 3000
+#> 
+#> Total CPU runtime: 51.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>      RC  0.022 0.001  0.023
-#>     ERC  6.926 0.000  6.926
-#>    MCML  0.104 0.000  0.104
-#>     FMA  0.176 0.010  0.186
-#>     BMA 43.026 0.001 43.027
+#>      RC  0.028 0.001  0.029
+#>     ERC  7.951 0.000  7.951
+#>    MCML  0.110 0.000  0.110
+#>     FMA  0.311 0.004  0.315
+#>     BMA 42.780 0.001 42.781
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -210,5 +214,5 @@ plot(fit, methods="RC")
 <img src="man/figures/README-unnamed-chunk-5-1.png" alt="" width="100%" /><img src="man/figures/README-unnamed-chunk-5-2.png" alt="" width="100%" />
 
 See the vignettes for additional details on model fitting, confidence
-intervals, transformations, effect modification, standard analyses with one
-dose realization, manual FMA, and parallel FMA.
+intervals, transformations, standard analyses with one dose realization,
+manual FMA through multiple RC fits, and parallel FMA.
