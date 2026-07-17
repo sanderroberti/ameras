@@ -274,6 +274,108 @@ test_that("subgroup-coded multi-level factors match contrast-coded fits", {
 })
 
 
+test_that("subgroup conversion uses the same positive-infinity cap as exposureRR", {
+  modifier_info <- ameras:::new_modifier_info(
+    coding = "group",
+    design_vars = ".ameras_modifier_1",
+    parameter_names = "M",
+    group_labels = c("M=0", "M=1")
+  )
+
+  expect_equal(
+    ameras:::cap_positive_infinite_rr_params(c(-Inf, Inf, 2)),
+    c(-Inf, 70, 2)
+  )
+
+  converted <- ameras:::modifier_reported_to_internal_params(
+    params = c(Inf, 0.25),
+    family = "prophaz",
+    M = 1,
+    deg = 1,
+    modifier_info = modifier_info
+  )
+
+  # The reported subgroup effects are capped before converting to the internal
+  # reference-plus-contrast scale: main = 70, contrast = 0.25 - 70.
+  expect_equal(converted, c(70, -69.75))
+})
+
+
+test_that("subgroup-coded relative risks are evaluated on the subgroup scale", {
+  dat <- data.frame(
+    D = c(22.37811, 22.37811),
+    M_design = c(0, 1)
+  )
+  modifier_info <- ameras:::new_modifier_info(
+    coding = "group",
+    design_vars = "M_design",
+    parameter_names = "M",
+    group_labels = c("M=0", "M=1")
+  )
+  low <- -1 / max(dat$D)
+  params <- c(1e20, low + 1e-12)
+
+  rr <- ameras:::exposureRR(
+    params = params,
+    D = "D",
+    M = "M_design",
+    data = dat,
+    doseRRmod = "ERR",
+    deg = 1,
+    modifier_info = modifier_info
+  )
+
+  # The second row should use the second reported subgroup effect directly.
+  # Converting through a huge reference-plus-contrast value first can lose this
+  # small positive margin by numerical cancellation.
+  expect_equal(unname(rr[2, 1]), 1 + params[2] * dat$D[2], tolerance = 1e-12)
+  expect_true(rr[2, 1] > 0)
+
+  # Non-group ERR models keep the existing positive-infinity cap.
+  expect_equal(unname(ameras:::exposureRR(
+    params = Inf,
+    D = "D",
+    M = NULL,
+    data = dat,
+    doseRRmod = "ERR",
+    deg = 1
+  )[1, 1]), 1 + 70 * dat$D[1])
+})
+
+
+test_that("subgroup-coded proportional hazards likelihood avoids contrast cancellation", {
+  dat <- data.frame(
+    entry = c(0, 0),
+    exit = c(1, 2),
+    status = c(1, 0),
+    D = c(22.37811, 22.37811),
+    M_design = c(0, 1)
+  )
+  modifier_info <- ameras:::new_modifier_info(
+    coding = "group",
+    design_vars = "M_design",
+    parameter_names = "M",
+    group_labels = c("M=0", "M=1")
+  )
+  low <- -1 / max(dat$D)
+
+  val <- ameras:::loglik.prophaz(
+    params = c(1e20, low + 1e-12),
+    D = "D",
+    status = "status",
+    M = "M_design",
+    data = dat,
+    doseRRmod = "ERR",
+    deg = 1,
+    entry = "entry",
+    exit = "exit",
+    modifier_info = modifier_info
+  )
+
+  expect_true(is.finite(val))
+})
+
+
 test_that("BMA subgroup sample conversion maps contrasts to subgroup effects", {
   modifier_info <- ameras:::new_modifier_info(
     coding = "group",

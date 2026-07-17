@@ -11,6 +11,7 @@ loglik.binomial <- function(
   deg = 1,
   loglim = 1e-30,
   transform = NULL,
+  modifier_info = NULL,
   ...
 ) {
   # params = c(a0, a1, ..., ap, b1, b2, (bm1), (bm2))
@@ -67,6 +68,16 @@ loglik.binomial <- function(
   } else {
     betavec <- c(b1, bm1)
   }
+  if (modifier_is_group_coded(modifier_info)) {
+    betavec <- extract_dose_params(
+      params,
+      X = X,
+      M = M,
+      deg = deg,
+      modifier_info = modifier_info,
+      intercept = 1L
+    )
+  }
 
   A <- exp(pmin(a0 + Xlinpred, 7e1)) *
     exposureRR(
@@ -75,7 +86,8 @@ loglik.binomial <- function(
       M = M,
       data = data,
       doseRRmod = doseRRmod,
-      deg = deg
+      deg = deg,
+      modifier_info = modifier_info
     )
 
   if (any(A < 0)) {
@@ -97,7 +109,8 @@ loglik.binomial <- function(
       M = M,
       data = data,
       doseRRmod = doseRRmod,
-      deg = deg
+      deg = deg,
+      modifier_info = modifier_info
     )
     dpdk <- exp(pmin(a0 + Xlinpred, 7e1)) * derivs$first / (1 + A)^2
     dpdk2 <- exp(pmin(a0 + Xlinpred, 7e1)) *
@@ -132,6 +145,7 @@ loglik.poisson <- function(
   deg = 1,
   loglim = 1e-30,
   transform = NULL,
+  modifier_info = NULL,
   ...
 ) {
   # C++ version
@@ -190,6 +204,16 @@ loglik.poisson <- function(
   } else {
     betavec <- c(b1, bm1)
   }
+  if (modifier_is_group_coded(modifier_info)) {
+    betavec <- extract_dose_params(
+      params,
+      X = X,
+      M = M,
+      deg = deg,
+      modifier_info = modifier_info,
+      intercept = 1L
+    )
+  }
 
   mus <- pmax(
     exp(pmin(a0 + Xlinpred, 7e1)) *
@@ -200,7 +224,8 @@ loglik.poisson <- function(
           M = M,
           data = data,
           doseRRmod = doseRRmod,
-          deg = deg
+          deg = deg,
+          modifier_info = modifier_info
         ),
         loglim
       ) *
@@ -246,6 +271,7 @@ loglik.poisson.erc <- function(
   deg = 1,
   loglim = 1e-30,
   transform = NULL,
+  modifier_info = NULL,
   Xc,
   Kmat_diag,
   ...
@@ -310,6 +336,16 @@ loglik.poisson.erc <- function(
   } else {
     betavec <- c(b1, bm1)
   }
+  if (modifier_is_group_coded(modifier_info)) {
+    betavec <- extract_dose_params(
+      params,
+      X = X,
+      M = M,
+      deg = deg,
+      modifier_info = modifier_info,
+      intercept = 1L
+    )
+  }
 
   #data$rcdose_ameras <- rowMeans(dosemat)
 
@@ -322,7 +358,8 @@ loglik.poisson.erc <- function(
           M = M,
           data = data,
           doseRRmod = doseRRmod,
-          deg = deg
+          deg = deg,
+          modifier_info = modifier_info
         ),
         loglim
       ) *
@@ -347,7 +384,8 @@ loglik.poisson.erc <- function(
     M = M,
     data = data,
     doseRRmod = doseRRmod,
-    deg = deg
+    deg = deg,
+    modifier_info = modifier_info
   )
   dmdd <- exp(pmin(a0 + Xlinpred, 7e1)) * derivs$first * offset
   dmdd2 <- exp(pmin(a0 + Xlinpred, 7e1)) * derivs$second * offset
@@ -381,6 +419,7 @@ loglik.gaussian <- function(
   deg = 1,
   loglim = 1e-30,
   transform = NULL,
+  modifier_info = NULL,
   ...
 ) {
   # params = c(a0, a1, ..., ap, b1, b2, (bm1), (bm2), sigma)
@@ -440,6 +479,16 @@ loglik.gaussian <- function(
   } else {
     betavec <- c(b1, bm1)
   }
+  if (modifier_is_group_coded(modifier_info)) {
+    betavec <- extract_dose_params(
+      params,
+      X = X,
+      M = M,
+      deg = deg,
+      modifier_info = modifier_info,
+      intercept = 1L
+    )
+  }
 
   sigma <- params[deg * length(M) + deg + length(X) + 2]
 
@@ -454,7 +503,8 @@ loglik.gaussian <- function(
       M = M,
       data = data,
       doseRRmod = "ERR",
-      deg = deg
+      deg = deg,
+      modifier_info = modifier_info
     ) -
     1
 
@@ -474,7 +524,8 @@ loglik.gaussian <- function(
       M = M,
       data = data,
       doseRRmod = "ERR",
-      deg = deg
+      deg = deg,
+      modifier_info = modifier_info
     )
     dmdd <- derivs$first
     dmdd2 <- derivs$second
@@ -507,6 +558,7 @@ loglik.clogit <- function(
   Kmat = NULL,
   loglim = 1e-30,
   transform = NULL,
+  modifier_info = NULL,
   ...
 ) {
   # params = c(a1, ..., ap, b1, b2, (bm1), (bm2))
@@ -564,6 +616,16 @@ loglik.clogit <- function(
   } else {
     betavec <- c(b1, bm1)
   }
+  if (modifier_is_group_coded(modifier_info)) {
+    betavec <- extract_dose_params(
+      params,
+      X = X,
+      M = M,
+      deg = deg,
+      modifier_info = modifier_info,
+      intercept = 0L
+    )
+  }
 
   RRs <- exp(pmin(Xlinpred, 7e1)) *
     exposureRR(
@@ -572,7 +634,8 @@ loglik.clogit <- function(
       M = M,
       data = data,
       doseRRmod = doseRRmod,
-      deg = deg
+      deg = deg,
+      modifier_info = modifier_info
     )
 
   if (any(RRs < 0)) {
@@ -591,7 +654,8 @@ loglik.clogit <- function(
       M = M,
       data = data,
       doseRRmod = doseRRmod,
-      deg = deg
+      deg = deg,
+      modifier_info = modifier_info
     )
     drdd <- exp(pmin(Xlinpred, 7e1)) * derivs$first
     drdd2 <- exp(pmin(Xlinpred, 7e1)) * derivs$second
@@ -627,6 +691,7 @@ loglik.prophaz <- function(
   exit,
   loglim = 1e-30,
   transform = NULL,
+  modifier_info = NULL,
   ...
 ) {
   # params = c(a1, ..., ap, b1, b2, (bm1), (bm2))
@@ -676,6 +741,16 @@ loglik.prophaz <- function(
   } else {
     betavec <- c(b1, bm1)
   }
+  if (modifier_is_group_coded(modifier_info)) {
+    betavec <- extract_dose_params(
+      params,
+      X = X,
+      M = M,
+      deg = deg,
+      modifier_info = modifier_info,
+      intercept = 0L
+    )
+  }
 
   #RRs <- exp(pmin(Xlinpred, 7e1))*exposureRR(params=betavec, D=D, M=M, data=data, doseRRmod=doseRRmod, deg=deg)
   e1 <- exposureRR(
@@ -684,7 +759,8 @@ loglik.prophaz <- function(
     M = M,
     data = data,
     doseRRmod = doseRRmod,
-    deg = deg
+    deg = deg,
+    modifier_info = modifier_info
   )
   e1 <- as.matrix(e1, ncol = length(D))
   if (any(e1 < 0)) {
@@ -736,6 +812,7 @@ loglik.prophaz.erc <- function(
   exit,
   loglim = 1e-30,
   transform = NULL,
+  modifier_info = NULL,
   Xc_ord,
   Kmat_diag_ord,
   ...
@@ -789,6 +866,16 @@ loglik.prophaz.erc <- function(
   } else {
     betavec <- c(b1, bm1)
   }
+  if (modifier_is_group_coded(modifier_info)) {
+    betavec <- extract_dose_params(
+      params,
+      X = X,
+      M = M,
+      deg = deg,
+      modifier_info = modifier_info,
+      intercept = 0L
+    )
+  }
 
   e1 <- exposureRR(
     params = betavec,
@@ -796,7 +883,8 @@ loglik.prophaz.erc <- function(
     M = M,
     data = data,
     doseRRmod = doseRRmod,
-    deg = deg
+    deg = deg,
+    modifier_info = modifier_info
   )
   e1 <- as.matrix(e1, ncol = 1)
   if (any(e1 < 0)) {
@@ -836,7 +924,8 @@ loglik.prophaz.erc <- function(
     M = M,
     data = data,
     doseRRmod = doseRRmod,
-    deg = deg
+    deg = deg,
+    modifier_info = modifier_info
   )
   drdd <- exp(pmin(Xlinpred, 7e1)) * derivs$first
   drdd2 <- exp(pmin(Xlinpred, 7e1)) * derivs$second
@@ -886,6 +975,7 @@ loglik.multinomial <- function(
   deg = 1,
   loglim = 1e-30,
   transform = NULL,
+  modifier_info = NULL,
   ...
 ) {
   Z <- length(unique(data[, Y])) # number of outcome categories
@@ -935,7 +1025,8 @@ loglik.multinomial <- function(
         M = M,
         data = data,
         doseRRmod = doseRRmod,
-        deg = deg
+        deg = deg,
+        modifier_info = modifier_info
       )
     }
     myarray[,, Z] <- 1
@@ -971,7 +1062,8 @@ loglik.multinomial <- function(
         M = M,
         data = data,
         doseRRmod = doseRRmod,
-        deg = deg
+        deg = deg,
+        modifier_info = modifier_info
       )
     }
 
@@ -1002,7 +1094,8 @@ loglik.multinomial <- function(
         M = M,
         data = data,
         doseRRmod = doseRRmod,
-        deg = deg
+        deg = deg,
+        modifier_info = modifier_info
       )$first
     })
     drdd2 <- apply(betamat, 2, function(betavec) {
@@ -1012,7 +1105,8 @@ loglik.multinomial <- function(
         M = M,
         data = data,
         doseRRmod = doseRRmod,
-        deg = deg
+        deg = deg,
+        modifier_info = modifier_info
       )$second
     })
 
@@ -1043,10 +1137,102 @@ loglik.multinomial <- function(
 }
 
 
-exposureRR <- function(params, D, M, data, doseRRmod, deg) {
+cap_positive_infinite_rr_params <- function(params, cap = 7e1) {
+  params[is.infinite(params) & params > 0] <- cap
+  params
+}
+
+
+dose_param_count <- function(M = NULL, deg = 1, modifier_info = NULL) {
+  if (modifier_is_group_coded(modifier_info)) {
+    return(length(modifier_info$group_labels) * deg)
+  }
+
+  deg + length(M) * deg
+}
+
+
+extract_dose_params <- function(
+  params,
+  X = NULL,
+  M = NULL,
+  deg = 1,
+  modifier_info = NULL,
+  intercept = 1L
+) {
+  start <- length(X) + intercept + 1L
+  len <- dose_param_count(M = M, deg = deg, modifier_info = modifier_info)
+  params[start + seq_len(len) - 1L]
+}
+
+
+modifier_group_components <- function(params, M, data, deg, modifier_info) {
+  if (!modifier_is_group_coded(modifier_info) || is.null(M)) {
+    return(NULL)
+  }
+
+  n_groups <- length(modifier_info$group_labels)
+  group_params <- matrix(
+    params[seq_len(n_groups * deg)],
+    nrow = n_groups,
+    ncol = deg,
+    byrow = TRUE
+  )
+  group_params <- cap_positive_infinite_rr_params(group_params)
+
+  mmat <- as.matrix(data[, M, drop = FALSE])
+  group_index <- rep(1L, nrow(data))
+  has_nonreference <- rowSums(mmat) > 0
+  if (any(has_nonreference)) {
+    group_index[has_nonreference] <-
+      max.col(mmat, ties.method = "first")[has_nonreference] + 1L
+  }
+
+  list(
+    b1 = group_params[group_index, 1L],
+    b2 = if (deg == 2) group_params[group_index, 2L] else 0
+  )
+}
+
+
+exposureRR <- function(
+  params,
+  D,
+  M,
+  data,
+  doseRRmod,
+  deg,
+  modifier_info = NULL
+) {
   # params = c(beta1, beta2, (beta_m1), (beta_m2))
-  params[is.infinite(params) & params > 0] <- 7e1
+  params <- cap_positive_infinite_rr_params(params)
   dosemat <- as.matrix(data[, D, drop = FALSE])
+  group_components <- modifier_group_components(
+    params = params,
+    M = M,
+    data = data,
+    deg = deg,
+    modifier_info = modifier_info
+  )
+  if (!is.null(group_components)) {
+    b1 <- group_components$b1
+    b2 <- group_components$b2
+
+    if (doseRRmod == "ERR") {
+      return(1 + b1 * dosemat + b2 * dosemat^2)
+    } else if (doseRRmod == "EXP") {
+      val <- b1 * dosemat + b2 * dosemat^2
+      val <- pmin(val, 7e1)
+      val[!is.finite(val)] <- 7e1
+      return(exp(val))
+    } else if (doseRRmod == "LINEXP") {
+      val <- 1 + b1 * dosemat * exp(pmin(b2 * dosemat, 7e1))
+      val <- pmin(val, exp(7e1))
+      val[!is.finite(val)] <- exp(7e1)
+      return(val)
+    }
+  }
+
   b1 <- params[1]
 
   if (deg == 2) {
@@ -1096,9 +1282,45 @@ exposureRR <- function(params, D, M, data, doseRRmod, deg) {
 }
 
 
-dRRdD <- function(params, D, M, data, doseRRmod, deg) {
+dRRdD <- function(
+  params,
+  D,
+  M,
+  data,
+  doseRRmod,
+  deg,
+  modifier_info = NULL
+) {
   # params = c(beta1, beta2, (beta_m1), (beta_m2))
-  params[is.infinite(params) & params > 0] <- 7e1
+  params <- cap_positive_infinite_rr_params(params)
+  group_components <- modifier_group_components(
+    params = params,
+    M = M,
+    data = data,
+    deg = deg,
+    modifier_info = modifier_info
+  )
+  if (!is.null(group_components)) {
+    b1 <- group_components$b1
+    b2 <- group_components$b2
+    dose <- data[, D]
+
+    if (doseRRmod == "ERR") {
+      first <- b1 + 2 * b2 * dose
+      second <- 2 * b2
+    } else if (doseRRmod == "EXP") {
+      exp_part <- exp(pmin(b1 * dose + b2 * dose^2, 8e1))
+      first <- (b1 + 2 * b2 * dose) * exp_part
+      second <- 2 * b2 * exp_part + (b1 + 2 * b2 * dose)^2 * exp_part
+    } else if (doseRRmod == "LINEXP") {
+      exp_part <- exp(b2 * dose)
+      first <- b1 * exp_part + b2 * b1 * dose * exp_part
+      second <- b1 * b2 * exp_part + b2 * first
+    }
+
+    return(list(first = first, second = second))
+  }
+
   b1 <- params[1]
 
   if (deg == 2) {

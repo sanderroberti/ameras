@@ -150,7 +150,8 @@ fit_fma_realizations <- function(
   # count.
   fma_realization_lapply(seq_along(dosevars), function(Xi) {
     # Keep each realization fit on the reported subgroup scale when modifiers
-    # use no-intercept coding, while evaluating the existing contrast likelihood.
+    # use no-intercept coding. modifier_info lets the relative-risk helper avoid
+    # unstable subgroup-to-contrast cancellation during likelihood evaluation.
     loglik_transform <- make_modifier_loglik_transform(
       transform = transform,
       modifier_info = modifier_info,
@@ -177,6 +178,7 @@ fit_fma_realizations <- function(
       deg = deg,
       ERC = FALSE,
       transform = loglik_transform,
+      modifier_info = modifier_info,
       designmat = designmat
     )
     fit <- fit_objective_with_hessian(

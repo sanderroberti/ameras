@@ -92,8 +92,9 @@ ameras.mcml <- function(
       )
     }
   }
-  # Group-coded modifiers are reported on the subgroup scale, but the
-  # low-level likelihoods still use reference-plus-contrast parameters.
+  # Group-coded modifiers are reported and optimized on the subgroup scale.
+  # modifier_info lets the low-level relative-risk helper evaluate them without
+  # converting through numerically unstable reference/contrast differences.
   loglik_transform <- make_modifier_loglik_transform(
     transform = transform,
     modifier_info = modifier_info,
@@ -121,6 +122,7 @@ ameras.mcml <- function(
     deg = deg,
     loglim = loglim,
     transform = loglik_transform,
+    modifier_info = modifier_info,
     ...
   )
 
@@ -184,8 +186,9 @@ ameras.rc <- function(
   } else {
     Kmat <- NULL
   }
-  # Group-coded modifiers are reported on the subgroup scale, but the
-  # low-level likelihoods still use reference-plus-contrast parameters.
+  # Group-coded modifiers are reported and optimized on the subgroup scale.
+  # modifier_info lets the low-level relative-risk helper evaluate them without
+  # converting through numerically unstable reference/contrast differences.
   loglik_transform <- make_modifier_loglik_transform(
     transform = transform,
     modifier_info = modifier_info,
@@ -220,6 +223,7 @@ ameras.rc <- function(
         Kmat = Kmat,
         loglim = loglim,
         transform = loglik_transform,
+        modifier_info = modifier_info,
         ...
       )
     }
@@ -255,6 +259,7 @@ ameras.rc <- function(
         Kmat = Kmat,
         loglim = loglim,
         transform = loglik_transform,
+        modifier_info = modifier_info,
         ...
       )
     }
@@ -298,6 +303,7 @@ ameras.rc <- function(
           deg = deg,
           loglim = loglim,
           transform = loglik_transform,
+          modifier_info = modifier_info,
           Xc = Xc,
           Kmat_diag = Kmat_diag,
           ...
@@ -315,6 +321,7 @@ ameras.rc <- function(
           deg = deg,
           loglim = loglim,
           transform = loglik_transform,
+          modifier_info = modifier_info,
           ...
         )
       }
@@ -362,6 +369,7 @@ ameras.rc <- function(
         Kmat = Kmat,
         loglim = loglim,
         transform = loglik_transform,
+        modifier_info = modifier_info,
         ...
       )
     }
@@ -416,6 +424,7 @@ ameras.rc <- function(
           deg = deg,
           loglim = loglim,
           transform = loglik_transform,
+          modifier_info = modifier_info,
           Xc_ord = Xc_ord,
           Kmat_diag_ord = Kmat_diag_ord,
           ...
@@ -434,6 +443,7 @@ ameras.rc <- function(
           deg = deg,
           loglim = loglim,
           transform = loglik_transform,
+          modifier_info = modifier_info,
           ...
         )
       }
@@ -474,6 +484,7 @@ ameras.rc <- function(
         Kmat = Kmat,
         loglim = loglim,
         transform = loglik_transform,
+        modifier_info = modifier_info,
         ...
       )
     }

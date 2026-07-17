@@ -65,6 +65,7 @@ make_base_loglik_fn <- function(object, method_fit, data) {
               deg = m$deg,
               loglim = m$loglim,
               transform = loglik_transform,
+              modifier_info = m$modifier_info,
               Xc_ord = Xc_ord,
               Kmat_diag_ord = Kmat_diag_ord
             ),
@@ -92,6 +93,7 @@ make_base_loglik_fn <- function(object, method_fit, data) {
               deg = m$deg,
               loglim = m$loglim,
               transform = loglik_transform,
+              modifier_info = m$modifier_info,
               Xc = Xc_poisson,
               Kmat_diag = Kmat_diag_poisson
             ),
@@ -121,6 +123,7 @@ make_base_loglik_fn <- function(object, method_fit, data) {
         deg = m$deg,
         loglim = m$loglim,
         transform = loglik_transform,
+        modifier_info = m$modifier_info,
         ERC = ERC,
         Kmat = Kmat
       ),
@@ -149,6 +152,7 @@ make_single_realization_loglik <- function(
   deg = 1,
   loglim = 1e-30,
   transform = NULL,
+  modifier_info = NULL,
   ERC = FALSE,
   Kmat = NULL,
   designmat = NULL,
@@ -187,7 +191,8 @@ make_single_realization_loglik <- function(
             ERC = ERC,
             Kmat = Kmat,
             loglim = loglim,
-            transform = transform
+            transform = transform,
+            modifier_info = modifier_info
           ),
           list(...)
         )
@@ -210,7 +215,8 @@ make_single_realization_loglik <- function(
             ERC = ERC,
             Kmat = Kmat,
             loglim = loglim,
-            transform = transform
+            transform = transform,
+            modifier_info = modifier_info
           ),
           list(...)
         )
@@ -232,7 +238,8 @@ make_single_realization_loglik <- function(
             data = data,
             deg = deg,
             loglim = loglim,
-            transform = transform
+            transform = transform,
+            modifier_info = modifier_info
           ),
           list(...)
         )
@@ -255,7 +262,8 @@ make_single_realization_loglik <- function(
             ERC = ERC,
             Kmat = Kmat,
             loglim = loglim,
-            transform = transform
+            transform = transform,
+            modifier_info = modifier_info
           ),
           list(...)
         )
@@ -291,7 +299,8 @@ make_single_realization_loglik <- function(
             ERC = ERC,
             Kmat = Kmat,
             loglim = loglim,
-            transform = transform
+            transform = transform,
+            modifier_info = modifier_info
           ),
           list(...)
         )
@@ -314,7 +323,8 @@ make_single_realization_loglik <- function(
             data = data,
             deg = deg,
             loglim = loglim,
-            transform = transform
+            transform = transform,
+            modifier_info = modifier_info
           ),
           list(...)
         )
@@ -348,6 +358,7 @@ make_mcml_loglik_fn <- function(
   deg = 1,
   loglim = 1e-30,
   transform = NULL,
+  modifier_info = NULL,
   ...
 ) {
   # For MCML, the existing family likelihoods accept all dose realization
@@ -368,6 +379,7 @@ make_mcml_loglik_fn <- function(
     deg = deg,
     loglim = loglim,
     transform = transform,
+    modifier_info = modifier_info,
     ERC = FALSE,
     Kmat = NULL,
     ...
@@ -419,6 +431,7 @@ make_base_loglik_fn_single <- function(object, method_fit, data, dose.col) {
         deg = m$deg,
         loglim = m$loglim,
         transform = loglik_transform,
+        modifier_info = m$modifier_info,
         ERC = FALSE,
         Kmat = NULL
       ),
@@ -572,16 +585,18 @@ compute_fitted <- function(
 ) {
   m <- object$model
   coefs <- object[[method]]$coefficients
-  coefs <- modifier_reported_to_internal_params(
-    params = coefs,
-    family = m$family,
-    X = m$X,
-    M = m$M,
-    deg = m$deg,
-    modifier_info = m$modifier_info,
-    Y = m$Y,
-    data = data
-  )
+  if (!modifier_is_group_coded(m$modifier_info)) {
+    coefs <- modifier_reported_to_internal_params(
+      params = coefs,
+      family = m$family,
+      X = m$X,
+      M = m$M,
+      deg = m$deg,
+      modifier_info = m$modifier_info,
+      Y = m$Y,
+      data = data
+    )
+  }
 
   if (m$family %in% c("prophaz", "clogit")) {
     # For prophaz we return the vector relative risks
@@ -627,7 +642,8 @@ compute_fitted <- function(
       M = m$M,
       data = data,
       doseRRmod = m$doseRRmod,
-      deg = m$deg
+      deg = m$deg,
+      modifier_info = m$modifier_info
     )
     fullRR <- drop(exp(pmin(Xlinpred, 7e1)) * RR)
     if (m$family == "prophaz") {
@@ -671,7 +687,8 @@ compute_fitted <- function(
         M = m$M,
         data = data,
         doseRRmod = m$doseRRmod,
-        deg = m$deg
+        deg = m$deg,
+        modifier_info = m$modifier_info
       )
     }
 
@@ -724,7 +741,8 @@ compute_fitted <- function(
       M = m$M,
       data = data,
       doseRRmod = m$doseRRmod,
-      deg = m$deg
+      deg = m$deg,
+      modifier_info = m$modifier_info
     )
 
     if (m$family == "gaussian") {

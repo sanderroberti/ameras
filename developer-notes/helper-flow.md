@@ -57,7 +57,7 @@ flowchart TD
   V --> X["make_loglik_fn()"]
   AJ --> X
   X --> Y["make_base_loglik_fn()"]
-  Y --> AN["make_modifier_loglik_transform()<br/>subgroup effects -> contrast scale"]
+  Y --> AN["make_modifier_loglik_transform()<br/>apply transforms on reported subgroup scale"]
   AN --> Z["make_single_realization_loglik()<br/>ordinary RC/ERC/MCML cases"]
   AN --> AA["loglik.poisson.erc() / loglik.prophaz.erc()<br/>special ERC cases"]
   Z --> AE["base likelihood closure"]
@@ -108,12 +108,13 @@ For ordinary `modifier = ~ M` formulas, the prepared design columns are still
 used in the existing reference-plus-contrast likelihood parameterization. For
 subgroup-coded formulas such as `modifier = ~ 0 + M` or `modifier = ~ M - 1`,
 the fitted and reported coefficients are subgroup-specific effects. The
-low-level likelihoods still use the original contrast parameterization, so
-`make_modifier_loglik_transform()` maps reported subgroup effects to the
-equivalent contrast scale immediately before likelihood evaluation. BMA keeps
-the NIMBLE model and priors on that same internal contrast scale, then converts
-the stored posterior samples to the reported subgroup scale before summaries,
-diagnostics, trace plots, and sample-based intervals are computed.
+low-level frequentist likelihoods receive `modifier_info` and evaluate relative
+risks directly on the reported subgroup scale. This avoids numerically unstable
+subgroup-to-contrast cancellation when one subgroup effect is near a
+transformation boundary and another is large. BMA keeps the NIMBLE model and
+priors on the internal contrast scale, then converts the stored posterior
+samples to the reported subgroup scale before summaries, diagnostics, trace
+plots, and sample-based intervals are computed.
 
 `ameras_main()` dispatches to the method-specific fitting functions:
 
@@ -209,10 +210,10 @@ That reconstruction goes through two adapter helpers:
   precomputed centered dose-realization residuals.
 
 When a fitted object used subgroup-coded modifiers, `make_base_loglik_fn()` also
-recreates the modifier log-likelihood transform. That keeps profile likelihood
-intervals, `dose_lrt()`, and other fitted-object diagnostics on the same
-reported parameter scale as `coef()` while still evaluating the old contrast
-likelihood internally.
+recreates the modifier log-likelihood transform and passes `modifier_info` into
+the likelihood closure. That keeps profile likelihood intervals, `dose_lrt()`,
+and other fitted-object diagnostics on the same reported subgroup parameter
+scale as `coef()`.
 
 The reconstructed likelihood is then passed into `proflik()` through
 `compute_proflik_ci_one()`. For MCML profile likelihoods,
