@@ -2,7 +2,16 @@
 
 ## ameras (development version)
 
+### Bug fixes
+
+- Fixed a numerical issue for subgroup-coded dose modifiers where
+  likelihood evaluations could create invalid internal contrast values
+  during optimization, even though subgroup-specific dose effects were
+  properly transformed.
+
 ## ameras 0.5.1
+
+CRAN release: 2026-07-16
 
 ### Bug fixes
 
