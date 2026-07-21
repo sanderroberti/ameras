@@ -93,9 +93,10 @@ omitted-row object returned by the missing-value action, when applicable),
 function, if applicable), \code{transform.jacobian} (the used Jacobian function for 
 the transformation, if applicable), \code{other.args} (any other arguments passed to 
 \dots), \code{model} (a list containing the specified model components parsed from 
-the formula), \code{CI.computed} (logical, whether confidence intervals have been 
-attached by \code{\link[=confint.amerasfit]{confint}}), and \code{data} (either the 
-data frame used for model fitting when \code{keep.data=TRUE} or \code{NULL} otherwise).
+the formula, including \code{model$data}, which is either the data frame used for
+model fitting when \code{keep.data=TRUE} or \code{NULL} otherwise), and
+\code{CI.computed} (logical, whether confidence intervals have been attached by
+\code{\link[=confint.amerasfit]{confint}}).
 
 For each method supplied to \code{methods}, the output contains a list with components:
   \item{coefficients}{named vector of model coefficients.}

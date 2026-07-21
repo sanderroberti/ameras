@@ -37,6 +37,40 @@ make_extreme_aic_data <- function(two_good = TRUE) {
   )
 }
 
+test_that("ameras forwards optim.method to FMA", {
+  data("data", package = "ameras")
+  captured <- NULL
+
+  testthat::with_mocked_bindings(
+    ameras.fma = function(...) {
+      captured <<- list(...)
+      list(
+        coefficients = c("(Intercept)" = 0, dose = 0, sigma = 1),
+        sd = c("(Intercept)" = 0, dose = 0, sigma = 0),
+        vcov = diag(3),
+        samples = NULL,
+        included.realizations = 1:2,
+        weights = c(V1 = 0.5, V2 = 0.5),
+        runtime = "0 seconds"
+      )
+    },
+    {
+      fit <- suppressMessages(
+        ameras(
+          Y.gaussian ~ dose(V1:V2),
+          data = data[1:20, ],
+          family = "gaussian",
+          methods = "FMA",
+          optim.method = "BFGS"
+        )
+      )
+    }
+  )
+
+  expect_identical(captured$optim.method, "BFGS")
+  expect_identical(fit$FMA$included.realizations, 1:2)
+})
+
 test_that("FMA weights are finite with extreme AIC differences", {
   skip_on_cran()
 

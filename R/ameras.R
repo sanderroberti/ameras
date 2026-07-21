@@ -243,6 +243,7 @@ ameras_main <- function(
         MFMA = MFMA,
         future.chunk.size.FMA = future.chunk.size.FMA,
         control = control,
+        optim.method = optim.method,
         ...
       )
       results <- c(results, list(FMA = fit))
