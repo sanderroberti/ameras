@@ -306,11 +306,11 @@ of dose realizations provided), `transform` (the used transformation
 function, if applicable), `transform.jacobian` (the used Jacobian
 function for the transformation, if applicable), `other.args` (any other
 arguments passed to ...), `model` (a list containing the specified model
-components parsed from the formula), `CI.computed` (logical, whether
-confidence intervals have been attached by
-[`confint`](https://ameras.sanderroberti.com/reference/confint.md)), and
-`data` (either the data frame used for model fitting when
-`keep.data=TRUE` or `NULL` otherwise).
+components parsed from the formula, including `model$data`, which is
+either the data frame used for model fitting when `keep.data=TRUE` or
+`NULL` otherwise), and `CI.computed` (logical, whether confidence
+intervals have been attached by
+[`confint`](https://ameras.sanderroberti.com/reference/confint.md)).
 
 For each method supplied to `methods`, the output contains a list with
 components:
@@ -620,12 +620,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.5 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.335 0.0 0.335
+#>      RC 0.472 0.0 0.472
 #> 
 #> Estimated model parameters:
 #> 

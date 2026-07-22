@@ -173,12 +173,12 @@ summary(fit)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0 seconds
+#> Total CPU runtime: 0.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.047 0.0 0.047
+#>      RC 0.056 0.0 0.056
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -204,12 +204,12 @@ summary(fit)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0 seconds
+#> Total CPU runtime: 0.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.047 0.001 0.048
+#>  Method   Fit  CI Total
+#>      RC 0.056 0.0 0.056
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -254,14 +254,14 @@ summary(fit2)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 72.2 seconds
+#> Total CPU runtime: 56.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit    CI  Total
-#>      RC  0.045 0.000  0.045
-#>     ERC 71.720 0.001 71.721
-#>    MCML  0.405 0.000  0.405
+#>  Method    Fit  CI  Total
+#>      RC  0.056 0.0  0.056
+#>     ERC 56.097 0.0 56.097
+#>    MCML  0.408 0.0  0.408
 #> 
 #> Summary of coefficients by method:
 #> 

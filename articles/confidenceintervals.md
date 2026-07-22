@@ -115,7 +115,7 @@ summary(fit.ameras.waldorig)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.408 0.0 0.408
+#>      RC 0.426 0.0 0.426
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -136,7 +136,7 @@ summary(fit.ameras.waldtransformed)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.408 0.0 0.408
+#>      RC 0.426 0.0 0.426
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -152,12 +152,12 @@ summary(fit.ameras.proflik)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 2.1 seconds
+#> Total CPU runtime: 2.5 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.408 1.721 2.129
+#>      RC 0.426 2.045 2.471
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -208,12 +208,12 @@ summary(fit.ameras.hpd)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 1.7 seconds
+#> Total CPU runtime: 2.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>     FMA 1.638 0.036 1.674
+#>     FMA 2.146 0.236 2.382
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -229,12 +229,12 @@ summary(fit.ameras.percentile)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 1.9 seconds
+#> Total CPU runtime: 2.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>     FMA 1.638 0.232  1.87
+#>     FMA 2.146 0.254   2.4
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -230,9 +230,10 @@ omitted-row object returned by the missing-value action, when applicable),
 function, if applicable), <code>transform.jacobian</code> (the used Jacobian function for
 the transformation, if applicable), <code>other.args</code> (any other arguments passed to
 ...), <code>model</code> (a list containing the specified model components parsed from
-the formula), <code>CI.computed</code> (logical, whether confidence intervals have been
-attached by <code><a href="confint.html">confint</a></code>), and <code>data</code> (either the
-data frame used for model fitting when <code>keep.data=TRUE</code> or <code>NULL</code> otherwise).</p>
+the formula, including <code>model$data</code>, which is either the data frame used for
+model fitting when <code>keep.data=TRUE</code> or <code>NULL</code> otherwise), and
+<code>CI.computed</code> (logical, whether confidence intervals have been attached by
+<code><a href="confint.html">confint</a></code>).</p>
 <p>For each method supplied to <code>methods</code>, the output contains a list with components:</p>
 <dl><dt>coefficients</dt>
 <dd><p>named vector of model coefficients.</p></dd>
@@ -345,12 +346,12 @@ those outputs are computed on the fitted rows.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.3 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.5 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.335 0.0 0.335</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.472 0.0 0.472</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
