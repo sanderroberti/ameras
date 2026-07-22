@@ -65,7 +65,7 @@ If \code{methods} contains at least one of RC, ERC, and MCML and at least one of
 \item{inpar}{vector of initial values for log-likelihood optimization (optional).}
 \item{loglim}{parameter used in likelihood computations to avoid taking the log of very small or negative numbers via \code{log(max(x, loglim))} (default \code{1e-30}).}
 \item{MFMA}{number of samples for \code{"FMA"} to compute estimates and CIs (default 100,000).}
-\item{future.chunk.size.FMA}{optional positive number controlling the average number of FMA dose realizations per future when \pkg{future.apply} is available. Parallel execution is controlled by the user's current \code{future::plan()}; with the default sequential plan, FMA is fit sequentially.}
+\item{future.chunk.size.FMA}{optional positive number controlling the average number of FMA dose realizations per future. When \code{NULL} (the default), approximately one future per available worker is used. Parallel execution is controlled by the user's current \code{future::plan()}; the default plan is sequential.}
 \item{prophaz.numints.BMA}{for \code{methods="BMA"} with \code{family="prophaz"}, the number of subintervals with constant baseline hazard (default 10). Cut points are determined based on quantiles of the event time distribution among cases.}
 \item{ERRprior.BMA}{prior for dose-related parameters when \code{doseRRmod="ERR"} or \code{"LINEXP"} and \code{methods="BMA"}.
 Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncated_doubleexponential"}, \code{"normal"}, \code{"horseshoe"}, \code{"doubleexponential"}, see Details (default \code{"doubleexponential"}).}
