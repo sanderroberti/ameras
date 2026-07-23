@@ -132,9 +132,9 @@
 <dd><p>A data frame reporting computation time in seconds for each method.
       When structured timing information is available this has columns
       <code>Method</code>, <code>Fit</code>, <code>CI</code>, and <code>Total</code>, with CPU time
-      reported for each timing component. For objects that only contain the
-      compatibility <code>runtime</code> field, this has columns <code>Method</code> and
-      <code>Runtime</code>.</p></dd>
+      reported for each timing component. Older fitted objects that only
+      contain the former <code>runtime</code> field are still supported and produce
+      columns <code>Method</code> and <code>Runtime</code>.</p></dd>
 
     <dt><code>total_runtime_seconds</code></dt>
 <dd><p>The total CPU computation time in seconds across all methods.</p></dd>
@@ -200,7 +200,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.056 0.0 0.056</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.054 0.0 0.054</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -230,8 +230,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.056 0.001 0.057</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.054 0.0 0.054</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -276,14 +276,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 59.6 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 57.6 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit    CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.056 0.000  0.056</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 59.178 0.001 59.179</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.409 0.000  0.409</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit  CI  Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.055 0.0  0.055</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 57.144 0.0 57.144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.383 0.0  0.383</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

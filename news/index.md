@@ -10,6 +10,13 @@
   properly transformed.
 - Fixed an issue where `optim.method` was not forwarded to FMA fits.
 
+### Improvements
+
+- Removed the redundant `runtime` field from newly created method
+  results. Structured fitting, confidence interval, and total
+  computation times remain available through `timing`; older
+  runtime-only fitted objects remain supported.
+
 ## ameras 0.5.1
 
 CRAN release: 2026-07-16

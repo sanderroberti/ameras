@@ -244,9 +244,6 @@ model fitting when <code>keep.data=TRUE</code> or <code>NULL</code> otherwise), 
   <dt>vcov</dt>
 <dd><p>covariance matrix for the full parameter vector. Based on the observed information (negative second derivative of log-likelihood) for RC, ERC, and MCML, and on the obtained samples for FMA and BMA.</p></dd>
 
-  <dt>runtime</dt>
-<dd><p>string with the total CPU runtime currently available for the method. After fitting this is the fitting time; after <code><a href="confint.html">confint</a></code> this includes confidence interval computation time.</p></dd>
-
   <dt>timing</dt>
 <dd><p>list with CPU and elapsed timings for fitting, confidence interval computation, and their total. CPU time is used for printed runtime summaries.</p></dd>
 
@@ -351,7 +348,7 @@ those outputs are computed on the fitted rows.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.492 0.0 0.492</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.455 0.0 0.455</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

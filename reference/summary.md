@@ -107,8 +107,9 @@ which is a list containing the following elements:
   A data frame reporting computation time in seconds for each method.
   When structured timing information is available this has columns
   `Method`, `Fit`, `CI`, and `Total`, with CPU time reported for each
-  timing component. For objects that only contain the compatibility
-  `runtime` field, this has columns `Method` and `Runtime`.
+  timing component. Older fitted objects that only contain the former
+  `runtime` field are still supported and produce columns `Method` and
+  `Runtime`.
 
 - `total_runtime_seconds`:
 
@@ -178,7 +179,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.056 0.0 0.056
+#>      RC 0.054 0.0 0.054
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -208,8 +209,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.056 0.001 0.057
+#>  Method   Fit  CI Total
+#>      RC 0.054 0.0 0.054
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -254,14 +255,14 @@ summary(fit2)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 59.6 seconds
+#> Total CPU runtime: 57.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit    CI  Total
-#>      RC  0.056 0.000  0.056
-#>     ERC 59.178 0.001 59.179
-#>    MCML  0.409 0.000  0.409
+#>  Method    Fit  CI  Total
+#>      RC  0.055 0.0  0.055
+#>     ERC 57.144 0.0 57.144
+#>    MCML  0.383 0.0  0.383
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -119,10 +119,10 @@ confint(object, parm="dose", level=0.95,
 ## Value
 
 The original `amerasfit` object with a `CI` element added to each fitted
-method result. The method-specific `timing` and `runtime` elements are
-also updated so that printed runtime summaries include confidence
-interval computation time. For RC, ERC, and MCML the `CI` element is a
-data frame with columns:
+method result. The method-specific `timing` element is also updated so
+that printed runtime summaries include confidence interval computation
+time. For RC, ERC, and MCML the `CI` element is a data frame with
+columns:
 
 - `lower`:
 
@@ -237,7 +237,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.041 0.0 0.041
+#>      RC 0.038 0.0 0.038
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -268,7 +268,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.041 0.0 0.041
+#>      RC 0.038 0.0 0.038
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -340,13 +340,13 @@ summary(fit3)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 97.7 seconds
+#> Total CPU runtime: 94.7 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>     FMA  0.536 0.007  0.543
-#>     BMA 97.156 0.001 97.157
+#>     FMA  0.501 0.007  0.508
+#>     BMA 94.156 0.001 94.157
 #> 
 #> Summary of coefficients by method:
 #> 

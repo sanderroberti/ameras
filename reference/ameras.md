@@ -330,13 +330,6 @@ components:
   information (negative second derivative of log-likelihood) for RC,
   ERC, and MCML, and on the obtained samples for FMA and BMA.
 
-- runtime:
-
-  string with the total CPU runtime currently available for the method.
-  After fitting this is the fitting time; after
-  [`confint`](https://ameras.sanderroberti.com/reference/confint.md)
-  this includes confidence interval computation time.
-
 - timing:
 
   list with CPU and elapsed timings for fitting, confidence interval
@@ -626,7 +619,7 @@ Studies
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.492 0.0 0.492
+#>      RC 0.455 0.0 0.455
 #> 
 #> Estimated model parameters:
 #> 

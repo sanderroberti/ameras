@@ -45,6 +45,10 @@
 <ul><li>Fixed a numerical issue for subgroup-coded dose modifiers where likelihood evaluations could create invalid internal contrast values during optimization, even though subgroup-specific dose effects were properly transformed.</li>
 <li>Fixed an issue where <code>optim.method</code> was not forwarded to FMA fits.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
+<ul><li>Removed the redundant <code>runtime</code> field from newly created method results. Structured fitting, confidence interval, and total computation times remain available through <code>timing</code>; older runtime-only fitted objects remain supported.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1" id="ameras-051">ameras 0.5.1<a class="anchor" aria-label="anchor" href="#ameras-051"></a></h2><p class="text-muted">CRAN release: 2026-07-16</p>
