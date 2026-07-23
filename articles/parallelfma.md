@@ -84,8 +84,15 @@ the future package documentation for details.
 
 ## Controlling chunk size
 
-By default, `future.apply` chooses how to split dose realizations into
-futures. For FMA, this can be adjusted with `future.chunk.size.FMA`, the
+When `future.chunk.size.FMA = NULL`, as it is by default, `future.apply`
+uses its default scheduling of approximately one future per available
+worker. The dose realizations are divided among those futures. Thus,
+with `K` realizations and `W` workers, the default usually creates about
+`min(K, W)` futures, each processing roughly `K / min(K, W)`
+realizations sequentially. Under the default sequential future plan, one
+future processes all realizations sequentially.
+
+An explicit `future.chunk.size.FMA` changes this behavior by setting the
 average number of dose realizations handled by each future.
 
 Let `K` be the number of dose realizations, `W` the number of workers,
@@ -97,6 +104,7 @@ For example, with `K = 100` dose realizations and `W = 4` workers:
 
 | `future.chunk.size.FMA` | Approximate chunks | Interpretation |
 |---:|---:|----|
+| `NULL` | 4 | default scheduling; about one task per worker |
 | 1 | 100 | many small tasks; more load balancing, more overhead |
 | 5 | 20 | moderate load balancing and overhead |
 | 25 | 4 | about one task per worker |
@@ -187,8 +195,8 @@ data.frame(
   elapsed_seconds = round(c(sequential_elapsed, parallel_elapsed), 2)
 )
 #>           plan elapsed_seconds
-#> 1   sequential            1.99
-#> 2 multisession            2.23
+#> 1   sequential            2.04
+#> 2 multisession            2.27
 ```
 
 The estimates should agree up to ordinary numerical precision. Parallel

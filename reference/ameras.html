@@ -174,7 +174,7 @@ If <code>methods</code> contains at least one of RC, ERC, and MCML and at least 
 <dd><p>number of samples for <code>"FMA"</code> to compute estimates and CIs (default 100,000).</p></dd>
 
 <dt id="arg-future-chunk-size-fma">future.chunk.size.FMA<a class="anchor" aria-label="anchor" href="#arg-future-chunk-size-fma"></a></dt>
-<dd><p>optional positive number controlling the average number of FMA dose realizations per future when <span class="pkg">future.apply</span> is available. Parallel execution is controlled by the user's current <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">future::plan()</a></code>; with the default sequential plan, FMA is fit sequentially.</p></dd>
+<dd><p>optional positive number controlling the average number of FMA dose realizations per future. When <code>NULL</code> (the default), approximately one future per available worker is used. Parallel execution is controlled by the user's current <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">future::plan()</a></code>; the default plan is sequential.</p></dd>
 
 <dt id="arg-prophaz-numints-bma">prophaz.numints.BMA<a class="anchor" aria-label="anchor" href="#arg-prophaz-numints-bma"></a></dt>
 <dd><p>for <code>methods="BMA"</code> with <code>family="prophaz"</code>, the number of subintervals with constant baseline hazard (default 10). Cut points are determined based on quantiles of the event time distribution among cases.</p></dd>
@@ -351,7 +351,7 @@ those outputs are computed on the fitted rows.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.472 0.0 0.472</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.492 0.0 0.492</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

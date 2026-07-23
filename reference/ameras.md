@@ -212,10 +212,11 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 - future.chunk.size.FMA:
 
   optional positive number controlling the average number of FMA dose
-  realizations per future when future.apply is available. Parallel
-  execution is controlled by the user's current
+  realizations per future. When `NULL` (the default), approximately one
+  future per available worker is used. Parallel execution is controlled
+  by the user's current
   [`future::plan()`](https://future.futureverse.org/reference/plan.html);
-  with the default sequential plan, FMA is fit sequentially.
+  the default plan is sequential.
 
 - prophaz.numints.BMA:
 
@@ -625,7 +626,7 @@ Studies
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.472 0.0 0.472
+#>      RC 0.492 0.0 0.492
 #> 
 #> Estimated model parameters:
 #> 

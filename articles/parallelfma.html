@@ -132,10 +132,17 @@ future package documentation for details.</p>
 <div class="section level2">
 <h2 id="controlling-chunk-size">Controlling chunk size<a class="anchor" aria-label="anchor" href="#controlling-chunk-size"></a>
 </h2>
-<p>By default, <code>future.apply</code> chooses how to split dose
-realizations into futures. For FMA, this can be adjusted with
-<code>future.chunk.size.FMA</code>, the average number of dose
-realizations handled by each future.</p>
+<p>When <code>future.chunk.size.FMA = NULL</code>, as it is by default,
+<code>future.apply</code> uses its default scheduling of approximately
+one future per available worker. The dose realizations are divided among
+those futures. Thus, with <code>K</code> realizations and <code>W</code>
+workers, the default usually creates about <code>min(K, W)</code>
+futures, each processing roughly <code>K / min(K, W)</code> realizations
+sequentially. Under the default sequential future plan, one future
+processes all realizations sequentially.</p>
+<p>An explicit <code>future.chunk.size.FMA</code> changes this behavior
+by setting the average number of dose realizations handled by each
+future.</p>
 <p>Let <code>K</code> be the number of dose realizations, <code>W</code>
 the number of workers, and <code>C</code> the value of
 <code>future.chunk.size.FMA</code>. <code>K</code> and <code>C</code>
@@ -152,21 +159,26 @@ can run at the same time.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="right"><code>NULL</code></td>
+<td align="right">4</td>
+<td>default scheduling; about one task per worker</td>
+</tr>
+<tr class="even">
 <td align="right">1</td>
 <td align="right">100</td>
 <td>many small tasks; more load balancing, more overhead</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right">5</td>
 <td align="right">20</td>
 <td>moderate load balancing and overhead</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right">25</td>
 <td align="right">4</td>
 <td>about one task per worker</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right">100</td>
 <td align="right">1</td>
 <td>one task; only one worker is used</td>
@@ -250,8 +262,8 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span>  elapsed_seconds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sequential_elapsed</span>, <span class="va">parallel_elapsed</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;           plan elapsed_seconds</span></span>
-<span><span class="co">#&gt; 1   sequential            1.99</span></span>
-<span><span class="co">#&gt; 2 multisession            2.23</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   sequential            2.04</span></span>
+<span><span class="co">#&gt; 2 multisession            2.27</span></span></code></pre></div>
 <p>The estimates should agree up to ordinary numerical precision.
 Parallel execution is not guaranteed to be faster for small examples
 because starting workers and transferring data have overhead. It is most
