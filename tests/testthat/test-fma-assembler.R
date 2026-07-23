@@ -99,7 +99,8 @@ test_that("assemble_fma_result computes weights and sample allocations", {
   expect_identical(names(out$coefficients), parnames)
   expect_identical(rownames(out$vcov), parnames)
   expect_identical(colnames(out$vcov), parnames)
-  expect_match(out$runtime, "seconds$")
+  expect_false("runtime" %in% names(out))
+  expect_true(all(c("fit", "ci", "total") %in% names(out$timing)))
 })
 
 test_that("assemble_fma_result excludes non-finite sampling covariance", {

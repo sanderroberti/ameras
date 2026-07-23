@@ -263,7 +263,8 @@ test_that("assemble_frequentist_fit_result handles untransformed fits", {
   expect_equal(out$sd, sqrt(c(alpha = 1 / 4, beta = 1 / 9)))
   expect_identical(out$optim$counts, fit$counts)
   expect_equal(out$loglik, -5)
-  expect_match(out$runtime, "seconds$")
+  expect_false("runtime" %in% names(out))
+  expect_true(all(c("fit", "ci", "total") %in% names(out$timing)))
 })
 
 test_that("assemble_frequentist_fit_result handles transformed fits", {
@@ -396,7 +397,7 @@ test_that("ameras passes default BMA realization indices explicitly", {
         Rhat = NULL,
         samples = NULL,
         included.realizations = captured$included.realizations,
-        runtime = "0 seconds"
+        timing = ameras:::new_method_timing()
       )
     },
     {

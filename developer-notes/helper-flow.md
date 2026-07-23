@@ -191,8 +191,9 @@ adding exported API.
 
 Method results store structured timing in a `timing` list with separate
 `fit`, `ci`, and `total` phases. Printed runtime summaries use CPU time so they
-do not count time spent while the machine is asleep. The legacy `runtime`
-string is still kept for compatibility and mirrors the current total CPU time.
+do not count time spent while the machine is asleep. Runtime-only method
+results from older saved fits remain readable but are upgraded to structured
+timing when confidence intervals are computed.
 
 ## Profile Likelihood Path
 
@@ -221,9 +222,9 @@ The reconstructed likelihood is then passed into `proflik()` through
 realizations.
 
 After each method's interval calculation, `confint.amerasfit()` records the CI
-timing for that method and updates the method's total runtime. When intervals
-are recomputed with `force = TRUE`, the previous CI timing is replaced rather
-than accumulated. The updated `amerasfit` object is returned invisibly.
+timing for that method and updates its total timing. When intervals are
+recomputed with `force = TRUE`, the previous CI timing is replaced rather than
+accumulated. The updated `amerasfit` object is returned invisibly.
 
 ## Diagnostics Data Path
 

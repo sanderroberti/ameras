@@ -13,7 +13,6 @@ test_that("method timing combines fit and CI phases", {
 
 test_that("CI timing replaces previous CI timing instead of accumulating", {
   method_fit <- list(
-    runtime = "1 seconds",
     timing = ameras:::new_method_timing(
       fit = ameras:::new_runtime_phase(cpu = 1, elapsed = 10),
       ci = ameras:::new_runtime_phase(cpu = 4, elapsed = 40)
@@ -28,7 +27,19 @@ test_that("CI timing replaces previous CI timing instead of accumulating", {
   expect_equal(updated$timing$fit$cpu, 1)
   expect_equal(updated$timing$ci$cpu, 0.25)
   expect_equal(updated$timing$total$cpu, 1.25)
-  expect_identical(updated$runtime, "1.2 seconds")
+  expect_false("runtime" %in% names(updated))
+})
+
+test_that("CI timing upgrades legacy runtime-only method results", {
+  updated <- ameras:::set_ci_timing(
+    list(runtime = "1 seconds"),
+    ameras:::new_runtime_phase(cpu = 0.25, elapsed = 3)
+  )
+
+  expect_equal(updated$timing$fit$cpu, 1)
+  expect_equal(updated$timing$ci$cpu, 0.25)
+  expect_equal(updated$timing$total$cpu, 1.25)
+  expect_false("runtime" %in% names(updated))
 })
 
 test_that("summary uses structured timing when available", {
@@ -125,7 +136,6 @@ test_that("confint records CI timing for sample-based intervals", {
       sd = c(a = 0.1),
       vcov = matrix(0.01, dimnames = list("a", "a")),
       samples = data.frame(a = c(0.8, 1, 1.2)),
-      runtime = "1 seconds",
       timing = ameras:::new_method_timing(
         fit = ameras:::new_runtime_phase(cpu = 1, elapsed = 2)
       )
@@ -141,8 +151,5 @@ test_that("confint records CI timing for sample-based intervals", {
     out$FMA$timing$total$cpu,
     out$FMA$timing$fit$cpu + out$FMA$timing$ci$cpu
   )
-  expect_identical(
-    out$FMA$runtime,
-    ameras:::format_runtime(out$FMA$timing$total$cpu)
-  )
+  expect_false("runtime" %in% names(out$FMA))
 })

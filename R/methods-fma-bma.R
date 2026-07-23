@@ -374,8 +374,7 @@ assemble_fma_result <- function(
     included.samples = included.samples,
     weights = wgts,
     samples = FMAsamples,
-    timing = timing,
-    runtime = format_runtime(timing$total$cpu)
+    timing = timing
   )
 }
 
@@ -1218,8 +1217,7 @@ ameras.bma <- function(
     Rhat = Rhat,
     samples = nimblesamples,
     included.realizations = included.realizations,
-    timing = timing,
-    runtime = format_runtime(timing$total$cpu)
+    timing = timing
   )
   if (family == "prophaz") {
     out <- c(

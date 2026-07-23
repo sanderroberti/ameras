@@ -102,7 +102,6 @@ For each method supplied to \code{methods}, the output contains a list with comp
   \item{coefficients}{named vector of model coefficients.}
   \item{sd}{named vector of standard deviations.}
   \item{vcov}{covariance matrix for the full parameter vector. Based on the observed information (negative second derivative of log-likelihood) for RC, ERC, and MCML, and on the obtained samples for FMA and BMA.}
-  \item{runtime}{string with the total CPU runtime currently available for the method. After fitting this is the fitting time; after \code{\link[=confint.amerasfit]{confint}} this includes confidence interval computation time.}
   \item{timing}{list with CPU and elapsed timings for fitting, confidence interval computation, and their total. CPU time is used for printed runtime summaries.}
   
 For RC, ERC, and MCML  the following additional output is included:

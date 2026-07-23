@@ -5,6 +5,10 @@
 * Fixed a numerical issue for subgroup-coded dose modifiers where likelihood evaluations could create invalid internal contrast values during optimization, even though subgroup-specific dose effects were properly transformed.
 * Fixed an issue where `optim.method` was not forwarded to FMA fits.
 
+## Improvements
+
+* Removed the redundant `runtime` field from newly created method results. Structured fitting, confidence interval, and total computation times remain available through `timing`; older runtime-only fitted objects remain supported.
+
 # ameras 0.5.1
 
 ## Bug fixes

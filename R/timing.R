@@ -69,7 +69,9 @@ set_ci_timing <- function(method_fit, ci_timing) {
     fit = timing$fit,
     ci = ci_timing
   )
-  method_fit$runtime <- format_runtime(method_fit$timing$total$cpu)
+  # Updating an older runtime-only fit also upgrades it to the current
+  # structured timing representation.
+  method_fit$runtime <- NULL
   method_fit
 }
 

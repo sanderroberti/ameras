@@ -51,7 +51,7 @@ test_that("ameras forwards optim.method to FMA", {
         samples = NULL,
         included.realizations = 1:2,
         weights = c(V1 = 0.5, V2 = 0.5),
-        runtime = "0 seconds"
+        timing = ameras:::new_method_timing()
       )
     },
     {

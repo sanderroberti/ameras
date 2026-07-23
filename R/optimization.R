@@ -396,8 +396,7 @@ assemble_frequentist_fit_result <- function(
         counts = fit$counts
       ),
       loglik = -1 * fit$value,
-      timing = timing,
-      runtime = format_runtime(timing$total$cpu)
+      timing = timing
     ),
     extra
   )

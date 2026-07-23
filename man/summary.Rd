@@ -83,9 +83,9 @@
       A data frame reporting computation time in seconds for each method.
       When structured timing information is available this has columns
       \code{Method}, \code{Fit}, \code{CI}, and \code{Total}, with CPU time
-      reported for each timing component. For objects that only contain the
-      compatibility \code{runtime} field, this has columns \code{Method} and
-      \code{Runtime}.
+      reported for each timing component. Older fitted objects that only
+      contain the former \code{runtime} field are still supported and produce
+      columns \code{Method} and \code{Runtime}.
     }
     \item{\code{total_runtime_seconds}}{
       The total CPU computation time in seconds across all methods.
