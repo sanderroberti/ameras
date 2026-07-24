@@ -246,7 +246,12 @@ prepare_modifier_inputs <- function(data, modifier_info) {
     var <- modifier_info$source_vars[i]
     n_cols <- ncol(encoded[[i]]$values)
     idx <- design_offset + seq_len(n_cols)
-    data[, design_vars[idx]] <- encoded[[i]]$values
+    # Assign each design column separately. Assigning a one-column matrix to a
+    # data-frame column can create a matrix-valued column, which has different
+    # dimensional behavior from an ordinary numeric column.
+    for (j in seq_len(n_cols)) {
+      data[[design_vars[idx[j]]]] <- encoded[[i]]$values[, j]
+    }
     levels[[var]] <- encoded[[i]]$levels
     parameter_names[idx] <- encoded[[i]]$parameter_names
     design_offset <- design_offset + n_cols

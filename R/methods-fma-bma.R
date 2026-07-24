@@ -628,6 +628,18 @@ ameras.fma <- function(
 }
 
 
+# The NIMBLE model indexes a single design column as a vector and multiple
+# columns as a matrix. Normalize that shape explicitly so data-frame subclasses
+# and generated formula columns cannot change the dimensionality seen by NIMBLE.
+nimble_design_values <- function(data, columns) {
+  if (length(columns) == 1L) {
+    return(as.numeric(data[[columns]]))
+  }
+
+  as.matrix(data[, columns, drop = FALSE])
+}
+
+
 ameras.bma <- function(
   family,
   dosevars,
@@ -977,11 +989,17 @@ ameras.bma <- function(
     nimbleconst <- c(nimbleconst, list(Z = Z))
   }
   if (length(X) > 0) {
-    nimbleconst <- c(nimbleconst, list(Xmat = data[, X]))
+    nimbleconst <- c(
+      nimbleconst,
+      list(Xmat = nimble_design_values(data, X))
+    )
     mons <- c(mons, "a")
   }
   if (length(M) > 0) {
-    nimbleconst <- c(nimbleconst, list(Mmat = data[, M]))
+    nimbleconst <- c(
+      nimbleconst,
+      list(Mmat = nimble_design_values(data, M))
+    )
     if (deg == 1) {
       mons <- c(mons, "bm")
     } else if (deg > 1) {

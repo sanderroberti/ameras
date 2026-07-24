@@ -32,6 +32,7 @@ test_that("formula modifiers build contrast and subgroup designs", {
     unname(as.vector(inputs_fac$data[[inputs_fac$design_vars]])),
     c(0, 1, 0, 1)
   )
+  expect_false(is.matrix(inputs_fac$data[[inputs_fac$design_vars]]))
   expect_identical(inputs_fac$modifier_info$parameter_names, "M_fac=high")
 
   parsed_f3 <- ameras:::parse_ameras_formula(
@@ -83,6 +84,24 @@ test_that("formula modifiers build contrast and subgroup designs", {
     inputs_group_alt$modifier_info$parameter_names,
     c("F3=b", "F3=c")
   )
+})
+
+
+test_that("NIMBLE design inputs preserve the dimensions expected by BMA", {
+  dat <- data.frame(
+    one = c(0, 1, 0),
+    two = c(1, 0, 1)
+  )
+
+  # NIMBLE uses one-dimensional indexing when the model has one X or M column,
+  # and two-dimensional indexing when it has more than one.
+  one <- ameras:::nimble_design_values(dat, "one")
+  two <- ameras:::nimble_design_values(dat, c("one", "two"))
+
+  expect_type(one, "double")
+  expect_null(dim(one))
+  expect_identical(dim(two), c(3L, 2L))
+  expect_type(two, "double")
 })
 
 
@@ -567,12 +586,13 @@ test_that("subgroup-coded modifiers report subgroup BMA samples", {
 
 test_that("formula contrast modifiers remain supported for BMA", {
   skip_on_cran()
-  data <- three_level_modifier_data()
+  data("data", package = "ameras")
 
-  # BMA still uses the existing reference-plus-contrast parameterization. This
-  # keeps the new formula syntax compatible with the current BMA model code.
+  # A binary formula modifier creates one internal design column. Keep a real
+  # BMA fit here because NIMBLE distinguishes that vector case from the matrix
+  # used for multi-level factor modifiers.
   fit <- suppressWarnings(suppressMessages(ameras(
-    Y.gaussian ~ dose(V1:V2, modifier = ~ F3),
+    Y.gaussian ~ dose(V1:V2, modifier = ~ M1),
     data = data[seq_len(24), ],
     family = "gaussian",
     methods = "BMA",
@@ -584,7 +604,7 @@ test_that("formula contrast modifiers remain supported for BMA", {
 
   expect_named(
     fit$BMA$coefficients,
-    c("(Intercept)", "dose", "dose:F3=mid", "dose:F3=high", "sigma")
+    c("(Intercept)", "dose", "dose:M1", "sigma")
   )
 })
 

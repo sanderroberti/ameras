@@ -2,6 +2,7 @@
 
 ## Bug fixes
 
+* Fixed a BMA dimensionality error for models with a single formula-based effect modifier.
 * Fixed a numerical issue for subgroup-coded dose modifiers where likelihood evaluations could create invalid internal contrast values during optimization, even though subgroup-specific dose effects were properly transformed.
 * Fixed an issue where `optim.method` was not forwarded to FMA fits.
 
