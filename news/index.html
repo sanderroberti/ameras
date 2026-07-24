@@ -42,7 +42,8 @@
 <h2 class="pkg-version" data-toc-text="development version" id="ameras-development-version">ameras (development version)<a class="anchor" aria-label="anchor" href="#ameras-development-version"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li>Fixed a numerical issue for subgroup-coded dose modifiers where likelihood evaluations could create invalid internal contrast values during optimization, even though subgroup-specific dose effects were properly transformed.</li>
+<ul><li>Fixed a BMA dimensionality error for models with a single formula-based effect modifier.</li>
+<li>Fixed a numerical issue for subgroup-coded dose modifiers where likelihood evaluations could create invalid internal contrast values during optimization, even though subgroup-specific dose effects were properly transformed.</li>
 <li>Fixed an issue where <code>optim.method</code> was not forwarded to FMA fits.</li>
 </ul></div>
 <div class="section level3">
