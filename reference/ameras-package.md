@@ -28,7 +28,7 @@ visualize the exposure uncertainty in the dose realizations, use
 
 ## Author
 
-Sander Roberti \<sander.roberti@nih.gov\>, William Wheeler
+Sander Roberti \<statspackages@sanderroberti.nl\>, William Wheeler
 \<WheelerB@imsweb.com\>, Ruth Pfeiffer \<pfeiffer@mail.nih.gov\>, and
 Deukwoo Kwon \<DKwon@uams.edu\>
 

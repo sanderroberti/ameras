@@ -42,13 +42,13 @@
 <h2 class="pkg-version" data-toc-text="development version" id="ameras-development-version">ameras (development version)<a class="anchor" aria-label="anchor" href="#ameras-development-version"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li>Fixed a BMA dimensionality error for models with a single formula-based effect modifier.</li>
-<li>Fixed a numerical issue for subgroup-coded dose modifiers where likelihood evaluations could create invalid internal contrast values during optimization, even though subgroup-specific dose effects were properly transformed.</li>
-<li>Fixed an issue where <code>optim.method</code> was not forwarded to FMA fits.</li>
+<ul><li>Fixed a BMA error when fitting models with a single formula-based effect modifier.</li>
+<li>Fixed numerical failures that could occur while fitting subgroup-coded effect modifiers, despite valid transformed subgroup effects.</li>
+<li>FMA now honors the optimizer selected through <code>optim.method</code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
-<ul><li>Removed the redundant <code>runtime</code> field from newly created method results. Structured fitting, confidence interval, and total computation times remain available through <code>timing</code>; older runtime-only fitted objects remain supported.</li>
+<h3 id="changes-development-version">Changes<a class="anchor" aria-label="anchor" href="#changes-development-version"></a></h3>
+<ul><li>Newly fitted method results no longer contain the redundant <code>runtime</code> field. Fitting, confidence interval, and total computation times remain available through <code>timing</code>. Fitted objects from earlier versions that contain only <code>runtime</code> remain supported.</li>
 </ul></div>
 </div>
     <div class="section level2">

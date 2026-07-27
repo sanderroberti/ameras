@@ -4,20 +4,18 @@
 
 ### Bug fixes
 
-- Fixed a BMA dimensionality error for models with a single
-  formula-based effect modifier.
-- Fixed a numerical issue for subgroup-coded dose modifiers where
-  likelihood evaluations could create invalid internal contrast values
-  during optimization, even though subgroup-specific dose effects were
-  properly transformed.
-- Fixed an issue where `optim.method` was not forwarded to FMA fits.
+- Fixed a BMA error when fitting models with a single formula-based
+  effect modifier.
+- Fixed numerical failures that could occur while fitting subgroup-coded
+  effect modifiers, despite valid transformed subgroup effects.
+- FMA now honors the optimizer selected through `optim.method`.
 
-### Improvements
+### Changes
 
-- Removed the redundant `runtime` field from newly created method
-  results. Structured fitting, confidence interval, and total
-  computation times remain available through `timing`; older
-  runtime-only fitted objects remain supported.
+- Newly fitted method results no longer contain the redundant `runtime`
+  field. Fitting, confidence interval, and total computation times
+  remain available through `timing`. Fitted objects from earlier
+  versions that contain only `runtime` remain supported.
 
 ## ameras 0.5.1
 
