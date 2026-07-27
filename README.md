@@ -110,16 +110,16 @@ summary(fit)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 51.2 seconds
+#> Total CPU runtime: 52.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.028 0.0  0.028
-#>     ERC  7.951 0.0  7.951
-#>    MCML  0.110 0.0  0.110
-#>     FMA  0.311 0.0  0.311
-#>     BMA 42.780 0.0 42.780
+#>      RC  0.025 0.0  0.025
+#>     ERC  8.284 0.0  8.284
+#>    MCML  0.126 0.0  0.126
+#>     FMA  0.341 0.0  0.341
+#>     BMA 43.375 0.0 43.375
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -178,16 +178,16 @@ summary(fit)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 51.2 seconds
+#> Total CPU runtime: 52.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>      RC  0.028 0.001  0.029
-#>     ERC  7.951 0.000  7.951
-#>    MCML  0.110 0.000  0.110
-#>     FMA  0.311 0.004  0.315
-#>     BMA 42.780 0.001 42.781
+#>      RC  0.025 0.001  0.026
+#>     ERC  8.284 0.000  8.284
+#>    MCML  0.126 0.000  0.126
+#>     FMA  0.341 0.004  0.345
+#>     BMA 43.375 0.000 43.375
 #> 
 #> Summary of coefficients by method:
 #> 

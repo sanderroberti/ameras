@@ -12,7 +12,7 @@
 \details{
   The function used to fit models is \code{\link{ameras}}. To attach confidence/credible intervals, use the method \code{\link[=confint.amerasfit]{confint}}. To visualize the exposure uncertainty in the dose realizations, use \code{\link{ecdfplot}}.
 }
-\author{Sander Roberti <sander.roberti@nih.gov>, William Wheeler <WheelerB@imsweb.com>, Ruth Pfeiffer <pfeiffer@mail.nih.gov>, and Deukwoo Kwon <DKwon@uams.edu>}
+\author{Sander Roberti <statspackages@sanderroberti.nl>, William Wheeler <WheelerB@imsweb.com>, Ruth Pfeiffer <pfeiffer@mail.nih.gov>, and Deukwoo Kwon <DKwon@uams.edu>}
 
 \keyword{measurement error}
 \keyword{exposure uncertainty}

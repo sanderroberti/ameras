@@ -4,7 +4,7 @@ Version: 0.5.1.9000
 Authors@R: c(person(given = "Sander",
                       family = "Roberti",
                       role =  c("aut", "cre"),
-                      email = "sander.roberti@nih.gov",
+                      email = "statspackages@sanderroberti.nl",
                       comment = c(ORCID = "0000-0002-6275-7442")),
               person(given = "William",
                       family = "Wheeler",
@@ -50,6 +50,6 @@ Author: Sander Roberti [aut, cre] (ORCID: <https://orcid.org/0000-0002-6275-7442
     Deukwoo Kwon [aut] (ORCID: <https://orcid.org/0000-0001-5376-5320>),
     Ruth Pfeiffer [ctb] (ORCID: <https://orcid.org/0000-0001-7791-2698>),
     NCI [cph, fnd]
-Maintainer: Sander Roberti <sander.roberti@nih.gov>
+Maintainer: Sander Roberti <statspackages@sanderroberti.nl>
 URL: https://ameras.sanderroberti.com, https://github.com/sanderroberti/ameras
 BugReports: https://github.com/sanderroberti/ameras/issues
