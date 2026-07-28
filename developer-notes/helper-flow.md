@@ -149,9 +149,13 @@ log-mean-exp calculation.
 `fit_objective_with_hessian()` is the shared optimizer wrapper. It normalizes
 the scalar `optimize()` path and the general `optim()` path into one fit object
 shape, then attaches a numeric Hessian. For general `optim()` fits, it also
-stores numerical gradient diagnostics. MCML, RC/ERC, and FMA all use this
-optimizer helper, but FMA disables the gradient check inside the
-per-realization loop to avoid extra overhead and warning noise.
+stores numerical gradient diagnostics. A Nelder-Mead fit is normally refined
+with BFGS; if that automatic refinement fails because its finite-difference
+evaluations are non-finite, the preceding Nelder-Mead solution is retained for
+the usual Hessian and convergence checks. MCML, RC/ERC, and FMA all use this
+optimizer helper, but FMA disables the gradient check and the associated
+refinement warning inside the per-realization loop to avoid extra overhead and
+warning noise.
 
 `assemble_frequentist_fit_result()` packages MCML and RC/ERC results. It applies
 any transform, propagates variance through `transform.jacobian`, names

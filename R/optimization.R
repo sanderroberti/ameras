@@ -1,3 +1,46 @@
+# Refine a Nelder-Mead solution with BFGS when its numerical finite differences
+# are usable. A failed refinement should not discard an otherwise valid
+# Nelder-Mead fit.
+refine_nelder_mead_with_bfgs <- function(
+  fit,
+  fn,
+  control,
+  warn = TRUE,
+  ...
+) {
+  count0 <- fit$counts
+  refined <- tryCatch(
+    optim(
+      fit$par,
+      fn,
+      method = "BFGS",
+      control = control,
+      ...
+    ),
+    error = identity
+  )
+
+  if (inherits(refined, "error")) {
+    fit$bfgs.refinement.error <- conditionMessage(refined)
+    if (isTRUE(warn)) {
+      warning(
+        "Automatic BFGS refinement failed (",
+        fit$bfgs.refinement.error,
+        "); retaining the Nelder-Mead solution. Review the optimizer ",
+        "convergence diagnostics and consider rescaling covariates or ",
+        "supplying different starting values.",
+        call. = FALSE
+      )
+    }
+    return(fit)
+  }
+
+  refined$counts <- replace(count0, is.na(count0), 0) +
+    replace(refined$counts, is.na(refined$counts), 0)
+  refined
+}
+
+
 # Internal optimizer wrapper used by FMA/BMA, MCML, and RC/ERC. It normalizes
 # the one-dimensional optimize() path and the general optim() path to the same
 # fit object shape, then attaches a numeric Hessian for downstream checks.
@@ -34,16 +77,13 @@ fit_objective_with_hessian <- function(
       ...
     )
     if (optim.method == "Nelder-Mead") {
-      count0 <- fit$counts
-      fit <- optim(
-        fit$par,
-        fn,
-        method = "BFGS",
+      fit <- refine_nelder_mead_with_bfgs(
+        fit = fit,
+        fn = fn,
         control = control,
+        warn = gradient.check,
         ...
       )
-      fit$counts <- replace(count0, is.na(count0), 0) +
-        replace(fit$counts, is.na(fit$counts), 0)
     }
   }
 

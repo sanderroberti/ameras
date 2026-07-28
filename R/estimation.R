@@ -609,16 +609,13 @@ proflik <- function(
       ...
     )
     if (optim.method == "Nelder-Mead") {
-      count0 <- innerfit$counts
-      innerfit <- optim(
-        par = innerfit$par,
+      innerfit <- refine_nelder_mead_with_bfgs(
+        fit = innerfit,
         fn = innerfun,
-        method = "BFGS",
         control = control,
+        warn = FALSE,
         ...
       )
-      innerfit$counts <- replace(count0, is.na(count0), 0) +
-        replace(innerfit$counts, is.na(innerfit$counts), 0)
     }
     return(innerfit$value)
   }

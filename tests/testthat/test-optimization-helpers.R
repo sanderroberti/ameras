@@ -25,6 +25,50 @@ test_that("fit_objective_with_hessian handles multi-parameter objectives", {
 })
 
 
+test_that("failed automatic BFGS refinement retains the Nelder-Mead fit", {
+  real_optim <- stats::optim
+  testthat::local_mocked_bindings(
+    optim = function(par, fn, method, control, ...) {
+      if (identical(method, "BFGS")) {
+        stop("non-finite finite-difference value [2]")
+      }
+      real_optim(par, fn, method = method, control = control, ...)
+    },
+    .package = "ameras"
+  )
+
+  expect_warning(
+    fit <- ameras:::fit_objective_with_hessian(
+      start = c(0, 0),
+      fn = function(x) sum((x - c(1, -2))^2)
+    ),
+    "retaining the Nelder-Mead solution"
+  )
+
+  expect_equal(fit$par, c(1, -2), tolerance = 1e-4)
+  expect_equal(fit$value, 0, tolerance = 1e-8)
+  expect_equal(fit$convergence, 0)
+  expect_identical(
+    fit$bfgs.refinement.error,
+    "non-finite finite-difference value [2]"
+  )
+  expect_true(ameras:::fit_passes_hessian_check(fit))
+
+  expect_silent(
+    quiet_fit <- ameras:::fit_objective_with_hessian(
+      start = c(0, 0),
+      fn = function(x) sum((x - c(1, -2))^2),
+      gradient.check = FALSE
+    )
+  )
+  expect_identical(
+    quiet_fit$bfgs.refinement.error,
+    "non-finite finite-difference value [2]"
+  )
+  expect_true(ameras:::fit_passes_hessian_check(quiet_fit))
+})
+
+
 test_that("fit_objective_with_hessian can skip expensive Hessian work", {
   fit <- ameras:::fit_objective_with_hessian(
     start = c(x = 1, y = -1),
