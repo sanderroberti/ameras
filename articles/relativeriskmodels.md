@@ -62,8 +62,8 @@ summary(fit.ameras.exp)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method  Fit  CI Total
-#>      RC 0.37 0.0  0.37
+#>  Method   Fit  CI Total
+#>      RC 0.391 0.0 0.391
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -102,8 +102,8 @@ summary(fit.ameras.err)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.396 0.0 0.396
+#>  Method  Fit  CI Total
+#>      RC 0.42 0.0  0.42
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -137,12 +137,12 @@ summary(fit.ameras.linexp)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.6 seconds
+#> Total CPU runtime: 0.7 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.616 0.0 0.616
+#>      RC 0.659 0.0 0.659
 #> 
 #> Summary of coefficients by method:
 #> 

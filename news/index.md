@@ -1,6 +1,6 @@
 # Changelog
 
-## ameras (development version)
+## ameras 0.5.2
 
 ### Bug fixes
 

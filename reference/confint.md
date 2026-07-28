@@ -340,13 +340,13 @@ summary(fit3)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 94.3 seconds
+#> Total CPU runtime: 97.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>     FMA  0.529 0.007  0.536
-#>     BMA 93.810 0.001 93.811
+#>     FMA  0.532 0.006  0.538
+#>     BMA 96.631 0.001 96.632
 #> 
 #> Summary of coefficients by method:
 #> 
