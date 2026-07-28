@@ -263,7 +263,10 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 
   method used for optimization by `optim`. Options are `"Nelder-Mead"`
   and `"BFGS"`. When using Nelder-Mead, a second optimization with BFGS
-  is run to ensure an optimal fit.
+  is normally run to refine the fit. If this automatic BFGS refinement
+  fails because its finite-difference evaluations are non-finite, the
+  Nelder-Mead solution is retained and checked using the usual Hessian
+  and convergence diagnostics.
 
 - control:
 
@@ -619,7 +622,7 @@ Studies
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.436 0.0 0.436
+#>      RC 0.442 0.0 0.442
 #> 
 #> Estimated model parameters:
 #> 

@@ -31,7 +31,7 @@ Methods include regression calibration (Carroll et al. 2006 doi:10.1201/97814200
 
     <a class="navbar-brand me-2" href="../index.html">ameras</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -202,7 +202,7 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 <dd><p><strong>Deprecated</strong>. Use <code>included.realizations.BMA</code> instead. Indices of exposure realizations used in BMA (defaults to all realizations).</p></dd>
 
 <dt id="arg-optim-method">optim.method<a class="anchor" aria-label="anchor" href="#arg-optim-method"></a></dt>
-<dd><p>method used for optimization by <code>optim</code>. Options are <code>"Nelder-Mead"</code> and <code>"BFGS"</code>. When using Nelder-Mead, a second optimization with BFGS is run to ensure an optimal fit.</p></dd>
+<dd><p>method used for optimization by <code>optim</code>. Options are <code>"Nelder-Mead"</code> and <code>"BFGS"</code>. When using Nelder-Mead, a second optimization with BFGS is normally run to refine the fit. If this automatic BFGS refinement fails because its finite-difference evaluations are non-finite, the Nelder-Mead solution is retained and checked using the usual Hessian and convergence diagnostics.</p></dd>
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
 <dd><p>control list passed to <code>optim</code> (default <code>list(reltol=1e-10)</code>).</p></dd>
@@ -348,7 +348,7 @@ those outputs are computed on the fitted rows.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.436 0.0 0.436</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.442 0.0 0.442</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

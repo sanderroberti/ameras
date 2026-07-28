@@ -1,5 +1,14 @@
 # Changelog
 
+## ameras (development version)
+
+### Bug fixes
+
+- A failure of the automatic BFGS refinement due to non-finite
+  finite-difference evaluations no longer aborts a valid Nelder-Mead
+  fit. The Nelder-Mead solution is retained and assessed using the usual
+  Hessian and convergence diagnostics.
+
 ## ameras 0.5.2
 
 ### Bug fixes
