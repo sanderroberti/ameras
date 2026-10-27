@@ -18,7 +18,7 @@ Fifth is multinomial logistic regression for a categorical outcome with \eqn{Z>2
 
 Sixth is conditional logistic regression for matched case control data, for which \deqn{P\left(Y_i = 1, Y_k = 0 \forall k \neq i \bigg| \sum_{i \in \mathcal{R}} Y_i = 1\right) = RR_i\exp(\bm X_i^T \bm \alpha)/\{\sum_{k \in \mathcal{R}}RR_k\exp(\bm X_k^T \bm \alpha)\},} where \eqn{\mathcal{R}} is the matched set corresponding to individual \eqn{i}.
 
-Methods include regression calibration (Carroll et al. 2006 \doi{10.1201/9781420010138}), extended regression calibration (Little et al. 2023 \doi{10.1038/s41598-023-42283-y}), Monte Carlo maximum likelihood (Stayner et al. 2007 \doi{10.1667/RR0677.1}), frequentist model averaging (Kwon et al. 2023 \doi{10.1371/journal.pone.0290498}), and Bayesian model averaging (Kwon et al. 2016 \doi{10.1002/sim.6635}).
+Methods include regression calibration (RC; Carroll et al. 2006 \doi{10.1201/9781420010138}), extended regression calibration (ERC; Little et al. 2023 \doi{10.1038/s41598-023-42283-y}), Monte Carlo maximum likelihood (MCML; Stayner et al. 2007 \doi{10.1667/RR0677.1}), frequentist model averaging (FMA; Kwon et al. 2023 \doi{10.1371/journal.pone.0290498}), and Bayesian model averaging (BMA; Kwon et al. 2016 \doi{10.1002/sim.6635}).
 
 }
 
