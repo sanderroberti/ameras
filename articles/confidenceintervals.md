@@ -4,7 +4,7 @@
 
 library(ameras)
 #> Loading required package: nimble
-#> nimble version 1.4.2 is loaded.
+#> nimble version 1.4.3 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
 #> 
@@ -110,12 +110,12 @@ summary(fit.ameras.waldorig)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.429 0.001  0.43
+#>  Method   Fit  CI Total
+#>      RC 0.344 0.0 0.344
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -131,12 +131,12 @@ summary(fit.ameras.waldtransformed)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.429 0.0 0.429
+#>      RC 0.344 0.0 0.344
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -152,12 +152,12 @@ summary(fit.ameras.proflik)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 2.4 seconds
+#> Total CPU runtime: 1.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit   CI Total
-#>      RC 0.429 2.01 2.439
+#>  Method   Fit    CI Total
+#>      RC 0.344 1.261 1.605
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -208,12 +208,12 @@ summary(fit.ameras.hpd)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 2.4 seconds
+#> Total CPU runtime: 1.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>     FMA 2.142 0.225 2.367
+#>     FMA 1.179 0.023 1.202
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -229,12 +229,12 @@ summary(fit.ameras.percentile)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 2.2 seconds
+#> Total CPU runtime: 1.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>     FMA 2.142 0.076 2.218
+#>     FMA 1.179 0.015 1.194
 #> 
 #> Summary of coefficients by method:
 #> 

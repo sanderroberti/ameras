@@ -38,7 +38,7 @@ summary of the fitted model including confidence intervals if computed.
 ## Examples
 
 ``` r
-# \donttest{
+
 data("data", package = "ameras")
 dosevars <- paste0("V", 1:10)
 
@@ -56,5 +56,4 @@ coef(fit)
 ## Vector with RC parameters
 coef(fit)$RC
 #> [1] -0.8847176  0.8019528
-# }
 ```

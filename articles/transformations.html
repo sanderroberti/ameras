@@ -76,7 +76,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ameras.sanderroberti.com">ameras</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: nimble</span></span>
-<span><span class="co">#&gt; nimble version 1.4.2 is loaded.</span></span>
+<span><span class="co">#&gt; nimble version 1.4.3 is loaded.</span></span>
 <span><span class="co">#&gt; For more information on NIMBLE and a User Manual,</span></span>
 <span><span class="co">#&gt; please visit https://R-nimble.org.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -155,8 +155,8 @@ respectively, resulting in transformed parameters <span class="math inline">f(\t
 <span>  <span class="va">params</span><span class="op">[</span><span class="va">index.t</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">params</span><span class="op">[</span><span class="va">index.t</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="va">lowlimit</span></span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="va">boundcheck</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">params</span><span class="op">[</span><span class="va">index.t</span><span class="op">]</span><span class="op">-</span><span class="va">lowlimit</span> <span class="op">&lt;</span> <span class="va">boundtol</span><span class="op">)</span><span class="op">)</span> </span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"WARNING: one or multiple parameter estimates within "</span>, <span class="va">boundtol</span>, <span class="st">" of </span></span>
-<span><span class="st">        lower bounds. Try different bounds or starting values."</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"one or multiple parameter estimates within "</span>, <span class="va">boundtol</span>,</span>
+<span>        <span class="st">" of lower bounds. Try different bounds or starting values."</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">params</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -219,7 +219,7 @@ bound check):</p>
 <span>  <span class="va">params</span><span class="op">[</span><span class="va">index.t</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op">+</span> <span class="op">(</span><span class="va">b</span><span class="op">-</span><span class="va">a</span><span class="op">)</span> <span class="op">*</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">*</span><span class="va">params</span><span class="op">[</span><span class="va">index.t</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="va">boundcheck</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span> <span class="op">(</span><span class="va">params</span><span class="op">[</span><span class="va">index.t</span><span class="op">]</span><span class="op">-</span><span class="va">a</span> <span class="op">&lt;</span> <span class="va">boundtol</span><span class="op">)</span> <span class="op">|</span> <span class="op">(</span><span class="va">b</span><span class="op">-</span><span class="va">params</span><span class="op">[</span><span class="va">index.t</span><span class="op">]</span> <span class="op">&lt;</span> <span class="va">boundtol</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"WARNING: one or multiple parameter estimates within "</span>, <span class="va">boundtol</span>, </span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"one or multiple parameter estimates within "</span>, <span class="va">boundtol</span>,</span>
 <span>      <span class="st">" of bounds. Try different bounds or starting values."</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">params</span><span class="op">)</span></span>
@@ -264,12 +264,12 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.7 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.656 0.0 0.656</span></span>
+<span><span class="co">#&gt;      RC 0.439 0.0 0.439</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -293,12 +293,12 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.388 0.0 0.388</span></span>
+<span><span class="co">#&gt;      RC 0.203 0.0 0.203</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -319,7 +319,7 @@ sigmoid transformation:</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Sander Roberti, William Wheeler, Deukwoo Kwon, NCI.</p>
+  <p>Developed by Sander Roberti, William Wheeler, Deukwoo Kwon, U.S. National Cancer Institute.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -4,7 +4,7 @@
 
   library(ameras)
 #> Loading required package: nimble
-#> nimble version 1.4.2 is loaded.
+#> nimble version 1.4.3 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
 #> 
@@ -90,8 +90,8 @@ transform1 <- function(params, index.t=1:length(params), lowlimit=rep(0,length(i
   params[index.t] <- exp(params[index.t]) + lowlimit
   if(boundcheck){
     if(any(params[index.t]-lowlimit < boundtol)) 
-      warning(paste0("WARNING: one or multiple parameter estimates within ", boundtol, " of 
-        lower bounds. Try different bounds or starting values."))
+      warning(paste0("one or multiple parameter estimates within ", boundtol,
+        " of lower bounds. Try different bounds or starting values."))
   }
   return(params)
 }
@@ -154,7 +154,7 @@ transform.sigmoid <- function(params, index.t=1:length(params), a=rep(0,length(i
   params[index.t] <- a + (b-a) * 1/(1+exp(-1*params[index.t]))
   if(boundcheck){
     if(any( (params[index.t]-a < boundtol) | (b-params[index.t] < boundtol))) 
-      warning(paste0("WARNING: one or multiple parameter estimates within ", boundtol, 
+      warning(paste0("one or multiple parameter estimates within ", boundtol,
       " of bounds. Try different bounds or starting values."))
   }
   return(params)
@@ -205,12 +205,12 @@ summary(fit.ameras.sigmoid)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.7 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.656 0.0 0.656
+#>      RC 0.439 0.0 0.439
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -238,12 +238,12 @@ summary(fit.ameras.transform1)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.388 0.0 0.388
+#>      RC 0.203 0.0 0.203
 #> 
 #> Summary of coefficients by method:
 #> 

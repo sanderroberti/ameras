@@ -47,15 +47,15 @@ for which \$\$P\left(Y_i = 1, Y_k = 0 \forall k \neq i \bigg\| \sum\_{i
 where \\\mathcal{R}\\ is the matched set corresponding to individual
 \\i\\.
 
-Methods include regression calibration (Carroll et al. 2006
+Methods include regression calibration (RC; Carroll et al. 2006
 [doi:10.1201/9781420010138](https://doi.org/10.1201/9781420010138) ),
-extended regression calibration (Little et al. 2023
+extended regression calibration (ERC; Little et al. 2023
 [doi:10.1038/s41598-023-42283-y](https://doi.org/10.1038/s41598-023-42283-y)
-), Monte Carlo maximum likelihood (Stayner et al. 2007
+), Monte Carlo maximum likelihood (MCML; Stayner et al. 2007
 [doi:10.1667/RR0677.1](https://doi.org/10.1667/RR0677.1) ), frequentist
-model averaging (Kwon et al. 2023
+model averaging (FMA; Kwon et al. 2023
 [doi:10.1371/journal.pone.0290498](https://doi.org/10.1371/journal.pone.0290498)
-), and Bayesian model averaging (Kwon et al. 2016
+), and Bayesian model averaging (BMA; Kwon et al. 2016
 [doi:10.1002/sim.6635](https://doi.org/10.1002/sim.6635) ).
 
 ## Usage
@@ -606,7 +606,6 @@ Studies
 ## Examples
 
 ``` r
-# \donttest{
   data(data, package="ameras")
   ameras(Y.gaussian~dose(V1:V10, modifier=~M1+M2)+X1+X2, data=data, family="gaussian")
 #> Fitting RC
@@ -617,12 +616,12 @@ Studies
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.442 0.0 0.442
+#>      RC 0.269 0.0 0.269
 #> 
 #> Estimated model parameters:
 #> 
@@ -635,5 +634,4 @@ Studies
 #> dose:M2      0.5054
 #> sigma        1.0661
 #> 
-# }
 ```

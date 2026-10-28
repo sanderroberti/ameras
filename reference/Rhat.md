@@ -42,7 +42,7 @@ cannot be estimated and these columns are returned as `NA`.
 ## Examples
 
 ``` r
-# \donttest{
+
 data("data", package="ameras")
 dosevars <- paste0("V", 1:10)
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
@@ -74,5 +74,4 @@ Rhat(fit)
 #>             Rhat n.eff
 #> (Intercept) 1.03  1236
 #> dose        1.02   969
-# }
 ```

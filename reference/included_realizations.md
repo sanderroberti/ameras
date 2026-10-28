@@ -67,7 +67,6 @@ example by passing the indices returned by
 ## Examples
 
 ``` r
-# \donttest{
 data("data", package="ameras")
 dosevars <- paste0("V", 1:10)
 
@@ -81,6 +80,7 @@ length(included_realizations(fit))
 #> [1] 10
 
 ## Both FMA and BMA
+
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods=c("FMA", "BMA"))
 #> Note: BMA may require extensive computation time
@@ -118,5 +118,4 @@ included_realizations(fit2, methods="FMA")
 #>  [1]  1  2  3  4  5  6  7  8  9 10
 included_realizations(fit2, methods="BMA")
 #>  [1]  1  2  3  4  5  6  7  8  9 10
-# }
 ```

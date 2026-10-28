@@ -124,7 +124,6 @@ diagnostics such as
 ## Examples
 
 ``` r
-# \donttest{
   data(data, package="ameras")
   fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
                 data=data, family="gaussian", methods="RC")
@@ -134,5 +133,4 @@ diagnostics such as
 #> RC     RC                 0   0.01218529        2.670265e-06       4.442178e-07
 #>    newton.improvement.relative convergence.warning
 #> RC                 9.73452e-11               FALSE
-# }
 ```

@@ -12,7 +12,7 @@
 - **Ruth Pfeiffer**. Contributor.
   [](https://orcid.org/0000-0001-7791-2698)
 
-- **NCI**. Copyright holder, funder.
+- **U.S. National Cancer Institute**. Copyright holder, funder.
 
 ## Citation
 

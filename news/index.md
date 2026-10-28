@@ -11,6 +11,8 @@
 
 ## ameras 0.5.2
 
+CRAN release: 2026-07-28
+
 ### Bug fixes
 
 - Fixed a BMA error when fitting models with a single formula-based

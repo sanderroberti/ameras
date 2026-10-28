@@ -6,11 +6,11 @@ Third is Poisson regression for counts, $$Y_i \sim \text{Poisson}(\mu_i),$$ wher
 Fourth is proportional hazards regression for time-to-event data, with hazard function $$h(t) = h_0(t)RR_i\exp(\bm X_i^T \bm \alpha),$$ with \(h_0\) the baseline hazard.
 Fifth is multinomial logistic regression for a categorical outcome with \(Z&amp;gt;2\) outcome categories, with the last category as the referent category (i.e., \(\alpha_{0,Z}=\bm \alpha_{Z}=\beta_{1,Z}=\beta_{2,Z}=\bm \beta_{m1,Z} = \bm \beta_{m2,Z}=0\)): $$P(Y_i=z)=RR_i\exp(\alpha_{0,z}+\bm X_i^T \bm \alpha_{z})/\{1+\sum_{s=1}^{Z-1} RR_i\exp(\alpha_{0,s}+\bm X_i^T \bm \alpha_{s})\}$$
 Sixth is conditional logistic regression for matched case control data, for which $$P\left(Y_i = 1, Y_k = 0 \forall k \neq i \bigg| \sum_{i \in \mathcal{R}} Y_i = 1\right) = RR_i\exp(\bm X_i^T \bm \alpha)/\{\sum_{k \in \mathcal{R}}RR_k\exp(\bm X_k^T \bm \alpha)\},$$ where \(\mathcal{R}\) is the matched set corresponding to individual \(i\).
-Methods include regression calibration (Carroll et al. 2006 doi:10.1201/9781420010138
-), extended regression calibration (Little et al. 2023 doi:10.1038/s41598-023-42283-y
-), Monte Carlo maximum likelihood (Stayner et al. 2007 doi:10.1667/RR0677.1
-), frequentist model averaging (Kwon et al. 2023 doi:10.1371/journal.pone.0290498
-), and Bayesian model averaging (Kwon et al. 2016 doi:10.1002/sim.6635
+Methods include regression calibration (RC; Carroll et al. 2006 doi:10.1201/9781420010138
+), extended regression calibration (ERC; Little et al. 2023 doi:10.1038/s41598-023-42283-y
+), Monte Carlo maximum likelihood (MCML; Stayner et al. 2007 doi:10.1667/RR0677.1
+), frequentist model averaging (FMA; Kwon et al. 2023 doi:10.1371/journal.pone.0290498
+), and Bayesian model averaging (BMA; Kwon et al. 2016 doi:10.1002/sim.6635
 )."><meta property="og:description" content="Fit regression models accounting for exposure uncertainty using multiple Monte Carlo exposure realizations. Six outcome model families are supported. The first is the Gaussian family for continuous outcomes, $$Y_i \sim N(\mu_i, \sigma^2),$$ with \(\mu_i = \alpha_0 + \bm X_i^T \bm \alpha +\beta_1 D_i+\beta_2 D_i^2 + \bm M_i^T \bm \beta_{m1}D_i + \bm M_i^T \bm \beta_{m2}D_i^2\). Here \(\bm X_i\) are covariates, \(D_i\) is the exposure with measurement error, and \(\bm M_i\) are effect modifier design columns. The quadratic exposure terms and effect modification are optional.
 For non-Gaussian families, three relative risk models for the main exposure are supported, the usual exponential \(RR_i=\exp(\beta_1 D_i+\beta_2 D_i^2+ \bm M_i^T \bm \beta_{m1}D_i + \bm M_i^T \bm \beta_{m2} D_i^2)\) and the linear excess relative risk (ERR) model \(RR_i= 1+\beta_1 D_i+\beta_2 D_i^2 + \bm M_i^T \bm \beta_{m1}D_i + \bm M_i^T \bm \beta_{m2}D_i^2\), where the quadratic and effect modification terms are optional. Finally, the linear-exponential relative risk model \(RR_i= 1+(\beta_1 + \bm{M}_i^T \bm{\beta}_{m1}) D_i \exp\{(\beta_2+  \bm{M}_i^T \bm{\beta}_{m2})D_i\}\) is supported.
 The second supported family is logistic regression for binary outcomes, with probabilities $$p_i/(1-p_i)=RR_i\exp(\alpha_0+\bm X_i^T \bm \alpha).$$
@@ -18,11 +18,11 @@ Third is Poisson regression for counts, $$Y_i \sim \text{Poisson}(\mu_i),$$ wher
 Fourth is proportional hazards regression for time-to-event data, with hazard function $$h(t) = h_0(t)RR_i\exp(\bm X_i^T \bm \alpha),$$ with \(h_0\) the baseline hazard.
 Fifth is multinomial logistic regression for a categorical outcome with \(Z&amp;gt;2\) outcome categories, with the last category as the referent category (i.e., \(\alpha_{0,Z}=\bm \alpha_{Z}=\beta_{1,Z}=\beta_{2,Z}=\bm \beta_{m1,Z} = \bm \beta_{m2,Z}=0\)): $$P(Y_i=z)=RR_i\exp(\alpha_{0,z}+\bm X_i^T \bm \alpha_{z})/\{1+\sum_{s=1}^{Z-1} RR_i\exp(\alpha_{0,s}+\bm X_i^T \bm \alpha_{s})\}$$
 Sixth is conditional logistic regression for matched case control data, for which $$P\left(Y_i = 1, Y_k = 0 \forall k \neq i \bigg| \sum_{i \in \mathcal{R}} Y_i = 1\right) = RR_i\exp(\bm X_i^T \bm \alpha)/\{\sum_{k \in \mathcal{R}}RR_k\exp(\bm X_k^T \bm \alpha)\},$$ where \(\mathcal{R}\) is the matched set corresponding to individual \(i\).
-Methods include regression calibration (Carroll et al. 2006 doi:10.1201/9781420010138
-), extended regression calibration (Little et al. 2023 doi:10.1038/s41598-023-42283-y
-), Monte Carlo maximum likelihood (Stayner et al. 2007 doi:10.1667/RR0677.1
-), frequentist model averaging (Kwon et al. 2023 doi:10.1371/journal.pone.0290498
-), and Bayesian model averaging (Kwon et al. 2016 doi:10.1002/sim.6635
+Methods include regression calibration (RC; Carroll et al. 2006 doi:10.1201/9781420010138
+), extended regression calibration (ERC; Little et al. 2023 doi:10.1038/s41598-023-42283-y
+), Monte Carlo maximum likelihood (MCML; Stayner et al. 2007 doi:10.1667/RR0677.1
+), frequentist model averaging (FMA; Kwon et al. 2023 doi:10.1371/journal.pone.0290498
+), and Bayesian model averaging (BMA; Kwon et al. 2016 doi:10.1002/sim.6635
 )."><meta property="og:image" content="https://ameras.sanderroberti.com/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -71,11 +71,11 @@ Methods include regression calibration (Carroll et al. 2006 doi:10.1201/97814200
 <p>Fourth is proportional hazards regression for time-to-event data, with hazard function $$h(t) = h_0(t)RR_i\exp(\bm X_i^T \bm \alpha),$$ with \(h_0\) the baseline hazard.</p>
 <p>Fifth is multinomial logistic regression for a categorical outcome with \(Z&gt;2\) outcome categories, with the last category as the referent category (i.e., \(\alpha_{0,Z}=\bm \alpha_{Z}=\beta_{1,Z}=\beta_{2,Z}=\bm \beta_{m1,Z} = \bm \beta_{m2,Z}=0\)): $$P(Y_i=z)=RR_i\exp(\alpha_{0,z}+\bm X_i^T \bm \alpha_{z})/\{1+\sum_{s=1}^{Z-1} RR_i\exp(\alpha_{0,s}+\bm X_i^T \bm \alpha_{s})\}$$</p>
 <p>Sixth is conditional logistic regression for matched case control data, for which $$P\left(Y_i = 1, Y_k = 0 \forall k \neq i \bigg| \sum_{i \in \mathcal{R}} Y_i = 1\right) = RR_i\exp(\bm X_i^T \bm \alpha)/\{\sum_{k \in \mathcal{R}}RR_k\exp(\bm X_k^T \bm \alpha)\},$$ where \(\mathcal{R}\) is the matched set corresponding to individual \(i\).</p>
-<p>Methods include regression calibration (Carroll et al. 2006 <a href="https://doi.org/10.1201/9781420010138" class="external-link">doi:10.1201/9781420010138</a>
-), extended regression calibration (Little et al. 2023 <a href="https://doi.org/10.1038/s41598-023-42283-y" class="external-link">doi:10.1038/s41598-023-42283-y</a>
-), Monte Carlo maximum likelihood (Stayner et al. 2007 <a href="https://doi.org/10.1667/RR0677.1" class="external-link">doi:10.1667/RR0677.1</a>
-), frequentist model averaging (Kwon et al. 2023 <a href="https://doi.org/10.1371/journal.pone.0290498" class="external-link">doi:10.1371/journal.pone.0290498</a>
-), and Bayesian model averaging (Kwon et al. 2016 <a href="https://doi.org/10.1002/sim.6635" class="external-link">doi:10.1002/sim.6635</a>
+<p>Methods include regression calibration (RC; Carroll et al. 2006 <a href="https://doi.org/10.1201/9781420010138" class="external-link">doi:10.1201/9781420010138</a>
+), extended regression calibration (ERC; Little et al. 2023 <a href="https://doi.org/10.1038/s41598-023-42283-y" class="external-link">doi:10.1038/s41598-023-42283-y</a>
+), Monte Carlo maximum likelihood (MCML; Stayner et al. 2007 <a href="https://doi.org/10.1667/RR0677.1" class="external-link">doi:10.1667/RR0677.1</a>
+), frequentist model averaging (FMA; Kwon et al. 2023 <a href="https://doi.org/10.1371/journal.pone.0290498" class="external-link">doi:10.1371/journal.pone.0290498</a>
+), and Bayesian model averaging (BMA; Kwon et al. 2016 <a href="https://doi.org/10.1002/sim.6635" class="external-link">doi:10.1002/sim.6635</a>
 ).</p>
     </div>
 
@@ -332,8 +332,7 @@ those outputs are computed on the fitted rows.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">ameras</span><span class="op">(</span><span class="va">Y.gaussian</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, modifier<span class="op">=</span><span class="op">~</span><span class="va">M1</span><span class="op">+</span><span class="va">M2</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting RC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
@@ -343,12 +342,12 @@ those outputs are computed on the fitted rows.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.4 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.3 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.442 0.0 0.442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.269 0.0 0.269</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -361,7 +360,6 @@ those outputs are computed on the fitted rows.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dose:M2      0.5054</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> sigma        1.0661</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -369,7 +367,7 @@ those outputs are computed on the fitted rows.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Sander Roberti, William Wheeler, Deukwoo Kwon, NCI.</p>
+  <p>Developed by Sander Roberti, William Wheeler, Deukwoo Kwon, U.S. National Cancer Institute.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -167,7 +167,7 @@ plot(fit, type="deviance")
 
 
 ## Multiple methods
-# \donttest{
+
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods=c("RC", "ERC"))
 #> Fitting RC
@@ -177,10 +177,9 @@ plot(fit2)
 
 
 
-# }
+
 
 ## With keep.data=FALSE, supply data explicitly
-# \donttest{
 fit3 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods="RC",
                keep.data=FALSE)
@@ -188,14 +187,10 @@ fit3 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
 plot(fit3, data=data)
 
 
-# }
 
 ## Schoenfeld residual plot
-# \donttest{
 fit4 <- ameras(Surv(time, status) ~ dose(all_of(dosevars), model = "ERR"),
               data = data, family = "prophaz", methods = "RC")
 #> Fitting RC
 plot(fit4)
-
-# }
 ```

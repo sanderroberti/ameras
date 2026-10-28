@@ -237,7 +237,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.041 0.0 0.041
+#>      RC 0.021 0.0 0.021
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -247,14 +247,12 @@ summary(fit)
 #> 
 
 ## Profile likelihood intervals for dose parameters only (slower)
-# \donttest{
-fit <- confint(fit, type = "proflik", parm = "dose")
-#> Confidence intervals have already been computed for this object. Returning the object unchanged. Use force=TRUE to recompute.
+fit <- confint(fit, type = "proflik", parm = "dose", force = TRUE)
+#> Obtaining profile likelihood CI for dose
 #> RC confidence intervals:
 #> 
-#>               lower   upper
-#> (Intercept) -1.0293 -0.7401
-#> dose         0.5324  1.0715
+#>       lower upper
+#> dose 0.5648 1.112
 #> 
 summary(fit)
 #> Call:
@@ -263,23 +261,21 @@ summary(fit)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0 seconds
+#> Total CPU runtime: 0.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.041 0.0 0.041
+#>  Method   Fit    CI Total
+#>      RC 0.021 0.034 0.055
 #> 
 #> Summary of coefficients by method:
 #> 
 #>  Method        Term Estimate      SE CI.lower CI.upper
-#>      RC (Intercept)  -0.8847 0.07378  -1.0293  -0.7401
-#>      RC        dose   0.8020 0.13751   0.5324   1.0715
+#>      RC (Intercept)  -0.8847 0.07378       NA       NA
+#>      RC        dose   0.8020 0.13751   0.5648    1.112
 #> 
-# }
 
 ## With keep.data = FALSE, supply data explicitly for proflik
-# \donttest{
 fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
                methods = "RC", keep.data = FALSE)
 #> Fitting RC
@@ -290,10 +286,9 @@ fit2 <- confint(fit2, type = "proflik", data = data)
 #>       lower upper
 #> dose 0.5648 1.112
 #> 
-# }
 
 ## FMA and BMA with percentile intervals
-# \donttest{
+
 fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial", 
                methods = c("FMA", "BMA"))
 #> Note: BMA may require extensive computation time
@@ -340,13 +335,13 @@ summary(fit3)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 96 seconds
+#> Total CPU runtime: 58.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI  Total
-#>     FMA  0.54 0.007  0.547
-#>     BMA 95.50 0.001 95.497
+#>  Method    Fit    CI Total
+#>     FMA  0.275 0.005  0.28
+#>     BMA 58.367 0.000 58.37
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -356,5 +351,4 @@ summary(fit3)
 #>     BMA (Intercept)  -0.8780 0.07121  -1.0083  -0.7337 1.00 1073.00
 #>     BMA        dose   0.8003 0.13344   0.5554   1.0806 1.00 1068.00
 #> 
-# }
 ```

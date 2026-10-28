@@ -62,11 +62,8 @@ before plotting.
 ## Examples
 
 ``` r
-# \donttest{
   if (requireNamespace("ggplot2", quietly = TRUE)) {
    data(data, package="ameras")
    ecdfplot(data,  dosevars=paste0("V", 1:10))
   }
-
-# }
 ```

@@ -55,7 +55,7 @@ for a summary including standard errors,
 ## Examples
 
 ``` r
-# \donttest{
+
 data("data", package="ameras")
 dosevars <- paste0("V", 1:10)
 
@@ -95,5 +95,4 @@ vcov(fit, methods=c("RC", "ERC"))
 #> (Intercept)  0.005589966 -0.009297482
 #> dose        -0.009297482  0.020459538
 #> 
-# }
 ```

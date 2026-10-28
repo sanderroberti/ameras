@@ -179,7 +179,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.041 0.0 0.041
+#>      RC 0.034 0.0 0.034
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -209,8 +209,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.041 0.0 0.041
+#>  Method   Fit    CI Total
+#>      RC 0.034 0.001 0.035
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -223,7 +223,7 @@ summary(fit)
 s <- summary_table(fit)
 
 ## Multiple methods
-# \donttest{
+
 fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
               methods = c("RC", "ERC", "MCML"))
 #> Fitting RC
@@ -255,14 +255,14 @@ summary(fit2)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 58.8 seconds
+#> Total CPU runtime: 88.7 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit    CI  Total
-#>      RC  0.040 0.001  0.041
-#>     ERC 58.287 0.000 58.287
-#>    MCML  0.442 0.000  0.442
+#>  Method    Fit  CI  Total
+#>      RC  0.036 0.0  0.036
+#>     ERC 88.467 0.0 88.467
+#>    MCML  0.151 0.0  0.151
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -274,5 +274,4 @@ summary(fit2)
 #>    MCML (Intercept)  -0.8758 0.07323  -1.0193  -0.7323
 #>    MCML        dose   0.7910 0.13644   0.5236   1.0584
 #> 
-# }
 ```

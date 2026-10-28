@@ -44,7 +44,7 @@ intervals if computed.
 ## Examples
 
 ``` r
-# \donttest{
+
 data("data", package = "ameras")
 
 ## Fit the model
@@ -62,13 +62,13 @@ fit
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 64 seconds
+#> Total CPU runtime: 93.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC  0.04 0.0  0.04
-#>     ERC 63.97 0.0 63.97
+#>  Method    Fit  CI  Total
+#>      RC  0.023 0.0  0.023
+#>     ERC 93.171 0.0 93.171
 #> 
 #> Estimated model parameters:
 #> 
@@ -84,13 +84,13 @@ print(fit)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 64 seconds
+#> Total CPU runtime: 93.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC  0.04 0.0  0.04
-#>     ERC 63.97 0.0 63.97
+#>  Method    Fit  CI  Total
+#>      RC  0.023 0.0  0.023
+#>     ERC 93.171 0.0 93.171
 #> 
 #> Estimated model parameters:
 #> 
@@ -108,13 +108,13 @@ print(fit, digits=5)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 64 seconds
+#> Total CPU runtime: 93.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.040 0.0  0.040
-#>     ERC 63.967 0.0 63.967
+#>      RC  0.023 0.0  0.023
+#>     ERC 93.171 0.0 93.171
 #> 
 #> Estimated model parameters:
 #> 
@@ -122,5 +122,4 @@ print(fit, digits=5)
 #> (Intercept) -0.88472 -0.88491
 #> dose         0.80195  0.82142
 #> 
-# }
 ```

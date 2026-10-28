@@ -4,7 +4,7 @@
 
 library(ameras)
 #> Loading required package: nimble
-#> nimble version 1.4.2 is loaded.
+#> nimble version 1.4.3 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
 #> 
@@ -58,12 +58,12 @@ summary(fit.ameras.exp)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.382 0.0 0.382
+#>      RC 0.226 0.0 0.226
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -103,7 +103,7 @@ summary(fit.ameras.err)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.416 0.0 0.416
+#>      RC 0.387 0.0 0.387
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -142,7 +142,7 @@ summary(fit.ameras.linexp)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.441 0.0 0.441
+#>      RC 0.437 0.0 0.437
 #> 
 #> Summary of coefficients by method:
 #> 

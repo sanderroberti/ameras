@@ -257,7 +257,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.041 0.0 0.041</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.021 0.0 0.021</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -267,14 +267,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Profile likelihood intervals for dose parameters only (slower)</span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"proflik"</span>, parm <span class="op">=</span> <span class="st">"dose"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Confidence intervals have already been computed for this object. Returning the object unchanged. Use force=TRUE to recompute.</span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"proflik"</span>, parm <span class="op">=</span> <span class="st">"dose"</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Obtaining profile likelihood CI for dose</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RC confidence intervals:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               lower   upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.0293 -0.7401</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dose         0.5324  1.0715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5648 1.112</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
@@ -283,23 +281,21 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.1 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.041 0.0 0.041</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.021 0.034 0.055</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method        Term Estimate      SE CI.lower CI.upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378  -1.0293  -0.7401</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751   0.5324   1.0715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC (Intercept)  -0.8847 0.07378       NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC        dose   0.8020 0.13751   0.5648    1.112</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## With keep.data = FALSE, supply data explicitly for proflik</span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span>,</span></span>
 <span class="r-in"><span>               methods <span class="op">=</span> <span class="st">"RC"</span>, keep.data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting RC</span>
@@ -310,10 +306,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>       lower upper</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dose 0.5648 1.112</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## FMA and BMA with percentile intervals</span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">fit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, </span></span>
 <span class="r-in"><span>               methods <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FMA"</span>, <span class="st">"BMA"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note: BMA may require extensive computation time</span>
@@ -360,13 +355,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 96 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 58.6 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA  0.54 0.007  0.547</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA 95.50 0.001 95.497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit    CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     FMA  0.275 0.005  0.28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BMA 58.367 0.000 58.37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -376,7 +371,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>     BMA (Intercept)  -0.8780 0.07121  -1.0083  -0.7337 1.00 1073.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     BMA        dose   0.8003 0.13344   0.5554   1.0806 1.00 1068.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -384,7 +379,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Sander Roberti, William Wheeler, Deukwoo Kwon, NCI.</p>
+  <p>Developed by Sander Roberti, William Wheeler, Deukwoo Kwon, U.S. National Cancer Institute.</p>
 </div>
 
 <div class="pkgdown-footer-right">
