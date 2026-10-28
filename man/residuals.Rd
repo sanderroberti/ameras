@@ -191,25 +191,21 @@ res_raw <- residuals(fit, type="response")
 res_v1 <- residuals(fit, dose.col="V1")
 
 ## Multiple methods
-\donttest{
+\donttest{% slow
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods=c("RC", "ERC"))
 res_erc <- residuals(fit2, method="ERC")
 }
 
 ## With keep.data=FALSE
-\donttest{
 fit3 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="binomial", methods="RC",
                keep.data=FALSE)
 res <- residuals(fit3, data=data)
-}
 
 ## Schoenfeld residuals for proportional hazards model
-\donttest{
 fit4 <- ameras(Surv(time, status) ~ dose(all_of(dosevars), model="ERR"),
                data=data, family="prophaz", methods="RC")
 res_sch <- residuals(fit4)
 res_raw_sch <- residuals(fit4, scaled.schoenfeld=FALSE)
-}
 }

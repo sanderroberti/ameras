@@ -170,10 +170,8 @@ Because the proportional hazards model is not available in \code{nimble}, \code{
 }
 
 \examples{
-\donttest{
   data(data, package="ameras")
   ameras(Y.gaussian~dose(V1:V10, modifier=~M1+M2)+X1+X2, data=data, family="gaussian")
-}
 }
 
 \references{

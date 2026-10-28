@@ -42,7 +42,7 @@
 }
 
 \examples{
-\donttest{
+\donttest{% slow
 data("data", package = "ameras")
 
 ## Fit the model

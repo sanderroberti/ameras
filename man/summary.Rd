@@ -148,7 +148,7 @@ summary(fit)
 s <- summary_table(fit)
 
 ## Multiple methods
-\donttest{
+\donttest{% slow
 fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
               methods = c("RC", "ERC", "MCML"))
 fit2 <- confint(fit2, type = "wald.orig")

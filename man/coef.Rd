@@ -38,7 +38,7 @@
 }
 
 \examples{
-\donttest{
+\donttest{% slow
 data("data", package = "ameras")
 dosevars <- paste0("V", 1:10)
 

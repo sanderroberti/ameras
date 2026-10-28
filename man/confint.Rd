@@ -195,20 +195,16 @@ fit <- confint(fit, type = "wald.orig")
 summary(fit)
 
 ## Profile likelihood intervals for dose parameters only (slower)
-\donttest{
-fit <- confint(fit, type = "proflik", parm = "dose")
+fit <- confint(fit, type = "proflik", parm = "dose", force = TRUE)
 summary(fit)
-}
 
 ## With keep.data = FALSE, supply data explicitly for proflik
-\donttest{
 fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
                methods = "RC", keep.data = FALSE)
 fit2 <- confint(fit2, type = "proflik", data = data)
-}
 
 ## FMA and BMA with percentile intervals
-\donttest{
+\donttest{% slow
 fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial", 
                methods = c("FMA", "BMA"))
 fit3 <- confint(fit3, type = "percentile")
