@@ -1,5 +1,94 @@
 # Fast tests for small amerasfit accessors that do not need model fitting.
 
+test_that("public methods warn about unused dots", {
+  timing <- ameras:::new_method_timing(
+    fit = ameras:::new_runtime_phase(cpu = 0)
+  )
+  ci <- data.frame(lower = 0.8, upper = 1.2, row.names = "dose")
+  method_fit <- list(
+    coefficients = c(dose = 1),
+    sd = c(dose = 0.1),
+    vcov = matrix(0.01, dimnames = list("dose", "dose")),
+    CI = ci,
+    timing = timing
+  )
+  fit <- ameras:::new_amerasfit(list(
+    call = quote(ameras(Y ~ dose(D), data = dat)),
+    num.rows = 1L,
+    num.rows.original = 1L,
+    num.realizations = 1L,
+    CI.computed = TRUE,
+    model = list(family = "gaussian"),
+    RC = method_fit,
+    FMA = c(method_fit, list(included.realizations = 1L)),
+    BMA = c(
+      method_fit,
+      list(
+        included.realizations = 1L,
+        Rhat = data.frame(Rhat = 1, n.eff = 100, row.names = "dose")
+      )
+    )
+  ))
+  count_chk_dots_warnings <- function(expr) {
+    n <- 0L
+    withCallingHandlers(
+      force(expr),
+      chkDotsWarning = function(cnd) {
+        n <<- n + 1L
+        invokeRestart("muffleWarning")
+      }
+    )
+    n
+  }
+
+  expect_warning(vcov(fit, typo = TRUE), class = "chkDotsWarning")
+  expect_warning(coef(fit, typo = TRUE), class = "chkDotsWarning")
+  expect_warning(summary(fit, typo = TRUE), class = "chkDotsWarning")
+  expect_identical(
+    count_chk_dots_warnings(summary_table(fit, typo = TRUE)),
+    1L
+  )
+  expect_warning(Rhat(fit, typo = TRUE), class = "chkDotsWarning")
+  expect_warning(
+    included_realizations(fit, typo = TRUE),
+    class = "chkDotsWarning"
+  )
+  expect_warning(
+    capture.output(suppressMessages(confint(fit, print = FALSE, typo = TRUE))),
+    class = "chkDotsWarning"
+  )
+  expect_identical(
+    count_chk_dots_warnings(capture.output(print(fit, typo = TRUE))),
+    1L
+  )
+  expect_identical(
+    count_chk_dots_warnings(capture.output(print(summary(fit), typo = TRUE))),
+    1L
+  )
+
+  expect_warning(
+    expect_error(
+      convergence(fit, methods = "FMA", typo = TRUE),
+      "available for RC, ERC, and MCML"
+    ),
+    class = "chkDotsWarning"
+  )
+  expect_warning(
+    expect_error(
+      residuals(fit, type = "schoenfeld", typo = TRUE),
+      "schoenfeld residuals not supported"
+    ),
+    class = "chkDotsWarning"
+  )
+  expect_warning(
+    expect_error(
+      dose_lrt(fit, methods = "FMA", typo = TRUE),
+      "supports RC, ERC, and MCML"
+    ),
+    class = "chkDotsWarning"
+  )
+})
+
 test_that("Rhat returns BMA convergence diagnostics", {
   diagnostics <- data.frame(
     Rhat = c(1.01, 1.02),

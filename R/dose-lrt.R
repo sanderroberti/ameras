@@ -262,6 +262,8 @@ dose_lrt.amerasfit <- function(
   data = NULL,
   ...
 ) {
+  chkDots(...)
+
   supported_methods <- c("RC", "ERC", "MCML")
 
   if (!is.character(methods) || !length(methods)) {

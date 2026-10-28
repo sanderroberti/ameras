@@ -11,6 +11,8 @@ vcov.amerasfit <- function(
   methods = c("RC", "ERC", "MCML", "FMA", "BMA"),
   ...
 ) {
+  chkDots(...)
+
   methods <- match.arg(
     methods,
     c("RC", "ERC", "MCML", "FMA", "BMA"),
@@ -46,6 +48,8 @@ convergence.amerasfit <- function(
   warn = FALSE,
   ...
 ) {
+  chkDots(...)
+
   methods <- match.arg(
     methods,
     c("RC", "ERC", "MCML", "FMA", "BMA"),
@@ -210,9 +214,11 @@ print_row_info <- function(row_info, detailed = TRUE) {
 
 
 print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
+  chkDots(...)
+
   object0 <- x[intersect(names(x), c("RC", "ERC", "MCML", "FMA", "BMA"))]
 
-  coefs <- coef.amerasfit(x, ...)
+  coefs <- coef.amerasfit(x)
 
   runtime_table <- runtime_table_from_methods(object0)
   total_runtime <- total_runtime_seconds(runtime_table)
@@ -243,6 +249,8 @@ print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 
 
 coef.amerasfit <- function(object, ...) {
+  chkDots(...)
+
   object <- object[intersect(
     names(object),
     c("RC", "ERC", "MCML", "FMA", "BMA")
@@ -294,6 +302,8 @@ print_confint <- function(object, digits = max(3, getOption("digits") - 3)) {
 }
 
 summary.amerasfit <- function(object, ...) {
+  chkDots(...)
+
   object0 <- object[intersect(
     names(object),
     c("RC", "ERC", "MCML", "FMA", "BMA")
@@ -367,6 +377,8 @@ print.summary.amerasfit <- function(
   digits = max(3, getOption("digits") - 3),
   ...
 ) {
+  chkDots(...)
+
   cat("Call:\n")
   print(x$call)
 
@@ -407,6 +419,8 @@ print.summary.amerasfit <- function(
 Rhat <- function(x, ...) UseMethod("Rhat")
 
 Rhat.amerasfit <- function(x, ...) {
+  chkDots(...)
+
   if (is.null(x$BMA)) {
     stop("BMA not present in fitted object")
   }
@@ -416,6 +430,8 @@ Rhat.amerasfit <- function(x, ...) {
 included_realizations <- function(x, ...) UseMethod("included_realizations")
 
 included_realizations.amerasfit <- function(x, methods = c("FMA", "BMA"), ...) {
+  chkDots(...)
+
   methods <- match.arg(methods, several.ok = TRUE)
 
   available <- intersect(methods, names(x)[names(x) %in% c("FMA", "BMA")])
@@ -472,6 +488,8 @@ confint.amerasfit <- function(
   digits = max(3, getOption("digits") - 3),
   ...
 ) {
+  chkDots(...)
+
   # Check if CIs have already been computed
   if (object$CI.computed && !force) {
     message(
@@ -603,7 +621,9 @@ confint.amerasfit <- function(
 summary_table <- function(object, ...) UseMethod("summary_table")
 
 summary_table.amerasfit <- function(object, ...) {
-  summ <- summary(object, ...)
+  chkDots(...)
+
+  summ <- summary(object)
   return(summ$summary_table)
 }
 
@@ -782,6 +802,8 @@ residuals.amerasfit <- function(
   scaled.schoenfeld = TRUE,
   ...
 ) {
+  chkDots(...)
+
   if (is.null(type)) {
     if (object$model$family == "prophaz") {
       type <- "schoenfeld"
