@@ -280,7 +280,7 @@ test_that("convergence can recompute gradients when data were not stored", {
     convergence(fit),
     "Data not stored"
   )
-  expect_no_error(diag <- convergence(fit, data = dat))
+  diag <- convergence(fit, data = dat)
   expect_true(is.finite(diag$gradient.rms))
 })
 

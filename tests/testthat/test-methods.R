@@ -1,7 +1,7 @@
 set.seed(123)
 data("data", package = "ameras")
 
-test_that("vcov & plot & summary_table binomial", {
+test_that("binomial accessors and diagnostic plots return structured results", {
   skip_on_cran()
 
   fit <- ameras(
@@ -11,21 +11,30 @@ test_that("vcov & plot & summary_table binomial", {
     methods = c("RC", "FMA")
   )
 
-  expect_no_error({
-    vcov(fit)
-    vcov(fit, methods = "FMA")
-    summary(fit)
-    summary_table(fit)
-    plot(fit, ask = FALSE)
-    plot(fit, methods = "RC", ask = FALSE)
-  })
+  vcovs <- vcov(fit)
+  expect_named(vcovs, c("RC", "FMA"))
+  expect_identical(vcovs$RC, fit$RC$vcov)
+  expect_identical(vcovs$FMA, fit$FMA$vcov)
+  expect_identical(vcov(fit, methods = "FMA"), fit$FMA$vcov)
 
-  expect_no_error(
-    plot(fit, which = "qq", ask = FALSE)
+  summ <- summary(fit)
+  table <- summary_table(fit)
+  expect_s3_class(summ, "summary.amerasfit")
+  expect_identical(table, summ$summary_table)
+  expect_named(table, c("Method", "Term", "Estimate", "SE"))
+  expect_setequal(unique(table$Method), c("RC", "FMA"))
+
+  grDevices::pdf(NULL)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  expect_identical(plot(fit, ask = FALSE), fit)
+  expect_identical(plot(fit, methods = "RC", ask = FALSE), fit)
+  expect_identical(
+    plot(fit, which = "qq", ask = FALSE),
+    fit
   )
-
-  expect_no_error(
-    plot(fit, type = "deviance", ask = FALSE)
+  expect_identical(
+    plot(fit, type = "deviance", ask = FALSE),
+    fit
   )
 })
 
@@ -41,12 +50,14 @@ test_that("plot works with supplied data when keep.data is FALSE", {
 
   # plot() resolves the supplied data once and reuses that resolved version
   # while computing residuals; the caller's data frame should stay untouched.
-  expect_no_error(plot(fit, data = dat, ask = FALSE))
+  grDevices::pdf(NULL)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  expect_identical(plot(fit, data = dat, ask = FALSE), fit)
   expect_false("rcdose_ameras" %in% names(dat))
 })
 
 
-test_that("vcov & plot & summary_table multinomial", {
+test_that("multinomial accessors and plots preserve category structure", {
   fit <- ameras(
     Y.multinomial ~ dose(V1:V10) + X1 * X2,
     data = data,
@@ -54,23 +65,26 @@ test_that("vcov & plot & summary_table multinomial", {
     methods = "RC"
   )
 
-  expect_no_error({
-    vcov(fit)
-    summary_table(fit)
-    plot(fit, ask = FALSE)
-  })
+  expect_identical(vcov(fit), fit$RC$vcov)
+  table <- summary_table(fit)
+  expect_identical(unique(table$Method), "RC")
+  expect_identical(table$Term, names(fit$RC$coefficients))
 
-  expect_no_error(
-    plot(fit, which = "qq", ask = FALSE)
+  grDevices::pdf(NULL)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  expect_identical(plot(fit, ask = FALSE), fit)
+  expect_identical(
+    plot(fit, which = "qq", ask = FALSE),
+    fit
   )
-
-  expect_no_error(
-    plot(fit, type = "deviance", ask = FALSE)
+  expect_identical(
+    plot(fit, type = "deviance", ask = FALSE),
+    fit
   )
 })
 
 
-test_that("vcov & plot & summary_table prophaz", {
+test_that("proportional-hazards accessors and plots preserve coefficient terms", {
   fit <- ameras(
     Surv(time, status) ~ dose(V1:V10) + X1 * X2,
     data = data,
@@ -78,9 +92,12 @@ test_that("vcov & plot & summary_table prophaz", {
     methods = "RC"
   )
 
-  expect_no_error({
-    vcov(fit)
-    summary_table(fit)
-    plot(fit, ask = FALSE)
-  })
+  expect_identical(vcov(fit), fit$RC$vcov)
+  table <- summary_table(fit)
+  expect_identical(unique(table$Method), "RC")
+  expect_identical(table$Term, names(fit$RC$coefficients))
+
+  grDevices::pdf(NULL)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  expect_identical(plot(fit, ask = FALSE), fit)
 })

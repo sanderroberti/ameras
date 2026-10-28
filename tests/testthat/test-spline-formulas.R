@@ -16,45 +16,65 @@ test_that("namespace-qualified spline basis functions are accepted in X terms", 
   # Spline support should be general RHS model-matrix support, not a special
   # case for unqualified ns(). Namespace-qualified calls are the safest user
   # spelling because they do not depend on splines being attached.
-  expect_no_error(
-    ameras:::parse_ameras_formula(
-      Y ~ dose(D) + splines::ns(age, df = 3),
-      data = dat,
-      family = "gaussian"
-    )
+  parsed_ns <- ameras:::parse_ameras_formula(
+    Y ~ dose(D) + splines::ns(age, df = 3),
+    data = dat,
+    family = "gaussian"
   )
-  expect_no_error(
-    ameras:::parse_ameras_formula(
-      Y ~ dose(D) + splines::bs(age, df = 4),
-      data = dat,
-      family = "gaussian"
-    )
+  parsed_bs <- ameras:::parse_ameras_formula(
+    Y ~ dose(D) + splines::bs(age, df = 4),
+    data = dat,
+    family = "gaussian"
+  )
+
+  expect_identical(parsed_ns$Y, "Y")
+  expect_identical(parsed_ns$dosevars, "D")
+  expect_match(
+    paste(deparse(parsed_ns$X_formula), collapse = ""),
+    "splines::ns",
+    fixed = TRUE
+  )
+  expect_match(
+    paste(deparse(parsed_bs$X_formula), collapse = ""),
+    "splines::bs",
+    fixed = TRUE
+  )
+  expect_equal(
+    ncol(ameras:::build_X_design(parsed_ns$X_formula, dat)$matrix),
+    3L
+  )
+  expect_equal(
+    ncol(ameras:::build_X_design(parsed_bs$X_formula, dat)$matrix),
+    4L
   )
 })
 
 test_that("namespace-qualified spline basis functions can be fitted", {
   dat <- make_spline_formula_data()
 
-  expect_no_error(
-    suppressWarnings(suppressMessages(
-      ameras(
-        Y ~ dose(D) + splines::ns(age, df = 3),
-        data = dat,
-        family = "gaussian",
-        methods = "RC"
-      )
-    ))
-  )
-  expect_no_error(
-    suppressWarnings(suppressMessages(
-      ameras(
-        Y ~ dose(D) + splines::bs(age, df = 4),
-        data = dat,
-        family = "gaussian",
-        methods = "RC"
-      )
-    ))
-  )
+  fit_ns <- suppressWarnings(suppressMessages(
+    ameras(
+      Y ~ dose(D) + splines::ns(age, df = 3),
+      data = dat,
+      family = "gaussian",
+      methods = "RC"
+    )
+  ))
+  fit_bs <- suppressWarnings(suppressMessages(
+    ameras(
+      Y ~ dose(D) + splines::bs(age, df = 4),
+      data = dat,
+      family = "gaussian",
+      methods = "RC"
+    )
+  ))
+
+  expect_s3_class(fit_ns, "amerasfit")
+  expect_s3_class(fit_bs, "amerasfit")
+  expect_length(fit_ns$model$X, 3L)
+  expect_length(fit_bs$model$X, 4L)
+  expect_true(all(is.finite(fit_ns$RC$coefficients)))
+  expect_true(all(is.finite(fit_bs$RC$coefficients)))
 })
 
 test_that("keep.data FALSE can rebuild spline design columns from supplied data", {
@@ -77,11 +97,9 @@ test_that("keep.data FALSE can rebuild spline design columns from supplied data"
 
   expect_null(fit$model$data)
   expect_true(is.list(fit$model$X_design_info))
-  res <- NULL
-  expect_no_error(res <- residuals(fit, data = dat, type = "response"))
-  if (!is.null(res)) {
-    expect_length(res, nrow(dat))
-  }
+  res <- residuals(fit, data = dat, type = "response")
+  expect_length(res, nrow(dat))
+  expect_true(all(is.finite(res)))
 })
 
 test_that("rebuilt spline design columns match the fitted design columns", {
@@ -111,19 +129,14 @@ test_that("rebuilt spline design columns match the fitted design columns", {
     )
   ))
 
-  resolved <- NULL
-  expect_no_error(
-    resolved <- ameras:::resolve_data(fit_without_data, data = dat)
-  )
+  resolved <- ameras:::resolve_data(fit_without_data, data = dat)
 
-  if (!is.null(resolved)) {
-    expect_identical(fit_without_data$model$X, fit_with_data$model$X)
-    expect_equal(
-      resolved[, fit_without_data$model$X, drop = FALSE],
-      fit_with_data$model$data[, fit_with_data$model$X, drop = FALSE],
-      tolerance = 1e-12
-    )
-  }
+  expect_identical(fit_without_data$model$X, fit_with_data$model$X)
+  expect_equal(
+    resolved[, fit_without_data$model$X, drop = FALSE],
+    fit_with_data$model$data[, fit_with_data$model$X, drop = FALSE],
+    tolerance = 1e-12
+  )
 })
 
 test_that("stored spline design information does not retain caller workspace", {
@@ -156,5 +169,7 @@ test_that("stored spline design information does not retain caller workspace", {
     )
   )
   expect_identical(parent.env(design_env), baseenv())
-  expect_no_error(residuals(fit, data = dat, type = "response"))
+  res <- residuals(fit, data = dat, type = "response")
+  expect_length(res, nrow(dat))
+  expect_true(all(is.finite(res)))
 })

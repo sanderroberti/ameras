@@ -67,7 +67,7 @@ for (method in setdiff(all_methods, "RC")) {
 }
 
 
-# Basic no-error check for RC and all combinations of doseRRmod, deg, and
+# Check the RC fit contract for all combinations of doseRRmod, deg, and
 # lengths of X and M.
 for (combo in binomial_combos) {
   for (cov_combo in covariate_combinations) {
@@ -93,39 +93,43 @@ for (combo in binomial_combos) {
     test_that(label, {
       skip_on_cran()
 
-      expect_no_error({
-        if (length(cov_combo$M) > 0) {
-          fit_combination(
-            family = combo$family,
-            Y = combo$Y,
-            deg = combo$deg,
-            doseRRmod = combo$doseRRmod,
-            X = cov_combo$X,
-            M = cov_combo$M,
-            data = data,
-            methods = "RC",
-            CI = "wald.orig",
-            transform = transform1,
-            transform.jacobian = transform1.jacobian,
-            index.t = (length(cov_combo$X) + 2):(length(cov_combo$X) +
-              length(cov_combo$M) * combo$deg +
-              combo$deg +
-              1)
-          )
-        } else {
-          fit_combination(
-            family = combo$family,
-            Y = combo$Y,
-            deg = combo$deg,
-            doseRRmod = combo$doseRRmod,
-            X = cov_combo$X,
-            M = cov_combo$M,
-            data = data,
-            methods = "RC",
-            CI = "wald.orig"
-          )
-        }
-      })
+      fit <- if (length(cov_combo$M) > 0) {
+        fit_combination(
+          family = combo$family,
+          Y = combo$Y,
+          deg = combo$deg,
+          doseRRmod = combo$doseRRmod,
+          X = cov_combo$X,
+          M = cov_combo$M,
+          data = data,
+          methods = "RC",
+          transform = transform1,
+          transform.jacobian = transform1.jacobian,
+          index.t = (length(cov_combo$X) + 2):(length(cov_combo$X) +
+            length(cov_combo$M) * combo$deg +
+            combo$deg +
+            1)
+        )
+      } else {
+        fit_combination(
+          family = combo$family,
+          Y = combo$Y,
+          deg = combo$deg,
+          doseRRmod = combo$doseRRmod,
+          X = cov_combo$X,
+          M = cov_combo$M,
+          data = data,
+          methods = "RC"
+        )
+      }
+
+      npar <- 1L + length(cov_combo$X) +
+        length(cov_combo$M) * combo$deg + combo$deg
+      expect_s3_class(fit, "amerasfit")
+      expect_length(fit$RC$coefficients, npar)
+      expect_true(all(is.finite(fit$RC$coefficients)))
+      expect_equal(dim(fit$RC$vcov), c(npar, npar))
+      expect_identical(rownames(fit$RC$vcov), names(fit$RC$coefficients))
     })
   }
 }
