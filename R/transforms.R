@@ -55,7 +55,7 @@ transform1 <- function(
   if (boundcheck) {
     if (any(params[index.t] - lowlimit < boundtol)) {
       warning(paste0(
-        "WARNING: one or multiple parameter estimates within ",
+        "one or multiple parameter estimates within ",
         boundtol,
         " of lower bounds. Try different bounds or starting values."
       ))

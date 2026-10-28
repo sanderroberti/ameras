@@ -519,7 +519,7 @@ ameras <- function(
   data <- na_result$data
   fit_na_action <- na_result$na.action
   if (!nrow(data)) {
-    stop("ERROR: no rows remain after applying na.action")
+    stop("no rows remain after applying na.action")
   }
 
   # Formula modifiers can be factors/logicals. Convert them once to numeric

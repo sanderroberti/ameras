@@ -186,7 +186,7 @@ warn_if_large_optimizer_gradient <- function(fit) {
 
   warning(
     paste0(
-      "WARNING: optim() reported convergence, but optimizer diagnostics ",
+      "optim() reported convergence, but optimizer diagnostics ",
       "suggest the solution may not be fully stationary ",
       "(RMS gradient = ",
       signif(fit$gradient.rms, 4),
@@ -383,13 +383,13 @@ assemble_frequentist_fit_result <- function(
           #vcov <- jac %*% MASS::ginv(fit$hessian) %*% t(jac)
         } else {
           warning(
-            "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
+            "Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
           )
           vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
         }
       } else {
         warning(
-          "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
+          "Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
         )
         vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
       }
@@ -402,7 +402,7 @@ assemble_frequentist_fit_result <- function(
       vcov <- chol2inv(chol(fit$hessian)) #MASS::ginv(fit$hessian)
     } else {
       warning(
-        "WARNING: Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
+        "Hessian was not invertible or inverse was not positive definite, variance matrix could not be obtained"
       )
       vcov <- matrix(NA, ncol = length(parnames), nrow = length(parnames))
     }

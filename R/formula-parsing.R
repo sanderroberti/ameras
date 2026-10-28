@@ -268,7 +268,7 @@ check_X_model_frame_rows <- function(mf, data) {
 
   if (length(bad_terms)) {
     stop(
-      "ERROR: X formula terms must preserve one value per row of data. ",
+      "X formula terms must preserve one value per row of data. ",
       "The following evaluated term(s) returned the wrong number of rows: ",
       paste(bad_terms, collapse = ", "),
       ". This can happen when a term drops missing values internally; ",
@@ -290,7 +290,7 @@ build_X_model_matrix <- function(terms_obj, data, contrasts.arg = NULL) {
     ),
     error = function(e) {
       stop(
-        "ERROR: could not build the X model matrix. X formula terms must ",
+        "could not build the X model matrix. X formula terms must ",
         "preserve one value per row of data; this can happen when a term ",
         "drops missing values internally. Original error: ",
         conditionMessage(e),
@@ -304,7 +304,7 @@ build_X_model_matrix <- function(terms_obj, data, contrasts.arg = NULL) {
 check_X_matrix_rows <- function(X_matrix, data) {
   if (nrow(X_matrix) != nrow(data)) {
     stop(
-      "ERROR: X model matrix has ",
+      "X model matrix has ",
       nrow(X_matrix),
       " rows, but data has ",
       nrow(data),

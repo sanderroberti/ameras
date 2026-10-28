@@ -132,7 +132,7 @@ encode_modifier_variable <- function(x, var) {
     lv <- levels(x)
     if (length(lv) < 2) {
       stop(
-        "ERROR: modifier variable ",
+        "modifier variable ",
         var,
         " must have at least two levels.",
         call. = FALSE
@@ -169,7 +169,7 @@ encode_modifier_variable <- function(x, var) {
   }
 
   stop(
-    "ERROR: modifier variable ",
+    "modifier variable ",
     var,
     " must be binary numeric/logical or a factor.",
     call. = FALSE

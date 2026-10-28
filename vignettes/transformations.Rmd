@@ -45,8 +45,8 @@ transform1 <- function(params, index.t=1:length(params), lowlimit=rep(0,length(i
   params[index.t] <- exp(params[index.t]) + lowlimit
   if(boundcheck){
     if(any(params[index.t]-lowlimit < boundtol)) 
-      warning(paste0("WARNING: one or multiple parameter estimates within ", boundtol, " of 
-        lower bounds. Try different bounds or starting values."))
+      warning(paste0("one or multiple parameter estimates within ", boundtol,
+        " of lower bounds. Try different bounds or starting values."))
   }
   return(params)
 }
@@ -89,7 +89,7 @@ transform.sigmoid <- function(params, index.t=1:length(params), a=rep(0,length(i
   params[index.t] <- a + (b-a) * 1/(1+exp(-1*params[index.t]))
   if(boundcheck){
     if(any( (params[index.t]-a < boundtol) | (b-params[index.t] < boundtol))) 
-      warning(paste0("WARNING: one or multiple parameter estimates within ", boundtol, 
+      warning(paste0("one or multiple parameter estimates within ", boundtol,
       " of bounds. Try different bounds or starting values."))
   }
   return(params)

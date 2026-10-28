@@ -116,7 +116,8 @@ test_that("initial parameter checks use family-specific parameter counts", {
 
   expect_error(
     ameras:::check_inpar(1, family = "unknown", M = M, X = X, deg = deg),
-    "ERROR"
+    "Unsupported family: unknown",
+    fixed = TRUE
   )
 })
 
@@ -167,7 +168,7 @@ test_that("general check helpers cover representative validation branches", {
   expect_error(ameras:::check_deg(3), "deg must be <= 2")
 
   expect_null(ameras:::check_factor_vec(dat$z, "Y"))
-  expect_error(ameras:::check_factor_vec(dat$x, "Y"), "Y must be numeric")
+  expect_error(ameras:::check_factor_vec(dat$x, "Y"), "Y must be a factor")
   expect_error(
     ameras:::check_factor_vec(dat$z_unused, "Y"),
     "Y contains unused levels"
@@ -245,7 +246,7 @@ test_that("outcome checks enforce family-specific response requirements", {
   )
   expect_error(
     ameras:::check_Y("y_binary", dat, family = "multinomial"),
-    "Y must be numeric"
+    "Y must be a factor"
   )
   expect_error(
     ameras:::check_Y("missing_y", dat, family = "gaussian"),

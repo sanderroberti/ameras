@@ -1206,12 +1206,12 @@ ameras.bma <- function(
   if (nchains > 1) {
     if (any(Rhat$Rhat > 1.05)) {
       warning(
-        "WARNING: Potential problems with MCMC convergence, consider using longer chains"
+        "Potential problems with MCMC convergence, consider using longer chains"
       )
     }
   } else {
     warning(
-      "WARNING: MCMC convergence cannot be assessed using a single chain"
+      "MCMC convergence cannot be assessed using a single chain"
     )
   }
 
@@ -1221,7 +1221,6 @@ ameras.bma <- function(
   prc_excluded <- round(100 * (1 - length(included.realizations) / ndoses), 1)
   if (length(included.realizations) / ndoses < .8) {
     warning(paste0(
-      "WARNING: ",
       prc_excluded,
       "% of realizations excluded from model averaging. Try different bounds or starting values."
     ))

@@ -453,7 +453,7 @@ traceplot.amerasfit <- function(
     )
   } else {
     stop(
-      "ERROR: traceplot() requires BMA output in the provided 'amerasfit' object."
+      "traceplot() requires BMA output in the provided 'amerasfit' object."
     )
   }
 }
@@ -505,7 +505,7 @@ confint.amerasfit <- function(
       )
       if (length(type.i) != 1) {
         stop(
-          "ERROR: Exactly one CI type (either 'percentile' or 'hpd') for FMA and/or BMA should be specified"
+          "Exactly one CI type (either 'percentile' or 'hpd') for FMA and/or BMA should be specified"
         )
       }
 
@@ -546,7 +546,7 @@ confint.amerasfit <- function(
       )
       if (length(type.i) != 1) {
         stop(
-          "ERROR: Exactly one CI type (one of 'proflik', 'wald.orig', or 'wald.transformed') for RC, ERC, and/or MCML should be specified"
+          "Exactly one CI type (one of 'proflik', 'wald.orig', or 'wald.transformed') for RC, ERC, and/or MCML should be specified"
         )
       }
       if (!is.null(parm) && type.i != "proflik") {

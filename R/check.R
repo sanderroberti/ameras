@@ -1,12 +1,12 @@
 check_df <- function(x, nm = "data") {
   if (!is.data.frame(x)) {
-    stop(paste0("ERROR: ", nm, " must be a data frame"))
+    stop(paste0(nm, " must be a data frame"))
   }
   if (!nrow(x)) {
-    stop(paste0("ERROR: ", nm, " has no rows"))
+    stop(paste0(nm, " has no rows"))
   }
   if (!ncol(x)) {
-    stop(paste0("ERROR: ", nm, " has no columns"))
+    stop(paste0(nm, " has no columns"))
   }
   NULL
 }
@@ -15,7 +15,7 @@ check_reserved_names <- function(data, reserved = "rcdose_ameras") {
   used <- intersect(reserved, colnames(data))
   if (length(used)) {
     stop(paste0(
-      "ERROR: data contains reserved ameras column name(s): ",
+      "data contains reserved ameras column name(s): ",
       getCharVecStr(used),
       ". Please rename these columns before fitting."
     ))
@@ -87,12 +87,12 @@ check_included_realizations_BMA <- function(x, dosevars) {
   check_integer(x, nm, minlen = 0, maxlen = 0, min = 1, max = length(dosevars))
   if (length(x) < 2) {
     stop(
-      "ERROR: BMA requires at least two included exposure realizations. ",
+      "BMA requires at least two included exposure realizations. ",
       "With a single exposure realization, use RC."
     )
   }
   if (any(duplicated(x))) {
-    stop(paste0("ERROR: ", nm, " contains duplicated values"))
+    stop(paste0(nm, " contains duplicated values"))
   }
 
   NULL
@@ -199,7 +199,7 @@ warn_if_poorly_conditioned_X <- function(
   if (length(details)) {
     warning(
       paste0(
-        "WARNING: right-hand-side covariates appear poorly scaled or ",
+        "right-hand-side covariates appear poorly scaled or ",
         "ill-conditioned (",
         paste(unique(details), collapse = "; "),
         "). This can make optimizer convergence unreliable. Consider ",
@@ -330,7 +330,7 @@ check_entry_exit <- function(entry, exit, data) {
     check_num_vec(vec1, nm1)
     tmp <- vec1 > vec2
     tmp[is.na(tmp)] <- FALSE
-    if (any(tmp)) stop(paste0("ERROR: ", nm1, " > ", nm2, " for some values"))
+    if (any(tmp)) stop(paste0(nm1, " > ", nm2, " for some values"))
   }
 
   NULL
@@ -367,7 +367,7 @@ check_inpar <- function(x, family, M, X, deg, multinom_levels = 0) {
   } else if (family == "multinomial") {
     len <- (multinom_levels - 1) * (1 + length(X) + length(M) * deg + deg)
   } else {
-    stop("ERROR")
+    stop("Unsupported family: ", family)
   }
   check_num_vec(x, nm, binary = 0, nonneg = 0, integer = 0, len = len)
   x
@@ -379,7 +379,7 @@ check_future_chunk_size_FMA <- function(x) {
   }
   nm <- "future.chunk.size.FMA"
   if (!is.numeric(x) || length(x) != 1 || is.na(x) || x <= 0) {
-    stop(paste0("ERROR: ", nm, " must be a positive number or NULL"))
+    stop(paste0(nm, " must be a positive number or NULL"))
   }
 
   x
@@ -388,18 +388,18 @@ check_future_chunk_size_FMA <- function(x) {
 
 check_factor_vec <- function(x, nm, len = 0) {
   if (!is.factor(x)) {
-    stop(paste0("ERROR: ", nm, " must be numeric"))
+    stop(paste0(nm, " must be a factor"))
   }
   if (len && (len != length(x))) {
-    stop(paste0("ERROR: ", nm, " must be a numeric vector of length ", len))
+    stop(paste0(nm, " must be a factor of length ", len))
   }
 
   if (length(levels(x)) < 3) {
-    stop(paste0("ERROR: ", nm, " must have at least 3 levels"))
+    stop(paste0(nm, " must have at least 3 levels"))
   }
 
   if (length(levels(x)) > length(unique(x))) {
-    stop(paste0("ERROR: ", nm, " contains unused levels"))
+    stop(paste0(nm, " contains unused levels"))
   }
 
   NULL
@@ -407,25 +407,25 @@ check_factor_vec <- function(x, nm, len = 0) {
 
 check_num_vec <- function(x, nm, binary = 0, nonneg = 0, integer = 0, len = 0) {
   if (!is.numeric(x)) {
-    stop(paste0("ERROR: ", nm, " must be numeric"))
+    stop(paste0(nm, " must be numeric"))
   }
   if (len && (len != length(x))) {
-    stop(paste0("ERROR: ", nm, " must be a numeric vector of length ", len))
+    stop(paste0(nm, " must be a numeric vector of length ", len))
   }
   tmp <- !is.finite(x)
   if (any(tmp)) {
-    stop(paste0("ERROR: ", nm, " must contain finite values"))
+    stop(paste0(nm, " must contain finite values"))
   }
   if (binary) {
     tmp <- !(x %in% 0:1)
     if (any(tmp)) {
-      stop(paste0("ERROR: ", nm, " must contain binary (0 - 1) values"))
+      stop(paste0(nm, " must contain binary (0 - 1) values"))
     }
   }
   if (nonneg) {
     tmp <- x < 0
     if (any(tmp)) {
-      stop(paste0("ERROR: ", nm, " must contain non-negative values"))
+      stop(paste0(nm, " must contain non-negative values"))
     }
   }
   if (integer) {
@@ -438,17 +438,16 @@ check_num_vec <- function(x, nm, binary = 0, nonneg = 0, integer = 0, len = 0) {
 check_vars <- function(data, vars, nm, minlen = 0, maxlen = 0) {
   nv <- length(vars)
   if (minlen && (minlen == maxlen) && (nv != minlen)) {
-    stop(paste0("ERROR: ", nm, " must have length ", minlen))
+    stop(paste0(nm, " must have length ", minlen))
   }
   if (nv < minlen) {
-    stop(paste0("ERROR: ", nm, " must have length >= ", minlen))
+    stop(paste0(nm, " must have length >= ", minlen))
   }
   if (!nv) {
     return(NULL)
   }
   if (!is.vector(vars)) {
     stop(paste0(
-      "ERROR: ",
       nm,
       " must be a vector of indices or variable names"
     ))
@@ -462,13 +461,12 @@ check_vars <- function(data, vars, nm, minlen = 0, maxlen = 0) {
     check_char_vec(vars, nm, valid = cx, def = NULL)
   } else {
     stop(paste0(
-      "ERROR: ",
       nm,
       " must be a vector of indices or variable names"
     ))
   }
   if (any(duplicated(vars))) {
-    stop(paste0("ERROR: ", nm, " contains duplicated values"))
+    stop(paste0(nm, " contains duplicated values"))
   }
 
   unique(vars)
@@ -478,19 +476,19 @@ check_vars <- function(data, vars, nm, minlen = 0, maxlen = 0) {
 check_char_vec <- function(x, nm, valid = NULL, def = NULL, len = 0) {
   n <- length(x)
   if (len && (n != len)) {
-    stop(paste0("ERROR: ", nm, " must have length ", len))
+    stop(paste0(nm, " must have length ", len))
   }
   if (!n) {
     return(def)
   }
   if (!is.character(x)) {
-    stop(paste0("ERROR: ", nm, " must be character"))
+    stop(paste0(nm, " must be character"))
   }
   if (length(valid)) {
     tmp <- !(x %in% valid)
     if (any(tmp)) {
       err <- getCharVecStr(x[tmp])
-      stop(paste0("ERROR ", nm, " contains invalid values: ", err))
+      stop(paste0(nm, " contains invalid values: ", err))
     }
   }
   x
@@ -542,16 +540,16 @@ resolve_na_action <- function(na.action, env = parent.frame()) {
 
   if (is.character(na.action)) {
     if (length(na.action) != 1) {
-      stop("ERROR: na.action must be a function or a single function name")
+      stop("na.action must be a function or a single function name")
     }
     if (!exists(na.action, envir = env, mode = "function", inherits = TRUE)) {
-      stop("ERROR: na.action function not found: ", na.action)
+      stop("na.action function not found: ", na.action)
     }
     na.action <- get(na.action, envir = env, mode = "function", inherits = TRUE)
   }
 
   if (!is.function(na.action)) {
-    stop("ERROR: na.action must be a function or a single function name")
+    stop("na.action must be a function or a single function name")
   }
 
   na.action
@@ -628,13 +626,13 @@ apply_na_action_to_data <- function(data, vars, na.action) {
   acted <- na.action(na_frame)
   if (!is.data.frame(acted) || !row_id %in% colnames(acted)) {
     stop(
-      "ERROR: na.action must return a data frame with rows preserved or removed"
+      "na.action must return a data frame with rows preserved or removed"
     )
   }
 
   keep <- acted[[row_id]]
   if (!length(keep)) {
-    stop("ERROR: no complete observations remain after applying na.action")
+    stop("no complete observations remain after applying na.action")
   }
 
   list(
@@ -654,25 +652,25 @@ check_integer <- function(
 ) {
   n <- length(x)
   if (minlen && (minlen == maxlen) && (n != minlen)) {
-    stop(paste0("ERROR: ", nm, " must have length ", minlen))
+    stop(paste0(nm, " must have length ", minlen))
   }
   if (minlen && (n < minlen)) {
-    stop(paste0("ERROR: ", nm, " must have length >= ", minlen))
+    stop(paste0(nm, " must have length >= ", minlen))
   }
   if (!is.numeric(x)) {
-    stop(paste0("ERROR: ", nm, " must be integer"))
+    stop(paste0(nm, " must be integer"))
   }
   if (any(!is.finite(x))) {
-    stop(paste0("ERROR: ", nm, " must be integer"))
+    stop(paste0(nm, " must be integer"))
   }
   if (any(x != floor(x))) {
-    stop(paste0("ERROR: ", nm, " must be integer"))
+    stop(paste0(nm, " must be integer"))
   }
   if (length(min) && any(x < min)) {
-    stop(paste0("ERROR: ", nm, " must be >= ", min))
+    stop(paste0(nm, " must be >= ", min))
   }
   if (length(max) && any(x > max)) {
-    stop(paste0("ERROR: ", nm, " must be <= ", max))
+    stop(paste0(nm, " must be <= ", max))
   }
 
   NULL
@@ -696,7 +694,7 @@ check_string <- function(obj, valid, parm) {
   }
   if (errFlag) {
     msg <- getCharVecStr(valid)
-    msg <- paste0("ERROR: ", parm, " contains the invalid values ", msg)
+    msg <- paste0(parm, " contains the invalid values ", msg)
     stop(msg)
   }
 
