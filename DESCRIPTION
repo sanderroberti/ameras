@@ -25,7 +25,9 @@ Authors@R: c(person(given = "Sander",
 Depends: R (>= 4.1.0), stats, nimble
 Suggests: 
     knitr,
+    nnet,
     rmarkdown,
+    survival,
     testthat (>= 3.0.0),
     future,
     future.apply,
