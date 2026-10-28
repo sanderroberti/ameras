@@ -228,20 +228,20 @@
 
 # binomial snapshot: BMA
 
-    structure(list(BMA = c(-0.730173444353113, 0.287133677575896, 
-    0.0421037845656069)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared"))
+    structure(list(BMA = c(-0.73216025963789, 0.28931796129074, 0.0416938097364
+    )), class = "data.frame", row.names = c("(Intercept)", "dose", 
+    "dose_squared"))
 
 ---
 
-    c("(Intercept)" = 0.061525993306574, dose = 0.0901418668188222, 
-    dose_squared = 0.0242758155720054)
+    c("(Intercept)" = 0.0604442945013618, dose = 0.0892026948497069, 
+    dose_squared = 0.0239762836084772)
 
 ---
 
-    structure(list(lower = c(-0.857291851271742, 0.107033728876186, 
-    0.00426550225354544), upper = c(-0.618610154718928, 0.439121194911745, 
-    0.0886645543721738)), class = "data.frame", row.names = c("(Intercept)", 
+    structure(list(lower = c(-0.852235794919144, 0.0942062438106157, 
+    0.000151319122154136), upper = c(-0.61699073406199, 0.443545978090755, 
+    0.0915470912109513)), class = "data.frame", row.names = c("(Intercept)", 
     "dose", "dose_squared"))
 
 ---
@@ -250,7 +250,7 @@
       print(summary(fit)$summary_table, digits = 2)
     Output
         Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (Intercept)   -0.730 0.062  -0.8573   -0.619  1.2    44
-      2    BMA         dose    0.287 0.090   0.1070    0.439  2.1    23
-      3    BMA dose_squared    0.042 0.024   0.0043    0.089  2.2    35
+      1    BMA  (Intercept)   -0.732 0.060 -0.85224   -0.617  1.4    45
+      2    BMA         dose    0.289 0.089  0.09421    0.444  2.2    25
+      3    BMA dose_squared    0.042 0.024  0.00015    0.092  2.2    35
 

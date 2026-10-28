@@ -38,7 +38,7 @@ fit_combination <- function(
   data,
   niter.BMA = 1000,
   nburnin.BMA = 200,
-  nthin.BMA = 1,
+  thin.BMA = 1,
   transform = NULL,
   transform.jacobian = NULL,
   ...
@@ -113,7 +113,7 @@ fit_combination <- function(
       methods = methods,
       nburnin.BMA = nburnin.BMA,
       niter.BMA = niter.BMA,
-      nthin.BMA = nthin.BMA,
+      thin.BMA = thin.BMA,
       transform = transform,
       transform.jacobian = transform.jacobian
     ),

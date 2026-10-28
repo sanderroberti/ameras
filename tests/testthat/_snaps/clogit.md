@@ -102,18 +102,19 @@
 
 # clogit snapshot: BMA
 
-    structure(list(BMA = c(0.62957288938639, -0.0491256940956094)), class = "data.frame", row.names = c("dose", 
-    "dose_squared"))
+    structure(list(BMA = c(0.625671431172552, -0.0485696930926242
+    )), class = "data.frame", row.names = c("dose", "dose_squared"
+    ))
 
 ---
 
-    c(dose = 0.137109688051081, dose_squared = 0.0304239879548994
+    c(dose = 0.135422583412642, dose_squared = 0.0296929172025812
     )
 
 ---
 
-    structure(list(lower = c(0.363967101239792, -0.0986573570228772
-    ), upper = c(0.858500724121195, 0.00677148649021496)), class = "data.frame", row.names = c("dose", 
+    structure(list(lower = c(0.363871646778362, -0.0986573570228772
+    ), upper = c(0.875450929261442, 0.0064082333580212)), class = "data.frame", row.names = c("dose", 
     "dose_squared"))
 
 ---
@@ -122,8 +123,8 @@
       print(summary(fit)$summary_table, digits = 2)
     Output
         Method         Term Estimate   SE CI.lower CI.upper Rhat n.eff
-      1    BMA         dose    0.630 0.14    0.364   0.8585  3.3    49
-      2    BMA dose_squared   -0.049 0.03   -0.099   0.0068  3.6    29
+      1    BMA         dose    0.626 0.14    0.364   0.8755  3.6    26
+      2    BMA dose_squared   -0.049 0.03   -0.099   0.0064  3.7    25
 
 # clogit snapshot: FMA 1-par
 
