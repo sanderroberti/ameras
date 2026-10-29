@@ -32,7 +32,7 @@ make_loglik_test_object <- function(
 }
 
 make_loglik_test_data <- function(dosevars = paste0("V", 1:10)) {
-  data("data", package = "ameras")
+  data <- ameras_simulated
   data$rcdose_ameras <- rowMeans(data[, dosevars, drop = FALSE])
   data
 }
@@ -50,7 +50,7 @@ expect_single_loglik_equal <- function(object, params, direct) {
 }
 
 test_that("single-realization loglik helper forwards runtime arguments", {
-  data("data", package = "ameras")
+  data <- ameras_simulated
   transform_shift <- function(params, shift, ...) params + shift
   helper <- ameras:::make_single_realization_loglik(
     family = "gaussian",

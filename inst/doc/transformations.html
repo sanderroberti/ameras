@@ -402,7 +402,7 @@ LB can be supplied to arguments <code>index.t</code> and
 <p>In particular, <code>transform1</code> and
 <code>transform1.jacobian</code> are defined as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>transform1 <span class="ot">&lt;-</span> <span class="cf">function</span>(params, <span class="at">index.t=</span><span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(params), <span class="at">lowlimit=</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">length</span>(index.t)), </span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                       <span class="at">boundcheck=</span><span class="cn">FALSE</span>, <span class="at">boundtol=</span><span class="fl">1e-3</span>, ...){</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                       <span class="at">boundcheck=</span><span class="cn">FALSE</span>, <span class="at">boundtol=</span><span class="dv">1</span>e<span class="sc">-</span><span class="dv">3</span>, ...){</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  </span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(index.t)<span class="sc">!=</span><span class="fu">length</span>(lowlimit)) </span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;Length mismatch between index.t and lowlimit&quot;</span>)</span>
@@ -411,8 +411,8 @@ LB can be supplied to arguments <code>index.t</code> and
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  params[index.t] <span class="ot">&lt;-</span> <span class="fu">exp</span>(params[index.t]) <span class="sc">+</span> lowlimit</span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="cf">if</span>(boundcheck){</span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">any</span>(params[index.t]<span class="sc">-</span>lowlimit <span class="sc">&lt;</span> boundtol)) </span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>      <span class="fu">warning</span>(<span class="fu">paste0</span>(<span class="st">&quot;WARNING: one or multiple parameter estimates within &quot;</span>, boundtol, <span class="st">&quot; of </span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="st">        lower bounds. Try different bounds or starting values.&quot;</span>))</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>      <span class="fu">warning</span>(<span class="fu">paste0</span>(<span class="st">&quot;one or multiple parameter estimates within &quot;</span>, boundtol,</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>        <span class="st">&quot; of lower bounds. Try different bounds or starting values.&quot;</span>))</span>
 <span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  }</span>
 <span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="fu">return</span>(params)</span>
 <span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>}</span>
@@ -462,7 +462,7 @@ transformation <span class="math inline">\(f: \mathbb{R} \rightarrow
 transformation as follows (note that since <span class="math inline">\(\mathbf{a}\)</span> and <span class="math inline">\(\mathbf{b}\)</span> act as bounds, we use an
 updated bound check):</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>transform.sigmoid <span class="ot">&lt;-</span> <span class="cf">function</span>(params, <span class="at">index.t=</span><span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(params), <span class="at">a=</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">length</span>(index.t)), </span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                              <span class="at">b=</span><span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">length</span>(index.t)), <span class="at">boundcheck=</span><span class="cn">FALSE</span>, <span class="at">boundtol=</span><span class="fl">1e-3</span>, ...){</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                              <span class="at">b=</span><span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">length</span>(index.t)), <span class="at">boundcheck=</span><span class="cn">FALSE</span>, <span class="at">boundtol=</span><span class="dv">1</span>e<span class="sc">-</span><span class="dv">3</span>, ...){</span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  </span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(index.t)<span class="sc">!=</span><span class="fu">length</span>(a) <span class="sc">|</span> <span class="fu">length</span>(index.t) <span class="sc">!=</span> <span class="fu">length</span>(b)) </span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;Length mismatch between index.t, a, and b&quot;</span>)</span>
@@ -472,7 +472,7 @@ updated bound check):</p>
 <span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  params[index.t] <span class="ot">&lt;-</span> a <span class="sc">+</span> (b<span class="sc">-</span>a) <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span>params[index.t]))</span>
 <span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="cf">if</span>(boundcheck){</span>
 <span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">any</span>( (params[index.t]<span class="sc">-</span>a <span class="sc">&lt;</span> boundtol) <span class="sc">|</span> (b<span class="sc">-</span>params[index.t] <span class="sc">&lt;</span> boundtol))) </span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>      <span class="fu">warning</span>(<span class="fu">paste0</span>(<span class="st">&quot;WARNING: one or multiple parameter estimates within &quot;</span>, boundtol, </span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>      <span class="fu">warning</span>(<span class="fu">paste0</span>(<span class="st">&quot;one or multiple parameter estimates within &quot;</span>, boundtol,</span>
 <span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>      <span class="st">&quot; of bounds. Try different bounds or starting values.&quot;</span>))</span>
 <span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  }</span>
 <span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  <span class="fu">return</span>(params)</span>
@@ -501,45 +501,44 @@ parameters are returned after transformation, and so there should be no
 difference between using <code>transform1</code> and
 <code>transform.sigmoid</code>. First, we fit the model using the
 sigmoid transformation:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">data</span>(data, <span class="at">package=</span><span class="st">&quot;ameras&quot;</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>fit.ameras.sigmoid <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial<span class="sc">~</span><span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">deg=</span><span class="dv">2</span>, <span class="at">model=</span><span class="st">&quot;ERR&quot;</span>)<span class="sc">+</span>X1<span class="sc">+</span>X2, <span class="at">data=</span>data, </span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="st">&quot;RC&quot;</span>, <span class="at">transform=</span>transform.sigmoid, </span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                            <span class="at">transform.jacobian=</span>transform.sigmoid.jacobian, <span class="at">index.t=</span><span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Fitting RC</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.sigmoid)</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = &quot;ERR&quot;) + </span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;binomial&quot;, methods = &quot;RC&quot;, </span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, </span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt;     index.t = 4:5)</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt;      RC 0.218 0.0 0.218</span></span>
-<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
-<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt;  Method         Term Estimate      SE</span></span>
-<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co">#&gt;      RC  (Intercept) -0.87358 0.09758</span></span>
-<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&gt;      RC           X1  0.44587 0.07672</span></span>
-<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="co">#&gt;      RC           X2 -0.33552 0.09610</span></span>
-<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="co">#&gt;      RC         dose  0.04875 0.21281</span></span>
-<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt;      RC dose_squared  0.28764 0.08100</span></span>
-<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>fit.ameras.sigmoid <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial<span class="sc">~</span><span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">deg=</span><span class="dv">2</span>, <span class="at">model=</span><span class="st">&quot;ERR&quot;</span>)<span class="sc">+</span>X1<span class="sc">+</span>X2, <span class="at">data =</span> ameras_simulated,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="st">&quot;RC&quot;</span>, <span class="at">transform=</span>transform.sigmoid, </span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                            <span class="at">transform.jacobian=</span>transform.sigmoid.jacobian, <span class="at">index.t=</span><span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; Fitting RC</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.sigmoid)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = &quot;ERR&quot;) + </span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = ameras_simulated, family = &quot;binomial&quot;, methods = &quot;RC&quot;, </span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt;     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, </span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;     index.t = 4:5)</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt;      RC 0.246 0.0 0.246</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt;  Method         Term Estimate      SE</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt;      RC  (Intercept) -0.87358 0.09758</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co">#&gt;      RC           X1  0.44587 0.07672</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&gt;      RC           X2 -0.33552 0.09610</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="co">#&gt;      RC         dose  0.04875 0.21281</span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="co">#&gt;      RC dose_squared  0.28764 0.08100</span></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
 <p>Next with default settings, using <code>transform1</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>fit.ameras.transform1 <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial<span class="sc">~</span><span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">deg=</span><span class="dv">2</span>, <span class="at">model=</span><span class="st">&quot;ERR&quot;</span>)<span class="sc">+</span>X1<span class="sc">+</span>X2, <span class="at">data=</span>data, </span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>fit.ameras.transform1 <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial<span class="sc">~</span><span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">deg=</span><span class="dv">2</span>, <span class="at">model=</span><span class="st">&quot;ERR&quot;</span>)<span class="sc">+</span>X1<span class="sc">+</span>X2, <span class="at">data =</span> ameras_simulated,</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                            <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="at">methods=</span><span class="st">&quot;RC&quot;</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; Fitting RC</span></span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.transform1)</span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = &quot;ERR&quot;) + </span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = data, family = &quot;binomial&quot;, methods = &quot;RC&quot;)</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;     X1 + X2, data = ameras_simulated, family = &quot;binomial&quot;, methods = &quot;RC&quot;)</span></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -548,7 +547,7 @@ sigmoid transformation:</p>
 <span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;      RC 0.196 0.0 0.196</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;      RC 0.209 0.0 0.209</span></span>
 <span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; </span></span>

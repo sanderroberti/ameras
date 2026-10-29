@@ -51,11 +51,10 @@
 
 \examples{
 \donttest{% slow
-data("data", package="ameras")
 dosevars <- paste0("V", 1:10)
 
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-              data=data, family="binomial", methods=c("RC", "ERC"))
+              data = ameras_simulated, family="binomial", methods=c("RC", "ERC"))
 
 ## Extract vcov for all available methods
 vcov(fit)

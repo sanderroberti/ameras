@@ -43,10 +43,8 @@
 
 \examples{
 \donttest{% slow
-data("data", package = "ameras")
-
 ## Fit the model
-fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial", 
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
               methods = c("RC","ERC"))
 
 ## Default print

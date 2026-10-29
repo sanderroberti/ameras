@@ -131,10 +131,8 @@
 }
 
 \examples{
-data("data", package = "ameras")
-
 ## Fit the model
-fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
               methods = "RC")
 
 ## Summary without confidence intervals
@@ -149,7 +147,7 @@ s <- summary_table(fit)
 
 ## Multiple methods
 \donttest{% slow
-fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
               methods = c("RC", "ERC", "MCML"))
 fit2 <- confint(fit2, type = "wald.orig")
 summary(fit2)

@@ -30,7 +30,6 @@ Traceplots and posterior density plots.
 }
 \examples{
 \donttest{% slow
-   data(data, package="ameras")
    fit <- ameras(Y.gaussian~dose(V1:V10), data, methods="BMA")
    traceplot(fit)
 }

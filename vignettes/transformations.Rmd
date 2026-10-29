@@ -118,8 +118,7 @@ transform.sigmoid.jacobian <- function(params, index.t=1:length(params),
 Now let us try this transformation on the example data using regression calibration for a linear-quadratic ERR model. Note that all parameters are returned after transformation, and so there should be no difference between using `transform1` and `transform.sigmoid`. First, we fit the model using the sigmoid transformation:
 
 ```{r modelfit.sigmoid}
-data(data, package="ameras")
-fit.ameras.sigmoid <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data=data, 
+fit.ameras.sigmoid <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods="RC", transform=transform.sigmoid, 
                             transform.jacobian=transform.sigmoid.jacobian, index.t=4:5)
 summary(fit.ameras.sigmoid)
@@ -127,7 +126,7 @@ summary(fit.ameras.sigmoid)
 
 Next with default settings, using `transform1`:
 ```{r modelfit.transform1}
-fit.ameras.transform1 <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data=data, 
+fit.ameras.transform1 <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods="RC")
 summary(fit.ameras.transform1)
 ```

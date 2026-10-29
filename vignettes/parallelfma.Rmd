@@ -25,10 +25,6 @@ run_parallel_examples <- future_available
 library(ameras)
 ```
 
-```{r data}
-data(data, package = "ameras")
-```
-
 # Introduction
 
 Frequentist model averaging (`FMA`) fits the specified model once for each dose
@@ -60,7 +56,7 @@ single-process FMA path.
 future::plan(future::sequential)
 
 fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-              data = data,
+              data = ameras_simulated,
               family = "gaussian",
               methods = "FMA")
 ```
@@ -73,7 +69,7 @@ platforms supported by R, including Windows, macOS, and Linux.
 future::plan(future::multisession, workers = 2)
 
 fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-              data = data,
+              data = ameras_simulated,
               family = "gaussian",
               methods = "FMA")
 
@@ -119,7 +115,7 @@ For example, with `K = 100` dose realizations and `W = 4` workers:
 future::plan(future::multisession, workers = 2)
 
 fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-              data = data,
+              data = ameras_simulated,
               family = "gaussian",
               methods = "FMA",
               future.chunk.size.FMA = 2)
@@ -149,7 +145,7 @@ set.seed(2024)
 sequential_elapsed <- system.time(
   sequential_fit <- suppressWarnings(
     ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-           data = data,
+           data = ameras_simulated,
            family = "gaussian",
            methods = "FMA",
            MFMA = 10000)
@@ -161,7 +157,7 @@ set.seed(2024)
 parallel_elapsed <- system.time(
   parallel_fit <- suppressWarnings(
     ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-           data = data,
+           data = ameras_simulated,
            family = "gaussian",
            methods = "FMA",
            MFMA = 10000,
@@ -208,7 +204,7 @@ future::plan(future::multisession, workers = 2)
 
 set.seed(2024)
 fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-              data = data,
+              data = ameras_simulated,
               family = "gaussian",
               methods = "FMA")
 

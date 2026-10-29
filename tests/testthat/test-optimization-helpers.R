@@ -428,7 +428,7 @@ test_that("BMA automatic realization screening is disabled explicitly", {
 })
 
 test_that("ameras passes default BMA realization indices explicitly", {
-  data("data", package = "ameras")
+  data <- ameras_simulated
   captured <- NULL
 
   testthat::with_mocked_bindings(

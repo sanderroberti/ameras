@@ -39,11 +39,10 @@
 
 \examples{
 \donttest{% slow
-data("data", package = "ameras")
 dosevars <- paste0("V", 1:10)
 
 ## Fit the model
-fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial", 
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
 methods = c("RC","ERC"))
 ## Full matrix
 coef(fit)

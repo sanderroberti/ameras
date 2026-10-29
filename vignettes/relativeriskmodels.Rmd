@@ -19,7 +19,6 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(ameras)
 library(ggplot2)
-data(data, package="ameras")
 ```
 
 # Introduction
@@ -32,7 +31,7 @@ The usual exponential relative risk model is given by $RR_i=\exp(\beta_1 D_i+\be
 
 ```{r modelfit.exp}
 fit.ameras.exp <- ameras(Y.binomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                         data=data, family="binomial", methods="RC")
+                         data = ameras_simulated, family="binomial", methods="RC")
 summary(fit.ameras.exp)
 ```
 
@@ -45,7 +44,7 @@ The linear excess relative risk model is given by $RR_i=1+\beta_1 D_i+\beta_2 D_
 
 ```{r modelfit.err}
 fit.ameras.err <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, 
-                         data=data, family="binomial", methods="RC")
+                         data = ameras_simulated, family="binomial", methods="RC")
 summary(fit.ameras.err)
 ```
 
@@ -56,7 +55,7 @@ The linear-exponential relative risk model is given by $RR_i= 1+(\beta_1 + \math
 
 ```{r modelfit.linexp}
 fit.ameras.linexp <- ameras(Y.binomial~dose(V1:V10, model="LINEXP")+X1+X2, 
-                         data=data, family="binomial", methods="RC")
+                         data = ameras_simulated, family="binomial", methods="RC")
 summary(fit.ameras.linexp)
 ```
 

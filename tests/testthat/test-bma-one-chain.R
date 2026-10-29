@@ -1,5 +1,5 @@
 test_that("BMA requires at least two included dose realizations", {
-  data("data", package = "ameras")
+  data <- ameras_simulated
 
   # The formula has multiple dose realizations, but this explicit BMA subset
   # would leave BMA with only one realization. That case should use RC instead.
@@ -22,7 +22,7 @@ test_that("one-chain BMA fits support amerasfit methods", {
   skip_on_cran()
   set.seed(123)
 
-  data("data", package = "ameras")
+  data <- ameras_simulated
   small_data <- data[seq_len(30), ]
 
   # A one-chain BMA fit exercises a different output shape than the usual
@@ -109,7 +109,7 @@ test_that("one-parameter BMA fits preserve sample matrix dimensions", {
   skip_on_cran()
   set.seed(123)
 
-  data("data", package = "ameras")
+  data <- ameras_simulated
   small_data <- data[seq_len(20), ]
 
   # With clogit, linear ERR, and no X or M terms, the only sampled model

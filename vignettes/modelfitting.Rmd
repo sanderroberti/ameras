@@ -34,11 +34,15 @@ Additional right-hand-side covariates are expanded using `model.matrix()`, so st
 
 ## Example data
 
-The included example dataset contains 3,000 individuals with 10 exposure realizations `V1`-`V10`, binary covariates `X1` and `X2` and effect modifiers `M1` and `M2`, and outcomes of all types (`Y.gaussian`, `Y.binomial`, `Y.poisson`, `status`, `time`, `Y.multinomial`, `Y.clogit`, and `setnr`).
+The included `ameras_simulated` dataset contains 3,000 simulated individuals
+with 10 exposure realizations `V1`-`V10`, binary covariates `X1` and `X2`,
+effect modifiers `M1` and `M2`, and outcomes of all supported types
+(`Y.gaussian`, `Y.binomial`, `Y.poisson`, `status`, `time`,
+`Y.multinomial`, `Y.clogit`, and `setnr`). The outcomes were generated under
+linear excess relative risk models; see `?ameras_simulated` for details.
 
 ```{r}
-data(data, package="ameras")
-head(data)
+head(ameras_simulated)
 ```
 
 
@@ -48,7 +52,7 @@ head(data)
 Now we fit all methods to the data through one function call:
 ```{r modelfit.linreg, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 set.seed(12345)
-fit.ameras.linreg <- ameras(Y.gaussian~dose(V1:V10)+X1+X2, data=data, 
+fit.ameras.linreg <- ameras(Y.gaussian~dose(V1:V10)+X1+X2, data = ameras_simulated,
                             family="gaussian", niter.BMA=5000, nburnin.BMA=1000,
                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"))
 ```
@@ -90,7 +94,7 @@ First, we fit models including a quadratic exposure term by setting `deg=2`.
 ```{r modelfit.logreg, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 set.seed(33521)
 fit.ameras.logreg <- ameras(Y.binomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                            data=data, family="binomial", 
+                            data = ameras_simulated, family="binomial",
                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                             niter.BMA = 5000, nburnin.BMA = 1000)
 ```
@@ -107,7 +111,7 @@ Without the quadratic term (`deg=1`):
 ```{r modelfit.logreg.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 set.seed(3521216)
 fit.ameras.logreg.lin <- ameras(Y.binomial~dose(V1:V10, deg=1, model="EXP")+X1+X2,  
-                                data=data, family="binomial", 
+                                data = ameras_simulated, family="binomial",
                                 methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                 niter.BMA = 5000, nburnin.BMA = 1000)
 ```
@@ -129,7 +133,7 @@ Here, we show models without using an offset, first including a quadratic exposu
 ```{r modelfit.poisson, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 set.seed(332101)
 fit.ameras.poisson <- ameras(Y.poisson~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                             data=data, family="poisson", 
+                             data = ameras_simulated, family="poisson",
                              methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                              niter.BMA = 5000, nburnin.BMA = 1000)
 ```
@@ -147,7 +151,7 @@ Without the quadratic term (`deg=1`):
 ```{r modelfit.poisson.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 set.seed(24252)
 fit.ameras.poisson.lin <- ameras(Y.poisson~dose(V1:V10, deg=1, model="EXP")+X1+X2, 
-                                 data=data, family="poisson", 
+                                 data = ameras_simulated, family="poisson",
                                  methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                  niter.BMA = 5000, nburnin.BMA = 1000)
 ```
@@ -170,7 +174,7 @@ Again, we first fit models including a quadratic exposure term by setting `deg=2
 set.seed(332120000)
 fit.ameras.prophaz <- ameras(Surv(time, status)~
                                dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                             data=data, family="prophaz", 
+                             data = ameras_simulated, family="prophaz",
                              methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                              niter.BMA = 5000, nburnin.BMA = 1000)
 ```
@@ -194,7 +198,7 @@ Without the quadratic term (`deg=1`):
 set.seed(24978252)
 fit.ameras.prophaz.lin <- ameras(Surv(time, status)~
                                    dose(V1:V10, deg=1, model="EXP")+X1+X2, 
-                                 data=data, family="prophaz", 
+                                 data = ameras_simulated, family="prophaz",
                                  methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                  niter.BMA = 5000, nburnin.BMA = 1000)
 ```
@@ -217,7 +221,7 @@ Again, we first fit models including a quadratic exposure term by setting `deg=2
 set.seed(33)
 fit.ameras.multinomial <- ameras(Y.multinomial~
                                    dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                                 data=data, family="multinomial",
+                                 data = ameras_simulated, family="multinomial",
                                  methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                  niter.BMA = 5000, nburnin.BMA = 1000)
 ```
@@ -237,7 +241,7 @@ Without the quadratic term (`deg=1`):
 set.seed(44)
 fit.ameras.multinomial.lin <- ameras(Y.multinomial~
                                        dose(V1:V10, deg=1, model="EXP")+X1+X2, 
-                                     data=data, family="multinomial",
+                                     data = ameras_simulated, family="multinomial",
                                      methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                      niter.BMA = 5000, nburnin.BMA = 1000)
 ```
@@ -256,7 +260,7 @@ For conditional logistic regression, the set number variable is specified throug
 ```{r modelfit.clogit, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 set.seed(3301)
 fit.ameras.clogit <- ameras(Y.clogit~dose(V1:V10, deg=2, model="EXP")+X1+X2+
-                              strata(setnr), data=data, family="clogit", 
+                              strata(setnr), data = ameras_simulated, family="clogit",
                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                             niter.BMA = 5000, nburnin.BMA = 1000)
 ```
@@ -275,7 +279,7 @@ Without the quadratic term (`deg=1`):
 ```{r modelfit.clogit.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")}
 set.seed(4401)
 fit.ameras.clogit.lin <- ameras(Y.clogit~dose(V1:V10, deg=1, model="EXP")+X1+X2+
-                                  strata(setnr), data=data, family="clogit", 
+                                  strata(setnr), data = ameras_simulated, family="clogit",
                                 methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                 niter.BMA = 5000, nburnin.BMA = 1000)
 ```

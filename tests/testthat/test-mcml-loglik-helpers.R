@@ -19,7 +19,7 @@ test_that("MCML aggregation helper preserves clipped log-mean-exp behavior", {
 })
 
 test_that("MCML loglik helper matches direct Gaussian likelihood aggregation", {
-  data("data", package = "ameras")
+  data <- ameras_simulated
   params <- c(0, 0.1, 1)
   dosevars <- c("V1", "V2")
 
@@ -52,7 +52,7 @@ test_that("MCML loglik helper matches direct Gaussian likelihood aggregation", {
 })
 
 test_that("MCML loglik helper forwards runtime transform arguments", {
-  data("data", package = "ameras")
+  data <- ameras_simulated
   params <- c(0, 0.1, 1)
   shift <- c(0.2, 0.3, 0.4)
   dosevars <- c("V1", "V2")

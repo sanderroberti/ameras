@@ -9,7 +9,6 @@ knitr::opts_chunk$set(
 library(ameras)
 
 ## ----data---------------------------------------------------------------------
-data(data, package = "ameras")
 dosevars <- paste0("V", 1:10)
 
 ## ----fit-helper---------------------------------------------------------------
@@ -25,12 +24,12 @@ passes_fma_screen <- function(rc) {
     all(eigen(hessian)$values > 0))
 }
 
-fit_rc_realization <- function(dosevar, data) {
+fit_rc_realization <- function(dosevar, dataset) {
   formula <- stats::as.formula(
     paste0("Y.gaussian ~ dose(", dosevar, ") + X1 + X2")
   )
 
-  fit <- ameras(formula, data = data, family = "gaussian")
+  fit <- ameras(formula, data = dataset, family = "gaussian")
   rc <- fit$RC
 
   list(
@@ -44,13 +43,17 @@ fit_rc_realization <- function(dosevar, data) {
 }
 
 ## ----fit-realizations---------------------------------------------------------
-rc_summaries <- lapply(dosevars, fit_rc_realization, data = data)
+rc_summaries <- lapply(
+  dosevars,
+  fit_rc_realization,
+  dataset = ameras_simulated
+)
 
 ## ----save-fits, eval = FALSE--------------------------------------------------
 # dir.create("fma-fits", showWarnings = FALSE)
 # 
 # for (dosevar in dosevars) {
-#   fit_summary <- fit_rc_realization(dosevar, data = data)
+#   fit_summary <- fit_rc_realization(dosevar, dataset = ameras_simulated)
 #   saveRDS(fit_summary, file = file.path("fma-fits", paste0(dosevar, ".rds")))
 # }
 # 
@@ -163,7 +166,7 @@ manual_fma$included.samples
 set.seed(100)
 fit_builtin_fma <- suppressWarnings(
   ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-         data = data,
+         data = ameras_simulated,
          family = "gaussian",
          methods = "FMA",
          MFMA = 100000)

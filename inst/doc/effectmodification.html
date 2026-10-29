@@ -355,7 +355,7 @@ coding</a></li>
 </div>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ameras)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(data, <span class="at">package =</span> <span class="st">&quot;ameras&quot;</span>)</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>effect_data <span class="ot">&lt;-</span> ameras_simulated</span></code></pre></div>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>Effect modification is specified inside <code>dose()</code> with the
@@ -383,7 +383,7 @@ coding. For a binary modifier <code>M1</code>, the coefficient named
 and the reference group.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>fit_contrast <span class="ot">&lt;-</span> <span class="fu">ameras</span>(</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">modifier =</span> <span class="sc">~</span> M1) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">data =</span> data,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">data =</span> effect_data,</span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">methods =</span> <span class="st">&quot;RC&quot;</span></span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>)</span>
@@ -406,7 +406,7 @@ subgroup. For the same binary modifier <code>M1</code>, the coefficient
 names are <code>dose[M1=0]</code> and <code>dose[M1=1]</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>fit_subgroup <span class="ot">&lt;-</span> <span class="fu">ameras</span>(</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">modifier =</span> <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> M1) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">data =</span> data,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">data =</span> effect_data,</span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">methods =</span> <span class="st">&quot;RC&quot;</span></span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>)</span>
@@ -450,15 +450,15 @@ contrast parameters are not bounded by the default transformation.</p>
 <h1>Factor modifiers</h1>
 <p>Factor modifiers use the existing level order of the factor. The
 first level is the reference level.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>data<span class="sc">$</span>M_factor <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">ifelse</span>(data<span class="sc">$</span>M1 <span class="sc">==</span> <span class="dv">0</span>, <span class="st">&quot;unexposed modifier group&quot;</span>, <span class="st">&quot;modifier group&quot;</span>),</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>effect_data<span class="sc">$</span>M_factor <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">ifelse</span>(effect_data<span class="sc">$</span>M1 <span class="sc">==</span> <span class="dv">0</span>, <span class="st">&quot;unexposed modifier group&quot;</span>, <span class="st">&quot;modifier group&quot;</span>),</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;unexposed modifier group&quot;</span>, <span class="st">&quot;modifier group&quot;</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>)</span></code></pre></div>
 <p>With <code>modifier = ~ M_factor</code>, ameras reports contrast
 terms for the non-reference levels.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>fit_factor_contrast <span class="ot">&lt;-</span> <span class="fu">ameras</span>(</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">modifier =</span> <span class="sc">~</span> M_factor) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">data =</span> data,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">data =</span> effect_data,</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">methods =</span> <span class="st">&quot;RC&quot;</span></span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>)</span>
@@ -475,7 +475,7 @@ terms for the non-reference levels.</p>
 subgroup-specific effects for all levels.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>fit_factor_subgroup <span class="ot">&lt;-</span> <span class="fu">ameras</span>(</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">modifier =</span> <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> M_factor) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">data =</span> data,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">data =</span> effect_data,</span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">methods =</span> <span class="st">&quot;RC&quot;</span></span>
 <span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>)</span>
@@ -492,14 +492,14 @@ subgroup-specific effects for all levels.</p>
 coding, ameras reports one contrast for each non-reference level. With
 subgroup-specific coding, ameras reports one dose-effect parameter for
 each factor level.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>data<span class="sc">$</span>M3 <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;middle&quot;</span>, <span class="st">&quot;high&quot;</span>), <span class="at">length.out =</span> <span class="fu">nrow</span>(data)),</span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>effect_data<span class="sc">$</span>M3 <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;middle&quot;</span>, <span class="st">&quot;high&quot;</span>), <span class="at">length.out =</span> <span class="fu">nrow</span>(effect_data)),</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;middle&quot;</span>, <span class="st">&quot;high&quot;</span>)</span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>)</span>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>fit_three_level <span class="ot">&lt;-</span> <span class="fu">ameras</span>(</span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">modifier =</span> <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> M3) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="at">data =</span> data,</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="at">data =</span> effect_data,</span>
 <span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
 <span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  <span class="at">methods =</span> <span class="st">&quot;RC&quot;</span></span>
 <span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>)</span>

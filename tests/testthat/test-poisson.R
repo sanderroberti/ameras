@@ -1,5 +1,5 @@
 set.seed(123)
-data("data", package = "ameras")
+data <- ameras_simulated
 
 
 # Poisson, basic model, all methods

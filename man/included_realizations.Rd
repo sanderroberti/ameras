@@ -64,19 +64,18 @@ included_realizations(x, \dots)
 }
 
 \examples{
-data("data", package="ameras")
 dosevars <- paste0("V", 1:10)
 
 ## FMA only
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-              data=data, family="binomial", methods="FMA")
+              data = ameras_simulated, family="binomial", methods="FMA")
 included_realizations(fit)
 length(included_realizations(fit))
 
 ## Both FMA and BMA
 \donttest{% slow
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-               data=data, family="binomial", methods=c("FMA", "BMA"))
+               data = ameras_simulated, family="binomial", methods=c("FMA", "BMA"))
 included_realizations(fit2)
 included_realizations(fit2, methods="FMA")
 included_realizations(fit2, methods="BMA")

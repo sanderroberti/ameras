@@ -5,7 +5,7 @@ test_that("ecdfplot returns a patchwork object with and without mean curves", {
   skip_if_not_installed("tidyr")
   skip_if_not_installed("scales")
 
-  data("data", package = "ameras")
+  data <- ameras_simulated
   plot_data <- data[1:8, ]
   dosevars <- paste0("V", 1:3)
 

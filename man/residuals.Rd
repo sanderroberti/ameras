@@ -171,11 +171,10 @@
 }
 
 \examples{
-data("data", package="ameras")
 dosevars <- paste0("V", 1:10)
 
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-              data=data, family="binomial", methods="RC")
+              data = ameras_simulated, family="binomial", methods="RC")
 
 ## Pearson residuals (default)
 res <- residuals(fit)
@@ -193,19 +192,19 @@ res_v1 <- residuals(fit, dose.col="V1")
 ## Multiple methods
 \donttest{% slow
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-               data=data, family="binomial", methods=c("RC", "ERC"))
+               data = ameras_simulated, family="binomial", methods=c("RC", "ERC"))
 res_erc <- residuals(fit2, method="ERC")
 }
 
 ## With keep.data=FALSE
 fit3 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-               data=data, family="binomial", methods="RC",
+               data = ameras_simulated, family="binomial", methods="RC",
                keep.data=FALSE)
-res <- residuals(fit3, data=data)
+res <- residuals(fit3, data = ameras_simulated)
 
 ## Schoenfeld residuals for proportional hazards model
 fit4 <- ameras(Surv(time, status) ~ dose(all_of(dosevars), model="ERR"),
-               data=data, family="prophaz", methods="RC")
+               data = ameras_simulated, family="prophaz", methods="RC")
 res_sch <- residuals(fit4)
 res_raw_sch <- residuals(fit4, scaled.schoenfeld=FALSE)
 }

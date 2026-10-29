@@ -354,7 +354,6 @@ parallel FMA</a></li>
 </div>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ameras)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(data, <span class="at">package =</span> <span class="st">&quot;ameras&quot;</span>)</span></code></pre></div>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>Frequentist model averaging (<code>FMA</code>) fits the specified
@@ -378,24 +377,24 @@ documentation.</p>
 <h1>Choosing a future plan</h1>
 <p>The default future plan is sequential, so this call uses the ordinary
 single-process FMA path.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>              <span class="at">data =</span> data,</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>              <span class="at">data =</span> ameras_simulated,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>)</span></code></pre></div>
 <p>For parallel FMA on a local machine, <code>multisession</code> is
 usually the most portable choice. It starts separate background R
 sessions and works across the main platforms supported by R, including
 Windows, macOS, and Linux.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>              <span class="at">data =</span> data,</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>              <span class="at">data =</span> ameras_simulated,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span></code></pre></div>
 <p>The <code>multicore</code> backend can be efficient on systems that
 support forking, but it is not available on Windows. For code intended
 to run on multiple platforms, prefer <code>multisession</code>.</p>
@@ -460,15 +459,15 @@ can run at the same time.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>              <span class="at">data =</span> data,</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>,</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>              <span class="at">future.chunk.size.FMA =</span> <span class="dv">2</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>              <span class="at">data =</span> ameras_simulated,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>              <span class="at">future.chunk.size.FMA =</span> <span class="dv">2</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span></code></pre></div>
 <p>Smaller chunks can improve load balancing when some realizations take
 longer to fit than others. Larger chunks can reduce overhead and may be
 preferable when each realization-specific fit is fast. If the
@@ -482,59 +481,59 @@ chunks may keep workers busier.</p>
 <p>The example below compares the same Gaussian FMA fit with a
 sequential plan and a two-worker multisession plan. The seed is reset
 before each call so that the final FMA sampling step is comparable.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>old_plan <span class="ot">&lt;-</span> future<span class="sc">::</span><span class="fu">plan</span>()</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">on.exit</span>(future<span class="sc">::</span><span class="fu">plan</span>(old_plan), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>sequential_elapsed <span class="ot">&lt;-</span> <span class="fu">system.time</span>(</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  sequential_fit <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>           <span class="at">data =</span> data,</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>           <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>,</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>           <span class="at">MFMA =</span> <span class="dv">10000</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  )</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>)[[<span class="st">&quot;elapsed&quot;</span>]]</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>parallel_elapsed <span class="ot">&lt;-</span> <span class="fu">system.time</span>(</span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  parallel_fit <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(</span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>    <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>           <span class="at">data =</span> data,</span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>           <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>,</span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>           <span class="at">MFMA =</span> <span class="dv">10000</span>,</span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>           <span class="at">future.chunk.size.FMA =</span> <span class="dv">2</span>)</span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>  )</span>
-<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>)[[<span class="st">&quot;elapsed&quot;</span>]]</span>
-<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a></span>
-<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(old_plan)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>old_plan <span class="ot">&lt;-</span> future<span class="sc">::</span><span class="fu">plan</span>()</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">on.exit</span>(future<span class="sc">::</span><span class="fu">plan</span>(old_plan), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>sequential_elapsed <span class="ot">&lt;-</span> <span class="fu">system.time</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  sequential_fit <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>           <span class="at">data =</span> ameras_simulated,</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>           <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>           <span class="at">MFMA =</span> <span class="dv">10000</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  )</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>)[[<span class="st">&quot;elapsed&quot;</span>]]</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>parallel_elapsed <span class="ot">&lt;-</span> <span class="fu">system.time</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>  parallel_fit <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>    <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>           <span class="at">data =</span> ameras_simulated,</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>           <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>,</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>           <span class="at">MFMA =</span> <span class="dv">10000</span>,</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>           <span class="at">future.chunk.size.FMA =</span> <span class="dv">2</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>  )</span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>)[[<span class="st">&quot;elapsed&quot;</span>]]</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(old_plan)</span></code></pre></div>
 <p>Compare the coefficient estimates and elapsed runtimes.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>coefficient_comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">names</span>(sequential_fit<span class="sc">$</span>FMA<span class="sc">$</span>coefficients),</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">sequential =</span> <span class="fu">unname</span>(sequential_fit<span class="sc">$</span>FMA<span class="sc">$</span>coefficients),</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">parallel =</span> <span class="fu">unname</span>(parallel_fit<span class="sc">$</span>FMA<span class="sc">$</span>coefficients),</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">NULL</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>)</span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>coefficient_comparison[<span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(coefficient_comparison[<span class="sc">-</span><span class="dv">1</span>], <span class="dv">4</span>)</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>coefficient_comparison</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;          term sequential parallel</span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 1 (Intercept)    -1.2802  -1.2802</span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; 2          X1     0.4829   0.4829</span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; 3          X2    -0.5163  -0.5163</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 4        dose     1.0793   1.0793</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 5       sigma     1.1376   1.1376</span></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="at">plan =</span> <span class="fu">c</span>(<span class="st">&quot;sequential&quot;</span>, <span class="st">&quot;multisession&quot;</span>),</span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  <span class="at">elapsed_seconds =</span> <span class="fu">round</span>(<span class="fu">c</span>(sequential_elapsed, parallel_elapsed), <span class="dv">2</span>)</span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>)</span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt;           plan elapsed_seconds</span></span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; 1   sequential            1.08</span></span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; 2 multisession            1.93</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>coefficient_comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">names</span>(sequential_fit<span class="sc">$</span>FMA<span class="sc">$</span>coefficients),</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">sequential =</span> <span class="fu">unname</span>(sequential_fit<span class="sc">$</span>FMA<span class="sc">$</span>coefficients),</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">parallel =</span> <span class="fu">unname</span>(parallel_fit<span class="sc">$</span>FMA<span class="sc">$</span>coefficients),</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">NULL</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>coefficient_comparison[<span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(coefficient_comparison[<span class="sc">-</span><span class="dv">1</span>], <span class="dv">4</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>coefficient_comparison</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;          term sequential parallel</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; 1 (Intercept)    -1.2802  -1.2802</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; 2          X1     0.4829   0.4829</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 3          X2    -0.5163  -0.5163</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; 4        dose     1.0793   1.0793</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; 5       sigma     1.1376   1.1376</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  <span class="at">plan =</span> <span class="fu">c</span>(<span class="st">&quot;sequential&quot;</span>, <span class="st">&quot;multisession&quot;</span>),</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  <span class="at">elapsed_seconds =</span> <span class="fu">round</span>(<span class="fu">c</span>(sequential_elapsed, parallel_elapsed), <span class="dv">2</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>)</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;           plan elapsed_seconds</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 1   sequential            1.05</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; 2 multisession            1.82</span></span></code></pre></div>
 <p>The estimates should agree up to ordinary numerical precision.
 Parallel execution is not guaranteed to be faster for small examples
 because starting workers and transferring data have overhead. It is most
@@ -548,15 +547,15 @@ step, which is deterministic for ordinary model fits. The random FMA
 sampling step is performed afterward in the main R process. For
 reproducible FMA samples, set the seed before calling
 <code>ameras()</code>, just as in the sequential case.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>              <span class="at">data =</span> data,</span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>)</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>              <span class="at">data =</span> ameras_simulated,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>              <span class="at">methods =</span> <span class="st">&quot;FMA&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span></code></pre></div>
 <p>User-supplied functions passed through <code>transform</code>,
 <code>transform.jacobian</code>, or other runtime arguments should also
 be deterministic. Random number generation inside those functions is not

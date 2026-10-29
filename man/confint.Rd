@@ -184,10 +184,8 @@
 }
 
 \examples{
-data("data", package = "ameras")
-
 ## Fit the model
-fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
                methods = "RC")
 
 ## Wald intervals (fast)
@@ -199,13 +197,13 @@ fit <- confint(fit, type = "proflik", parm = "dose", force = TRUE)
 summary(fit)
 
 ## With keep.data = FALSE, supply data explicitly for proflik
-fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
                methods = "RC", keep.data = FALSE)
-fit2 <- confint(fit2, type = "proflik", data = data)
+fit2 <- confint(fit2, type = "proflik", data = ameras_simulated)
 
 ## FMA and BMA with percentile intervals
 \donttest{% slow
-fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial", 
+fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
                methods = c("FMA", "BMA"))
 fit3 <- confint(fit3, type = "percentile")
 summary(fit3)

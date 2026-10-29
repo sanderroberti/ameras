@@ -9,12 +9,11 @@
   library(ameras)
 
 ## -----------------------------------------------------------------------------
-data(data, package="ameras")
-head(data)
+head(ameras_simulated)
 
 ## ----modelfit.linreg, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")----
 set.seed(12345)
-fit.ameras.linreg <- ameras(Y.gaussian~dose(V1:V10)+X1+X2, data=data, 
+fit.ameras.linreg <- ameras(Y.gaussian~dose(V1:V10)+X1+X2, data = ameras_simulated,
                             family="gaussian", niter.BMA=5000, nburnin.BMA=1000,
                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"))
 
@@ -36,7 +35,7 @@ traceplot(fit.ameras.linreg)
 ## ----modelfit.logreg, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")----
 set.seed(33521)
 fit.ameras.logreg <- ameras(Y.binomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                            data=data, family="binomial", 
+                            data = ameras_simulated, family="binomial",
                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                             niter.BMA = 5000, nburnin.BMA = 1000)
 
@@ -49,7 +48,7 @@ coef(fit.ameras.logreg)
 ## ----modelfit.logreg.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")----
 set.seed(3521216)
 fit.ameras.logreg.lin <- ameras(Y.binomial~dose(V1:V10, deg=1, model="EXP")+X1+X2,  
-                                data=data, family="binomial", 
+                                data = ameras_simulated, family="binomial",
                                 methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                 niter.BMA = 5000, nburnin.BMA = 1000)
 
@@ -62,7 +61,7 @@ coef(fit.ameras.logreg.lin)
 ## ----modelfit.poisson, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")----
 set.seed(332101)
 fit.ameras.poisson <- ameras(Y.poisson~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                             data=data, family="poisson", 
+                             data = ameras_simulated, family="poisson",
                              methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                              niter.BMA = 5000, nburnin.BMA = 1000)
 
@@ -75,7 +74,7 @@ coef(fit.ameras.poisson)
 ## ----modelfit.poisson.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")----
 set.seed(24252)
 fit.ameras.poisson.lin <- ameras(Y.poisson~dose(V1:V10, deg=1, model="EXP")+X1+X2, 
-                                 data=data, family="poisson", 
+                                 data = ameras_simulated, family="poisson",
                                  methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                  niter.BMA = 5000, nburnin.BMA = 1000)
 
@@ -89,7 +88,7 @@ coef(fit.ameras.poisson.lin)
 set.seed(332120000)
 fit.ameras.prophaz <- ameras(Surv(time, status)~
                                dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                             data=data, family="prophaz", 
+                             data = ameras_simulated, family="prophaz",
                              methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                              niter.BMA = 5000, nburnin.BMA = 1000)
 
@@ -106,7 +105,7 @@ fit.ameras.prophaz$BMA$prophaz.timepoints
 set.seed(24978252)
 fit.ameras.prophaz.lin <- ameras(Surv(time, status)~
                                    dose(V1:V10, deg=1, model="EXP")+X1+X2, 
-                                 data=data, family="prophaz", 
+                                 data = ameras_simulated, family="prophaz",
                                  methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                  niter.BMA = 5000, nburnin.BMA = 1000)
 
@@ -120,7 +119,7 @@ coef(fit.ameras.prophaz.lin)
 set.seed(33)
 fit.ameras.multinomial <- ameras(Y.multinomial~
                                    dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                                 data=data, family="multinomial",
+                                 data = ameras_simulated, family="multinomial",
                                  methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                  niter.BMA = 5000, nburnin.BMA = 1000)
 
@@ -134,7 +133,7 @@ coef(fit.ameras.multinomial)
 set.seed(44)
 fit.ameras.multinomial.lin <- ameras(Y.multinomial~
                                        dose(V1:V10, deg=1, model="EXP")+X1+X2, 
-                                     data=data, family="multinomial",
+                                     data = ameras_simulated, family="multinomial",
                                      methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                      niter.BMA = 5000, nburnin.BMA = 1000)
 
@@ -147,7 +146,7 @@ coef(fit.ameras.multinomial.lin)
 ## ----modelfit.clogit, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")----
 set.seed(3301)
 fit.ameras.clogit <- ameras(Y.clogit~dose(V1:V10, deg=2, model="EXP")+X1+X2+
-                              strata(setnr), data=data, family="clogit", 
+                              strata(setnr), data = ameras_simulated, family="clogit",
                             methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                             niter.BMA = 5000, nburnin.BMA = 1000)
 
@@ -160,7 +159,7 @@ coef(fit.ameras.clogit)
 ## ----modelfit.clogit.lin, cache=TRUE, eval = identical(Sys.getenv("NOT_CRAN"), "true")----
 set.seed(4401)
 fit.ameras.clogit.lin <- ameras(Y.clogit~dose(V1:V10, deg=1, model="EXP")+X1+X2+
-                                  strata(setnr), data=data, family="clogit", 
+                                  strata(setnr), data = ameras_simulated, family="clogit",
                                 methods=c("RC", "ERC", "MCML", "FMA", "BMA"), 
                                 niter.BMA = 5000, nburnin.BMA = 1000)
 

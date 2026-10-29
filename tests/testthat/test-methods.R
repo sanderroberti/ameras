@@ -1,5 +1,5 @@
 set.seed(123)
-data("data", package = "ameras")
+data <- ameras_simulated
 
 test_that("binomial accessors and diagnostic plots return structured results", {
   skip_on_cran()

@@ -12,14 +12,11 @@ run_parallel_examples <- future_available
 ## ----setup--------------------------------------------------------------------
 library(ameras)
 
-## ----data---------------------------------------------------------------------
-data(data, package = "ameras")
-
 ## ----sequential-plan, eval = FALSE--------------------------------------------
 # future::plan(future::sequential)
 # 
 # fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-#               data = data,
+#               data = ameras_simulated,
 #               family = "gaussian",
 #               methods = "FMA")
 
@@ -27,7 +24,7 @@ data(data, package = "ameras")
 # future::plan(future::multisession, workers = 2)
 # 
 # fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-#               data = data,
+#               data = ameras_simulated,
 #               family = "gaussian",
 #               methods = "FMA")
 # 
@@ -37,7 +34,7 @@ data(data, package = "ameras")
 # future::plan(future::multisession, workers = 2)
 # 
 # fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-#               data = data,
+#               data = ameras_simulated,
 #               family = "gaussian",
 #               methods = "FMA",
 #               future.chunk.size.FMA = 2)
@@ -53,7 +50,7 @@ set.seed(2024)
 sequential_elapsed <- system.time(
   sequential_fit <- suppressWarnings(
     ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-           data = data,
+           data = ameras_simulated,
            family = "gaussian",
            methods = "FMA",
            MFMA = 10000)
@@ -65,7 +62,7 @@ set.seed(2024)
 parallel_elapsed <- system.time(
   parallel_fit <- suppressWarnings(
     ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-           data = data,
+           data = ameras_simulated,
            family = "gaussian",
            methods = "FMA",
            MFMA = 10000,
@@ -96,7 +93,7 @@ data.frame(
 # 
 # set.seed(2024)
 # fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-#               data = data,
+#               data = ameras_simulated,
 #               family = "gaussian",
 #               methods = "FMA")
 # 

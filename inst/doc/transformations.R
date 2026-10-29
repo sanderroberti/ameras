@@ -18,8 +18,8 @@ transform1 <- function(params, index.t=1:length(params), lowlimit=rep(0,length(i
   params[index.t] <- exp(params[index.t]) + lowlimit
   if(boundcheck){
     if(any(params[index.t]-lowlimit < boundtol)) 
-      warning(paste0("WARNING: one or multiple parameter estimates within ", boundtol, " of 
-        lower bounds. Try different bounds or starting values."))
+      warning(paste0("one or multiple parameter estimates within ", boundtol,
+        " of lower bounds. Try different bounds or starting values."))
   }
   return(params)
 }
@@ -48,7 +48,7 @@ transform.sigmoid <- function(params, index.t=1:length(params), a=rep(0,length(i
   params[index.t] <- a + (b-a) * 1/(1+exp(-1*params[index.t]))
   if(boundcheck){
     if(any( (params[index.t]-a < boundtol) | (b-params[index.t] < boundtol))) 
-      warning(paste0("WARNING: one or multiple parameter estimates within ", boundtol, 
+      warning(paste0("one or multiple parameter estimates within ", boundtol,
       " of bounds. Try different bounds or starting values."))
   }
   return(params)
@@ -71,14 +71,13 @@ transform.sigmoid.jacobian <- function(params, index.t=1:length(params),
 }
 
 ## ----modelfit.sigmoid---------------------------------------------------------
-data(data, package="ameras")
-fit.ameras.sigmoid <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data=data, 
+fit.ameras.sigmoid <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods="RC", transform=transform.sigmoid, 
                             transform.jacobian=transform.sigmoid.jacobian, index.t=4:5)
 summary(fit.ameras.sigmoid)
 
 ## ----modelfit.transform1------------------------------------------------------
-fit.ameras.transform1 <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data=data, 
+fit.ameras.transform1 <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods="RC")
 summary(fit.ameras.transform1)
 

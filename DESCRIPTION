@@ -23,6 +23,8 @@ Authors@R: c(person(given = "Sander",
                 person(given = "U.S. National Cancer Institute",
                        role = c("cph", "fnd")))
 Depends: R (>= 4.1.0), stats, nimble
+LazyData: true
+LazyDataCompression: xz
 Suggests: 
     knitr,
     nnet,

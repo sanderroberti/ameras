@@ -38,7 +38,7 @@ make_extreme_aic_data <- function(two_good = TRUE) {
 }
 
 test_that("ameras forwards optim.method to FMA", {
-  data("data", package = "ameras")
+  data <- ameras_simulated
   captured <- NULL
 
   testthat::with_mocked_bindings(
@@ -263,7 +263,7 @@ fit_fma_quietly <- function(formula, data, family) {
 test_that("FMA LINEXP parameter names are set with and without modifiers", {
   skip_on_cran()
 
-  data("data", package = "ameras")
+  data <- ameras_simulated
   linexp_data <- data
   # A zero modifier is intentionally inert: it makes M non-null so the modifier
   # parname branch is exercised without changing the fitted LINEXP dose effect.
@@ -362,7 +362,7 @@ test_that("FMA LINEXP parameter names are set with and without modifiers", {
 test_that("FMA non-LINEXP parameter names include modifier terms", {
   skip_on_cran()
 
-  data("data", package = "ameras")
+  data <- ameras_simulated
 
   # EXP reaches the doseRRmod != "LINEXP" parname branch without the lower-bound
   # fragility of ERR models. deg = 2 also covers the dose_squared modifier names.
@@ -431,7 +431,7 @@ test_that("FMA non-LINEXP parameter names include modifier terms", {
 test_that("FMA multinomial LINEXP parameter names include level prefixes", {
   skip_on_cran()
 
-  data("data", package = "ameras")
+  data <- ameras_simulated
   linexp_data <- data
   # As above, this safely reaches the non-null M branch for LINEXP parnames.
   linexp_data$Mzero <- 0
@@ -485,7 +485,7 @@ test_that("FMA multinomial LINEXP parameter names include level prefixes", {
 test_that("FMA multinomial non-LINEXP names include modifiers and prefixes", {
   skip_on_cran()
 
-  data("data", package = "ameras")
+  data <- ameras_simulated
 
   expected_base_m <- c(
     "(Intercept)",

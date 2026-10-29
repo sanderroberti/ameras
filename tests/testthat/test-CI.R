@@ -1,5 +1,5 @@
 set.seed(123)
-data("data", package = "ameras")
+data <- ameras_simulated
 
 
 canonicalize_unresolved_profile_ci <- function(ci) {

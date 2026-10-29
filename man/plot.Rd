@@ -128,12 +128,11 @@
 }
 
 \examples{
-data("data", package="ameras")
 dosevars <- paste0("V", 1:10)
 
 ## Binomial model
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-              data=data, family="binomial", methods="RC")
+              data = ameras_simulated, family="binomial", methods="RC")
 
 ## Both diagnostic plots for RC
 plot(fit)
@@ -147,18 +146,18 @@ plot(fit, type="deviance")
 ## Multiple methods
 \donttest{% slow
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-               data=data, family="binomial", methods=c("RC", "ERC"))
+               data = ameras_simulated, family="binomial", methods=c("RC", "ERC"))
 plot(fit2)
 }
 
 ## With keep.data=FALSE, supply data explicitly
 fit3 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-               data=data, family="binomial", methods="RC",
+               data = ameras_simulated, family="binomial", methods="RC",
                keep.data=FALSE)
-plot(fit3, data=data)
+plot(fit3, data = ameras_simulated)
 
 ## Schoenfeld residual plot
 fit4 <- ameras(Surv(time, status) ~ dose(all_of(dosevars), model = "ERR"),
-              data = data, family = "prophaz", methods = "RC")
+              data = ameras_simulated, family = "prophaz", methods = "RC")
 plot(fit4)
 }

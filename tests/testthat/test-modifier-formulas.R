@@ -1,5 +1,5 @@
 three_level_modifier_data <- function() {
-  data("data", package = "ameras")
+  data <- ameras_simulated
   data$F3 <- factor(
     rep(c("low", "mid", "high"), length.out = nrow(data)),
     levels = c("low", "mid", "high")
@@ -176,7 +176,7 @@ test_that("formula modifier validation rejects unsupported terms", {
 test_that("legacy modifier syntax is deprecated but preserves RC output", {
   skip_on_cran()
 
-  data("data", package = "ameras")
+  data <- ameras_simulated
 
   lifecycle::expect_deprecated(
     legacy <- suppressMessages(ameras(
@@ -202,7 +202,7 @@ test_that("legacy modifier syntax is deprecated but preserves RC output", {
 test_that("subgroup-coded modifiers report subgroup dose coefficients", {
   skip_on_cran()
 
-  data("data", package = "ameras")
+  data <- ameras_simulated
 
   contrast <- suppressMessages(ameras(
     Y.binomial ~ dose(V1:V2, model = "EXP", modifier = ~ M1),
@@ -586,7 +586,7 @@ test_that("subgroup-coded modifiers report subgroup BMA samples", {
 
 test_that("formula contrast modifiers remain supported for BMA", {
   skip_on_cran()
-  data("data", package = "ameras")
+  data <- ameras_simulated
 
   # A binary formula modifier creates one internal design column. Keep a real
   # BMA fit here because NIMBLE distinguishes that vector case from the matrix

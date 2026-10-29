@@ -53,7 +53,7 @@ between curves reflects between-individual variation.
 ``` r
 library(ameras)
 #> Loading required package: nimble
-#> nimble version 1.4.2 is loaded.
+#> nimble version 1.4.3 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
 #> 
@@ -64,8 +64,7 @@ library(ameras)
 #> The following object is masked from 'package:base':
 #> 
 #>     declare
-data(data, package="ameras")
-ecdfplot(data, paste0("V", 1:10), show.mean = FALSE)
+ecdfplot(ameras_simulated, paste0("V", 1:10), show.mean = FALSE)
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" alt="" width="100%" />
@@ -74,7 +73,7 @@ Next, we apply all available methods to the data:
 
 ``` r
 set.seed(12345) # For reproducibility
-fit <- ameras(Y.binomial~dose(V1:V10), data, family="binomial", 
+fit <- ameras(Y.binomial~dose(V1:V10), data = ameras_simulated, family="binomial",
               methods=c("RC","ERC","MCML", "FMA", "BMA"))
 #> Note: BMA may require extensive computation time
 #> Fitting RC
@@ -105,21 +104,22 @@ fit <- ameras(Y.binomial~dose(V1:V10), data, family="binomial",
 #> |-------------------------------------------------------|
 summary(fit)
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
-#>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
+#> ameras(formula = Y.binomial ~ dose(V1:V10), data = ameras_simulated, 
+#>     family = "binomial", methods = c("RC", "ERC", "MCML", "FMA", 
+#>         "BMA"))
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 52.2 seconds
+#> Total CPU runtime: 68.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.025 0.0  0.025
-#>     ERC  8.284 0.0  8.284
-#>    MCML  0.126 0.0  0.126
-#>     FMA  0.341 0.0  0.341
-#>     BMA 43.375 0.0 43.375
+#>      RC  0.036 0.0  0.036
+#>     ERC 11.041 0.0 11.041
+#>    MCML  0.182 0.0  0.182
+#>     FMA  0.410 0.0  0.410
+#>     BMA 56.460 0.0 56.460
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -173,21 +173,22 @@ fit <- confint(fit, type=c("wald.orig","percentile"))
 #> dose         0.552  1.080
 summary(fit)
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10), data = data, family = "binomial", 
-#>     methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
+#> ameras(formula = Y.binomial ~ dose(V1:V10), data = ameras_simulated, 
+#>     family = "binomial", methods = c("RC", "ERC", "MCML", "FMA", 
+#>         "BMA"))
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 52.2 seconds
+#> Total CPU runtime: 68.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>      RC  0.025 0.001  0.026
-#>     ERC  8.284 0.000  8.284
-#>    MCML  0.126 0.000  0.126
-#>     FMA  0.341 0.004  0.345
-#>     BMA 43.375 0.000 43.375
+#>      RC  0.036 0.001  0.037
+#>     ERC 11.041 0.000 11.041
+#>    MCML  0.182 0.000  0.182
+#>     FMA  0.410 0.007  0.417
+#>     BMA 56.460 0.000 56.460
 #> 
 #> Summary of coefficients by method:
 #> 

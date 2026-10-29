@@ -374,18 +374,17 @@ excess relative risk model (<code>model = &quot;ERR&quot;</code>). To compare wi
 ordinary <code>glm()</code> fits, use the exponential relative risk
 model (<code>model = &quot;EXP&quot;</code>), which puts the dose coefficient on
 the usual logit or log-link scale.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(data, <span class="at">package =</span> <span class="st">&quot;ameras&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="do">## Use one exposure realization as the single observed dose.</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>data<span class="sc">$</span>D <span class="ot">&lt;-</span> data<span class="sc">$</span>V1</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">head</span>(data[<span class="fu">c</span>(<span class="st">&quot;D&quot;</span>, <span class="st">&quot;Y.gaussian&quot;</span>, <span class="st">&quot;Y.binomial&quot;</span>, <span class="st">&quot;Y.poisson&quot;</span>, <span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>)])</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;            D  Y.gaussian Y.binomial Y.poisson X1 X2</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 1 0.42868043 -0.32647093          0         0  0  0</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 2 0.73321154 -0.18734036          1         0  1  0</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 3 0.70369712  0.08404044          0         2  0  0</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 4 0.01845324  0.22432504          0         0  0  0</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 5 0.39389441 -0.46317255          0         0  1  0</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 6 0.01493158 -1.41036573          0         0  1  1</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="do">## Use one exposure realization as the single observed dose.</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>standard_data <span class="ot">&lt;-</span> ameras_simulated</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>standard_data<span class="sc">$</span>D <span class="ot">&lt;-</span> standard_data<span class="sc">$</span>V1</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">head</span>(standard_data[<span class="fu">c</span>(<span class="st">&quot;D&quot;</span>, <span class="st">&quot;Y.gaussian&quot;</span>, <span class="st">&quot;Y.binomial&quot;</span>, <span class="st">&quot;Y.poisson&quot;</span>, <span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>)])</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;            D  Y.gaussian Y.binomial Y.poisson X1 X2</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 1 0.42868043 -0.32647093          0         0  0  0</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 2 0.73321154 -0.18734036          1         0  1  0</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 3 0.70369712  0.08404044          0         2  0  0</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 4 0.01845324  0.22432504          0         0  0  0</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 5 0.39389441 -0.46317255          0         0  1  0</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 6 0.01493158 -1.41036573          0         0  1  1</span></span></code></pre></div>
 <p>This small helper prints matching coefficients from an
 <code>ameras</code> fit and a standard R model. The dose coefficient is
 named <code>dose</code> by <code>ameras</code> and <code>D</code> by the
@@ -413,10 +412,10 @@ numerical difference. The <code>ameras</code> fit also estimates
 <code>sigma</code>, so the comparison below only shows the regression
 coefficients.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>fit_ameras_gaussian <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.gaussian <span class="sc">~</span> <span class="fu">dose</span>(D) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                              <span class="at">data =</span> data,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                              <span class="at">data =</span> standard_data,</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                              <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>)</span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y.gaussian <span class="sc">~</span> D <span class="sc">+</span> X1 <span class="sc">+</span> X2, <span class="at">data =</span> data)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y.gaussian <span class="sc">~</span> D <span class="sc">+</span> X1 <span class="sc">+</span> X2, <span class="at">data =</span> standard_data)</span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="fu">compare_coefficients</span>(fit_ameras_gaussian, fit_lm)</span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;          term  ameras standard</span></span>
@@ -432,7 +431,7 @@ coefficients.</p>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                               <span class="at">print =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">summary</span>(fit_ameras_gaussian)</span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = data, </span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = standard_data, </span></span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt;     family = &quot;gaussian&quot;)</span></span>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
@@ -459,11 +458,11 @@ coefficients.</p>
 usual logistic regression parameterization used by
 <code>glm(..., family = binomial())</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>fit_ameras_binomial <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial <span class="sc">~</span> <span class="fu">dose</span>(D, <span class="at">model =</span> <span class="st">&quot;EXP&quot;</span>) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                              <span class="at">data =</span> data,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                              <span class="at">data =</span> standard_data,</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                              <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>fit_glm_binomial <span class="ot">&lt;-</span> <span class="fu">glm</span>(Y.binomial <span class="sc">~</span> D <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                        <span class="at">data =</span> data,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                        <span class="at">data =</span> standard_data,</span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>                        <span class="at">family =</span> <span class="fu">binomial</span>())</span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
 <span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">compare_coefficients</span>(fit_ameras_binomial, fit_glm_binomial)</span>
@@ -480,11 +479,11 @@ usual logistic regression parameterization used by
 directly comparable to the coefficient for <code>D</code> in
 <code>glm(..., family = poisson())</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>fit_ameras_poisson <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.poisson <span class="sc">~</span> <span class="fu">dose</span>(D, <span class="at">model =</span> <span class="st">&quot;EXP&quot;</span>) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                             <span class="at">data =</span> data,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                             <span class="at">data =</span> standard_data,</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>                             <span class="at">family =</span> <span class="st">&quot;poisson&quot;</span>)</span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>fit_glm_poisson <span class="ot">&lt;-</span> <span class="fu">glm</span>(Y.poisson <span class="sc">~</span> D <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>                       <span class="at">data =</span> data,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>                       <span class="at">data =</span> standard_data,</span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>                       <span class="at">family =</span> <span class="fu">poisson</span>())</span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="fu">compare_coefficients</span>(fit_ameras_poisson, fit_glm_poisson)</span>
@@ -518,21 +517,21 @@ changes only in the <code>dose()</code> term. For example, replacing
 <code>D</code> by <code>V1:V10</code> fits the default <code>RC</code>
 analysis using all 10 realizations:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>fit_ameras_rc <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">model =</span> <span class="st">&quot;EXP&quot;</span>) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                        <span class="at">data =</span> data,</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                        <span class="at">data =</span> standard_data,</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>                        <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="fu">summary</span>(fit_ameras_rc)</span>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;EXP&quot;) + X1 + </span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt;     X2, data = data, family = &quot;binomial&quot;)</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt;     X2, data = standard_data, family = &quot;binomial&quot;)</span></span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
 <span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.1 seconds</span></span>
 <span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt;      RC 0.194 0.0 0.194</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt;      RC 0.129 0.0 0.129</span></span>
 <span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -546,7 +545,7 @@ analysis using all 10 realizations:</p>
 <p>Other methods can then be added through the <code>methods</code>
 argument:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>fit_ameras_all <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">model =</span> <span class="st">&quot;EXP&quot;</span>) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>                         <span class="at">data =</span> data,</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>                         <span class="at">data =</span> standard_data,</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>                         <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>,</span>
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>                         <span class="at">methods =</span> <span class="fu">c</span>(<span class="st">&quot;RC&quot;</span>, <span class="st">&quot;ERC&quot;</span>, <span class="st">&quot;MCML&quot;</span>, <span class="st">&quot;FMA&quot;</span>, <span class="st">&quot;BMA&quot;</span>))</span></code></pre></div>
 </div>

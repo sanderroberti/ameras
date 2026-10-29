@@ -36,7 +36,6 @@ When using a log-scale for the x-axis, any zero dose values are excluded before 
 
 \examples{
   if (requireNamespace("ggplot2", quietly = TRUE)) {
-   data(data, package="ameras")
-   ecdfplot(data,  dosevars=paste0("V", 1:10))
+   ecdfplot(ameras_simulated, dosevars=paste0("V", 1:10))
   }
 }

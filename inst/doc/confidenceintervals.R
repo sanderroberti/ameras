@@ -9,9 +9,8 @@ library(ameras)
 
 
 ## ----fits1, eval = identical(Sys.getenv("NOT_CRAN"), "true")------------------
-data(data, package="ameras")
 dosevars <- paste0("V", 1:10)
-fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
+fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods=c("RC"))
 
 fit.ameras.waldorig <- confint(fit.ameras, type="wald.orig")
@@ -24,7 +23,7 @@ summary(fit.ameras.proflik)
 
 ## ----fits2, eval = identical(Sys.getenv("NOT_CRAN"), "true")------------------
 set.seed(123)
-fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
+fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods=c("FMA"))
 
 fit.ameras.hpd <- confint(fit.ameras2, type="hpd")

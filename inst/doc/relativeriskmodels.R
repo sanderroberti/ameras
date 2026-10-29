@@ -7,21 +7,20 @@ knitr::opts_chunk$set(
 ## ----setup--------------------------------------------------------------------
 library(ameras)
 library(ggplot2)
-data(data, package="ameras")
 
 ## ----modelfit.exp-------------------------------------------------------------
 fit.ameras.exp <- ameras(Y.binomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                         data=data, family="binomial", methods="RC")
+                         data = ameras_simulated, family="binomial", methods="RC")
 summary(fit.ameras.exp)
 
 ## ----modelfit.err-------------------------------------------------------------
 fit.ameras.err <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, 
-                         data=data, family="binomial", methods="RC")
+                         data = ameras_simulated, family="binomial", methods="RC")
 summary(fit.ameras.err)
 
 ## ----modelfit.linexp----------------------------------------------------------
 fit.ameras.linexp <- ameras(Y.binomial~dose(V1:V10, model="LINEXP")+X1+X2, 
-                         data=data, family="binomial", methods="RC")
+                         data = ameras_simulated, family="binomial", methods="RC")
 summary(fit.ameras.linexp)
 
 ## ----comparison, fig.width=7, fig.height=6------------------------------------
