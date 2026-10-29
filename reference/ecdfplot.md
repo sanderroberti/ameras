@@ -62,7 +62,9 @@ before plotting.
 ## Examples
 
 ``` r
+
   if (requireNamespace("ggplot2", quietly = TRUE)) {
    ecdfplot(ameras_simulated, dosevars=paste0("V", 1:10))
   }
+
 ```
