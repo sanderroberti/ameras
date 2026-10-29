@@ -118,20 +118,21 @@
 
 # gaussian snapshot: BMA
 
-    structure(list(BMA = c(-0.861958020735241, 0.489237791565475, 
-    0.146517933894224, 1.15212167686837)), class = "data.frame", row.names = c("(Intercept)", 
+    structure(list(BMA = c(-0.865545198845152, 0.492414885648207, 
+    0.146708521506299, 1.15277372803488)), class = "data.frame", row.names = c("(Intercept)", 
     "dose", "dose_squared", "sigma"))
 
 ---
 
-    c("(Intercept)" = 0.0376518764716656, dose = 0.0504117706009074, 
-    dose_squared = 0.013474665369558, sigma = 0.014467480212073)
+    c("(Intercept)" = 0.0368031703083119, dose = 0.0516043236200789, 
+    dose_squared = 0.0127048298740318, sigma = 0.0153933895529918
+    )
 
 ---
 
-    structure(list(lower = c(-0.935296317414493, 0.37948574238812, 
-    0.112552078466992, 1.1230401996803), upper = c(-0.781109625205653, 
-    0.597355421941769, 0.169978840321331, 1.18008386662221)), class = "data.frame", row.names = c("(Intercept)", 
+    structure(list(lower = c(-0.937106350969412, 0.392982996857579, 
+    0.119102751044606, 1.12302748079812), upper = c(-0.792957941271946, 
+    0.595296000218073, 0.170089894885922, 1.18291221306613)), class = "data.frame", row.names = c("(Intercept)", 
     "dose", "dose_squared", "sigma"))
 
 ---
@@ -140,8 +141,8 @@
       print(summary(fit)$summary_table, digits = 2)
     Output
         Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (Intercept)    -0.86 0.038    -0.94    -0.78  1.0   124
-      2    BMA         dose     0.49 0.050     0.38     0.60  1.1    50
-      3    BMA dose_squared     0.15 0.013     0.11     0.17  1.1    39
-      4    BMA        sigma     1.15 0.014     1.12     1.18  1.0   206
+      1    BMA  (Intercept)    -0.87 0.037    -0.94    -0.79    1   690
+      2    BMA         dose     0.49 0.052     0.39     0.60    1   393
+      3    BMA dose_squared     0.15 0.013     0.12     0.17    1   391
+      4    BMA        sigma     1.15 0.015     1.12     1.18    1  1846
 

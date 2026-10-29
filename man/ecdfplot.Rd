@@ -35,7 +35,9 @@ When using a log-scale for the x-axis, any zero dose values are excluded before 
 }
 
 \examples{
+\donttest{% slow
   if (requireNamespace("ggplot2", quietly = TRUE)) {
    ecdfplot(ameras_simulated, dosevars=paste0("V", 1:10))
   }
+}
 }

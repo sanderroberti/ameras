@@ -29,63 +29,61 @@ test_that("public methods warn about unused dots", {
       )
     )
   ))
-  count_chk_dots_warnings <- function(expr) {
+  count_unused_dots_warnings <- function(expr) {
     n <- 0L
     withCallingHandlers(
       force(expr),
-      chkDotsWarning = function(cnd) {
-        n <<- n + 1L
-        invokeRestart("muffleWarning")
+      warning = function(cnd) {
+        if (grepl("extra argument", conditionMessage(cnd), fixed = TRUE)) {
+          n <<- n + 1L
+          invokeRestart("muffleWarning")
+        }
       }
     )
     n
   }
+  expect_unused_dots_warning <- function(expr) {
+    expect_warning(expr, "extra argument")
+  }
 
-  expect_warning(vcov(fit, typo = TRUE), class = "chkDotsWarning")
-  expect_warning(coef(fit, typo = TRUE), class = "chkDotsWarning")
-  expect_warning(summary(fit, typo = TRUE), class = "chkDotsWarning")
+  expect_unused_dots_warning(vcov(fit, typo = TRUE))
+  expect_unused_dots_warning(coef(fit, typo = TRUE))
+  expect_unused_dots_warning(summary(fit, typo = TRUE))
   expect_identical(
-    count_chk_dots_warnings(summary_table(fit, typo = TRUE)),
+    count_unused_dots_warnings(summary_table(fit, typo = TRUE)),
     1L
   )
-  expect_warning(Rhat(fit, typo = TRUE), class = "chkDotsWarning")
-  expect_warning(
-    included_realizations(fit, typo = TRUE),
-    class = "chkDotsWarning"
-  )
-  expect_warning(
-    capture.output(suppressMessages(confint(fit, print = FALSE, typo = TRUE))),
-    class = "chkDotsWarning"
+  expect_unused_dots_warning(Rhat(fit, typo = TRUE))
+  expect_unused_dots_warning(included_realizations(fit, typo = TRUE))
+  expect_unused_dots_warning(
+    capture.output(suppressMessages(confint(fit, print = FALSE, typo = TRUE)))
   )
   expect_identical(
-    count_chk_dots_warnings(capture.output(print(fit, typo = TRUE))),
+    count_unused_dots_warnings(capture.output(print(fit, typo = TRUE))),
     1L
   )
   expect_identical(
-    count_chk_dots_warnings(capture.output(print(summary(fit), typo = TRUE))),
+    count_unused_dots_warnings(capture.output(print(summary(fit), typo = TRUE))),
     1L
   )
 
-  expect_warning(
+  expect_unused_dots_warning(
     expect_error(
       convergence(fit, methods = "FMA", typo = TRUE),
       "available for RC, ERC, and MCML"
-    ),
-    class = "chkDotsWarning"
+    )
   )
-  expect_warning(
+  expect_unused_dots_warning(
     expect_error(
       residuals(fit, type = "schoenfeld", typo = TRUE),
       "schoenfeld residuals not supported"
-    ),
-    class = "chkDotsWarning"
+    )
   )
-  expect_warning(
+  expect_unused_dots_warning(
     expect_error(
       dose_lrt(fit, methods = "FMA", typo = TRUE),
       "supports RC, ERC, and MCML"
-    ),
-    class = "chkDotsWarning"
+    )
   )
 })
 

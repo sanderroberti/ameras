@@ -20,8 +20,8 @@ for (method in all_methods) {
       M = NULL,
       data = data,
       methods = method,
-      niter.BMA = 1000,
-      nburnin.BMA = 500
+      niter.BMA = 5000,
+      nburnin.BMA = 1000
     )
     fit <- confint(fit, type = c("wald.orig", "percentile"))
     expect_snapshot_value(
