@@ -19,7 +19,7 @@
 ---
 
     Code
-      print(summary(fit1)$summary_table, digits = 2)
+      print_summary_snapshot(fit1)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1     RC  (Intercept)   -0.696 0.085       NA       NA
@@ -47,7 +47,7 @@
 ---
 
     Code
-      print(summary(fit2)$summary_table, digits = 2)
+      print_summary_snapshot(fit2)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1     RC  (Intercept)   -0.696 0.085 -8.6e-01    -0.53
@@ -75,7 +75,7 @@
 ---
 
     Code
-      print(summary(fit1)$summary_table, digits = 2)
+      print_summary_snapshot(fit1)
     Output
         Method         Term Estimate      SE CI.lower CI.upper
       1    ERC  (Intercept) -6.9e-01 0.05255       NA       NA
@@ -102,7 +102,7 @@
 ---
 
     Code
-      print(summary(fit2)$summary_table, digits = 2)
+      print_summary_snapshot(fit2)
     Output
         Method         Term Estimate      SE CI.lower CI.upper
       1    ERC  (Intercept) -6.9e-01 0.05255    -0.80    -0.59
@@ -130,7 +130,7 @@
 ---
 
     Code
-      print(summary(fit1)$summary_table, digits = 2)
+      print_summary_snapshot(fit1)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1   MCML  (Intercept)  -0.6781 0.084       NA       NA
@@ -158,7 +158,7 @@
 ---
 
     Code
-      print(summary(fit2)$summary_table, digits = 2)
+      print_summary_snapshot(fit2)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1   MCML  (Intercept)  -0.6781 0.084 -8.4e-01 -5.1e-01
@@ -186,7 +186,7 @@
 ---
 
     Code
-      print(summary(fit1)$summary_table, digits = 2)
+      print_summary_snapshot(fit1)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1    FMA  (Intercept)   -0.679 0.083    -0.84    -0.52
@@ -214,7 +214,7 @@
 ---
 
     Code
-      print(summary(fit2)$summary_table, digits = 2)
+      print_summary_snapshot(fit2)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1    FMA  (Intercept)   -0.679 0.083    -0.85    -0.52
@@ -242,12 +242,13 @@
 ---
 
     Code
-      print(summary(fit1)$summary_table, digits = 2)
+      print_summary_snapshot(fit1)
     Output
-        Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (Intercept)    -0.73 0.109    -1.00    -0.55  1.4    22
-      2    BMA         dose     0.14 0.257    -0.27     0.69  1.5    21
-      3    BMA dose_squared     0.25 0.073     0.11     0.39  1.3    45
+        Method         Term Estimate    SE CI.lower CI.upper
+      1    BMA  (Intercept)    -0.73 0.109    -1.00    -0.55
+      2    BMA         dose     0.14 0.257    -0.27     0.69
+      3    BMA dose_squared     0.25 0.073     0.11     0.39
+
 
 ---
 
@@ -270,10 +271,10 @@
 ---
 
     Code
-      print(summary(fit2)$summary_table, digits = 2)
+      print_summary_snapshot(fit2)
     Output
-        Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (Intercept)    -0.73 0.109    -0.93    -0.53  1.4    22
-      2    BMA         dose     0.14 0.257    -0.27     0.69  1.5    21
-      3    BMA dose_squared     0.25 0.073     0.13     0.40  1.3    45
+        Method         Term Estimate    SE CI.lower CI.upper
+      1    BMA  (Intercept)    -0.73 0.109    -0.93    -0.53
+      2    BMA         dose     0.14 0.257    -0.27     0.69
+      3    BMA dose_squared     0.25 0.073     0.13     0.40
 

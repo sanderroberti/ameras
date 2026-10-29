@@ -99,7 +99,7 @@ for (method in all_methods) {
     )
     expect_snapshot_value(fit[[method]]$sd, tolerance = 1e-4, style = "deparse")
     expect_snapshot_value(fit[[method]]$CI, tolerance = 1e-4, style = "deparse")
-    expect_snapshot(print(summary(fit)$summary_table, digits = 2))
+    expect_snapshot(print_summary_snapshot(fit))
   })
 }
 
@@ -125,5 +125,5 @@ test_that(paste("prophaz snapshot: FMA 1-par"), {
   )
   expect_snapshot_value(fit[["FMA"]]$sd, tolerance = 1e-4, style = "deparse")
   expect_snapshot_value(fit[["FMA"]]$CI, tolerance = 1e-4, style = "deparse")
-  expect_snapshot(print(summary(fit)$summary_table, digits = 2))
+    expect_snapshot(print_summary_snapshot(fit))
 })

@@ -31,6 +31,12 @@ for (method in all_methods) {
     )
     expect_snapshot_value(fit[[method]]$sd, tolerance = 1e-4, style = "deparse")
     expect_snapshot_value(fit[[method]]$CI, tolerance = 1e-4, style = "deparse")
-    expect_snapshot(print(summary(fit)$summary_table, digits = 2))
+    if (method == "BMA") {
+      expect_snapshot(print_summary_snapshot(
+        fit, max_rhat = 1.2, min_n_eff = 300
+      ))
+    } else {
+      expect_snapshot(print_summary_snapshot(fit))
+    }
   })
 }

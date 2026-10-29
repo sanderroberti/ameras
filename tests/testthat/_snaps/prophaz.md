@@ -17,7 +17,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1     RC         dose    0.576 0.087    0.405  7.5e-01
@@ -42,7 +42,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method         Term Estimate SE CI.lower CI.upper
       1    ERC         dose    0.329 NA       NA       NA
@@ -68,7 +68,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1   MCML         dose    0.581 0.078    0.428    0.735
@@ -94,7 +94,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1    FMA         dose    0.582 0.079    0.427     0.74
@@ -132,21 +132,21 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
-         Method         Term Estimate    SE CI.lower CI.upper Rhat n.eff
-      1     BMA         dose    0.593 0.087    0.416     0.74    1    71
-      2     BMA dose_squared   -0.041 0.016   -0.071    -0.01    1    83
-      3     BMA        h0[1]    0.437 0.065    0.322     0.58    1   622
-      4     BMA        h0[2]    0.470 0.070    0.342     0.62    1   667
-      5     BMA        h0[3]    0.362 0.053    0.266     0.48    1   622
-      6     BMA        h0[4]    0.399 0.059    0.293     0.53    1   867
-      7     BMA        h0[5]    0.425 0.063    0.308     0.56    1   720
-      8     BMA        h0[6]    0.535 0.078    0.394     0.70    1   551
-      9     BMA        h0[7]    0.363 0.053    0.267     0.48    1   773
-      10    BMA        h0[8]    0.416 0.062    0.309     0.55    1   592
-      11    BMA        h0[9]    0.365 0.053    0.273     0.48    1   480
-      12    BMA       h0[10]    0.409 0.059    0.305     0.54    1   574
+         Method         Term Estimate    SE CI.lower CI.upper
+      1     BMA         dose    0.593 0.087    0.416     0.74
+      2     BMA dose_squared   -0.041 0.016   -0.071    -0.01
+      3     BMA        h0[1]    0.437 0.065    0.322     0.58
+      4     BMA        h0[2]    0.470 0.070    0.342     0.62
+      5     BMA        h0[3]    0.362 0.053    0.266     0.48
+      6     BMA        h0[4]    0.399 0.059    0.293     0.53
+      7     BMA        h0[5]    0.425 0.063    0.308     0.56
+      8     BMA        h0[6]    0.535 0.078    0.394     0.70
+      9     BMA        h0[7]    0.363 0.053    0.267     0.48
+      10    BMA        h0[8]    0.416 0.062    0.309     0.55
+      11    BMA        h0[9]    0.365 0.053    0.273     0.48
+      12    BMA       h0[10]    0.409 0.059    0.305     0.54
 
 # prophaz snapshot: FMA 1-par
 
@@ -163,7 +163,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method Term Estimate   SE CI.lower CI.upper
       1    FMA dose      1.1 0.19      0.7      1.4

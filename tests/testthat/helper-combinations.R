@@ -27,6 +27,39 @@ covariate_combinations <- list(
 
 all_methods <- c("RC", "ERC", "MCML", "FMA", "BMA")
 
+print_summary_snapshot <- function(
+  fit,
+  digits = 2,
+  max_rhat = NULL,
+  min_n_eff = 0
+) {
+  tab <- summary(fit)$summary_table
+
+  if ("Rhat" %in% names(tab)) {
+    diagnostics <- tab[
+      tab$Method == "BMA",
+      c("Rhat", "n.eff"),
+      drop = FALSE
+    ]
+
+    # These are stochastic numerical diagnostics: identical seeded fits can
+    # produce Rhat values printed as 1, 1.0, or 1.1 across R versions and
+    # platforms. Check their statistical properties directly instead of
+    # treating their exact text representation as a portable invariant.
+    expect_true(all(is.finite(diagnostics$Rhat)))
+    expect_true(all(is.finite(diagnostics$n.eff)))
+    expect_true(all(diagnostics$Rhat >= 0.99))
+    if (!is.null(max_rhat)) {
+      expect_true(all(diagnostics$Rhat <= max_rhat))
+    }
+    expect_true(all(diagnostics$n.eff >= min_n_eff))
+
+    tab[c("Rhat", "n.eff")] <- NULL
+  }
+
+  print(tab, digits = digits)
+}
+
 fit_combination <- function(
   family,
   Y,

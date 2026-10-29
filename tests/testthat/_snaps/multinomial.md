@@ -25,7 +25,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method             Term Estimate    SE CI.lower CI.upper
       1     RC  (1)_(Intercept)   -0.873 0.091   -1.051   -0.694
@@ -62,7 +62,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method             Term Estimate    SE CI.lower CI.upper
       1    ERC  (1)_(Intercept)   -0.874 0.089   -1.049   -0.700
@@ -99,7 +99,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method             Term Estimate    SE CI.lower CI.upper
       1   MCML  (1)_(Intercept)   -0.859 0.089   -1.033  -0.6842
@@ -136,7 +136,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method             Term Estimate    SE CI.lower CI.upper
       1    FMA  (1)_(Intercept)   -0.861 0.090   -1.036  -0.6865
@@ -173,13 +173,13 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
-        Method             Term Estimate   SE CI.lower CI.upper Rhat n.eff
-      1    BMA  (1)_(Intercept)    -0.58 0.17   -0.882    -0.26  2.0    14
-      2    BMA         (1)_dose    -0.13 0.42   -0.894     0.48  2.7     3
-      3    BMA (1)_dose_squared     0.18 0.15   -0.021     0.49  2.8     3
-      4    BMA  (2)_(Intercept)     0.14 0.15   -0.122     0.42  1.8     8
-      5    BMA         (2)_dose    -0.02 0.39   -0.715     0.58  2.5     3
-      6    BMA (2)_dose_squared     0.15 0.15   -0.046     0.45  2.5     2
+        Method             Term Estimate   SE CI.lower CI.upper
+      1    BMA  (1)_(Intercept)    -0.58 0.17   -0.882    -0.26
+      2    BMA         (1)_dose    -0.13 0.42   -0.894     0.48
+      3    BMA (1)_dose_squared     0.18 0.15   -0.021     0.49
+      4    BMA  (2)_(Intercept)     0.14 0.15   -0.122     0.42
+      5    BMA         (2)_dose    -0.02 0.39   -0.715     0.58
+      6    BMA (2)_dose_squared     0.15 0.15   -0.046     0.45
 

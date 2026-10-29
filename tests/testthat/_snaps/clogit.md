@@ -17,7 +17,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1     RC         dose    0.637 0.099     0.44   0.8318
@@ -42,7 +42,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method         Term Estimate     SE CI.lower CI.upper
       1    ERC         dose    0.211 0.0353    0.142     0.28
@@ -68,7 +68,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1   MCML         dose    0.668 0.098    0.476    0.860
@@ -94,7 +94,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method         Term Estimate    SE CI.lower CI.upper
       1    FMA         dose    0.666 0.102    0.460    0.864
@@ -120,11 +120,11 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
-        Method         Term Estimate   SE CI.lower CI.upper Rhat n.eff
-      1    BMA         dose    0.626 0.14    0.364   0.8755  3.6    26
-      2    BMA dose_squared   -0.049 0.03   -0.099   0.0064  3.7    25
+        Method         Term Estimate   SE CI.lower CI.upper
+      1    BMA         dose    0.626 0.14    0.364   0.8755
+      2    BMA dose_squared   -0.049 0.03   -0.099   0.0064
 
 # clogit snapshot: FMA 1-par
 
@@ -141,7 +141,7 @@
 ---
 
     Code
-      print(summary(fit)$summary_table, digits = 2)
+      print_summary_snapshot(fit)
     Output
         Method Term Estimate   SE CI.lower CI.upper
       1    FMA dose      1.1 0.21     0.68      1.5
