@@ -29,6 +29,9 @@ test_that("public methods warn about unused dots", {
       )
     )
   ))
+  # Older supported R versions emit the same chkDots() warning text without
+  # attaching the chkDotsWarning class. Match the message so the test verifies
+  # that unused dots are reported consistently across R versions.
   count_unused_dots_warnings <- function(expr) {
     n <- 0L
     withCallingHandlers(
