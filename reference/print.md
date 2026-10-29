@@ -60,13 +60,13 @@ fit
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 106.1 seconds
+#> Total CPU runtime: 93.7 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method     Fit  CI   Total
-#>      RC   0.031 0.0   0.031
-#>     ERC 106.078 0.0 106.078
+#>  Method    Fit  CI  Total
+#>      RC  0.031 0.0  0.031
+#>     ERC 93.634 0.0 93.634
 #> 
 #> Estimated model parameters:
 #> 
@@ -82,13 +82,13 @@ print(fit)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 106.1 seconds
+#> Total CPU runtime: 93.7 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method     Fit  CI   Total
-#>      RC   0.031 0.0   0.031
-#>     ERC 106.078 0.0 106.078
+#>  Method    Fit  CI  Total
+#>      RC  0.031 0.0  0.031
+#>     ERC 93.634 0.0 93.634
 #> 
 #> Estimated model parameters:
 #> 
@@ -106,13 +106,13 @@ print(fit, digits=5)
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 106.1 seconds
+#> Total CPU runtime: 93.7 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method     Fit  CI   Total
-#>      RC   0.031 0.0   0.031
-#>     ERC 106.078 0.0 106.078
+#>  Method    Fit  CI  Total
+#>      RC  0.031 0.0  0.031
+#>     ERC 93.634 0.0 93.634
 #> 
 #> Estimated model parameters:
 #> 
