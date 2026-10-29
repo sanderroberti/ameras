@@ -45,10 +45,8 @@ intervals if computed.
 
 ``` r
 
-data("data", package = "ameras")
-
 ## Fit the model
-fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial", 
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
               methods = c("RC","ERC"))
 #> Fitting RC
 #> Fitting ERC
@@ -56,19 +54,19 @@ fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binom
 ## Default print
 fit
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
 #>     family = "binomial", methods = c("RC", "ERC"))
 #> 
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 93.2 seconds
+#> Total CPU runtime: 114.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit  CI  Total
-#>      RC  0.023 0.0  0.023
-#>     ERC 93.171 0.0 93.171
+#>  Method     Fit  CI   Total
+#>      RC   0.041 0.0   0.041
+#>     ERC 114.101 0.0 114.101
 #> 
 #> Estimated model parameters:
 #> 
@@ -78,19 +76,19 @@ fit
 #> 
 print(fit)
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
 #>     family = "binomial", methods = c("RC", "ERC"))
 #> 
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 93.2 seconds
+#> Total CPU runtime: 114.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit  CI  Total
-#>      RC  0.023 0.0  0.023
-#>     ERC 93.171 0.0 93.171
+#>  Method     Fit  CI   Total
+#>      RC   0.041 0.0   0.041
+#>     ERC 114.101 0.0 114.101
 #> 
 #> Estimated model parameters:
 #> 
@@ -102,19 +100,19 @@ print(fit)
 ## More digits
 print(fit, digits=5)
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
 #>     family = "binomial", methods = c("RC", "ERC"))
 #> 
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 93.2 seconds
+#> Total CPU runtime: 114.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit  CI  Total
-#>      RC  0.023 0.0  0.023
-#>     ERC 93.171 0.0 93.171
+#>  Method     Fit  CI   Total
+#>      RC   0.041 0.0   0.041
+#>     ERC 114.101 0.0 114.101
 #> 
 #> Estimated model parameters:
 #> 

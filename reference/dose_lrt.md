@@ -117,7 +117,7 @@ dat <- data.frame(
 )
 
 fit <- ameras(Y ~ dose(D), data = dat, family = "gaussian",
-              methods = "RC", print = FALSE)
+              methods = "RC")
 #> Fitting RC
 
 dose_lrt(fit)

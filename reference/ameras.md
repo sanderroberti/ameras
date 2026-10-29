@@ -606,22 +606,21 @@ Studies
 ## Examples
 
 ``` r
-  data(data, package="ameras")
-  ameras(Y.gaussian~dose(V1:V10, modifier=~M1+M2)+X1+X2, data=data, family="gaussian")
+  ameras(Y.gaussian~dose(V1:V10, modifier=~M1+M2)+X1+X2, data = ameras_simulated, family="gaussian")
 #> Fitting RC
 #> Call:
 #> ameras(formula = Y.gaussian ~ dose(V1:V10, modifier = ~M1 + M2) + 
-#>     X1 + X2, data = data, family = "gaussian")
+#>     X1 + X2, data = ameras_simulated, family = "gaussian")
 #> 
 #> Number of rows: 3000
 #> Number of dose realizations: 10
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.269 0.0 0.269
+#>  Method  Fit  CI Total
+#>      RC 0.42 0.0  0.42
 #> 
 #> Estimated model parameters:
 #> 

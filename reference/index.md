@@ -8,14 +8,14 @@
   : Analyze Multiple Exposure Realizations in Association Studies
 - [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) :
   Analyze Multiple Exposure Realizations
+- [`ameras_simulated`](https://ameras.sanderroberti.com/reference/ameras_simulated.md)
+  : Simulated Data for ameras Examples
 - [`coef(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/coef.md)
   : Estimated Coefficients for an amerasfit Object
 - [`confint(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/confint.md)
   : Confidence Intervals for an amerasfit Object
 - [`convergence()`](https://ameras.sanderroberti.com/reference/convergence.md)
   : Optimizer Convergence Diagnostics
-- [`data`](https://ameras.sanderroberti.com/reference/data.md) : Example
-  Data
 - [`dose_lrt()`](https://ameras.sanderroberti.com/reference/dose_lrt.md)
   : Likelihood-ratio tests for dose-related parameters
 - [`ecdfplot()`](https://ameras.sanderroberti.com/reference/ecdfplot.md)

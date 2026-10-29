@@ -68,9 +68,8 @@ modification](https://ameras.sanderroberti.com/articles/effectmodification.md).
 
 ``` r
 
-data(data, package="ameras")
 dosevars <- paste0("V", 1:10)
-fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
+fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods=c("RC"))
 #> Fitting RC
 
@@ -106,16 +105,16 @@ fit.ameras.proflik <- confint(fit.ameras, type="proflik", parm="all")
 summary(fit.ameras.waldorig)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
-#>     X2, data = data, family = "binomial", methods = c("RC"))
+#>     X2, data = ameras_simulated, family = "binomial", methods = c("RC"))
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.344 0.0 0.344
+#>      RC 0.436 0.0 0.436
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -127,16 +126,16 @@ summary(fit.ameras.waldorig)
 summary(fit.ameras.waldtransformed)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
-#>     X2, data = data, family = "binomial", methods = c("RC"))
+#>     X2, data = ameras_simulated, family = "binomial", methods = c("RC"))
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.344 0.0 0.344
+#>      RC 0.436 0.0 0.436
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -148,16 +147,16 @@ summary(fit.ameras.waldtransformed)
 summary(fit.ameras.proflik)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
-#>     X2, data = data, family = "binomial", methods = c("RC"))
+#>     X2, data = ameras_simulated, family = "binomial", methods = c("RC"))
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 1.6 seconds
+#> Total CPU runtime: 2.5 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.344 1.261 1.605
+#>      RC 0.436 2.043 2.479
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -180,7 +179,7 @@ Again, we use the example data to illustrate.
 ``` r
 
 set.seed(123)
-fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data=data, 
+fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods=c("FMA"))
 #> Fitting FMA
 
@@ -204,16 +203,16 @@ fit.ameras.percentile <- confint(fit.ameras2, type="percentile")
 summary(fit.ameras.hpd)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
-#>     X2, data = data, family = "binomial", methods = c("FMA"))
+#>     X2, data = ameras_simulated, family = "binomial", methods = c("FMA"))
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 1.2 seconds
+#> Total CPU runtime: 2.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>     FMA 1.179 0.023 1.202
+#>  Method  Fit   CI Total
+#>     FMA 2.19 0.23  2.42
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -225,16 +224,16 @@ summary(fit.ameras.hpd)
 summary(fit.ameras.percentile)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
-#>     X2, data = data, family = "binomial", methods = c("FMA"))
+#>     X2, data = ameras_simulated, family = "binomial", methods = c("FMA"))
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 1.2 seconds
+#> Total CPU runtime: 2.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>     FMA 1.179 0.015 1.194
+#>  Method  Fit    CI Total
+#>     FMA 2.19 0.082 2.272
 #> 
 #> Summary of coefficients by method:
 #> 

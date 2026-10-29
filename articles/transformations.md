@@ -191,26 +191,25 @@ model using the sigmoid transformation:
 
 ``` r
 
-data(data, package="ameras")
-fit.ameras.sigmoid <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data=data, 
+fit.ameras.sigmoid <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods="RC", transform=transform.sigmoid, 
                             transform.jacobian=transform.sigmoid.jacobian, index.t=4:5)
 #> Fitting RC
 summary(fit.ameras.sigmoid)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
-#>     X1 + X2, data = data, family = "binomial", methods = "RC", 
+#>     X1 + X2, data = ameras_simulated, family = "binomial", methods = "RC", 
 #>     transform = transform.sigmoid, transform.jacobian = transform.sigmoid.jacobian, 
 #>     index.t = 4:5)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.439 0.0 0.439
+#>      RC 0.641 0.0 0.641
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -228,22 +227,22 @@ Next with default settings, using `transform1`:
 
 ``` r
 
-fit.ameras.transform1 <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data=data, 
+fit.ameras.transform1 <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods="RC")
 #> Fitting RC
 summary(fit.ameras.transform1)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
-#>     X1 + X2, data = data, family = "binomial", methods = "RC")
+#>     X1 + X2, data = ameras_simulated, family = "binomial", methods = "RC")
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.2 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.203 0.0 0.203
+#>      RC 0.389 0.0 0.389
 #> 
 #> Summary of coefficients by method:
 #> 

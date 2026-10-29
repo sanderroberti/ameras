@@ -26,11 +26,10 @@ the dose coefficient on the usual logit or log-link scale.
 
 ``` r
 
-data(data, package = "ameras")
-
 ## Use one exposure realization as the single observed dose.
-data$D <- data$V1
-head(data[c("D", "Y.gaussian", "Y.binomial", "Y.poisson", "X1", "X2")])
+standard_data <- ameras_simulated
+standard_data$D <- standard_data$V1
+head(standard_data[c("D", "Y.gaussian", "Y.binomial", "Y.poisson", "X1", "X2")])
 #>            D  Y.gaussian Y.binomial Y.poisson X1 X2
 #> 1 0.42868043 -0.32647093          0         0  0  0
 #> 2 0.73321154 -0.18734036          1         0  1  0
@@ -74,10 +73,10 @@ below only shows the regression coefficients.
 ``` r
 
 fit_ameras_gaussian <- ameras(Y.gaussian ~ dose(D) + X1 + X2,
-                              data = data,
+                              data = standard_data,
                               family = "gaussian")
 
-fit_lm <- lm(Y.gaussian ~ D + X1 + X2, data = data)
+fit_lm <- lm(Y.gaussian ~ D + X1 + X2, data = standard_data)
 
 compare_coefficients(fit_ameras_gaussian, fit_lm)
 #>          term  ameras standard
@@ -100,7 +99,7 @@ fit_ameras_gaussian <- confint(fit_ameras_gaussian,
                                print = FALSE)
 summary(fit_ameras_gaussian)
 #> Call:
-#> ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = data, 
+#> ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = standard_data, 
 #>     family = "gaussian")
 #> 
 #> Rows: 3000
@@ -110,7 +109,7 @@ summary(fit_ameras_gaussian)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.265 0.001 0.266
+#>      RC 0.335 0.001 0.336
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -131,11 +130,11 @@ logistic regression parameterization used by
 ``` r
 
 fit_ameras_binomial <- ameras(Y.binomial ~ dose(D, model = "EXP") + X1 + X2,
-                              data = data,
+                              data = standard_data,
                               family = "binomial")
 
 fit_glm_binomial <- glm(Y.binomial ~ D + X1 + X2,
-                        data = data,
+                        data = standard_data,
                         family = binomial())
 
 compare_coefficients(fit_ameras_binomial, fit_glm_binomial)
@@ -155,11 +154,11 @@ makes the `ameras` dose term directly comparable to the coefficient for
 ``` r
 
 fit_ameras_poisson <- ameras(Y.poisson ~ dose(D, model = "EXP") + X1 + X2,
-                             data = data,
+                             data = standard_data,
                              family = "poisson")
 
 fit_glm_poisson <- glm(Y.poisson ~ D + X1 + X2,
-                       data = data,
+                       data = standard_data,
                        family = poisson())
 
 compare_coefficients(fit_ameras_poisson, fit_glm_poisson)
@@ -196,21 +195,21 @@ the default `RC` analysis using all 10 realizations:
 ``` r
 
 fit_ameras_rc <- ameras(Y.binomial ~ dose(V1:V10, model = "EXP") + X1 + X2,
-                        data = data,
+                        data = standard_data,
                         family = "binomial")
 summary(fit_ameras_rc)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "EXP") + X1 + 
-#>     X2, data = data, family = "binomial")
+#>     X2, data = standard_data, family = "binomial")
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.292 0.0 0.292
+#>      RC 0.237 0.0 0.237
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -228,7 +227,7 @@ Other methods can then be added through the `methods` argument:
 ``` r
 
 fit_ameras_all <- ameras(Y.binomial ~ dose(V1:V10, model = "EXP") + X1 + X2,
-                         data = data,
+                         data = standard_data,
                          family = "binomial",
                          methods = c("RC", "ERC", "MCML", "FMA", "BMA"))
 ```

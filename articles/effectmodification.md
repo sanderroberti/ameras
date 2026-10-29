@@ -3,7 +3,7 @@
 ``` r
 
 library(ameras)
-data(data, package = "ameras")
+effect_data <- ameras_simulated
 ```
 
 ## Introduction
@@ -34,7 +34,7 @@ the non-reference group and the reference group.
 
 fit_contrast <- ameras(
   Y.gaussian ~ dose(V1:V10, modifier = ~ M1) + X1 + X2,
-  data = data,
+  data = effect_data,
   family = "gaussian",
   methods = "RC"
 )
@@ -62,7 +62,7 @@ For the same binary modifier `M1`, the coefficient names are
 
 fit_subgroup <- ameras(
   Y.gaussian ~ dose(V1:V10, modifier = ~ 0 + M1) + X1 + X2,
-  data = data,
+  data = effect_data,
   family = "gaussian",
   methods = "RC"
 )
@@ -116,8 +116,8 @@ level is the reference level.
 
 ``` r
 
-data$M_factor <- factor(
-  ifelse(data$M1 == 0, "unexposed modifier group", "modifier group"),
+effect_data$M_factor <- factor(
+  ifelse(effect_data$M1 == 0, "unexposed modifier group", "modifier group"),
   levels = c("unexposed modifier group", "modifier group")
 )
 ```
@@ -129,7 +129,7 @@ non-reference levels.
 
 fit_factor_contrast <- ameras(
   Y.gaussian ~ dose(V1:V10, modifier = ~ M_factor) + X1 + X2,
-  data = data,
+  data = effect_data,
   family = "gaussian",
   methods = "RC"
 )
@@ -151,7 +151,7 @@ effects for all levels.
 
 fit_factor_subgroup <- ameras(
   Y.gaussian ~ dose(V1:V10, modifier = ~ 0 + M_factor) + X1 + X2,
-  data = data,
+  data = effect_data,
   family = "gaussian",
   methods = "RC"
 )
@@ -173,14 +173,14 @@ each factor level.
 
 ``` r
 
-data$M3 <- factor(
-  rep(c("low", "middle", "high"), length.out = nrow(data)),
+effect_data$M3 <- factor(
+  rep(c("low", "middle", "high"), length.out = nrow(effect_data)),
   levels = c("low", "middle", "high")
 )
 
 fit_three_level <- ameras(
   Y.gaussian ~ dose(V1:V10, modifier = ~ 0 + M3) + X1 + X2,
-  data = data,
+  data = effect_data,
   family = "gaussian",
   methods = "RC"
 )

@@ -159,27 +159,25 @@ extracting coefficients.
 ## Examples
 
 ``` r
-data("data", package = "ameras")
-
 ## Fit the model
-fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
               methods = "RC")
 #> Fitting RC
 
 ## Summary without confidence intervals
 summary(fit)
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
 #>     family = "binomial", methods = "RC")
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0 seconds
+#> Total CPU runtime: 0.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.034 0.0 0.034
+#>      RC 0.057 0.0 0.057
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -200,17 +198,17 @@ fit <- confint(fit, type = "wald.orig")
 #> 
 summary(fit)
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
 #>     family = "binomial", methods = "RC")
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0 seconds
+#> Total CPU runtime: 0.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.034 0.001 0.035
+#>  Method   Fit  CI Total
+#>      RC 0.057 0.0 0.057
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -224,7 +222,7 @@ s <- summary_table(fit)
 
 ## Multiple methods
 
-fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
               methods = c("RC", "ERC", "MCML"))
 #> Fitting RC
 #> Fitting ERC
@@ -250,19 +248,19 @@ fit2 <- confint(fit2, type = "wald.orig")
 #> 
 summary(fit2)
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
 #>     family = "binomial", methods = c("RC", "ERC", "MCML"))
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 88.7 seconds
+#> Total CPU runtime: 112.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit  CI  Total
-#>      RC  0.036 0.0  0.036
-#>     ERC 88.467 0.0 88.467
-#>    MCML  0.151 0.0  0.151
+#>  Method     Fit    CI   Total
+#>      RC   0.059 0.001   0.060
+#>     ERC 112.120 0.000 112.120
+#>    MCML   0.256 0.000   0.256
 #> 
 #> Summary of coefficients by method:
 #> 

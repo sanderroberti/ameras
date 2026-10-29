@@ -59,32 +59,8 @@ Traceplots and posterior density plots.
 
 ``` r
 
-   data(data, package="ameras")
    fit <- ameras(Y.gaussian~dose(V1:V10), data, methods="BMA")
-#> Note: BMA may require extensive computation time
-#> Fitting BMA
-#> Defining model
-#> Building model
-#> Setting data and initial values
-#> Running calculate on model
-#>   [Note] Any error reports that follow may simply reflect missing values in model variables.
-#> Checking model sizes and dimensions
-#>   [Note] This model is not fully initialized. This is not an error.
-#>          To see which variables are not initialized, use model$initializeInfo().
-#>          For more information on model initialization, see help(modelInitialization).
-#> Compiling
-#>   [Note] This may take a minute.
-#>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
-#> Compiling
-#>   [Note] This may take a minute.
-#>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
-#> running chain 1...
-#> |-------------|-------------|-------------|-------------|
-#> |-------------------------------------------------------|
-#> running chain 2...
-#> |-------------|-------------|-------------|-------------|
-#> |-------------------------------------------------------|
+#> Error in check_df(data): data must be a data frame
    traceplot(fit)
-
-
+#> Error: object 'fit' not found
 ```

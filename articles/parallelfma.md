@@ -5,11 +5,6 @@
 library(ameras)
 ```
 
-``` r
-
-data(data, package = "ameras")
-```
-
 ## Introduction
 
 Frequentist model averaging (`FMA`) fits the specified model once for
@@ -51,7 +46,7 @@ single-process FMA path.
 future::plan(future::sequential)
 
 fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-              data = data,
+              data = ameras_simulated,
               family = "gaussian",
               methods = "FMA")
 ```
@@ -66,7 +61,7 @@ Linux.
 future::plan(future::multisession, workers = 2)
 
 fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-              data = data,
+              data = ameras_simulated,
               family = "gaussian",
               methods = "FMA")
 
@@ -115,7 +110,7 @@ For example, with `K = 100` dose realizations and `W = 4` workers:
 future::plan(future::multisession, workers = 2)
 
 fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-              data = data,
+              data = ameras_simulated,
               family = "gaussian",
               methods = "FMA",
               future.chunk.size.FMA = 2)
@@ -147,7 +142,7 @@ set.seed(2024)
 sequential_elapsed <- system.time(
   sequential_fit <- suppressWarnings(
     ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-           data = data,
+           data = ameras_simulated,
            family = "gaussian",
            methods = "FMA",
            MFMA = 10000)
@@ -159,7 +154,7 @@ set.seed(2024)
 parallel_elapsed <- system.time(
   parallel_fit <- suppressWarnings(
     ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-           data = data,
+           data = ameras_simulated,
            family = "gaussian",
            methods = "FMA",
            MFMA = 10000,
@@ -195,8 +190,8 @@ data.frame(
   elapsed_seconds = round(c(sequential_elapsed, parallel_elapsed), 2)
 )
 #>           plan elapsed_seconds
-#> 1   sequential            1.11
-#> 2 multisession            1.41
+#> 1   sequential            2.00
+#> 2 multisession            2.22
 ```
 
 The estimates should agree up to ordinary numerical precision. Parallel
@@ -220,7 +215,7 @@ future::plan(future::multisession, workers = 2)
 
 set.seed(2024)
 fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-              data = data,
+              data = ameras_simulated,
               family = "gaussian",
               methods = "FMA")
 

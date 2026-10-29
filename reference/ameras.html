@@ -332,22 +332,21 @@ those outputs are computed on the fitted rows.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">ameras</span><span class="op">(</span><span class="va">Y.gaussian</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, modifier<span class="op">=</span><span class="op">~</span><span class="va">M1</span><span class="op">+</span><span class="va">M2</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu">ameras</span><span class="op">(</span><span class="va">Y.gaussian</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, modifier<span class="op">=</span><span class="op">~</span><span class="va">M1</span><span class="op">+</span><span class="va">M2</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data <span class="op">=</span> <span class="va">ameras_simulated</span>, family<span class="op">=</span><span class="st">"gaussian"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting RC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.gaussian ~ dose(V1:V10, modifier = ~M1 + M2) + </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     X1 + X2, data = data, family = "gaussian")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     X1 + X2, data = ameras_simulated, family = "gaussian")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of dose realizations: 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.3 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.4 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.269 0.0 0.269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method  Fit  CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.42 0.0  0.42</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated model parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

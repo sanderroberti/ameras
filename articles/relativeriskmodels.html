@@ -87,8 +87,7 @@
 <span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     declare</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package<span class="op">=</span><span class="st">"ameras"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -116,21 +115,21 @@ optional (not fit by setting <code>deg=1</code> and not supplying
 <code>model="EXP"</code> as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.ameras.exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"EXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
-<span>                         data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
+<span>                         data <span class="op">=</span> <span class="va">ameras_simulated</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.exp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "EXP") + </span></span>
-<span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
+<span><span class="co">#&gt;     X1 + X2, data = ameras_simulated, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.226 0.0 0.226</span></span>
+<span><span class="co">#&gt;      RC 0.369 0.0 0.369</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -154,12 +153,12 @@ exponential model; the example below uses <code>deg=2</code>. This model
 is fit by setting <code>model="ERR"</code> as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.ameras.err</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
-<span>                         data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
+<span>                         data <span class="op">=</span> <span class="va">ameras_simulated</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.err</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + </span></span>
-<span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
+<span><span class="co">#&gt;     X1 + X2, data = ameras_simulated, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -168,7 +167,7 @@ is fit by setting <code>model="ERR"</code> as follows:</p>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.387 0.0 0.387</span></span>
+<span><span class="co">#&gt;      RC 0.401 0.0 0.401</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -191,12 +190,12 @@ are optional. This model is fit by setting <code>model="LINEXP"</code>
 as follows:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.ameras.linexp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"LINEXP"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, </span>
-<span>                         data<span class="op">=</span><span class="va">data</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
+<span>                         data <span class="op">=</span> <span class="va">ameras_simulated</span>, family<span class="op">=</span><span class="st">"binomial"</span>, methods<span class="op">=</span><span class="st">"RC"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fitting RC</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.linexp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = "LINEXP") + </span></span>
-<span><span class="co">#&gt;     X1 + X2, data = data, family = "binomial", methods = "RC")</span></span>
+<span><span class="co">#&gt;     X1 + X2, data = ameras_simulated, family = "binomial", methods = "RC")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -205,7 +204,7 @@ as follows:</p>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.437 0.0 0.437</span></span>
+<span><span class="co">#&gt;      RC 0.433 0.0 0.433</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

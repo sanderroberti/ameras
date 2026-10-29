@@ -75,7 +75,7 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ameras.sanderroberti.com">ameras</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package <span class="op">=</span> <span class="st">"ameras"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">effect_data</span> <span class="op">&lt;-</span> <span class="va">ameras_simulated</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -108,7 +108,7 @@ and the reference group.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_contrast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span></span>
 <span>  <span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, modifier <span class="op">=</span> <span class="op">~</span> <span class="va">M1</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">effect_data</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>  methods <span class="op">=</span> <span class="st">"RC"</span></span>
 <span><span class="op">)</span></span>
@@ -133,7 +133,7 @@ names are <code>dose[M1=0]</code> and <code>dose[M1=1]</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_subgroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span></span>
 <span>  <span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, modifier <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">M1</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">effect_data</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>  methods <span class="op">=</span> <span class="st">"RC"</span></span>
 <span><span class="op">)</span></span>
@@ -180,8 +180,8 @@ contrast parameters are not bounded by the default transformation.</p>
 <p>Factor modifiers use the existing level order of the factor. The
 first level is the reference level.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">M_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">M1</span> <span class="op">==</span> <span class="fl">0</span>, <span class="st">"unexposed modifier group"</span>, <span class="st">"modifier group"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">effect_data</span><span class="op">$</span><span class="va">M_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">effect_data</span><span class="op">$</span><span class="va">M1</span> <span class="op">==</span> <span class="fl">0</span>, <span class="st">"unexposed modifier group"</span>, <span class="st">"modifier group"</span><span class="op">)</span>,</span>
 <span>  levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unexposed modifier group"</span>, <span class="st">"modifier group"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>With <code>modifier = ~ M_factor</code>, ameras reports contrast
@@ -189,7 +189,7 @@ terms for the non-reference levels.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_factor_contrast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span></span>
 <span>  <span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, modifier <span class="op">=</span> <span class="op">~</span> <span class="va">M_factor</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">effect_data</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>  methods <span class="op">=</span> <span class="st">"RC"</span></span>
 <span><span class="op">)</span></span>
@@ -207,7 +207,7 @@ subgroup-specific effects for all levels.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_factor_subgroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span></span>
 <span>  <span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, modifier <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">M_factor</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">effect_data</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>  methods <span class="op">=</span> <span class="st">"RC"</span></span>
 <span><span class="op">)</span></span>
@@ -225,14 +225,14 @@ coding, ameras reports one contrast for each non-reference level. With
 subgroup-specific coding, ameras reports one dose-effect parameter for
 each factor level.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">M3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"middle"</span>, <span class="st">"high"</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">effect_data</span><span class="op">$</span><span class="va">M3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"middle"</span>, <span class="st">"high"</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">effect_data</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"middle"</span>, <span class="st">"high"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit_three_level</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span></span>
 <span>  <span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, modifier <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">M3</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">effect_data</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>  methods <span class="op">=</span> <span class="st">"RC"</span></span>
 <span><span class="op">)</span></span>

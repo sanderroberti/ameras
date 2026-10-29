@@ -124,9 +124,8 @@ diagnostics such as
 ## Examples
 
 ``` r
-  data(data, package="ameras")
   fit <- ameras(Y.gaussian ~ dose(V1:V10) + X1 + X2,
-                data=data, family="gaussian", methods="RC")
+                data = ameras_simulated, family="gaussian", methods="RC")
 #> Fitting RC
   convergence(fit)
 #>    method optim.convergence gradient.rms gradient.rms.scaled newton.improvement

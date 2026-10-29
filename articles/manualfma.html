@@ -104,8 +104,7 @@ settings, and transformation arguments.</p>
 <h2 id="fit-realization-specific-rc-models">Fit realization-specific RC models<a class="anchor" aria-label="anchor" href="#fit-realization-specific-rc-models"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package <span class="op">=</span> <span class="st">"ameras"</span><span class="op">)</span></span>
-<span><span class="va">dosevars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">dosevars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p>The first helper mirrors the convergence and Hessian screen used by
 built-in FMA. The second helper fits one standard regression calibration
 model with a single dose realization. The returned list keeps only the
@@ -124,12 +123,12 @@ variance-covariance matrix, maximized log-likelihood, and AIC.</p>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/eigen.html" class="external-link">eigen</a></span><span class="op">(</span><span class="va">hessian</span><span class="op">)</span><span class="op">$</span><span class="va">values</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">fit_rc_realization</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dosevar</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">fit_rc_realization</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dosevar</span>, <span class="va">dataset</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Y.gaussian ~ dose("</span>, <span class="va">dosevar</span>, <span class="st">") + X1 + X2"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span>  <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">formula</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"gaussian"</span><span class="op">)</span></span>
+<span>  <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">formula</span>, data <span class="op">=</span> <span class="va">dataset</span>, family <span class="op">=</span> <span class="st">"gaussian"</span><span class="op">)</span></span>
 <span>  <span class="va">rc</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">RC</span></span>
 <span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -143,7 +142,11 @@ variance-covariance matrix, maximized log-likelihood, and AIC.</p>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Fit the model separately for each dose realization.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rc_summaries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">dosevars</span>, <span class="va">fit_rc_realization</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rc_summaries</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>  <span class="va">dosevars</span>,</span>
+<span>  <span class="va">fit_rc_realization</span>,</span>
+<span>  dataset <span class="op">=</span> <span class="va">ameras_simulated</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>For large analyses, the same call can be run in separate R sessions
 or submitted as separate jobs. Save the summaries from each job and read
 them back before model averaging.</p>
@@ -151,7 +154,7 @@ them back before model averaging.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">"fma-fits"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">dosevar</span> <span class="kw">in</span> <span class="va">dosevars</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">fit_summary</span> <span class="op">&lt;-</span> <span class="fu">fit_rc_realization</span><span class="op">(</span><span class="va">dosevar</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<span>  <span class="va">fit_summary</span> <span class="op">&lt;-</span> <span class="fu">fit_rc_realization</span><span class="op">(</span><span class="va">dosevar</span>, dataset <span class="op">=</span> <span class="va">ameras_simulated</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">fit_summary</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"fma-fits"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">dosevar</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
@@ -302,7 +305,7 @@ likelihoods, AIC weights, and normal sampling strategy.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">fit_builtin_fma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>         data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>         data <span class="op">=</span> <span class="va">ameras_simulated</span>,</span>
 <span>         family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>         methods <span class="op">=</span> <span class="st">"FMA"</span>,</span>
 <span>         MFMA <span class="op">=</span> <span class="fl">100000</span><span class="op">)</span></span>

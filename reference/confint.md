@@ -210,10 +210,8 @@ function.
 ## Examples
 
 ``` r
-data("data", package = "ameras")
-
 ## Fit the model
-fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
                methods = "RC")
 #> Fitting RC
 
@@ -227,7 +225,7 @@ fit <- confint(fit, type = "wald.orig")
 #> 
 summary(fit)
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
 #>     family = "binomial", methods = "RC")
 #> 
 #> Rows: 3000
@@ -236,8 +234,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.021 0.0 0.021
+#>  Method   Fit    CI Total
+#>      RC 0.046 0.001 0.047
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -256,17 +254,17 @@ fit <- confint(fit, type = "proflik", parm = "dose", force = TRUE)
 #> 
 summary(fit)
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
 #>     family = "binomial", methods = "RC")
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.1 seconds
+#> Total CPU runtime: 0.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.021 0.034 0.055
+#>      RC 0.046 0.105 0.151
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -276,10 +274,10 @@ summary(fit)
 #> 
 
 ## With keep.data = FALSE, supply data explicitly for proflik
-fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial",
+fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
                methods = "RC", keep.data = FALSE)
 #> Fitting RC
-fit2 <- confint(fit2, type = "proflik", data = data)
+fit2 <- confint(fit2, type = "proflik", data = ameras_simulated)
 #> Obtaining profile likelihood CI for dose
 #> RC confidence intervals:
 #> 
@@ -289,7 +287,7 @@ fit2 <- confint(fit2, type = "proflik", data = data)
 
 ## FMA and BMA with percentile intervals
 
-fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = data, family = "binomial", 
+fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
                methods = c("FMA", "BMA"))
 #> Note: BMA may require extensive computation time
 #> Fitting FMA
@@ -330,18 +328,18 @@ fit3 <- confint(fit3, type = "percentile")
 #> 
 summary(fit3)
 #> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, 
+#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
 #>     family = "binomial", methods = c("FMA", "BMA"))
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 58.6 seconds
+#> Total CPU runtime: 99.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit    CI Total
-#>     FMA  0.275 0.005  0.28
-#>     BMA 58.367 0.000 58.37
+#>  Method    Fit    CI  Total
+#>     FMA  0.595 0.007  0.602
+#>     BMA 98.795 0.001 98.796
 #> 
 #> Summary of coefficients by method:
 #> 

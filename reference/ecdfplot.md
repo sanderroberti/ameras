@@ -63,7 +63,6 @@ before plotting.
 
 ``` r
   if (requireNamespace("ggplot2", quietly = TRUE)) {
-   data(data, package="ameras")
-   ecdfplot(data,  dosevars=paste0("V", 1:10))
+   ecdfplot(ameras_simulated, dosevars=paste0("V", 1:10))
   }
 ```

@@ -16,7 +16,6 @@ library(ameras)
 #> 
 #>     declare
 library(ggplot2)
-data(data, package="ameras")
 ```
 
 ## Introduction
@@ -49,21 +48,21 @@ not supplying `modifier`, respectively). This model is fit by setting
 ``` r
 
 fit.ameras.exp <- ameras(Y.binomial~dose(V1:V10, deg=2, model="EXP")+X1+X2, 
-                         data=data, family="binomial", methods="RC")
+                         data = ameras_simulated, family="binomial", methods="RC")
 #> Fitting RC
 summary(fit.ameras.exp)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "EXP") + 
-#>     X1 + X2, data = data, family = "binomial", methods = "RC")
+#>     X1 + X2, data = ameras_simulated, family = "binomial", methods = "RC")
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.2 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.226 0.0 0.226
+#>      RC 0.369 0.0 0.369
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -89,12 +88,12 @@ model is fit by setting `model="ERR"` as follows:
 ``` r
 
 fit.ameras.err <- ameras(Y.binomial~dose(V1:V10, deg=2, model="ERR")+X1+X2, 
-                         data=data, family="binomial", methods="RC")
+                         data = ameras_simulated, family="binomial", methods="RC")
 #> Fitting RC
 summary(fit.ameras.err)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, deg = 2, model = "ERR") + 
-#>     X1 + X2, data = data, family = "binomial", methods = "RC")
+#>     X1 + X2, data = ameras_simulated, family = "binomial", methods = "RC")
 #> 
 #> Rows: 3000
 #> 
@@ -103,7 +102,7 @@ summary(fit.ameras.err)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.387 0.0 0.387
+#>      RC 0.401 0.0 0.401
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -128,12 +127,12 @@ modification terms are optional. This model is fit by setting
 ``` r
 
 fit.ameras.linexp <- ameras(Y.binomial~dose(V1:V10, model="LINEXP")+X1+X2, 
-                         data=data, family="binomial", methods="RC")
+                         data = ameras_simulated, family="binomial", methods="RC")
 #> Fitting RC
 summary(fit.ameras.linexp)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "LINEXP") + 
-#>     X1 + X2, data = data, family = "binomial", methods = "RC")
+#>     X1 + X2, data = ameras_simulated, family = "binomial", methods = "RC")
 #> 
 #> Rows: 3000
 #> 
@@ -142,7 +141,7 @@ summary(fit.ameras.linexp)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.437 0.0 0.437
+#>      RC 0.433 0.0 0.433
 #> 
 #> Summary of coefficients by method:
 #> 

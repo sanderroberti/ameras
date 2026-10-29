@@ -67,12 +67,11 @@ example by passing the indices returned by
 ## Examples
 
 ``` r
-data("data", package="ameras")
 dosevars <- paste0("V", 1:10)
 
 ## FMA only
 fit <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-              data=data, family="binomial", methods="FMA")
+              data = ameras_simulated, family="binomial", methods="FMA")
 #> Fitting FMA
 included_realizations(fit)
 #>  [1]  1  2  3  4  5  6  7  8  9 10
@@ -82,7 +81,7 @@ length(included_realizations(fit))
 ## Both FMA and BMA
 
 fit2 <- ameras(Y.binomial ~ dose(all_of(dosevars), model="ERR"),
-               data=data, family="binomial", methods=c("FMA", "BMA"))
+               data = ameras_simulated, family="binomial", methods=c("FMA", "BMA"))
 #> Note: BMA may require extensive computation time
 #> Fitting FMA
 #> Fitting BMA

@@ -75,8 +75,6 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ameras.sanderroberti.com">ameras</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">data</span>, package <span class="op">=</span> <span class="st">"ameras"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -102,22 +100,22 @@ documentation.</p>
 </h2>
 <p>The default future plan is sequential, so this call uses the ordinary
 single-process FMA path.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/sequential.html" class="external-link">sequential</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>              data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>              data <span class="op">=</span> <span class="va">ameras_simulated</span>,</span>
 <span>              family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>              methods <span class="op">=</span> <span class="st">"FMA"</span><span class="op">)</span></span></code></pre></div>
 <p>For parallel FMA on a local machine, <code>multisession</code> is
 usually the most portable choice. It starts separate background R
 sessions and works across the main platforms supported by R, including
 Windows, macOS, and Linux.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/multisession.html" class="external-link">multisession</a></span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>              data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>              data <span class="op">=</span> <span class="va">ameras_simulated</span>,</span>
 <span>              family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>              methods <span class="op">=</span> <span class="st">"FMA"</span><span class="op">)</span></span>
 <span></span>
@@ -185,11 +183,11 @@ can run at the same time.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/multisession.html" class="external-link">multisession</a></span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>              data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>              data <span class="op">=</span> <span class="va">ameras_simulated</span>,</span>
 <span>              family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>              methods <span class="op">=</span> <span class="st">"FMA"</span>,</span>
 <span>              future.chunk.size.FMA <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -209,7 +207,7 @@ chunks may keep workers busier.</p>
 <p>The example below compares the same Gaussian FMA fit with a
 sequential plan and a two-worker multisession plan. The seed is reset
 before each call so that the final FMA sampling step is comparable.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">old_plan</span> <span class="op">&lt;-</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">old_plan</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -218,7 +216,7 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span><span class="va">sequential_elapsed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span>
 <span>  <span class="va">sequential_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>           data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>           data <span class="op">=</span> <span class="va">ameras_simulated</span>,</span>
 <span>           family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>           methods <span class="op">=</span> <span class="st">"FMA"</span>,</span>
 <span>           MFMA <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
@@ -230,7 +228,7 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span><span class="va">parallel_elapsed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span>
 <span>  <span class="va">parallel_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>           data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>           data <span class="op">=</span> <span class="va">ameras_simulated</span>,</span>
 <span>           family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>           methods <span class="op">=</span> <span class="st">"FMA"</span>,</span>
 <span>           MFMA <span class="op">=</span> <span class="fl">10000</span>,</span>
@@ -240,7 +238,7 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span></span>
 <span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">old_plan</span><span class="op">)</span></span></code></pre></div>
 <p>Compare the coefficient estimates and elapsed runtimes.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">coefficient_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sequential_fit</span><span class="op">$</span><span class="va">FMA</span><span class="op">$</span><span class="va">coefficients</span><span class="op">)</span>,</span>
 <span>  sequential <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">sequential_fit</span><span class="op">$</span><span class="va">FMA</span><span class="op">$</span><span class="va">coefficients</span><span class="op">)</span>,</span>
@@ -262,8 +260,8 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span>  elapsed_seconds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sequential_elapsed</span>, <span class="va">parallel_elapsed</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;           plan elapsed_seconds</span></span>
-<span><span class="co">#&gt; 1   sequential            1.11</span></span>
-<span><span class="co">#&gt; 2 multisession            1.41</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   sequential            2.00</span></span>
+<span><span class="co">#&gt; 2 multisession            2.22</span></span></code></pre></div>
 <p>The estimates should agree up to ordinary numerical precision.
 Parallel execution is not guaranteed to be faster for small examples
 because starting workers and transferring data have overhead. It is most
@@ -278,12 +276,12 @@ step, which is deterministic for ordinary model fits. The random FMA
 sampling step is performed afterward in the main R process. For
 reproducible FMA samples, set the seed before calling
 <code><a href="../reference/ameras.html">ameras()</a></code>, just as in the sequential case.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/multisession.html" class="external-link">multisession</a></span>, workers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span> <span class="op">~</span> <span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span> <span class="op">+</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span>,</span>
-<span>              data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>              data <span class="op">=</span> <span class="va">ameras_simulated</span>,</span>
 <span>              family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
 <span>              methods <span class="op">=</span> <span class="st">"FMA"</span><span class="op">)</span></span>
 <span></span>

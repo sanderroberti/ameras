@@ -180,27 +180,25 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="data.html">data</a></span><span class="op">(</span><span class="st">"data"</span>, package <span class="op">=</span> <span class="st">"ameras"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Fit the model</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Fit the model</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">ameras_simulated</span>, family <span class="op">=</span> <span class="st">"binomial"</span>,</span></span>
 <span class="r-in"><span>              methods <span class="op">=</span> <span class="st">"RC"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting RC</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Summary without confidence intervals</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = "RC")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.1 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.034 0.0 0.034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.057 0.0 0.057</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -221,17 +219,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = "RC")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.1 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.034 0.001 0.035</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.057 0.0 0.057</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -245,7 +243,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Multiple methods</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span>,</span></span>
+<span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">ameras_simulated</span>, family <span class="op">=</span> <span class="st">"binomial"</span>,</span></span>
 <span class="r-in"><span>              methods <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RC"</span>, <span class="st">"ERC"</span>, <span class="st">"MCML"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting RC</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting ERC</span>
@@ -271,19 +269,19 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = data, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     family = "binomial", methods = c("RC", "ERC", "MCML"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 88.7 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 112.4 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method    Fit  CI  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC  0.036 0.0  0.036</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 88.467 0.0 88.467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML  0.151 0.0  0.151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method     Fit    CI   Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC   0.059 0.001   0.060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ERC 112.120 0.000 112.120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    MCML   0.256 0.000   0.256</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
