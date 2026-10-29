@@ -209,7 +209,7 @@ summary(fit.ameras.sigmoid)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.561 0.0 0.561
+#>      RC 0.578 0.0 0.578
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -241,8 +241,8 @@ summary(fit.ameras.transform1)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.296 0.0 0.296
+#>  Method Fit  CI Total
+#>      RC 0.3 0.0   0.3
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -234,8 +234,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.034 0.0 0.034
+#>  Method  Fit  CI Total
+#>      RC 0.03 0.0  0.03
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -263,8 +263,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.034 0.083 0.117
+#>  Method  Fit    CI Total
+#>      RC 0.03 0.064 0.094
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -333,13 +333,13 @@ summary(fit3)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 75.4 seconds
+#> Total CPU runtime: 65.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method    Fit    CI  Total
-#>     FMA  0.441 0.006  0.447
-#>     BMA 74.995 0.001 74.996
+#>  Method   Fit    CI  Total
+#>     FMA  0.41 0.006  0.416
+#>     BMA 64.88 0.001 64.881
 #> 
 #> Summary of coefficients by method:
 #> 
