@@ -89,10 +89,34 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span>   <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span>, <span class="va">data</span>, methods<span class="op">=</span><span class="st">"BMA"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in check_df(data):</span> data must be a data frame</span>
+<span class="r-in"><span>   <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.gaussian</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">ameras_simulated</span>,</span></span>
+<span class="r-in"><span>                 methods<span class="op">=</span><span class="st">"BMA"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: BMA may require extensive computation time</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting BMA</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Defining model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Building model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Setting data and initial values</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running calculate on model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] Any error reports that follow may simply reflect missing values in model variables.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Checking model sizes and dimensions</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] This model is not fully initialized. This is not an error.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>          To see which variables are not initialized, use model$initializeInfo().</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>          For more information on model initialization, see help(modelInitialization).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Compiling</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] This may take a minute.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Compiling</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] This may take a minute.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> running chain 1...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |-------------|-------------|-------------|-------------|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |-------------------------------------------------------|</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> running chain 2...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |-------------|-------------|-------------|-------------|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |-------------------------------------------------------|</span>
 <span class="r-in"><span>   <span class="fu">traceplot</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit' not found</span>
+<span class="r-plt img"><img src="traceplot-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="traceplot-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
