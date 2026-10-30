@@ -179,6 +179,40 @@ optimizer_gradient_is_large <- function(
 }
 
 
+optimizer_did_not_converge <- function(fit) {
+  code <- fit$convergence
+
+  is.numeric(code) &&
+    length(code) == 1L &&
+    is.finite(code) &&
+    code != 0
+}
+
+
+optimizer_method_prefix <- function(method_name = NULL) {
+  if (
+    is.character(method_name) &&
+      length(method_name) == 1L &&
+      !is.na(method_name) &&
+      nzchar(method_name)
+  ) {
+    paste0(method_name, ": ")
+  } else {
+    ""
+  }
+}
+
+
+optimizer_convergence_code_description <- function(code) {
+  switch(
+    as.character(code),
+    "1" = "the maximum number of iterations was reached",
+    "10" = "the Nelder-Mead simplex became degenerate",
+    "the optimizer did not report successful convergence"
+  )
+}
+
+
 warn_if_large_optimizer_gradient <- function(fit) {
   if (!optimizer_gradient_is_large(fit)) {
     return(invisible(NULL))
@@ -216,6 +250,30 @@ warn_if_large_optimizer_gradient <- function(fit) {
       "). The fit may be sensitive to covariate scaling or starting values; ",
       "consider centering/scaling continuous covariates, supplying inpar, ",
       "or adjusting optimizer controls."
+    ),
+    call. = FALSE
+  )
+
+  invisible(NULL)
+}
+
+
+warn_if_optimizer_did_not_converge <- function(fit, method_name = NULL) {
+  if (!optimizer_did_not_converge(fit)) {
+    return(invisible(NULL))
+  }
+
+  code <- fit$convergence
+  warning(
+    paste0(
+      optimizer_method_prefix(method_name),
+      "optim() did not converge (convergence code ",
+      code,
+      ": ",
+      optimizer_convergence_code_description(code),
+      "). Results may be unreliable; inspect convergence(fit) and consider ",
+      "centering/scaling continuous covariates, supplying inpar, or ",
+      "adjusting optimizer controls."
     ),
     call. = FALSE
   )

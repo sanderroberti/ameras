@@ -145,6 +145,7 @@ ameras.mcml <- function(
     use_optimize = length(parnames) == 1,
     ...
   )
+  warn_if_optimizer_did_not_converge(fit, method_name = "MCML")
 
   out <- assemble_frequentist_fit_result(
     fit = fit,
@@ -507,6 +508,10 @@ ameras.rc <- function(
     deg = deg,
     doseRRmod = doseRRmod,
     modifier_info = modifier_info
+  )
+  warn_if_optimizer_did_not_converge(
+    fit,
+    method_name = if (ERC) "ERC" else "RC"
   )
 
   out <- assemble_frequentist_fit_result(

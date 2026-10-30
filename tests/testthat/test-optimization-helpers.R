@@ -69,6 +69,53 @@ test_that("failed automatic BFGS refinement retains the Nelder-Mead fit", {
 })
 
 
+test_that("final BFGS result determines reported optimizer convergence", {
+  bfgs_code <- 0L
+  testthat::local_mocked_bindings(
+    optim = function(par, fn, method, control, ...) {
+      stopifnot(identical(method, "BFGS"))
+      list(
+        par = c(1, -2),
+        value = fn(c(1, -2), ...),
+        counts = c("function" = 2L, gradient = 1L),
+        convergence = bfgs_code
+      )
+    },
+    .package = "ameras"
+  )
+
+  nelder_mead_fit <- list(
+    par = c(0.9, -1.9),
+    value = 0.02,
+    counts = c("function" = 10L, gradient = NA_integer_),
+    convergence = 1L
+  )
+  objective <- function(x) sum((x - c(1, -2))^2)
+
+  refined <- ameras:::refine_nelder_mead_with_bfgs(
+    fit = nelder_mead_fit,
+    fn = objective,
+    control = list(),
+    warn = FALSE
+  )
+  expect_equal(refined$convergence, 0L)
+  expect_silent(ameras:::warn_if_optimizer_did_not_converge(refined))
+
+  bfgs_code <- 1L
+  not_converged <- ameras:::refine_nelder_mead_with_bfgs(
+    fit = nelder_mead_fit,
+    fn = objective,
+    control = list(),
+    warn = FALSE
+  )
+  expect_equal(not_converged$convergence, 1L)
+  expect_warning(
+    ameras:::warn_if_optimizer_did_not_converge(not_converged),
+    "convergence code 1"
+  )
+})
+
+
 test_that("fit_objective_with_hessian can skip expensive Hessian work", {
   fit <- ameras:::fit_objective_with_hessian(
     start = c(x = 1, y = -1),
@@ -161,10 +208,10 @@ test_that("optimizer gradient diagnostics warn only for suspicious convergence",
   not_converged_fit <- suspicious_fit
   not_converged_fit$convergence <- 1
 
-  # The diagnostic is intentionally warning-only. When available, it uses a
-  # curvature-scaled approximate objective improvement so large raw gradients do
-  # not warn if the remaining improvement is negligible in absolute terms or
-  # relative to the objective scale.
+  # The diagnostic is intentionally warning-only. For converged optimizations,
+  # it uses a curvature-scaled approximate objective improvement so large raw
+  # gradients do not warn if the remaining improvement is negligible in
+  # absolute terms or relative to the objective scale.
   expect_warning(
     ameras:::warn_if_large_optimizer_gradient(suspicious_fit),
     "not be fully stationary"
@@ -176,6 +223,28 @@ test_that("optimizer gradient diagnostics warn only for suspicious convergence",
     "not be fully stationary"
   )
   expect_silent(ameras:::warn_if_large_optimizer_gradient(not_converged_fit))
+  expect_false(
+    ameras:::gradient_diagnostic_row(
+      "RC",
+      not_converged_fit
+    )$convergence.warning
+  )
+})
+
+test_that("optimizer failure emits a separate method-specific warning", {
+  not_converged_fit <- list(convergence = 1L)
+
+  expect_warning(
+    ameras:::warn_if_optimizer_did_not_converge(
+      not_converged_fit,
+      method_name = "RC"
+    ),
+    "RC: optim\\(\\) did not converge.*convergence code 1"
+  )
+  expect_silent(
+    ameras:::warn_if_optimizer_did_not_converge(list(convergence = 0L))
+  )
+  expect_silent(ameras:::warn_if_optimizer_did_not_converge(list()))
 })
 
 test_that("convergence extracts and recomputes optimizer gradients", {
