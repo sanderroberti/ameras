@@ -1,62 +1,12 @@
 # Analyze Multiple Exposure Realizations
 
-Fit regression models accounting for exposure uncertainty using multiple
-Monte Carlo exposure realizations. Six outcome model families are
-supported. The first is the Gaussian family for continuous outcomes,
-\$\$Y_i \sim N(\mu_i, \sigma^2),\$\$ with \\\mu_i = \alpha_0 + \bm X_i^T
-\bm \alpha +\beta_1 D_i+\beta_2 D_i^2 + \bm M_i^T \bm \beta\_{m1}D_i +
-\bm M_i^T \bm \beta\_{m2}D_i^2\\. Here \\\bm X_i\\ are covariates,
-\\D_i\\ is the exposure with measurement error, and \\\bm M_i\\ are
-effect modifier design columns. The quadratic exposure terms and effect
-modification are optional.
-
-For non-Gaussian families, three relative risk models for the main
-exposure are supported, the usual exponential \\RR_i=\exp(\beta_1
-D_i+\beta_2 D_i^2+ \bm M_i^T \bm \beta\_{m1}D_i + \bm M_i^T \bm
-\beta\_{m2} D_i^2)\\ and the linear excess relative risk (ERR) model
-\\RR_i= 1+\beta_1 D_i+\beta_2 D_i^2 + \bm M_i^T \bm \beta\_{m1}D_i + \bm
-M_i^T \bm \beta\_{m2}D_i^2\\, where the quadratic and effect
-modification terms are optional. Finally, the linear-exponential
-relative risk model \\RR_i= 1+(\beta_1 + \bm{M}\_i^T \bm{\beta}\_{m1})
-D_i \exp\\(\beta_2+ \bm{M}\_i^T \bm{\beta}\_{m2})D_i\\\\ is supported.
-
-The second supported family is logistic regression for binary outcomes,
-with probabilities \$\$p_i/(1-p_i)=RR_i\exp(\alpha_0+\bm X_i^T \bm
-\alpha).\$\$
-
-Third is Poisson regression for counts, \$\$Y_i \sim
-\text{Poisson}(\mu_i),\$\$ where \\\mu_i=RR_i \exp(\alpha_0 +\bm X_i^T
-\bm \alpha)\times \text{offset}\_i\\ with optional offset.
-
-Fourth is proportional hazards regression for time-to-event data, with
-hazard function \$\$h(t) = h_0(t)RR_i\exp(\bm X_i^T \bm \alpha),\$\$
-with \\h_0\\ the baseline hazard.
-
-Fifth is multinomial logistic regression for a categorical outcome with
-\\Z\>2\\ outcome categories, with the last category as the referent
-category (i.e., \\\alpha\_{0,Z}=\bm
-\alpha\_{Z}=\beta\_{1,Z}=\beta\_{2,Z}=\bm \beta\_{m1,Z} = \bm
-\beta\_{m2,Z}=0\\): \$\$P(Y_i=z)=RR_i\exp(\alpha\_{0,z}+\bm X_i^T \bm
-\alpha\_{z})/\\1+\sum\_{s=1}^{Z-1} RR_i\exp(\alpha\_{0,s}+\bm X_i^T \bm
-\alpha\_{s})\\\$\$
-
-Sixth is conditional logistic regression for matched case control data,
-for which \$\$P\left(Y_i = 1, Y_k = 0 \forall k \neq i \bigg\| \sum\_{i
-\in \mathcal{R}} Y_i = 1\right) = RR_i\exp(\bm X_i^T \bm
-\alpha)/\\\sum\_{k \in \mathcal{R}}RR_k\exp(\bm X_k^T \bm \alpha)\\,\$\$
-where \\\mathcal{R}\\ is the matched set corresponding to individual
-\\i\\.
-
-Methods include regression calibration (RC; Carroll et al. 2006
-[doi:10.1201/9781420010138](https://doi.org/10.1201/9781420010138) ),
-extended regression calibration (ERC; Little et al. 2023
-[doi:10.1038/s41598-023-42283-y](https://doi.org/10.1038/s41598-023-42283-y)
-), Monte Carlo maximum likelihood (MCML; Stayner et al. 2007
-[doi:10.1667/RR0677.1](https://doi.org/10.1667/RR0677.1) ), frequentist
-model averaging (FMA; Kwon et al. 2023
-[doi:10.1371/journal.pone.0290498](https://doi.org/10.1371/journal.pone.0290498)
-), and Bayesian model averaging (BMA; Kwon et al. 2016
-[doi:10.1002/sim.6635](https://doi.org/10.1002/sim.6635) ).
+Fit regression models that account for exposure uncertainty using
+multiple exposure realizations. Supported outcome models are Gaussian,
+binomial, Poisson, proportional hazards, multinomial, and conditional
+logistic regression. Estimation methods include regression calibration
+(RC), extended regression calibration (ERC), Monte Carlo maximum
+likelihood (MCML), frequentist model averaging (FMA), and Bayesian model
+averaging (BMA).
 
 ## Usage
 
@@ -266,7 +216,8 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
   is normally run to refine the fit. If this automatic BFGS refinement
   fails because its finite-difference evaluations are non-finite, the
   Nelder-Mead solution is retained and checked using the usual Hessian
-  and convergence diagnostics.
+  and convergence diagnostics. A warning is emitted if the selected
+  final optimizer result has a nonzero convergence code.
 
 - control:
 
@@ -296,6 +247,107 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 - ...:
 
   other arguments, passed to functions such as `transform`.
+
+## Formula Syntax
+
+Models are specified through formulas of the form
+`Y ~ dose(dose_expression, model="ERR", deg=1, modifier=~M1+M2) + X1 + X2`.
+Exactly one `dose()` term is required. Its unnamed `dose_expression`
+argument selects the exposure realization columns using
+[`eval_select`](https://tidyselect.r-lib.org/reference/eval_select.html)
+syntax. For example, use `D1:D1000` for sequentially named columns or
+`all_of(dosevars)` for a character vector of column names.
+
+The recognized named arguments inside `dose()` are `model`, `deg`, and
+`modifier`; their names must be written exactly. For non-Gaussian
+families, `model` selects the exponential relative risk model (`"EXP"`),
+linear-exponential model (`"LINEXP"`), or linear excess relative risk
+model (`"ERR"`, the default). For exponential and linear ERR models,
+`deg=1` fits a linear exposure effect and `deg=2` adds a quadratic term.
+
+The optional `modifier` argument uses a one-sided formula. Use
+`modifier=~M` for reference-plus-contrast coding and `modifier=~0+M` or
+`modifier=~M-1` for subgroup-specific dose coefficients. Modifier
+variables may be binary numeric, logical, or factor with the first level
+used as the reference category. Interactions, transformed modifier
+terms, continuous numeric modifiers, character modifiers, and
+no-intercept coding with multiple modifier variables are not supported.
+
+The special terms are parsed more narrowly than ordinary model-formula
+terms. For non-survival models, the response must be a single,
+untransformed data column. The argument to `strata()` for conditional
+logistic regression and the argument to
+[`offset()`](https://rdrr.io/r/stats/offset.html) for Poisson regression
+must each be one untransformed data column. Proportional hazards models
+require `Surv(exit, status)` or `Surv(entry, exit, status)`, with each
+argument naming a data column. Expressions such as
+`offset(log(person_time))` or `strata(interaction(center, set))` are
+therefore not supported; create the derived column in `data` first.
+
+Additional right-hand-side covariates are expanded with
+[`model.matrix`](https://rdrr.io/r/stats/model.matrix.html) and may use
+standard formula features such as factor contrasts, interactions,
+[`I()`](https://rdrr.io/r/base/AsIs.html) terms, and basis functions.
+For example, `X1*X2`, `I(age^2)`, `splines::ns(age, df=3)`, and
+`splines::bs(age, df=4)` are supported. These terms must preserve one
+value per input row; terms that drop rows internally, such as
+`stats::na.omit(X)`, are not supported. Removing the overall intercept
+with `-1` or `+0` is also not supported.
+
+## Supported Outcome Models
+
+For the Gaussian family, \$\$Y_i \sim N(\mu_i, \sigma^2),\$\$ with
+\$\$\mu_i = \alpha_0 + \bm X_i^T \bm \alpha + \beta_1 D_i + \beta_2
+D_i^2 + \bm M_i^T \bm \beta\_{m1}D_i + \bm M_i^T \bm
+\beta\_{m2}D_i^2.\$\$ Here \\\bm X_i\\ are covariates, \\D_i\\ is the
+exposure with measurement error, and \\\bm M_i\\ are effect modifier
+design columns. The quadratic exposure terms and effect modification are
+optional.
+
+For non-Gaussian families, the supported main-exposure relative risk
+models are the exponential model \$\$RR_i=\exp(\beta_1 D_i+\beta_2
+D_i^2+ \bm M_i^T \bm \beta\_{m1}D_i + \bm M_i^T \bm
+\beta\_{m2}D_i^2),\$\$ the linear excess relative risk (ERR) model
+\$\$RR_i=1+\beta_1 D_i+\beta_2 D_i^2+ \bm M_i^T \bm \beta\_{m1}D_i + \bm
+M_i^T \bm \beta\_{m2}D_i^2,\$\$ and the linear-exponential model
+\$\$RR_i=1+(\beta_1+\bm M_i^T \bm \beta\_{m1})D_i \exp\\(\beta_2+\bm
+M_i^T \bm \beta\_{m2})D_i\\.\$\$ Quadratic and effect modification terms
+are optional where applicable.
+
+For binary outcomes, logistic regression uses
+\$\$p_i/(1-p_i)=RR_i\exp(\alpha_0+\bm X_i^T \bm \alpha).\$\$
+
+For counts, Poisson regression uses \$\$Y_i \sim \text{Poisson}(\mu_i),
+\qquad \mu_i=RR_i\exp(\alpha_0+\bm X_i^T \bm \alpha)\times
+\text{offset}\_i,\$\$ with an optional offset.
+
+For time-to-event outcomes, proportional hazards regression uses
+\$\$h(t)=h_0(t)RR_i\exp(\bm X_i^T \bm \alpha),\$\$ where \\h_0\\ is the
+baseline hazard.
+
+For a categorical outcome with \\Z\>2\\ categories, multinomial logistic
+regression uses the last category as the referent (\\\alpha\_{0,Z}=\bm
+\alpha_Z=\beta\_{1,Z}=\beta\_{2,Z}= \bm \beta\_{m1,Z}=\bm
+\beta\_{m2,Z}=0\\): \$\$P(Y_i=z)=\frac{RR_i\exp(\alpha\_{0,z}+\bm X_i^T
+\bm \alpha_z)} {1+\sum\_{s=1}^{Z-1}RR_i\exp(\alpha\_{0,s}+\bm X_i^T \bm
+\alpha_s)}.\$\$
+
+For matched case-control data, conditional logistic regression uses
+\$\$P\left(Y_i=1, Y_k=0\\ \forall k\ne i\\ \bigg\|\\ \sum\_{i\in\mathcal
+R}Y_i=1\right)= \frac{RR_i\exp(\bm X_i^T \bm \alpha)}
+{\sum\_{k\in\mathcal R}RR_k\exp(\bm X_k^T \bm \alpha)},\$\$ where
+\\\mathcal R\\ is the matched set containing individual \\i\\.
+
+The estimation methods are described by Carroll et al. (2006)
+[doi:10.1201/9781420010138](https://doi.org/10.1201/9781420010138) for
+RC, Little et al. (2023)
+[doi:10.1038/s41598-023-42283-y](https://doi.org/10.1038/s41598-023-42283-y)
+for ERC, Stayner et al. (2007)
+[doi:10.1667/RR0677.1](https://doi.org/10.1667/RR0677.1) for MCML, Kwon
+et al. (2023)
+[doi:10.1371/journal.pone.0290498](https://doi.org/10.1371/journal.pone.0290498)
+for FMA, and Kwon et al. (2016)
+[doi:10.1002/sim.6635](https://doi.org/10.1002/sim.6635) for BMA.
 
 ## Value
 
@@ -346,7 +398,8 @@ For RC, ERC, and MCML the following additional output is included:
   a list object with results returned by optim. Components are `par`
   (raw parameters before applying a transformation if applicable),
   `hessian` (Hessian matrix for `par`), `convergence` (convergence code
-  with 0 indicating convergence and 1 indicating that the maximal number
+  with 0 indicating convergence and a nonzero value indicating that the
+  optimizer did not converge; code 1 indicates that the maximal number
   of iterations was reached), and `counts` (the number of likelihood
   function evaluations used during optimization).
 
@@ -451,56 +504,18 @@ missing-value policy is reapplied. Unlike
 residuals or diagnostic plots back to the originally supplied row count;
 those outputs are computed on the fitted rows.
 
-Models are specified through formulas of the form
-`Y~dose(dose_expression, model="ERR", deg=1, modifier=~M1+M2)+X1+X2`.
-Here `dose_expression` specifies the dose realization columns and is
-parsed by `eval_select` from the tidyselect package. Useful examples are
-`D1:D1000` if the doses are in a sequence of columns with sequential
-names such as `D1`-`D1000`, and `all_of(dosevars)` where `dosevars` is a
-vector with the names of all dose columns. Further, `model` specifies,
-for non-Gaussian families, whether to use the exponential dose-response
-model (`model="EXP"`), the linear-exponential model (`model="LINEXP"`)
-or the linear ERR model (`model="ERR"`). Next, `deg` is used to specify
-whether a quadratic dose term should (`deg=2`) or should not (`deg=1`)
-be estimated for the exponential or linear ERR dose-response model. The
-`modifier` term is optional and used to specify effect modification
-variables through a formula. Use `modifier=~M` for
-reference-plus-contrast coding, and `modifier=~0+M` or `modifier=~M-1`
-for subgroup-specific dose coefficients. Formula modifiers may be binary
-numeric/logical variables or factors; factor modifiers use the existing
-factor level order, with the first level as the reference. Interactions,
-transformed modifier terms, continuous numeric modifiers, character
-modifiers, and no-intercept coding with multiple modifier variables are
-not currently supported. The older syntax `modifier=M1+M2` is deprecated
-and remains binary-only. When `deg`, `modifier`, and `model` are not
-supplied, the defaults are `deg=1`, no effect modifiers, and
-`model="ERR"`.
+When `keep.data=FALSE`, later calls that use supplied data apply the
+same expanded covariate columns as the original fit. If covariates
+appear poorly scaled or ill-conditioned, ameras emits a diagnostic
+warning; centering or scaling continuous covariates such as calendar
+year can improve numerical optimization.
 
-Additional right-hand-side covariates are expanded using
-[`model.matrix`](https://rdrr.io/r/stats/model.matrix.html), so standard
-formula features such as factor contrasts, interactions,
-[`I()`](https://rdrr.io/r/base/AsIs.html) terms, and basis functions can
-be used. For example, formulas can include terms such as `X1*X2`,
-`I(age^2)`, `splines::ns(age, df=3)`, or `splines::bs(age, df=4)`. These
-terms must preserve one value per row of the input data; terms that drop
-rows, such as `stats::na.omit(X)`, are not supported. When
-`keep.data=FALSE`, later calls that use supplied data apply the same
-expanded covariate columns as the original fit. If covariates appear
-poorly scaled or ill-conditioned, ameras emits a diagnostic warning;
-centering or scaling continuous covariates such as calendar year can
-improve numerical optimization.
-
-The matched set variable `setnr` required for conditional logistic
-regression is specified on the right-hand side of the formula through a
-term `strata(setnr)`, and an optional offset variable `offset` for
-Poisson regression similarly through a term `offset(offset)`. For
-conditional logistic regression, matched sets of size 1 and matched sets
-with no cases are excluded, and matched sets with more than one case are
-not currently supported. For proportional hazards regression, the
-left-hand side of the formula should have the form `Surv(exit, status)`
-or `Surv(entry, exit, status)`. When entry times are supplied, rows with
-`entry == exit` are excluded because they have zero follow-up time under
-the `entry < t <= exit` risk-set convention.
+For conditional logistic regression, matched sets of size 1 and matched
+sets with no cases are excluded, and matched sets with more than one
+case are not currently supported. For proportional hazards regression
+with entry times, rows with `entry == exit` are excluded because they
+have zero follow-up time under the `entry < t <= exit` risk-set
+convention.
 
 A transformation can be used to reparametrize parameters for
 optimization, such that the likelihoods are evaluated at
@@ -597,6 +612,16 @@ extracting variance-covariance matrices, and
 [`included_realizations`](https://ameras.sanderroberti.com/reference/included_realizations.md)
 for inspecting which realizations contributed to model averaging.
 
+For extended examples, see
+[`vignette("modelfitting", package="ameras")`](https://ameras.sanderroberti.com/articles/modelfitting.md)
+for the general workflow,
+[`vignette("relativeriskmodels", package="ameras")`](https://ameras.sanderroberti.com/articles/relativeriskmodels.md)
+for relative risk models,
+[`vignette("effectmodification", package="ameras")`](https://ameras.sanderroberti.com/articles/effectmodification.md)
+for effect modification, and
+[`vignette("confidenceintervals", package="ameras")`](https://ameras.sanderroberti.com/articles/confidenceintervals.md)
+for confidence and credible intervals.
+
 ## References
 
 Roberti, S., Kwon D., Wheeler W., Pfeiffer R. (in preparation). ameras:
@@ -606,31 +631,48 @@ Studies
 ## Examples
 
 ``` r
-  ameras(Y.gaussian~dose(V1:V10, modifier=~M1+M2)+X1+X2, data = ameras_simulated, family="gaussian")
+## Fit a Gaussian regression-calibration model using ten exposure realizations
+example_data <- ameras_simulated[1:500, ]
+fit <- ameras(
+  Y.gaussian ~ dose(V1:V10) + X1 + X2,
+  data = example_data,
+  family = "gaussian",
+  methods = "RC"
+)
 #> Fitting RC
+
+## Extract estimates
+coef(fit)
+#>                     RC
+#> (Intercept) -1.4325161
+#> X1           0.5776954
+#> X2          -0.5216418
+#> dose         1.1596141
+#> sigma        1.1238400
+
+## Add Wald confidence intervals and display a detailed summary
+fit <- confint(fit, type = "wald.orig", print = FALSE)
+summary(fit)
 #> Call:
-#> ameras(formula = Y.gaussian ~ dose(V1:V10, modifier = ~M1 + M2) + 
-#>     X1 + X2, data = ameras_simulated, family = "gaussian")
+#> ameras(formula = Y.gaussian ~ dose(V1:V10) + X1 + X2, data = example_data, 
+#>     family = "gaussian", methods = "RC")
 #> 
-#> Number of rows: 3000
-#> Number of dose realizations: 10
+#> Rows: 500
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.345 0.0 0.345
+#>      RC 0.081 0.0 0.081
 #> 
-#> Estimated model parameters:
+#> Summary of coefficients by method:
 #> 
-#>                  RC
-#> (Intercept) -1.3796
-#> X1           0.4966
-#> X2          -0.5151
-#> dose         0.9818
-#> dose:M1      0.1739
-#> dose:M2      0.5054
-#> sigma        1.0661
+#>  Method        Term Estimate      SE CI.lower CI.upper
+#>      RC (Intercept)  -1.4325 0.09084   -1.611  -1.2545
+#>      RC          X1   0.5777 0.10087    0.380   0.7754
+#>      RC          X2  -0.5216 0.12672   -0.770  -0.2733
+#>      RC        dose   1.1596 0.05252    1.057   1.2625
+#>      RC       sigma   1.1238 0.03554    1.054   1.1935
 #> 
 ```

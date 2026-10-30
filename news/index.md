@@ -4,10 +4,37 @@
 
 ### Bug fixes
 
+- RC, ERC, and MCML fits now warn when the selected final optimizer
+  result returns a nonzero convergence code. For automatic Nelder-Mead
+  plus BFGS fitting, the warning is based on the BFGS result when
+  refinement completes and on the retained Nelder-Mead result when
+  refinement fails.
 - A failure of the automatic BFGS refinement due to non-finite
   finite-difference evaluations no longer aborts a valid Nelder-Mead
   fit. The Nelder-Mead solution is retained and assessed using the usual
   Hessian and convergence diagnostics.
+
+### Changes
+
+- Renamed the bundled example dataset from `data` to `ameras_simulated`,
+  enabled lazy loading, and expanded its documentation.
+- The deprecation warning for the direct argument interface now
+  explicitly states that the interface will be removed in version 1.0.0.
+
+### Improvements
+
+- Public `amerasfit` methods now warn about unused arguments passed
+  through `...`, helping detect misspelled or unsupported arguments.
+- Improved validation messages, including correcting factor-validation
+  errors and removing redundant `ERROR:` and `WARNING:` prefixes.
+
+### Documentation
+
+- Expanded
+  [`?ameras`](https://ameras.sanderroberti.com/reference/ameras.md) with
+  dedicated formula-syntax and outcome-model sections, documented
+  restrictions on special formula terms, and added a more complete
+  example with links to the relevant vignettes.
 
 ## ameras 0.5.2
 
