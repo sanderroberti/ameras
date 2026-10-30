@@ -408,7 +408,7 @@ ameras <- function(
       what = "ameras(Y)",
       details = paste0(
         "The direct argument interface is deprecated and will be removed ",
-        "in the next release. ",
+        "in version 1.0.0. ",
         "Please use the formula interface instead:\n",
         "  ameras(Y ~ dose(D1:D10, model='ERR') + X1, ",
         "data=data, family='binomial')\n",
