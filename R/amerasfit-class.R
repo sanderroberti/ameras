@@ -6,6 +6,14 @@ new_amerasfit <- function(x = list()) {
   )
 }
 
+
+nobs.amerasfit <- function(object, ...) {
+  chkDots(...)
+
+  object$num.rows
+}
+
+
 vcov.amerasfit <- function(
   object,
   methods = c("RC", "ERC", "MCML", "FMA", "BMA"),

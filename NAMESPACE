@@ -61,6 +61,7 @@ export(
   summary_table
 )
 S3method(coef, amerasfit)
+S3method(nobs, amerasfit)
 S3method(summary, amerasfit)
 S3method(print, summary.amerasfit)
 S3method(traceplot, amerasfit)

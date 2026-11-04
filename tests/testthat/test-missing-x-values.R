@@ -33,6 +33,7 @@ test_that("na.omit drops missing ordinary X values before fitting", {
 
   expect_equal(fit$num.rows.original, nrow(dat))
   expect_equal(fit$num.rows, nrow(dat) - 1)
+  expect_equal(nobs(fit), nrow(dat) - 1)
   expect_s3_class(fit$na.action, "omit")
   expect_equal(as.integer(fit$na.action), 3L)
   expect_false(anyNA(fit$model$data$X))

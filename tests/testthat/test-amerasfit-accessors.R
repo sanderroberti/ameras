@@ -51,6 +51,7 @@ test_that("public methods warn about unused dots", {
 
   expect_unused_dots_warning(vcov(fit, typo = TRUE))
   expect_unused_dots_warning(coef(fit, typo = TRUE))
+  expect_unused_dots_warning(nobs(fit, typo = TRUE))
   expect_unused_dots_warning(summary(fit, typo = TRUE))
   expect_identical(
     count_unused_dots_warnings(summary_table(fit, typo = TRUE)),
@@ -88,6 +89,16 @@ test_that("public methods warn about unused dots", {
       "supports RC, ERC, and MCML"
     )
   )
+})
+
+test_that("nobs returns the number of rows used for fitting", {
+  fit <- ameras:::new_amerasfit(list(
+    num.rows = 7L,
+    num.rows.original = 10L,
+    na.action = structure(c(2L, 5L), class = "omit")
+  ))
+
+  expect_identical(nobs(fit), 7L)
 })
 
 test_that("Rhat returns BMA convergence diagnostics", {

@@ -28,6 +28,7 @@ test_that("prophaz filters zero-follow-up rows before fitting", {
   )
 
   expect_equal(fit$num.rows, nrow(base))
+  expect_equal(nobs(fit), nrow(base))
   expect_false(any(fit$model$data$entry == fit$model$data$exit))
   expect_true(all(is.finite(fit$RC$coefficients)))
 

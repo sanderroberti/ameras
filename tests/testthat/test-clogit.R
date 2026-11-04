@@ -54,6 +54,7 @@ test_that("clogit filters uninformative matched sets before fitting", {
   )
 
   expect_equal(fit$num.rows, nrow(base))
+  expect_equal(nobs(fit), nrow(base))
   expect_false(any(fit$model$data$setnr %in% c(9, 10)))
   expect_true(all(is.finite(fit$RC$coefficients)))
 

@@ -18,6 +18,12 @@
 * The deprecation warning for the direct argument interface now explicitly
   states that the interface will be removed in version 1.0.0.
 
+## New features
+
+* Added an `nobs()` method for `amerasfit` objects that returns the number of
+  observations used for fitting after missing-value and family-specific
+  exclusions.
+
 ## Improvements
 
 * Public `amerasfit` methods now warn about unused arguments passed through

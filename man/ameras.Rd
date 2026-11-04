@@ -218,7 +218,7 @@ Finally, for FMA the output additionally contains:
   \item{included.samples}{the total number of samples included.}
   \item{included.realizations}{indices of realization exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results. }
 
-The class \code{amerasfit} supports the methods \code{\link[=print.amerasfit]{print}}, \code{\link[=coef.amerasfit]{coef}}, \code{\link[=confint.amerasfit]{confint}}, \code{\link[=summary.amerasfit]{summary}}, \code{\link[=summary_table.amerasfit]{summary_table}}, \code{\link[=vcov.amerasfit]{vcov}}, \code{\link[=residuals.amerasfit]{residuals}}, \code{\link[=plot.amerasfit]{plot}}, \code{\link{traceplot}}, \code{\link[=convergence.amerasfit]{convergence}}, \code{\link[=Rhat.amerasfit]{Rhat}}, and \code{\link[=included_realizations.amerasfit]{included_realizations}}.
+The class \code{amerasfit} supports the methods \code{\link[=print.amerasfit]{print}}, \code{\link[=coef.amerasfit]{coef}}, \code{\link[=nobs.amerasfit]{nobs}}, \code{\link[=confint.amerasfit]{confint}}, \code{\link[=summary.amerasfit]{summary}}, \code{\link[=summary_table.amerasfit]{summary_table}}, \code{\link[=vcov.amerasfit]{vcov}}, \code{\link[=residuals.amerasfit]{residuals}}, \code{\link[=plot.amerasfit]{plot}}, \code{\link{traceplot}}, \code{\link[=convergence.amerasfit]{convergence}}, \code{\link[=Rhat.amerasfit]{Rhat}}, and \code{\link[=included_realizations.amerasfit]{included_realizations}}.
 }
 
 \details{
@@ -265,7 +265,8 @@ Because the proportional hazards model is not available in \code{nimble}, \code{
   \code{\link[=confint.amerasfit]{confint}} for computing confidence intervals,
   \code{\link[=summary.amerasfit]{summary}} for a summary of the fitted model
   including confidence intervals if computed, \code{\link[=coef.amerasfit]{coef}} 
-  for extracting coefficients, \code{\link[=vcov.amerasfit]{vcov}} for extracting
+  for extracting coefficients, \code{\link[=nobs.amerasfit]{nobs}} for the number
+  of observations used for fitting, \code{\link[=vcov.amerasfit]{vcov}} for extracting
   variance-covariance matrices, and \code{\link[=included_realizations.amerasfit]{included_realizations}}
   for inspecting which realizations contributed to model averaging.
 
