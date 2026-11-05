@@ -48,7 +48,13 @@
 <div class="section level3">
 <h3 id="changes-development-version">Changes<a class="anchor" aria-label="anchor" href="#changes-development-version"></a></h3>
 <ul><li>Renamed the bundled example dataset from <code>data</code> to <code>ameras_simulated</code>, enabled lazy loading, and expanded its documentation.</li>
+<li>
+<code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> now returns a named numeric vector when an <code>amerasfit</code> object contains one fitted method. Objects containing multiple methods continue to return a data frame with one column per method.</li>
 <li>The deprecation warning for the direct argument interface now explicitly states that the interface will be removed in version 1.0.0.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>Added an <code><a href="https://rdrr.io/r/stats/nobs.html" class="external-link">nobs()</a></code> method for <code>amerasfit</code> objects that returns the number of observations used for fitting after missing-value and family-specific exclusions.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>

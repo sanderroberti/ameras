@@ -18,8 +18,18 @@
 
 - Renamed the bundled example dataset from `data` to `ameras_simulated`,
   enabled lazy loading, and expanded its documentation.
+- [`coef()`](https://rdrr.io/r/stats/coef.html) now returns a named
+  numeric vector when an `amerasfit` object contains one fitted method.
+  Objects containing multiple methods continue to return a data frame
+  with one column per method.
 - The deprecation warning for the direct argument interface now
   explicitly states that the interface will be removed in version 1.0.0.
+
+### New features
+
+- Added an [`nobs()`](https://rdrr.io/r/stats/nobs.html) method for
+  `amerasfit` objects that returns the number of observations used for
+  fitting after missing-value and family-specific exclusions.
 
 ### Improvements
 

@@ -22,6 +22,8 @@
   : Visualize Multiple Dose Realizations
 - [`included_realizations()`](https://ameras.sanderroberti.com/reference/included_realizations.md)
   : Extract Included Realizations from an amerasfit Object
+- [`nobs(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/nobs.md)
+  : Number of Observations Used to Fit an ameras Model
 - [`plot(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/plot.md)
   : Diagnostic Plots for an amerasfit Object
 - [`print(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/print.md)

@@ -476,6 +476,7 @@ Finally, for FMA the output additionally contains:
 The class `amerasfit` supports the methods
 [`print`](https://ameras.sanderroberti.com/reference/print.md),
 [`coef`](https://ameras.sanderroberti.com/reference/coef.md),
+[`nobs`](https://ameras.sanderroberti.com/reference/nobs.md),
 [`confint`](https://ameras.sanderroberti.com/reference/confint.md),
 [`summary`](https://ameras.sanderroberti.com/reference/summary.md),
 [`summary_table`](https://ameras.sanderroberti.com/reference/summary.md),
@@ -607,6 +608,8 @@ computing confidence intervals,
 summary of the fitted model including confidence intervals if computed,
 [`coef`](https://ameras.sanderroberti.com/reference/coef.md) for
 extracting coefficients,
+[`nobs`](https://ameras.sanderroberti.com/reference/nobs.md) for the
+number of observations used for fitting,
 [`vcov`](https://ameras.sanderroberti.com/reference/vcov.md) for
 extracting variance-covariance matrices, and
 [`included_realizations`](https://ameras.sanderroberti.com/reference/included_realizations.md)
@@ -643,12 +646,8 @@ fit <- ameras(
 
 ## Extract estimates
 coef(fit)
-#>                     RC
-#> (Intercept) -1.4325161
-#> X1           0.5776954
-#> X2          -0.5216418
-#> dose         1.1596141
-#> sigma        1.1238400
+#> (Intercept)          X1          X2        dose       sigma 
+#>  -1.4325161   0.5776954  -0.5216418   1.1596141   1.1238400 
 
 ## Add Wald confidence intervals and display a detailed summary
 fit <- confint(fit, type = "wald.orig", print = FALSE)
@@ -663,8 +662,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.081 0.0 0.081
+#>  Method   Fit    CI Total
+#>      RC 0.105 0.001 0.106
 #> 
 #> Summary of coefficients by method:
 #> 

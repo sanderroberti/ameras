@@ -40,13 +40,8 @@ fit_contrast <- ameras(
 )
 
 coef(fit_contrast)
-#>                     RC
-#> (Intercept) -1.3602199
-#> X1           0.4788215
-#> X2          -0.5192733
-#> dose         1.0836911
-#> dose:M1      0.1566173
-#> sigma        1.1021197
+#> (Intercept)          X1          X2        dose     dose:M1       sigma 
+#>  -1.3602199   0.4788215  -0.5192733   1.0836911   0.1566173   1.1021197
 ```
 
 This coding is convenient when the effect-modification contrast is the
@@ -68,13 +63,8 @@ fit_subgroup <- ameras(
 )
 
 coef(fit_subgroup)
-#>                     RC
-#> (Intercept) -1.3602200
-#> X1           0.4788212
-#> X2          -0.5192734
-#> dose[M1=0]   1.0836912
-#> dose[M1=1]   1.2403085
-#> sigma        1.1021195
+#> (Intercept)          X1          X2  dose[M1=0]  dose[M1=1]       sigma 
+#>  -1.3602200   0.4788212  -0.5192734   1.0836912   1.2403085   1.1021195
 ```
 
 The two codings are equivalent. The non-reference subgroup effect is the
@@ -135,13 +125,12 @@ fit_factor_contrast <- ameras(
 )
 
 coef(fit_factor_contrast)
-#>                                      RC
-#> (Intercept)                  -1.3602199
-#> X1                            0.4788215
-#> X2                           -0.5192733
-#> dose                          1.0836911
-#> dose:M_factor=modifier group  0.1566173
-#> sigma                         1.1021197
+#>                  (Intercept)                           X1 
+#>                   -1.3602199                    0.4788215 
+#>                           X2                         dose 
+#>                   -0.5192733                    1.0836911 
+#> dose:M_factor=modifier group                        sigma 
+#>                    0.1566173                    1.1021197
 ```
 
 With `modifier = ~ 0 + M_factor`, ameras reports subgroup-specific
@@ -157,13 +146,12 @@ fit_factor_subgroup <- ameras(
 )
 
 coef(fit_factor_subgroup)
-#>                                                 RC
-#> (Intercept)                             -1.3602200
-#> X1                                       0.4788212
-#> X2                                      -0.5192734
-#> dose[M_factor=unexposed modifier group]  1.0836912
-#> dose[M_factor=modifier group]            1.2403085
-#> sigma                                    1.1021195
+#>                             (Intercept)                                      X1 
+#>                              -1.3602200                               0.4788212 
+#>                                      X2 dose[M_factor=unexposed modifier group] 
+#>                              -0.5192734                               1.0836912 
+#>           dose[M_factor=modifier group]                                   sigma 
+#>                               1.2403085                               1.1021195
 ```
 
 Multi-level factors are supported. With reference-plus-contrast coding,
@@ -186,14 +174,10 @@ fit_three_level <- ameras(
 )
 
 coef(fit_three_level)
-#>                         RC
-#> (Intercept)     -1.3619937
-#> X1               0.4813357
-#> X2              -0.5196477
-#> dose[M3=low]     1.1433969
-#> dose[M3=middle]  1.1715892
-#> dose[M3=high]    1.1807593
-#> sigma            1.1073548
+#>     (Intercept)              X1              X2    dose[M3=low] dose[M3=middle] 
+#>      -1.3619937       0.4813357      -0.5196477       1.1433969       1.1715892 
+#>   dose[M3=high]           sigma 
+#>       1.1807593       1.1073548
 ```
 
 ## Confidence intervals
