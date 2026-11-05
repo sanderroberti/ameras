@@ -662,8 +662,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.105 0.001 0.106
+#>  Method   Fit  CI Total
+#>      RC 0.139 0.0 0.139
 #> 
 #> Summary of coefficients by method:
 #> 
