@@ -173,29 +173,17 @@ test_that("formula modifier validation rejects unsupported terms", {
 })
 
 
-test_that("legacy modifier syntax is deprecated but preserves RC output", {
-  skip_on_cran()
-
-  data <- ameras_simulated
-
-  lifecycle::expect_deprecated(
-    legacy <- suppressMessages(ameras(
+test_that("legacy modifier syntax is defunct", {
+  expect_error(
+    ameras(
       Y.binomial ~ dose(V1:V2, model = "EXP", modifier = M1),
-      data = data,
+      data = ameras_simulated,
       family = "binomial",
       methods = "RC"
-    ))
+    ),
+    "Use formula modifier syntax",
+    class = "lifecycle_error_deprecated"
   )
-  formula <- suppressMessages(ameras(
-    Y.binomial ~ dose(V1:V2, model = "EXP", modifier = ~ M1),
-    data = data,
-    family = "binomial",
-    methods = "RC"
-  ))
-
-  expect_equal(coef(legacy), coef(formula), tolerance = 1e-7)
-  expect_equal(vcov(legacy), vcov(formula), tolerance = 1e-6)
-  expect_equal(legacy$RC$loglik, formula$RC$loglik, tolerance = 1e-7)
 })
 
 

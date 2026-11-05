@@ -292,26 +292,10 @@ ameras_main <- function(
 }
 
 ameras <- function(
-  formula = NULL,
+  formula,
   data,
   family = "gaussian",
   methods = "RC",
-  # Old arguments kept temporarily for deprecation
-  Y = NULL,
-  dosevars = NULL,
-  doseRRmod = NULL,
-  deg = NULL,
-  M = NULL,
-  X = NULL,
-  offset = NULL,
-  entry = NULL,
-  exit = NULL,
-  setnr = NULL,
-  CI = NULL,
-  params.profCI = NULL,
-  maxit.profCI = NULL,
-  tol.profCI = NULL,
-  # Current arguments
   transform = NULL,
   transform.jacobian = NULL,
   inpar = NULL,
@@ -325,7 +309,6 @@ ameras <- function(
   nchains.BMA = 2,
   thin.BMA = 10,
   included.realizations.BMA = NULL,
-  included.replicates.BMA = NULL,
   optim.method = "Nelder-Mead",
   control = NULL,
   keep.data = TRUE,
@@ -334,15 +317,66 @@ ameras <- function(
 ) {
   call_env <- parent.frame()
 
-  old_interface <- is.null(formula) || !inherits(formula, "formula")
-  if (!is.null(included.replicates.BMA)) {
-    included.realizations.BMA <- included.replicates.BMA
-    lifecycle::deprecate_warn(
+  # Deprecated arguments are no longer part of the public signature, but
+  # recognize their names in ... so users receive migration guidance instead
+  # of a low-level error. Inspect the raw call as well because R may partially
+  # match the former M argument to MFMA before placing arguments in ....
+  raw_call_names <- names(as.list(sys.call())[-1L])
+  matched_call <- match.call(expand.dots = FALSE)
+  dots_call <- matched_call$...
+  supplied_names <- unique(c(raw_call_names, names(dots_call)))
+  supplied_names <- supplied_names[
+    !is.na(supplied_names) & nzchar(supplied_names)
+  ]
+
+  direct_interface_args <- intersect(
+    supplied_names,
+    c(
+      "Y", "dosevars", "doseRRmod", "deg", "M", "X", "offset",
+      "entry", "exit", "setnr"
+    )
+  )
+  formula_supplied <- !missing(formula)
+  if (
+    length(direct_interface_args) ||
+      (formula_supplied &&
+        (is.null(formula) || !inherits(formula, "formula")))
+  ) {
+    lifecycle::deprecate_stop(
+      when = "0.2.0",
+      what = I("The direct argument interface to `ameras()`"),
+      details = paste0(
+        "Use the formula interface instead, for example:\n",
+        "  ameras(Y ~ dose(D1:D10, model='ERR') + X1, ",
+        "data=data, family='binomial')"
+      )
+    )
+  }
+
+  if (!formula_supplied) {
+    stop("`formula` is required.", call. = FALSE)
+  }
+
+  ci_args <- intersect(
+    supplied_names,
+    c("CI", "params.profCI", "maxit.profCI", "tol.profCI")
+  )
+  if (length(ci_args)) {
+    lifecycle::deprecate_stop(
+      when = "0.2.0",
+      what = paste0("ameras(", ci_args[[1L]], ")"),
+      details = paste0(
+        "Confidence intervals are no longer computed by ameras(). ",
+        "Fit the model first and then call confint()."
+      )
+    )
+  }
+
+  if ("included.replicates.BMA" %in% supplied_names) {
+    lifecycle::deprecate_stop(
       when = "0.3.0",
       what = "ameras(included.replicates.BMA)",
-      details = paste0(
-        "Use included.realizations.BMA instead."
-      )
+      with = "ameras(included.realizations.BMA)"
     )
   }
 
@@ -358,120 +392,7 @@ ameras <- function(
     message("Note: BMA may require extensive computation time")
   }
 
-  # Detect which interface is being used and resolve parsed arguments
-  if (!old_interface) {
-    # New formula interface
-    # Error if old arguments are also supplied
-    old_supplied <- Filter(
-      Negate(is.null),
-      list(
-        Y = Y,
-        dosevars = dosevars,
-        doseRRmod = doseRRmod,
-        deg = deg,
-        M = M,
-        X = X,
-        offset = offset,
-        entry = entry,
-        exit = exit,
-        setnr = setnr
-      )
-    )
-    if (length(old_supplied)) {
-      stop(
-        "Old-style arguments cannot be combined with the formula interface: ",
-        paste(names(old_supplied), collapse = ", "),
-        ".\n",
-        "Please use the formula interface only. See ?ameras for details."
-      )
-    }
-
-    # Warn for CI arguments moved to confint
-    if (!is.null(CI)) {
-      lifecycle::deprecate_warn(
-        when = "0.2.0",
-        what = "ameras(CI)",
-        details = paste0(
-          "CI is deprecated in ameras(). ",
-          "Use confint() after fitting instead, e.g.:\n",
-          "  fit <- ameras(...)\n",
-          "  fit <- confint(fit, type='wald.orig')"
-        )
-      )
-    }
-
-    parsed <- parse_ameras_formula(formula, data, family, env = call_env)
-  } else {
-    # Old direct argument interface
-    lifecycle::deprecate_warn(
-      when = "0.2.0",
-      what = "ameras(Y)",
-      details = paste0(
-        "The direct argument interface is deprecated and will be removed ",
-        "in version 1.0.0. ",
-        "Please use the formula interface instead:\n",
-        "  ameras(Y ~ dose(D1:D10, model='ERR') + X1, ",
-        "data=data, family='binomial')\n",
-        "See ?ameras for details."
-      )
-    )
-
-    if (!is.null(CI)) {
-      lifecycle::deprecate_warn(
-        when = "0.2.0",
-        what = "ameras(CI)",
-        details = paste0(
-          "CI is deprecated in ameras(). ",
-          "Use confint() after fitting instead, e.g.:\n",
-          "  fit <- ameras(...)\n",
-          "  fit <- confint(fit, method='wald.orig')"
-        )
-      )
-    }
-
-    # Validate old-style arguments
-    if (is.null(dosevars)) {
-      stop("dosevars is required")
-    }
-    if (is.null(Y)) {
-      stop("Y is required")
-    }
-
-    # Construct parsed list from direct arguments
-    # matching the structure returned by parse_ameras_formula
-    if (family == "prophaz") {
-      parsed_Y <- NULL
-      parsed_status <- Y
-    } else {
-      parsed_Y <- Y
-      parsed_status <- NULL
-    }
-
-    parsed <- list(
-      Y = parsed_Y,
-      status = parsed_status,
-      entry = entry,
-      exit = exit,
-      dosevars = dosevars,
-      doseRRmod = doseRRmod %||% if (family != "gaussian") "ERR" else NULL,
-      deg = deg %||% 1,
-      M = M,
-      modifier_info = new_modifier_info(
-        source_vars = M,
-        coding = if (!is.null(M)) "legacy" else "none",
-        design_vars = M,
-        parameter_names = M
-      ),
-      X = X,
-      X_formula = if (!is.null(X)) {
-        as.formula(paste("~", paste(X, collapse = "+")))
-      } else {
-        NULL
-      },
-      offset = offset,
-      setnr = setnr
-    )
-  }
+  parsed <- parse_ameras_formula(formula, data, family, env = call_env)
 
   X_design <- build_X_design(parsed$X_formula, data)
   if (!is.null(X_design$matrix)) {
@@ -674,17 +595,6 @@ ameras <- function(
   )
 
   ret <- new_amerasfit(ret)
-
-  # Compute CIs for old interface backwards compatibility
-  if (old_interface && !is.null(CI)) {
-    ret <- confint(
-      ret,
-      type = CI,
-      parm = params.profCI %||% "dose",
-      maxit.profCI = maxit.profCI %||% 20,
-      tol.profCI = tol.profCI %||% 1e-2
-    )
-  }
 
   ret
 }

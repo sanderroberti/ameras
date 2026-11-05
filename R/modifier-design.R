@@ -78,36 +78,10 @@ parse_modifier_formula <- function(expr) {
 
 
 parse_legacy_modifier <- function(expr, env = parent.frame()) {
-  if (is.call(expr)) {
-    fn <- call_name(expr)
-    if (fn %in% c("*", ":", "^")) {
-      stop(
-        "Interactions in modifier are not currently supported. ",
-        "Please create interaction terms manually as new columns in your ",
-        "data frame before calling ameras(). ",
-        "For example: data$M1M2 <- data$M1 * data$M2",
-        call. = FALSE
-      )
-    }
-  }
-
-  vars <- all.vars(expr)
-  if (!length(vars)) {
-    return(new_modifier_info())
-  }
-
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_stop(
     when = "0.5.0",
-    what = "dose(modifier = 'M1 + M2')",
-    details = "Use formula modifier syntax, e.g. dose(..., modifier = ~ M1 + M2).",
-    user_env = env
-  )
-
-  new_modifier_info(
-    source_vars = vars,
-    coding = "legacy",
-    design_vars = vars,
-    parameter_names = vars
+    what = I("Non-formula effect-modifier syntax in `dose()`"),
+    details = "Use formula modifier syntax, e.g. dose(..., modifier = ~ M1 + M2)."
   )
 }
 
@@ -210,16 +184,6 @@ prepare_modifier_inputs <- function(data, modifier_info) {
       data = data,
       modifier_info = new_modifier_info(),
       design_vars = NULL
-    ))
-  }
-
-  if (identical(modifier_info$coding, "legacy")) {
-    modifier_info$design_vars <- modifier_info$source_vars
-    modifier_info$parameter_names <- modifier_info$source_vars
-    return(list(
-      data = data,
-      modifier_info = modifier_info,
-      design_vars = modifier_info$design_vars
     ))
   }
 

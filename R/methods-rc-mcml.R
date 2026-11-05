@@ -21,15 +21,6 @@ ameras.mcml <- function(
   control = list(reltol = 1e-10),
   ...
 ) {
-  # if(length(CI)==0) stop("No CI method specified")
-  # CI <- CI[CI %in% c("wald.orig","wald.transformed", "proflik")]
-  # if(length(CI)>1) stop("Provide one type of CI for MCML: one of wald.orig, wald.transformed, and proflik")
-  # if(length(CI)==0) stop("Incorrect CI method specified, should be one of wald.orig, wald.transformed, and proflik")
-  # if(CI=="proflik" & !(params.profCI %in% c("dose","all"))) stop("Incorrect choice of parameters for profile likelihood CI supplied, should be either all or dose")
-  # if(CI=="wald.transformed" & is.null(transform)) stop("No transformation specified, specify transformation or choose a different CI type")
-  #
-  # if(CI=="proflik") message("Note: computation times for profile likelihood intervals for MCML may be extensive with large datasets or complex models")
-
   if (family == "gaussian") {
     if (is.null(Y)) {
       stop("Y is required for family=gaussian")

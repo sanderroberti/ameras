@@ -13,18 +13,13 @@ frequentist model averaging (FMA), and Bayesian model averaging (BMA).
 }
 
 \usage{
-ameras(formula=NULL, data, family="gaussian", methods="RC", 
-  Y=NULL, dosevars=NULL, doseRRmod=NULL, deg=NULL,
-  M=NULL, X=NULL, offset=NULL, entry=NULL, exit=NULL,
-  setnr=NULL,
-  CI=NULL, params.profCI=NULL,
-  maxit.profCI=NULL, tol.profCI=NULL,
+ameras(formula, data, family="gaussian", methods="RC",
   transform=NULL,
   transform.jacobian=NULL, inpar=NULL, loglim=1e-30, MFMA=100000, 
   future.chunk.size.FMA=NULL,
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
   niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.realizations.BMA=NULL, 
-  included.replicates.BMA=NULL, optim.method="Nelder-Mead", control=NULL, 
+  optim.method="Nelder-Mead", control=NULL,
   keep.data=TRUE, na.action=getOption("na.action"), ... )
 }
 \arguments{
@@ -32,23 +27,6 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 \item{data}{input data frame.}
 \item{family}{outcome model family: \code{"gaussian"}, \code{"binomial"}, \code{"poisson"}, \code{"prophaz"}, \code{"multinomial"} or \code{"clogit"} (default \code{"gaussian"}).}
 \item{methods}{character vector of one or multiple methods to apply. Options: \code{"RC"}, \code{"ERC"}, \code{"MCML"}, \code{"FMA"}, \code{"BMA"} (default \code{"RC"}).}
-\item{Y}{\strong{Deprecated}. Use the formula interface instead. Name or column index of the outcome variable for linear, binomial, Poisson, multinomial and conditional logistic models, or event indicator variable for the proportional hazards model.}
-\item{dosevars}{\strong{Deprecated}. Use the formula interface instead. Names or column indices of exposure realization vectors.}
-\item{doseRRmod}{\strong{Deprecated}. Use the formula interface instead. The functional form of the dose-response relationship; options are exponential RR (\code{"EXP"}), linear ERR (\code{"ERR"}), or linear-exponential RR (\code{"LINEXP"}) (default \code{"ERR"}).}
-\item{deg}{\strong{Deprecated}. Use the formula interface instead. For \code{doseRRmod="ERR"} and \code{doseRRmod="EXP"}, whether to fit a linear (\code{deg=1}) or linear-quadratic (\code{deg=2}) dose-response model (default linear).}
-\item{M}{\strong{Deprecated}. Use the formula interface instead. Names or column indices of binary effect modifying variables (optional).}
-\item{X}{\strong{Deprecated}. Use the formula interface instead. Names or column indices of other covariates (optional).}
-\item{offset}{\strong{Deprecated}. Use the formula interface instead. Name or column index of offset variable for Poisson regression (optional).}
-\item{entry}{\strong{Deprecated}. Use the formula interface instead. Name or column index of left truncation time variable for proportional hazards regression (optional).}
-\item{exit}{\strong{Deprecated}. Use the formula interface instead. Name or column index of exit time variable, required when \code{family=prophaz}.}
-\item{setnr}{\strong{Deprecated}. Use the formula interface instead. Name or column index of integer-valued matched set variable, required when \code{family="clogit"}.}
-\item{CI}{\strong{Deprecated}. Use confint() to compute confidence intervals instead. Method for calculation of 95\% confidence or credible intervals (see Details).
-For RC, ERC, and MCML, options are \code{"wald.orig"}, \code{"wald.transformed"}, \code{"proflik"} (default \code{"proflik"}).
-For FMA and BMA, options are \code{"percentile"} and \code{"hpd"} (default \code{"percentile"}).
-If \code{methods} contains at least one of RC, ERC, and MCML and at least one of FMA and BMA, \code{CI} must be length 2 and specify one method for RC, ERC, and MCML, and one for FMA and BMA (see Details).}
-\item{params.profCI}{\strong{Deprecated}. Use confint() to compute confidence intervals instead. When \code{CI="proflik"}, whether to obtain profile-likelihood CIs for all parameters (\code{"all"}) or only dose-related parameters (\code{"dose"}, default).}
-\item{maxit.profCI}{\strong{Deprecated}. Use confint() to compute confidence intervals instead. Maximum iterations for determining profile-likelihood CIs; passed to \code{uniroot} (default 20).}
-\item{tol.profCI}{\strong{Deprecated}. Use confint() to compute confidence intervals instead. Tolerance for determining profile-likelihood CIs; passed to \code{uniroot} (default \code{1e-2}).}
 \item{transform}{function for parameter transformation during optimization
 (see Details).}
 \item{transform.jacobian}{Jacobian of the transformation function (see Details).}
@@ -64,7 +42,6 @@ Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncat
 \item{nchains.BMA}{number of MCMC chains for BMA (default 2).}
 \item{thin.BMA}{thinning rate for BMA (default 10).}
 \item{included.realizations.BMA}{indices of exposure realizations used in BMA (defaults to all realizations).}
-\item{included.replicates.BMA}{\strong{Deprecated}. Use \code{included.realizations.BMA} instead. Indices of exposure realizations used in BMA (defaults to all realizations).}
 \item{optim.method}{method used for optimization by \code{optim}. Options are \code{"Nelder-Mead"} and \code{"BFGS"}. When using Nelder-Mead, a second optimization with BFGS is normally run to refine the fit. If this automatic BFGS refinement fails because its finite-difference evaluations are non-finite, the Nelder-Mead solution is retained and checked using the usual Hessian and convergence diagnostics. A warning is emitted if the selected final optimizer result has a nonzero convergence code.}
 \item{control}{control list passed to \code{optim} (default \code{list(reltol=1e-10)}).}
 \item{keep.data}{whether to attach data to the output object (default \code{TRUE}). When the data object is large, \code{keep.data} can be set to \code{FALSE} to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied separately when \code{keep.data=FALSE}. See \code{\link[=confint.amerasfit]{confint}}.}
