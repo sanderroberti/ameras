@@ -20,6 +20,7 @@ importFrom(
   "model.frame",
   "model.matrix",
   "na.pass",
+  "nobs",
   "terms",
   "as.formula",
   "confint",
