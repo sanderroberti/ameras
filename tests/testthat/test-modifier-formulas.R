@@ -224,20 +224,20 @@ test_that("subgroup-coded modifiers report subgroup dose coefficients", {
   ))
 
   expect_identical(
-    rownames(coef(group)),
+    names(coef(group)),
     c("(Intercept)", "dose[M1=0]", "dose[M1=1]")
   )
-  expect_identical(rownames(coef(group)), rownames(coef(group_alt)))
+  expect_identical(names(coef(group)), names(coef(group_alt)))
   expect_equal(coef(group), coef(group_alt), tolerance = 1e-7)
 
-  contrast_coef <- setNames(coef(contrast)$RC, rownames(coef(contrast)))
+  contrast_coef <- coef(contrast)
   expected_group <- c(
     "(Intercept)" = unname(contrast_coef["(Intercept)"]),
     "dose[M1=0]" = unname(contrast_coef["dose"]),
     "dose[M1=1]" = unname(contrast_coef["dose"] + contrast_coef["dose:M1"])
   )
   expect_equal(
-    setNames(coef(group)$RC, rownames(coef(group))),
+    coef(group),
     expected_group,
     tolerance = 1e-5
   )
@@ -270,13 +270,13 @@ test_that("subgroup-coded multi-level factors match contrast-coded fits", {
   ))
 
   expect_identical(
-    rownames(coef(group)),
+    names(coef(group)),
     c("(Intercept)", "dose[F3=low]", "dose[F3=mid]", "dose[F3=high]", "sigma")
   )
-  expect_identical(rownames(coef(group)), rownames(coef(group_alt)))
+  expect_identical(names(coef(group)), names(coef(group_alt)))
   expect_equal(coef(group), coef(group_alt), tolerance = 1e-7)
 
-  contrast_coef <- setNames(coef(contrast)$RC, rownames(coef(contrast)))
+  contrast_coef <- coef(contrast)
   expected_group <- c(
     "(Intercept)" = unname(contrast_coef["(Intercept)"]),
     "dose[F3=low]" = unname(contrast_coef["dose"]),
@@ -285,7 +285,7 @@ test_that("subgroup-coded multi-level factors match contrast-coded fits", {
     "sigma" = unname(contrast_coef["sigma"])
   )
   expect_equal(
-    setNames(coef(group)$RC, rownames(coef(group))),
+    coef(group),
     expected_group,
     tolerance = 1e-5
   )
@@ -483,7 +483,7 @@ test_that("subgroup-coded multinomial modifiers keep response-level prefixes", {
   ))
 
   expect_identical(
-    rownames(coef(fit)),
+    names(coef(fit)),
     c(
       "(1)_(Intercept)",
       "(1)_dose[F3=low]", "(1)_dose[F3=mid]", "(1)_dose[F3=high]",

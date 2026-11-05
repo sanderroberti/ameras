@@ -1,8 +1,7 @@
 # proflik/wald.transformed snapshot: RC
 
-    structure(list(RC = c(-0.695663582187652, 0.0358348096332653,
-    0.273524431388668)), class = "data.frame", row.names = c("(Intercept)",
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.695663582187652, dose = 0.0358348096332653,
+    dose_squared = 0.273524431388668)
 
 ---
 
@@ -28,9 +27,8 @@
 
 ---
 
-    structure(list(RC = c(-0.695663582187652, 0.0358348096332653,
-    0.273524431388668)), class = "data.frame", row.names = c("(Intercept)",
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.695663582187652, dose = 0.0358348096332653,
+    dose_squared = 0.273524431388668)
 
 ---
 
@@ -56,9 +54,8 @@
 
 # proflik/wald.transformed snapshot: ERC
 
-    structure(list(ERC = c(-0.693434923733658, 5.33950999146791e-08,
-    0.315000416519103)), class = "data.frame", row.names = c("(Intercept)",
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.693434923733658, dose = 5.33950999146791e-08,
+    dose_squared = 0.315000416519103)
 
 ---
 
@@ -84,9 +81,8 @@
 
 ---
 
-    structure(list(ERC = c(-0.693434923733658, 5.33950999146791e-08,
-    0.315000416519103)), class = "data.frame", row.names = c("(Intercept)",
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.693434923733658, dose = 5.33950999146791e-08,
+    dose_squared = 0.315000416519103)
 
 ---
 
@@ -111,9 +107,8 @@
 
 # proflik/wald.transformed snapshot: MCML
 
-    structure(list(MCML = c(-0.678139870284149, 0.0083653968680493,
-    0.275598584484292)), class = "data.frame", row.names = c("(Intercept)",
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.678139870284149, dose = 0.0083653968680493,
+    dose_squared = 0.275598584484292)
 
 ---
 
@@ -139,9 +134,8 @@
 
 ---
 
-    structure(list(MCML = c(-0.678139870284149, 0.0083653968680493,
-    0.275598584484292)), class = "data.frame", row.names = c("(Intercept)",
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.678139870284149, dose = 0.0083653968680493,
+    dose_squared = 0.275598584484292)
 
 ---
 
@@ -167,9 +161,8 @@
 
 # percentile/hpd snapshot: FMA
 
-    structure(list(FMA = c(-0.679420383964918, 0.0129581869892215,
-    0.274062556829787)), class = "data.frame", row.names = c("(Intercept)",
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.679420383964918, dose = 0.0129581869892215,
+    dose_squared = 0.274062556829787)
 
 ---
 
@@ -195,9 +188,8 @@
 
 ---
 
-    structure(list(FMA = c(-0.679420383964918, 0.0129581869892215,
-    0.274062556829787)), class = "data.frame", row.names = c("(Intercept)",
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.679420383964918, dose = 0.0129581869892215,
+    dose_squared = 0.274062556829787)
 
 ---
 
@@ -223,13 +215,12 @@
 
 # percentile/hpd snapshot: BMA
 
-    structure(list(BMA = c(-0.727676410729318, 0.140865764841154, 
-    0.248197301970858)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.727676410729318, dose = 0.140865764841154,
+    dose_squared = 0.248197301970858)
 
 ---
 
-    c("(Intercept)" = 0.108937552718589, dose = 0.257323028317662, 
+    c("(Intercept)" = 0.108937552718589, dose = 0.257323028317662,
     dose_squared = 0.0731439782080503)
 
 ---
@@ -251,13 +242,12 @@
 
 ---
 
-    structure(list(BMA = c(-0.727676410729318, 0.140865764841154, 
-    0.248197301970858)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.727676410729318, dose = 0.140865764841154,
+    dose_squared = 0.248197301970858)
 
 ---
 
-    c("(Intercept)" = 0.108937552718589, dose = 0.257323028317662, 
+    c("(Intercept)" = 0.108937552718589, dose = 0.257323028317662,
     dose_squared = 0.0731439782080503)
 
 ---

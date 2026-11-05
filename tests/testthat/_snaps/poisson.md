@@ -1,8 +1,7 @@
 # Poisson snapshot: RC
 
-    structure(list(RC = c(-0.884511877326043, 0.62049067304047, -0.0400924621455127
-    )), class = "data.frame", row.names = c("(Intercept)", "dose", 
-    "dose_squared"))
+    c("(Intercept)" = -0.884511877326043, dose = 0.62049067304047,
+    dose_squared = -0.0400924621455127)
 
 ---
 
@@ -28,9 +27,8 @@
 
 # Poisson snapshot: ERC
 
-    structure(list(ERC = c(-0.879900561003282, 0.611249720235731, 
-    -0.0378744548428055)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.879900561003282, dose = 0.611249720235731,
+    dose_squared = -0.0378744548428055)
 
 ---
 
@@ -56,9 +54,8 @@
 
 # Poisson snapshot: MCML
 
-    structure(list(MCML = c(-0.85434971404576, 0.593745669672536, 
-    -0.0368254864743646)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.85434971404576, dose = 0.593745669672536,
+    dose_squared = -0.0368254864743646)
 
 ---
 
@@ -84,9 +81,8 @@
 
 # Poisson snapshot: FMA
 
-    structure(list(FMA = c(-0.85774451193125, 0.599610478857139, 
-    -0.0382776866437891)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.85774451193125, dose = 0.599610478857139,
+    dose_squared = -0.0382776866437891)
 
 ---
 
@@ -112,9 +108,8 @@
 
 # Poisson snapshot: BMA
 
-    structure(list(BMA = c(-0.853197861506724, 0.596144032419898, 
-    -0.0395481116849701)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.853197861506724, dose = 0.596144032419898,
+    dose_squared = -0.0395481116849701)
 
 ---
 

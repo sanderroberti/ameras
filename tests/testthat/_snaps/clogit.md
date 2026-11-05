@@ -1,7 +1,7 @@
 # clogit snapshot: RC
 
-    structure(list(RC = c(0.636933079842829, -0.0469518747182343)), class = "data.frame", row.names = c("dose", 
-    "dose_squared"))
+    c(dose = 0.636933079842829, dose_squared = -0.0469518747182343
+    )
 
 ---
 
@@ -25,8 +25,8 @@
 
 # clogit snapshot: ERC
 
-    structure(list(ERC = c(0.211216746541785, 0.0529938610513979)), class = "data.frame", row.names = c("dose", 
-    "dose_squared"))
+    c(dose = 0.211216746541785, dose_squared = 0.0529938610513979
+    )
 
 ---
 
@@ -50,9 +50,8 @@
 
 # clogit snapshot: MCML
 
-    structure(list(MCML = c(0.668032212804173, -0.056784395590818
-    )), class = "data.frame", row.names = c("dose", "dose_squared"
-    ))
+    c(dose = 0.668032212804173, dose_squared = -0.056784395590818
+    )
 
 ---
 
@@ -76,9 +75,8 @@
 
 # clogit snapshot: FMA
 
-    structure(list(FMA = c(0.665505653115859, -0.0562187934345348
-    )), class = "data.frame", row.names = c("dose", "dose_squared"
-    ))
+    c(dose = 0.665505653115859, dose_squared = -0.0562187934345348
+    )
 
 ---
 
@@ -102,9 +100,8 @@
 
 # clogit snapshot: BMA
 
-    structure(list(BMA = c(0.625671431172552, -0.0485696930926242
-    )), class = "data.frame", row.names = c("dose", "dose_squared"
-    ))
+    c(dose = 0.625671431172552, dose_squared = -0.0485696930926242
+    )
 
 ---
 
@@ -128,7 +125,7 @@
 
 # clogit snapshot: FMA 1-par
 
-    structure(list(FMA = 1.09177057785782), class = "data.frame", row.names = "dose")
+    c(dose = 1.09177057785782)
 
 ---
 

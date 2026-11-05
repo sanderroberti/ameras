@@ -1,8 +1,7 @@
 # gaussian snapshot: RC
 
-    structure(list(RC = c(-0.859644829141104, 0.412396141643607, 
-    0.192379759719246, 1.10074804303578)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared", "sigma"))
+    c("(Intercept)" = -0.859644829141104, dose = 0.412396141643607,
+    dose_squared = 0.192379759719246, sigma = 1.10074804303578)
 
 ---
 
@@ -29,9 +28,8 @@
 
 # gaussian snapshot: ERC
 
-    structure(list(ERC = c(-0.857590768586508, 0.407372444065381, 
-    0.19375103179669, 1.09986471318972)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared", "sigma"))
+    c("(Intercept)" = -0.857590768586508, dose = 0.407372444065381,
+    dose_squared = 0.19375103179669, sigma = 1.09986471318972)
 
 ---
 
@@ -59,9 +57,8 @@
 
 # gaussian snapshot: MCML
 
-    structure(list(MCML = c(-0.863286201325093, 0.48796776533509, 
-    0.148289235834366, 1.15104527636048)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared", "sigma"))
+    c("(Intercept)" = -0.863286201325093, dose = 0.48796776533509,
+    dose_squared = 0.148289235834366, sigma = 1.15104527636048)
 
 ---
 
@@ -88,9 +85,8 @@
 
 # gaussian snapshot: FMA
 
-    structure(list(FMA = c(-0.863778905799158, 0.490749307581192, 
-    0.146947464269109, 1.1511772699684)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared", "sigma"))
+    c("(Intercept)" = -0.863778905799158, dose = 0.490749307581192,
+    dose_squared = 0.146947464269109, sigma = 1.1511772699684)
 
 ---
 
@@ -118,9 +114,8 @@
 
 # gaussian snapshot: BMA
 
-    structure(list(BMA = c(-0.865545198845152, 0.492414885648207, 
-    0.146708521506299, 1.15277372803488)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared", "sigma"))
+    c("(Intercept)" = -0.865545198845152, dose = 0.492414885648207,
+    dose_squared = 0.146708521506299, sigma = 1.15277372803488)
 
 ---
 

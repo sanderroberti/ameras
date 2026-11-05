@@ -64,7 +64,7 @@ test_that("one-chain BMA fits support amerasfit methods", {
   expect_true(all(is.na(diagnostics$n.eff)))
 
   expect_identical(included_realizations(fit, methods = "BMA"), 1:2)
-  expect_identical(rownames(coef(fit)), names(fit$BMA$coefficients))
+  expect_identical(names(coef(fit)), names(fit$BMA$coefficients))
   expect_identical(rownames(vcov(fit, methods = "BMA")), names(fit$BMA$coefficients))
 
   summary_table <- summary(fit)$summary_table

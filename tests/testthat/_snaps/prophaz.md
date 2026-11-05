@@ -1,7 +1,7 @@
 # prophaz snapshot: RC
 
-    structure(list(RC = c(0.57628615469363, -0.0339913365375492)), class = "data.frame", row.names = c("dose", 
-    "dose_squared"))
+    c(dose = 0.57628615469363, dose_squared = -0.0339913365375492
+    )
 
 ---
 
@@ -25,9 +25,8 @@
 
 # prophaz snapshot: ERC
 
-    structure(list(ERC = c(0.329438692494966, -0.0111115564109217
-    )), class = "data.frame", row.names = c("dose", "dose_squared"
-    ))
+    c(dose = 0.329438692494966, dose_squared = -0.0111115564109217
+    )
 
 ---
 
@@ -50,9 +49,8 @@
 
 # prophaz snapshot: MCML
 
-    structure(list(MCML = c(0.581318732120769, -0.038895795621568
-    )), class = "data.frame", row.names = c("dose", "dose_squared"
-    ))
+    c(dose = 0.581318732120769, dose_squared = -0.038895795621568
+    )
 
 ---
 
@@ -76,9 +74,8 @@
 
 # prophaz snapshot: FMA
 
-    structure(list(FMA = c(0.582119594670597, -0.0390576222751472
-    )), class = "data.frame", row.names = c("dose", "dose_squared"
-    ))
+    c(dose = 0.582119594670597, dose_squared = -0.0390576222751472
+    )
 
 ---
 
@@ -102,12 +99,11 @@
 
 # prophaz snapshot: BMA
 
-    structure(list(BMA = c(0.59279789774428, -0.0414212934705637, 
-    0.437203687857773, 0.469562756212489, 0.361723426783169, 0.399297505241577, 
-    0.425333707523287, 0.534964491715369, 0.363159201191068, 0.416056927906623, 
-    0.364887564898759, 0.408584041024697)), class = "data.frame", row.names = c("dose", 
-    "dose_squared", "h0[1]", "h0[2]", "h0[3]", "h0[4]", "h0[5]", 
-    "h0[6]", "h0[7]", "h0[8]", "h0[9]", "h0[10]"))
+    c(dose = 0.59279789774428, dose_squared = -0.0414212934705637,
+    "h0[1]" = 0.437203687857773, "h0[2]" = 0.469562756212489, "h0[3]" = 0.361723426783169,
+    "h0[4]" = 0.399297505241577, "h0[5]" = 0.425333707523287, "h0[6]" = 0.534964491715369,
+    "h0[7]" = 0.363159201191068, "h0[8]" = 0.416056927906623, "h0[9]" = 0.364887564898759,
+    "h0[10]" = 0.408584041024697)
 
 ---
 
@@ -150,7 +146,7 @@
 
 # prophaz snapshot: FMA 1-par
 
-    structure(list(FMA = 1.06798681864581), class = "data.frame", row.names = "dose")
+    c(dose = 1.06798681864581)
 
 ---
 

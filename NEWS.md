@@ -15,6 +15,9 @@
 
 * Renamed the bundled example dataset from `data` to `ameras_simulated`,
   enabled lazy loading, and expanded its documentation.
+* `coef()` now returns a named numeric vector when an `amerasfit` object
+  contains one fitted method. Objects containing multiple methods continue to
+  return a data frame with one column per method.
 * The deprecation warning for the direct argument interface now explicitly
   states that the interface will be removed in version 1.0.0.
 

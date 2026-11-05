@@ -1,10 +1,9 @@
 # multinomial snapshot: RC
 
-    structure(list(RC = c(-0.872532246181349, 0.544231834982583, 
-    -0.0313499823285036, -0.109368671249109, 0.57635409412743, -0.041641603047693
-    )), class = "data.frame", row.names = c("(1)_(Intercept)", "(1)_dose", 
-    "(1)_dose_squared", "(2)_(Intercept)", "(2)_dose", "(2)_dose_squared"
-    ))
+    c("(1)_(Intercept)" = -0.872532246181349, "(1)_dose" = 0.544231834982583,
+    "(1)_dose_squared" = -0.0313499823285036, "(2)_(Intercept)" = -0.109368671249109,
+    "(2)_dose" = 0.57635409412743, "(2)_dose_squared" = -0.041641603047693
+    )
 
 ---
 
@@ -37,11 +36,10 @@
 
 # multinomial snapshot: ERC
 
-    structure(list(ERC = c(-0.874400585060071, 0.557601599677255, 
-    -0.0322519686441131, -0.110267556601327, 0.582400710001095, -0.0391875439518789
-    )), class = "data.frame", row.names = c("(1)_(Intercept)", "(1)_dose", 
-    "(1)_dose_squared", "(2)_(Intercept)", "(2)_dose", "(2)_dose_squared"
-    ))
+    c("(1)_(Intercept)" = -0.874400585060071, "(1)_dose" = 0.557601599677255,
+    "(1)_dose_squared" = -0.0322519686441131, "(2)_(Intercept)" = -0.110267556601327,
+    "(2)_dose" = 0.582400710001095, "(2)_dose_squared" = -0.0391875439518789
+    )
 
 ---
 
@@ -74,11 +72,10 @@
 
 # multinomial snapshot: MCML
 
-    structure(list(MCML = c(-0.858804858198922, 0.52789110098132, 
-    -0.0284676930064826, -0.104061905992065, 0.580767475654764, -0.0443267873734486
-    )), class = "data.frame", row.names = c("(1)_(Intercept)", "(1)_dose", 
-    "(1)_dose_squared", "(2)_(Intercept)", "(2)_dose", "(2)_dose_squared"
-    ))
+    c("(1)_(Intercept)" = -0.858804858198922, "(1)_dose" = 0.52789110098132,
+    "(1)_dose_squared" = -0.0284676930064826, "(2)_(Intercept)" = -0.104061905992065,
+    "(2)_dose" = 0.580767475654764, "(2)_dose_squared" = -0.0443267873734486
+    )
 
 ---
 
@@ -111,11 +108,10 @@
 
 # multinomial snapshot: FMA
 
-    structure(list(FMA = c(-0.860734562162769, 0.532383338057357, 
-    -0.0299074150772933, -0.103626336376565, 0.580004407582068, -0.0442824724335984
-    )), class = "data.frame", row.names = c("(1)_(Intercept)", "(1)_dose", 
-    "(1)_dose_squared", "(2)_(Intercept)", "(2)_dose", "(2)_dose_squared"
-    ))
+    c("(1)_(Intercept)" = -0.860734562162769, "(1)_dose" = 0.532383338057357,
+    "(1)_dose_squared" = -0.0299074150772933, "(2)_(Intercept)" = -0.103626336376565,
+    "(2)_dose" = 0.580004407582068, "(2)_dose_squared" = -0.0442824724335984
+    )
 
 ---
 
@@ -148,11 +144,10 @@
 
 # multinomial snapshot: BMA
 
-    structure(list(BMA = c(-0.581569827960855, -0.133628956019433, 
-    0.180895600296025, 0.14447663929083, -0.0200635320216618, 0.150861851183175
-    )), class = "data.frame", row.names = c("(1)_(Intercept)", "(1)_dose", 
-    "(1)_dose_squared", "(2)_(Intercept)", "(2)_dose", "(2)_dose_squared"
-    ))
+    c("(1)_(Intercept)" = -0.581569827960855, "(1)_dose" = -0.133628956019433,
+    "(1)_dose_squared" = 0.180895600296025, "(2)_(Intercept)" = 0.14447663929083,
+    "(2)_dose" = -0.0200635320216618, "(2)_dose_squared" = 0.150861851183175
+    )
 
 ---
 

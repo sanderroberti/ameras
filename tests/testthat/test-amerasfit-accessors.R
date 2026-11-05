@@ -101,6 +101,28 @@ test_that("nobs returns the number of rows used for fitting", {
   expect_identical(nobs(fit), 7L)
 })
 
+test_that("coef simplifies one fitted method to a named vector", {
+  rc_coef <- c("(Intercept)" = -0.5, dose = 0.25)
+  erc_coef <- c("(Intercept)" = -0.4, dose = 0.2)
+
+  one_method <- ameras:::new_amerasfit(list(
+    RC = list(coefficients = rc_coef)
+  ))
+  multiple_methods <- ameras:::new_amerasfit(list(
+    RC = list(coefficients = rc_coef),
+    ERC = list(coefficients = erc_coef)
+  ))
+
+  expect_identical(coef(one_method), rc_coef)
+
+  multiple_coef <- coef(multiple_methods)
+  expect_s3_class(multiple_coef, "data.frame")
+  expect_named(multiple_coef, c("RC", "ERC"))
+  expect_identical(rownames(multiple_coef), names(rc_coef))
+  expect_identical(multiple_coef$RC, unname(rc_coef))
+  expect_identical(multiple_coef$ERC, unname(erc_coef))
+})
+
 test_that("Rhat returns BMA convergence diagnostics", {
   diagnostics <- data.frame(
     Rhat = c(1.01, 1.02),

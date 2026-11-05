@@ -227,6 +227,10 @@ print.amerasfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   object0 <- x[intersect(names(x), c("RC", "ERC", "MCML", "FMA", "BMA"))]
 
   coefs <- coef.amerasfit(x)
+  if (is.null(dim(coefs))) {
+    coefs <- data.frame(coefs, check.names = FALSE)
+    names(coefs) <- names(object0)
+  }
 
   runtime_table <- runtime_table_from_methods(object0)
   total_runtime <- total_runtime_seconds(runtime_table)
@@ -263,6 +267,10 @@ coef.amerasfit <- function(object, ...) {
     names(object),
     c("RC", "ERC", "MCML", "FMA", "BMA")
   )]
+
+  if (length(object) == 1L) {
+    return(object[[1L]]$coefficients)
+  }
 
   bma <- ("BMA" %in% names(object))
 

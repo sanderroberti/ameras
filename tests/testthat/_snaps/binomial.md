@@ -1,8 +1,7 @@
 # snapshot: binomial_ERR_deg1
 
-    structure(list(RC = c(-1.12138445681014, 0.43747816756955, 0.829152319286417
-    )), class = "data.frame", row.names = c("(Intercept)", "X1", 
-    "dose"))
+    c("(Intercept)" = -1.12138445681014, X1 = 0.43747816756955, dose = 0.829152319286417
+    )
 
 ---
 
@@ -28,9 +27,8 @@
 
 # snapshot: binomial_ERR_deg2
 
-    structure(list(RC = c(-0.930459974364865, 0.442578152424314, 
-    0.0355699195390312, 0.283828439726294)), class = "data.frame", row.names = c("(Intercept)", 
-    "X1", "dose", "dose_squared"))
+    c("(Intercept)" = -0.930459974364865, X1 = 0.442578152424314,
+    dose = 0.0355699195390312, dose_squared = 0.283828439726294)
 
 ---
 
@@ -57,9 +55,8 @@
 
 # snapshot: binomial_EXP_deg1
 
-    structure(list(RC = c(-1.03751752518051, 0.442783042151235, 0.441545076940068
-    )), class = "data.frame", row.names = c("(Intercept)", "X1", 
-    "dose"))
+    c("(Intercept)" = -1.03751752518051, X1 = 0.442783042151235,
+    dose = 0.441545076940068)
 
 ---
 
@@ -85,9 +82,8 @@
 
 # snapshot: binomial_EXP_deg2
 
-    structure(list(RC = c(-1.00098240262208, 0.442428476057805, 0.363241568514543, 
-    0.0223337183123334)), class = "data.frame", row.names = c("(Intercept)", 
-    "X1", "dose", "dose_squared"))
+    c("(Intercept)" = -1.00098240262208, X1 = 0.442428476057805,
+    dose = 0.363241568514543, dose_squared = 0.0223337183123334)
 
 ---
 
@@ -114,9 +110,9 @@
 
 # snapshot: binomial_LINEXP_deg2
 
-    structure(list(RC = c(-0.989261627830125, 0.442426615995325, 
-    0.310382666344636, 0.352282802770536)), class = "data.frame", row.names = c("(Intercept)", 
-    "X1", "dose_linear", "dose_exponential"))
+    c("(Intercept)" = -0.989261627830125, X1 = 0.442426615995325,
+    dose_linear = 0.310382666344636, dose_exponential = 0.352282802770536
+    )
 
 ---
 
@@ -144,9 +140,8 @@
 
 # binomial snapshot: ERC
 
-    structure(list(ERC = c(-0.742108872660136, 0.293763533354128, 
-    0.0445786596682705)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.742108872660136, dose = 0.293763533354128,
+    dose_squared = 0.0445786596682705)
 
 ---
 
@@ -172,9 +167,8 @@
 
 # binomial snapshot: MCML
 
-    structure(list(MCML = c(-0.732701069038212, 0.291000601776992, 
-    0.0407221187083245)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.732701069038212, dose = 0.291000601776992,
+    dose_squared = 0.0407221187083245)
 
 ---
 
@@ -200,9 +194,8 @@
 
 # binomial snapshot: FMA
 
-    structure(list(FMA = c(-0.733806899724863, 0.293742722421584, 
-    0.0398867147023287)), class = "data.frame", row.names = c("(Intercept)", 
-    "dose", "dose_squared"))
+    c("(Intercept)" = -0.733806899724863, dose = 0.293742722421584,
+    dose_squared = 0.0398867147023287)
 
 ---
 
@@ -228,9 +221,8 @@
 
 # binomial snapshot: BMA
 
-    structure(list(BMA = c(-0.73216025963789, 0.28931796129074, 0.0416938097364
-    )), class = "data.frame", row.names = c("(Intercept)", "dose", 
-    "dose_squared"))
+    c("(Intercept)" = -0.73216025963789, dose = 0.28931796129074,
+    dose_squared = 0.0416938097364)
 
 ---
 
