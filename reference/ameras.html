@@ -60,18 +60,13 @@ frequentist model averaging (FMA), and Bayesian model averaging (BMA).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ameras</span><span class="op">(</span>formula<span class="op">=</span><span class="cn">NULL</span>, <span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span>, methods<span class="op">=</span><span class="st">"RC"</span>, </span>
-<span>  Y<span class="op">=</span><span class="cn">NULL</span>, dosevars<span class="op">=</span><span class="cn">NULL</span>, doseRRmod<span class="op">=</span><span class="cn">NULL</span>, deg<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>  M<span class="op">=</span><span class="cn">NULL</span>, X<span class="op">=</span><span class="cn">NULL</span>, offset<span class="op">=</span><span class="cn">NULL</span>, entry<span class="op">=</span><span class="cn">NULL</span>, exit<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>  setnr<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>  CI<span class="op">=</span><span class="cn">NULL</span>, params.profCI<span class="op">=</span><span class="cn">NULL</span>,</span>
-<span>  maxit.profCI<span class="op">=</span><span class="cn">NULL</span>, tol.profCI<span class="op">=</span><span class="cn">NULL</span>,</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ameras</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, family<span class="op">=</span><span class="st">"gaussian"</span>, methods<span class="op">=</span><span class="st">"RC"</span>,</span>
 <span>  transform<span class="op">=</span><span class="cn">NULL</span>,</span>
 <span>  transform.jacobian<span class="op">=</span><span class="cn">NULL</span>, inpar<span class="op">=</span><span class="cn">NULL</span>, loglim<span class="op">=</span><span class="fl">1e-30</span>, MFMA<span class="op">=</span><span class="fl">100000</span>, </span>
 <span>  future.chunk.size.FMA<span class="op">=</span><span class="cn">NULL</span>,</span>
 <span>  prophaz.numints.BMA<span class="op">=</span><span class="fl">10</span>, ERRprior.BMA<span class="op">=</span><span class="st">"doubleexponential"</span>, nburnin.BMA<span class="op">=</span><span class="fl">5000</span>, </span>
 <span>  niter.BMA<span class="op">=</span><span class="fl">20000</span>, nchains.BMA<span class="op">=</span><span class="fl">2</span>, thin.BMA<span class="op">=</span><span class="fl">10</span>, included.realizations.BMA<span class="op">=</span><span class="cn">NULL</span>, </span>
-<span>  included.replicates.BMA<span class="op">=</span><span class="cn">NULL</span>, optim.method<span class="op">=</span><span class="st">"Nelder-Mead"</span>, control<span class="op">=</span><span class="cn">NULL</span>, </span>
+<span>  optim.method<span class="op">=</span><span class="st">"Nelder-Mead"</span>, control<span class="op">=</span><span class="cn">NULL</span>,</span>
 <span>  keep.data<span class="op">=</span><span class="cn">TRUE</span>, na.action<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"na.action"</span><span class="op">)</span>, <span class="va">...</span> <span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -90,51 +85,6 @@ frequentist model averaging (FMA), and Bayesian model averaging (BMA).</p>
 
 <dt id="arg-methods">methods<a class="anchor" aria-label="anchor" href="#arg-methods"></a></dt>
 <dd><p>character vector of one or multiple methods to apply. Options: <code>"RC"</code>, <code>"ERC"</code>, <code>"MCML"</code>, <code>"FMA"</code>, <code>"BMA"</code> (default <code>"RC"</code>).</p></dd>
-
-<dt id="arg-y">Y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Name or column index of the outcome variable for linear, binomial, Poisson, multinomial and conditional logistic models, or event indicator variable for the proportional hazards model.</p></dd>
-
-<dt id="arg-dosevars">dosevars<a class="anchor" aria-label="anchor" href="#arg-dosevars"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Names or column indices of exposure realization vectors.</p></dd>
-
-<dt id="arg-doserrmod">doseRRmod<a class="anchor" aria-label="anchor" href="#arg-doserrmod"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use the formula interface instead. The functional form of the dose-response relationship; options are exponential RR (<code>"EXP"</code>), linear ERR (<code>"ERR"</code>), or linear-exponential RR (<code>"LINEXP"</code>) (default <code>"ERR"</code>).</p></dd>
-
-<dt id="arg-deg">deg<a class="anchor" aria-label="anchor" href="#arg-deg"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use the formula interface instead. For <code>doseRRmod="ERR"</code> and <code>doseRRmod="EXP"</code>, whether to fit a linear (<code>deg=1</code>) or linear-quadratic (<code>deg=2</code>) dose-response model (default linear).</p></dd>
-
-<dt id="arg-m">M<a class="anchor" aria-label="anchor" href="#arg-m"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Names or column indices of binary effect modifying variables (optional).</p></dd>
-
-<dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Names or column indices of other covariates (optional).</p></dd>
-
-<dt id="arg-offset">offset<a class="anchor" aria-label="anchor" href="#arg-offset"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Name or column index of offset variable for Poisson regression (optional).</p></dd>
-
-<dt id="arg-entry">entry<a class="anchor" aria-label="anchor" href="#arg-entry"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Name or column index of left truncation time variable for proportional hazards regression (optional).</p></dd>
-
-<dt id="arg-exit">exit<a class="anchor" aria-label="anchor" href="#arg-exit"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Name or column index of exit time variable, required when <code>family=prophaz</code>.</p></dd>
-
-<dt id="arg-setnr">setnr<a class="anchor" aria-label="anchor" href="#arg-setnr"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use the formula interface instead. Name or column index of integer-valued matched set variable, required when <code>family="clogit"</code>.</p></dd>
-
-<dt id="arg-ci">CI<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use confint() to compute confidence intervals instead. Method for calculation of 95% confidence or credible intervals (see Details).
-For RC, ERC, and MCML, options are <code>"wald.orig"</code>, <code>"wald.transformed"</code>, <code>"proflik"</code> (default <code>"proflik"</code>).
-For FMA and BMA, options are <code>"percentile"</code> and <code>"hpd"</code> (default <code>"percentile"</code>).
-If <code>methods</code> contains at least one of RC, ERC, and MCML and at least one of FMA and BMA, <code>CI</code> must be length 2 and specify one method for RC, ERC, and MCML, and one for FMA and BMA (see Details).</p></dd>
-
-<dt id="arg-params-profci">params.profCI<a class="anchor" aria-label="anchor" href="#arg-params-profci"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use confint() to compute confidence intervals instead. When <code>CI="proflik"</code>, whether to obtain profile-likelihood CIs for all parameters (<code>"all"</code>) or only dose-related parameters (<code>"dose"</code>, default).</p></dd>
-
-<dt id="arg-maxit-profci">maxit.profCI<a class="anchor" aria-label="anchor" href="#arg-maxit-profci"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use confint() to compute confidence intervals instead. Maximum iterations for determining profile-likelihood CIs; passed to <code>uniroot</code> (default 20).</p></dd>
-
-<dt id="arg-tol-profci">tol.profCI<a class="anchor" aria-label="anchor" href="#arg-tol-profci"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use confint() to compute confidence intervals instead. Tolerance for determining profile-likelihood CIs; passed to <code>uniroot</code> (default <code>1e-2</code>).</p></dd>
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
 <dd><p>function for parameter transformation during optimization
@@ -176,9 +126,6 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 
 <dt id="arg-included-realizations-bma">included.realizations.BMA<a class="anchor" aria-label="anchor" href="#arg-included-realizations-bma"></a></dt>
 <dd><p>indices of exposure realizations used in BMA (defaults to all realizations).</p></dd>
-
-<dt id="arg-included-replicates-bma">included.replicates.BMA<a class="anchor" aria-label="anchor" href="#arg-included-replicates-bma"></a></dt>
-<dd><p><strong>Deprecated</strong>. Use <code>included.realizations.BMA</code> instead. Indices of exposure realizations used in BMA (defaults to all realizations).</p></dd>
 
 <dt id="arg-optim-method">optim.method<a class="anchor" aria-label="anchor" href="#arg-optim-method"></a></dt>
 <dd><p>method used for optimization by <code>optim</code>. Options are <code>"Nelder-Mead"</code> and <code>"BFGS"</code>. When using Nelder-Mead, a second optimization with BFGS is normally run to refine the fit. If this automatic BFGS refinement fails because its finite-difference evaluations are non-finite, the Nelder-Mead solution is retained and checked using the usual Hessian and convergence diagnostics. A warning is emitted if the selected final optimizer result has a nonzero convergence code.</p></dd>
@@ -452,7 +399,7 @@ time under the <code>entry &lt; t &lt;= exit</code> risk-set convention.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.139 0.0 0.139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.137 0.0 0.137</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

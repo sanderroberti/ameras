@@ -41,6 +41,13 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ameras-development-version">ameras (development version)<a class="anchor" aria-label="anchor" href="#ameras-development-version"></a></h2>
 <div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>Removed the deprecated direct argument interface to <code><a href="../reference/ameras.html">ameras()</a></code>. Models must now be specified through <code>formula</code>; calls using the former <code>Y</code>, <code>dosevars</code>, <code>doseRRmod</code>, <code>deg</code>, <code>M</code>, <code>X</code>, <code>offset</code>, <code>entry</code>, <code>exit</code>, or <code>setnr</code> arguments fail with migration guidance.</li>
+<li>Removed the deprecated <code>CI</code>, <code>params.profCI</code>, <code>maxit.profCI</code>, and <code>tol.profCI</code> arguments from <code><a href="../reference/ameras.html">ameras()</a></code>. Confidence intervals must be added after fitting with <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>.</li>
+<li>Removed the deprecated <code>included.replicates.BMA</code> alias; use <code>included.realizations.BMA</code> instead.</li>
+<li>Removed non-formula effect-modifier syntax. Use <code>modifier = ~ M1 + M2</code> instead of <code>modifier = M1 + M2</code> inside <code>dose()</code>.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>RC, ERC, and MCML fits now warn when the selected final optimizer result returns a nonzero convergence code. For automatic Nelder-Mead plus BFGS fitting, the warning is based on the BFGS result when refinement completes and on the retained Nelder-Mead result when refinement fails.</li>
 <li>A failure of the automatic BFGS refinement due to non-finite finite-difference evaluations no longer aborts a valid Nelder-Mead fit. The Nelder-Mead solution is retained and assessed using the usual Hessian and convergence diagnostics.</li>
@@ -50,7 +57,6 @@
 <ul><li>Renamed the bundled example dataset from <code>data</code> to <code>ameras_simulated</code>, enabled lazy loading, and expanded its documentation.</li>
 <li>
 <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> now returns a named numeric vector when an <code>amerasfit</code> object contains one fitted method. Objects containing multiple methods continue to return a data frame with one column per method.</li>
-<li>The deprecation warning for the direct argument interface now explicitly states that the interface will be removed in version 1.0.0.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>

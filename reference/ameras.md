@@ -11,18 +11,13 @@ averaging (BMA).
 ## Usage
 
 ``` r
-ameras(formula=NULL, data, family="gaussian", methods="RC", 
-  Y=NULL, dosevars=NULL, doseRRmod=NULL, deg=NULL,
-  M=NULL, X=NULL, offset=NULL, entry=NULL, exit=NULL,
-  setnr=NULL,
-  CI=NULL, params.profCI=NULL,
-  maxit.profCI=NULL, tol.profCI=NULL,
+ameras(formula, data, family="gaussian", methods="RC",
   transform=NULL,
   transform.jacobian=NULL, inpar=NULL, loglim=1e-30, MFMA=100000, 
   future.chunk.size.FMA=NULL,
   prophaz.numints.BMA=10, ERRprior.BMA="doubleexponential", nburnin.BMA=5000, 
   niter.BMA=20000, nchains.BMA=2, thin.BMA=10, included.realizations.BMA=NULL, 
-  included.replicates.BMA=NULL, optim.method="Nelder-Mead", control=NULL, 
+  optim.method="Nelder-Mead", control=NULL,
   keep.data=TRUE, na.action=getOption("na.action"), ... )
 ```
 
@@ -46,94 +41,6 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 
   character vector of one or multiple methods to apply. Options: `"RC"`,
   `"ERC"`, `"MCML"`, `"FMA"`, `"BMA"` (default `"RC"`).
-
-- Y:
-
-  **Deprecated**. Use the formula interface instead. Name or column
-  index of the outcome variable for linear, binomial, Poisson,
-  multinomial and conditional logistic models, or event indicator
-  variable for the proportional hazards model.
-
-- dosevars:
-
-  **Deprecated**. Use the formula interface instead. Names or column
-  indices of exposure realization vectors.
-
-- doseRRmod:
-
-  **Deprecated**. Use the formula interface instead. The functional form
-  of the dose-response relationship; options are exponential RR
-  (`"EXP"`), linear ERR (`"ERR"`), or linear-exponential RR (`"LINEXP"`)
-  (default `"ERR"`).
-
-- deg:
-
-  **Deprecated**. Use the formula interface instead. For
-  `doseRRmod="ERR"` and `doseRRmod="EXP"`, whether to fit a linear
-  (`deg=1`) or linear-quadratic (`deg=2`) dose-response model (default
-  linear).
-
-- M:
-
-  **Deprecated**. Use the formula interface instead. Names or column
-  indices of binary effect modifying variables (optional).
-
-- X:
-
-  **Deprecated**. Use the formula interface instead. Names or column
-  indices of other covariates (optional).
-
-- offset:
-
-  **Deprecated**. Use the formula interface instead. Name or column
-  index of offset variable for Poisson regression (optional).
-
-- entry:
-
-  **Deprecated**. Use the formula interface instead. Name or column
-  index of left truncation time variable for proportional hazards
-  regression (optional).
-
-- exit:
-
-  **Deprecated**. Use the formula interface instead. Name or column
-  index of exit time variable, required when `family=prophaz`.
-
-- setnr:
-
-  **Deprecated**. Use the formula interface instead. Name or column
-  index of integer-valued matched set variable, required when
-  `family="clogit"`.
-
-- CI:
-
-  **Deprecated**. Use confint() to compute confidence intervals instead.
-  Method for calculation of 95% confidence or credible intervals (see
-  Details). For RC, ERC, and MCML, options are `"wald.orig"`,
-  `"wald.transformed"`, `"proflik"` (default `"proflik"`). For FMA and
-  BMA, options are `"percentile"` and `"hpd"` (default `"percentile"`).
-  If `methods` contains at least one of RC, ERC, and MCML and at least
-  one of FMA and BMA, `CI` must be length 2 and specify one method for
-  RC, ERC, and MCML, and one for FMA and BMA (see Details).
-
-- params.profCI:
-
-  **Deprecated**. Use confint() to compute confidence intervals instead.
-  When `CI="proflik"`, whether to obtain profile-likelihood CIs for all
-  parameters (`"all"`) or only dose-related parameters (`"dose"`,
-  default).
-
-- maxit.profCI:
-
-  **Deprecated**. Use confint() to compute confidence intervals instead.
-  Maximum iterations for determining profile-likelihood CIs; passed to
-  `uniroot` (default 20).
-
-- tol.profCI:
-
-  **Deprecated**. Use confint() to compute confidence intervals instead.
-  Tolerance for determining profile-likelihood CIs; passed to `uniroot`
-  (default `1e-2`).
 
 - transform:
 
@@ -203,11 +110,6 @@ ameras(formula=NULL, data, family="gaussian", methods="RC",
 
   indices of exposure realizations used in BMA (defaults to all
   realizations).
-
-- included.replicates.BMA:
-
-  **Deprecated**. Use `included.realizations.BMA` instead. Indices of
-  exposure realizations used in BMA (defaults to all realizations).
 
 - optim.method:
 
@@ -663,7 +565,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.139 0.0 0.139
+#>      RC 0.137 0.0 0.137
 #> 
 #> Summary of coefficients by method:
 #> 

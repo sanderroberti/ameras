@@ -2,6 +2,23 @@
 
 ## ameras (development version)
 
+### Breaking changes
+
+- Removed the deprecated direct argument interface to
+  [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md).
+  Models must now be specified through `formula`; calls using the former
+  `Y`, `dosevars`, `doseRRmod`, `deg`, `M`, `X`, `offset`, `entry`,
+  `exit`, or `setnr` arguments fail with migration guidance.
+- Removed the deprecated `CI`, `params.profCI`, `maxit.profCI`, and
+  `tol.profCI` arguments from
+  [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md).
+  Confidence intervals must be added after fitting with
+  [`confint()`](https://rdrr.io/r/stats/confint.html).
+- Removed the deprecated `included.replicates.BMA` alias; use
+  `included.realizations.BMA` instead.
+- Removed non-formula effect-modifier syntax. Use `modifier = ~ M1 + M2`
+  instead of `modifier = M1 + M2` inside `dose()`.
+
 ### Bug fixes
 
 - RC, ERC, and MCML fits now warn when the selected final optimizer
@@ -22,8 +39,6 @@
   numeric vector when an `amerasfit` object contains one fitted method.
   Objects containing multiple methods continue to return a data frame
   with one column per method.
-- The deprecation warning for the direct argument interface now
-  explicitly states that the interface will be removed in version 1.0.0.
 
 ### New features
 
