@@ -32,7 +32,7 @@ test_that("public profile likelihood CIs hit target p-values for stable RC fits"
     data = data,
     methods = "RC"
   )
-  fit <- suppressMessages(confint(
+  fit <- suppressMessages(add_confint(
     fit,
     type = "proflik",
     parm = "dose",
@@ -66,11 +66,11 @@ for (method in c("RC", "ERC", "MCML")) {
     )
     if (method == "RC") {
       expect_warning(
-        fit1 <- confint(fit, type = c("proflik")),
+        fit1 <- add_confint(fit, type = c("proflik")),
         "Profile likelihood lower bound for dose could not be bracketed"
       )
     } else {
-      fit1 <- confint(fit, type = c("proflik"))
+      fit1 <- add_confint(fit, type = c("proflik"))
     }
     expect_snapshot_value(
       coef(fit1),
@@ -89,7 +89,7 @@ for (method in c("RC", "ERC", "MCML")) {
     )
     expect_snapshot(print_summary_snapshot(fit1))
 
-    fit2 <- confint(fit, type = c("wald.transformed"))
+    fit2 <- add_confint(fit, type = c("wald.transformed"))
     expect_snapshot_value(
       coef(fit2),
       tolerance = 1e-4,
@@ -124,7 +124,7 @@ for (method in c("FMA", "BMA")) {
       data = data,
       methods = method
     )
-    fit1 <- confint(fit, type = c("percentile"))
+    fit1 <- add_confint(fit, type = c("percentile"))
     expect_snapshot_value(
       coef(fit1),
       tolerance = 1e-4,
@@ -141,7 +141,7 @@ for (method in c("FMA", "BMA")) {
       style = "deparse"
     )
     expect_snapshot(print_summary_snapshot(fit1))
-    fit2 <- confint(fit, type = c("hpd"))
+    fit2 <- add_confint(fit, type = c("hpd"))
     expect_snapshot_value(
       coef(fit2),
       tolerance = 1e-4,

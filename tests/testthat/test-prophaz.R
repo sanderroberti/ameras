@@ -92,7 +92,7 @@ for (method in all_methods) {
       niter.BMA = 5000,
       nburnin.BMA = 500
     )
-    fit <- confint(fit, type = c("wald.orig", "percentile"))
+    fit <- add_confint(fit, type = c("wald.orig", "percentile"))
     expect_snapshot_value(
       coef(fit),
       tolerance = 1e-4,
@@ -118,7 +118,7 @@ test_that(paste("prophaz snapshot: FMA 1-par"), {
     data = data,
     methods = "FMA"
   )
-  fit <- confint(fit)
+  fit <- add_confint(fit)
   expect_snapshot_value(
     coef(fit),
     tolerance = 1e-4,

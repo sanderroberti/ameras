@@ -389,13 +389,8 @@ and the reference group.</p>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>)</span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="fu">coef</span>(fit_contrast)</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt;                     RC</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; (Intercept) -1.3602199</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; X1           0.4788215</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; X2          -0.5192733</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; dose         1.0836911</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; dose:M1      0.1566173</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; sigma        1.1021197</span></span></code></pre></div>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; (Intercept)          X1          X2        dose     dose:M1       sigma </span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;  -1.3602199   0.4788215  -0.5192733   1.0836911   0.1566173   1.1021197</span></span></code></pre></div>
 <p>This coding is convenient when the effect-modification contrast is
 the main quantity of interest.</p>
 </div>
@@ -412,13 +407,8 @@ names are <code>dose[M1=0]</code> and <code>dose[M1=1]</code>.</p>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>)</span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
 <span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">coef</span>(fit_subgroup)</span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt;                     RC</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; (Intercept) -1.3602200</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; X1           0.4788212</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; X2          -0.5192734</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; dose[M1=0]   1.0836912</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; dose[M1=1]   1.2403085</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; sigma        1.1021195</span></span></code></pre></div>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; (Intercept)          X1          X2  dose[M1=0]  dose[M1=1]       sigma </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt;  -1.3602200   0.4788212  -0.5192734   1.0836912   1.2403085   1.1021195</span></span></code></pre></div>
 <p>The two codings are equivalent. The non-reference subgroup effect is
 the reference effect plus the contrast:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>contrast_coef <span class="ot">&lt;-</span> fit_contrast<span class="sc">$</span>RC<span class="sc">$</span>coefficients</span>
@@ -464,13 +454,12 @@ terms for the non-reference levels.</p>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>)</span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">coef</span>(fit_factor_contrast)</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;                                      RC</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; (Intercept)                  -1.3602199</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; X1                            0.4788215</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; X2                           -0.5192733</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; dose                          1.0836911</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; dose:M_factor=modifier group  0.1566173</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; sigma                         1.1021197</span></span></code></pre></div>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;                  (Intercept)                           X1 </span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;                   -1.3602199                    0.4788215 </span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;                           X2                         dose </span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;                   -0.5192733                    1.0836911 </span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; dose:M_factor=modifier group                        sigma </span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;                    0.1566173                    1.1021197</span></span></code></pre></div>
 <p>With <code>modifier = ~ 0 + M_factor</code>, ameras reports
 subgroup-specific effects for all levels.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>fit_factor_subgroup <span class="ot">&lt;-</span> <span class="fu">ameras</span>(</span>
@@ -481,13 +470,12 @@ subgroup-specific effects for all levels.</p>
 <span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>)</span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="fu">coef</span>(fit_factor_subgroup)</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;                                                 RC</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; (Intercept)                             -1.3602200</span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; X1                                       0.4788212</span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; X2                                      -0.5192734</span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; dose[M_factor=unexposed modifier group]  1.0836912</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; dose[M_factor=modifier group]            1.2403085</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; sigma                                    1.1021195</span></span></code></pre></div>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;                             (Intercept)                                      X1 </span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;                              -1.3602200                               0.4788212 </span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt;                                      X2 dose[M_factor=unexposed modifier group] </span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;                              -0.5192734                               1.0836912 </span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;           dose[M_factor=modifier group]                                   sigma </span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;                               1.2403085                               1.1021195</span></span></code></pre></div>
 <p>Multi-level factors are supported. With reference-plus-contrast
 coding, ameras reports one contrast for each non-reference level. With
 subgroup-specific coding, ameras reports one dose-effect parameter for
@@ -505,14 +493,10 @@ each factor level.</p>
 <span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>)</span>
 <span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a></span>
 <span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="fu">coef</span>(fit_three_level)</span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;                         RC</span></span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; (Intercept)     -1.3619937</span></span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; X1               0.4813357</span></span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; X2              -0.5196477</span></span>
-<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt; dose[M3=low]     1.1433969</span></span>
-<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; dose[M3=middle]  1.1715892</span></span>
-<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt; dose[M3=high]    1.1807593</span></span>
-<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt; sigma            1.1073548</span></span></code></pre></div>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;     (Intercept)              X1              X2    dose[M3=low] dose[M3=middle] </span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt;      -1.3619937       0.4813357      -0.5196477       1.1433969       1.1715892 </span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt;   dose[M3=high]           sigma </span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt;       1.1807593       1.1073548</span></span></code></pre></div>
 </div>
 <div id="confidence-intervals" class="section level1">
 <h1>Confidence intervals</h1>
@@ -521,13 +505,17 @@ subgroup-specific coding and then call <code>confint()</code> as usual.
 For <code>RC</code>, <code>ERC</code>, and <code>MCML</code>, profile
 likelihood intervals treat subgroup effects as ordinary coefficient
 rows.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>fit_subgroup <span class="ot">&lt;-</span> <span class="fu">confint</span>(</span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>ci_subgroup <span class="ot">&lt;-</span> <span class="fu">confint</span>(</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  fit_subgroup,</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;proflik&quot;</span>,</span>
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">parm =</span> <span class="st">&quot;dose&quot;</span></span>
 <span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>)</span>
 <span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">summary</span>(fit_subgroup)</span></code></pre></div>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>ci_subgroup</span></code></pre></div>
+<p>If these intervals should be included in subsequent fitted-object
+summaries, use <code>add_confint()</code> with the same arguments and
+assign the returned fit. This also stores profile-likelihood diagnostics
+and confidence-interval timing with the fitted object.</p>
 <p>For <code>FMA</code> and <code>BMA</code>, sample-based confidence or
 credible intervals are computed from the sampled coefficients. When
 subgroup-specific coding is used, BMA priors and MCMC sampling remain on

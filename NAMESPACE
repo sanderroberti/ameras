@@ -56,6 +56,7 @@ export(
   traceplot,
   ecdfplot,
   dose_lrt,
+  add_confint,
   Rhat,
   included_realizations,
   convergence,
@@ -68,6 +69,7 @@ S3method(print, summary.amerasfit)
 S3method(traceplot, amerasfit)
 S3method(print, amerasfit)
 S3method(confint, amerasfit)
+S3method(add_confint, amerasfit)
 S3method(dose_lrt, amerasfit)
 S3method(included_realizations, amerasfit)
 S3method(convergence, amerasfit)

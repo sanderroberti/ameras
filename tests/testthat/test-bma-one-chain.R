@@ -74,7 +74,7 @@ test_that("one-chain BMA fits support amerasfit methods", {
   expect_true(all(is.na(summary_table$n.eff)))
 
   # Percentile intervals should work directly from the one-chain sample matrix.
-  fit_ci <- suppressMessages(confint(fit, type = "percentile", print = FALSE))
+  fit_ci <- suppressMessages(add_confint(fit, type = "percentile", print = FALSE))
   expect_true(fit_ci$CI.computed)
   expect_named(fit_ci$BMA$CI, c("lower", "upper"))
   expect_identical(rownames(fit_ci$BMA$CI), names(fit$BMA$coefficients))
@@ -143,10 +143,10 @@ test_that("one-parameter BMA fits preserve sample matrix dimensions", {
   # CI computation should preserve the single model parameter name after
   # stacking chains and dropping the sampled realization indicator.
   fit_percentile <- suppressMessages(
-    confint(fit, type = "percentile", print = FALSE)
+    add_confint(fit, type = "percentile", print = FALSE)
   )
   expect_identical(rownames(fit_percentile$BMA$CI), "dose")
 
-  fit_hpd <- suppressMessages(confint(fit, type = "hpd", print = FALSE))
+  fit_hpd <- suppressMessages(add_confint(fit, type = "hpd", print = FALSE))
   expect_identical(rownames(fit_hpd$BMA$CI), "dose")
 })

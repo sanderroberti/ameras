@@ -69,12 +69,16 @@ fit_lm <- lm(Y.gaussian ~ D + X1 + X2, data = standard_data)
 compare_coefficients(fit_ameras_gaussian, fit_lm)
 ```
 
-The usual `amerasfit` methods are available, including `summary()`, `coef()`, `vcov()`, and `confint()`.
+The usual `amerasfit` methods are available, including `summary()`, `coef()`,
+`vcov()`, and `confint()`. Use `confint()` for a standalone matrix of interval
+bounds. Use `add_confint()` when the bounds should travel with the fit and
+appear in subsequent summaries; it also stores available profile diagnostics
+and confidence-interval timing information.
 
 ```{r gaussian-summary}
-fit_ameras_gaussian <- confint(fit_ameras_gaussian,
-                               type = "wald.orig",
-                               print = FALSE)
+fit_ameras_gaussian <- add_confint(fit_ameras_gaussian,
+                                   type = "wald.orig",
+                                   print = FALSE)
 summary(fit_ameras_gaussian)
 ```
 

@@ -20,7 +20,7 @@ for (method in all_methods) {
       niter.BMA = 1000,
       nburnin.BMA = 500
     )
-    fit <- confint(fit, type = c("wald.orig", "percentile"))
+    fit <- add_confint(fit, type = c("wald.orig", "percentile"))
     expect_snapshot_value(
       coef(fit),
       tolerance = 1e-4,

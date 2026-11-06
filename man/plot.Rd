@@ -123,7 +123,8 @@
 \seealso{
   \code{\link{residuals.amerasfit}} for computing residuals,
   \code{\link{ameras}} for model fitting,
-  \code{\link[=confint.amerasfit]{confint}} for confidence intervals,
+  \code{\link[=confint.amerasfit]{confint}} for returning confidence intervals,
+  \code{\link{add_confint}} for attaching confidence intervals,
   \code{\link{plot.lm}} for the equivalent method for linear models.
 }
 

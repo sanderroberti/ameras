@@ -425,10 +425,14 @@ coefficients.</p>
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; 4        dose  1.0920   1.0920</span></span></code></pre></div>
 <p>The usual <code>amerasfit</code> methods are available, including
 <code>summary()</code>, <code>coef()</code>, <code>vcov()</code>, and
-<code>confint()</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>fit_ameras_gaussian <span class="ot">&lt;-</span> <span class="fu">confint</span>(fit_ameras_gaussian,</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                               <span class="at">type =</span> <span class="st">&quot;wald.orig&quot;</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                               <span class="at">print =</span> <span class="cn">FALSE</span>)</span>
+<code>confint()</code>. Use <code>confint()</code> for a standalone
+matrix of interval bounds. Use <code>add_confint()</code> when the bounds
+should travel with the fit and appear in subsequent summaries; it also
+stores available profile diagnostics and confidence-interval timing
+information.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>fit_ameras_gaussian <span class="ot">&lt;-</span> <span class="fu">add_confint</span>(fit_ameras_gaussian,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                                   <span class="at">type =</span> <span class="st">&quot;wald.orig&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                                   <span class="at">print =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">summary</span>(fit_ameras_gaussian)</span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = standard_data, </span></span>
@@ -436,12 +440,12 @@ coefficients.</p>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
 <span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.1 seconds</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt;      RC 0.075 0.0 0.075</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt;      RC 0.205 0.001 0.206</span></span>
 <span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -531,7 +535,7 @@ analysis using all 10 realizations:</p>
 <span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt;      RC 0.129 0.0 0.129</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt;      RC 0.118 0.0 0.118</span></span>
 <span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -541,7 +545,7 @@ analysis using all 10 realizations:</p>
 <span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3359 0.09596</span></span>
 <span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.4471 0.04101</span></span>
 <span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt; Note: confidence intervals not yet computed. Use add_confint() to add them.</span></span></code></pre></div>
 <p>Other methods can then be added through the <code>methods</code>
 argument:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>fit_ameras_all <span class="ot">&lt;-</span> <span class="fu">ameras</span>(Y.binomial <span class="sc">~</span> <span class="fu">dose</span>(V1<span class="sc">:</span>V10, <span class="at">model =</span> <span class="st">&quot;EXP&quot;</span>) <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>

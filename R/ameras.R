@@ -367,7 +367,7 @@ ameras <- function(
       what = paste0("ameras(", ci_args[[1L]], ")"),
       details = paste0(
         "Confidence intervals are no longer computed by ameras(). ",
-        "Fit the model first and then call confint()."
+        "Fit the model first and then call add_confint()."
       )
     )
   }

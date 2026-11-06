@@ -2,13 +2,20 @@
 
 ## Breaking changes
 
+* `confint()` now follows the standard extractor convention: it returns a
+  two-column matrix for a fit containing one method and a named list of such
+  matrices for a fit containing multiple methods. The former behavior of
+  attaching intervals and their diagnostics to an `amerasfit` object is now
+  provided by `add_confint()`. Both functions always compute the requested
+  intervals, so a new `add_confint()` call replaces intervals already attached
+  to the returned object.
 * Removed the deprecated direct argument interface to `ameras()`. Models must
   now be specified through `formula`; calls using the former `Y`, `dosevars`,
   `doseRRmod`, `deg`, `M`, `X`, `offset`, `entry`, `exit`, or `setnr`
   arguments fail with migration guidance.
 * Removed the deprecated `CI`, `params.profCI`, `maxit.profCI`, and
   `tol.profCI` arguments from `ameras()`. Confidence intervals must be added
-  after fitting with `confint()`.
+  after fitting with `add_confint()`.
 * Removed the deprecated `included.replicates.BMA` alias; use
   `included.realizations.BMA` instead.
 * Removed non-formula effect-modifier syntax. Use `modifier = ~ M1 + M2`

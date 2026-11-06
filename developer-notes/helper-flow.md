@@ -225,10 +225,12 @@ The reconstructed likelihood is then passed into `proflik()` through
 `make_loglik_fn()` reuses `mcml_average_neg_loglik()` to average over the dose
 realizations.
 
-After each method's interval calculation, `confint.amerasfit()` records the CI
-timing for that method and updates its total timing. When intervals are
-recomputed with `force = TRUE`, the previous CI timing is replaced rather than
-accumulated. The updated `amerasfit` object is returned invisibly.
+After each method's interval calculation, the shared confidence-interval helper
+records the CI timing for that method and updates its total timing. A new
+calculation replaces the previous CI timing rather than accumulating it.
+`add_confint.amerasfit()` returns the updated `amerasfit` object invisibly;
+`confint.amerasfit()` uses a temporary updated object and returns only its
+interval bounds.
 
 ## Diagnostics Data Path
 

@@ -81,7 +81,7 @@ test_that("confidence-interval arguments in ameras are defunct", {
     call_args <- c(base_args, setNames(list(defunct_args[[arg]]), arg))
     expect_error(
       do.call(ameras, call_args),
-      "call confint",
+      "call add_confint",
       class = "lifecycle_error_deprecated",
       info = arg
     )

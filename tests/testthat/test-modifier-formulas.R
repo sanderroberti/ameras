@@ -495,7 +495,7 @@ test_that("subgroup-coded modifiers work for profile CIs with keep.data FALSE", 
     keep.data = FALSE
   ))
 
-  fit <- suppressMessages(confint(
+  fit <- suppressMessages(add_confint(
     fit,
     type = "proflik",
     parm = "dose",
@@ -544,7 +544,7 @@ test_that("subgroup-coded modifiers report subgroup BMA samples", {
 
   # BMA still samples the NIMBLE model on the internal contrast scale. The
   # stored samples and summaries should be post-processed back to the subgroup
-  # scale used by coef(), vcov(), summary(), confint(), and traceplot().
+  # scale used by coef(), vcov(), summary(), add_confint(), and traceplot().
   fit <- suppressWarnings(suppressMessages(ameras(
     Y.gaussian ~ dose(V1:V2, modifier = ~ 0 + F3),
     data = data[seq_len(24), ],
@@ -567,7 +567,7 @@ test_that("subgroup-coded modifiers report subgroup BMA samples", {
   expect_identical(rownames(fit$BMA$vcov), expected)
   expect_identical(colnames(fit$BMA$samples), c(expected, "col.ind"))
 
-  fit_ci <- suppressMessages(confint(fit, type = "percentile", print = FALSE))
+  fit_ci <- suppressMessages(add_confint(fit, type = "percentile", print = FALSE))
   expect_identical(rownames(fit_ci$BMA$CI), expected)
 })
 

@@ -3,19 +3,17 @@
 \title{Confidence Intervals for an amerasfit Object}
 
 \description{
-  Computes and/or prints confidence intervals for the parameters of a fitted
-  \code{amerasfit} object. This is a separate step from model fitting,
-  i.e., \code{\link{ameras}} fits the model and \code{confint} computes 
-  intervals, attaches them to the fitted object, and prints them. If
-  \code{confint} is called a second time on the same object, intervals
-  are only printed and not recomputed, unless \code{force=TRUE}.
+  Computes confidence or credible intervals for the parameters of a fitted
+  \code{amerasfit} object and returns the interval bounds. The fitted object
+  is not amended. Use \code{\link{add_confint}} to attach intervals and any
+  available profile diagnostics to an \code{amerasfit} object for inclusion
+  in \code{summary()} output and recording of confidence-interval timing.
 }
 
 \usage{
-\method{confint}{amerasfit}(object, parm="dose", level=0.95, 
-        type=c("proflik","percentile"), maxit.profCI=20, 
-        tol.profCI=1e-2, data=NULL, force=FALSE, print=TRUE,
-        digits = max(3, getOption("digits") - 3), \dots)
+\method{confint}{amerasfit}(object, parm="dose", level=0.95,
+        type=c("proflik","percentile"), maxit.profCI=20,
+        tol.profCI=1e-2, data=NULL, \dots)
 }
 
 \arguments{
@@ -24,188 +22,103 @@
     \code{\link{ameras}}.
   }
   \item{parm}{
-    Either \code{"dose"} to compute intervals for dose-related parameters
-    only, \code{"all"} for all parameters, or a character vector of specific
-    parameter names. Only used when \code{type = "proflik"} since Wald
-    intervals are cheap to compute for all parameters simultaneously.
-    Defaults to \code{"dose"} since profile likelihood computation can be
-    extensive.
+    Either \code{"dose"} to compute profile likelihood intervals for
+    dose-related parameters only, \code{"all"} for all parameters, or a
+    character vector of parameter names. Only used when
+    \code{type = "proflik"}. Defaults to \code{"dose"} because profile
+    likelihood intervals can be computationally intensive.
   }
   \item{level}{
-    The confidence level (default \code{0.95}).
+    Confidence level, as a single number between zero and one. Defaults to
+    \code{0.95}.
   }
   \item{type}{
-    The type(s) of confidence intervals to determine. For
-    RC, ERC, and MCML, this can be one of:
-    \describe{
-      \item{\code{"wald.orig"}}{
-        Wald intervals on the original parameter scale using the delta
-        method variance-covariance matrix.
-      }
-      \item{\code{"wald.transformed"}}{
-        Wald intervals computed on the transformed (reparametrized) scale
-        and then back-transformed. Only available when a transformation
-        was used during fitting.
-      }
-      \item{\code{"proflik"}}{
-        Profile likelihood intervals based on the chi-squared
-        approximation. More accurate than Wald intervals but
-        computationally intensive, especially for large datasets or
-        complex models.
-      }
-    }
-    For FMA and BMA, confidence intervals are based on the generated samples and
-    possible confidence interval types are:
-    \describe{
-      \item{\code{"percentile"}}{
-        Equal-tailed percentile intervals.
-      }
-      \item{\code{"hpd"}}{
-        Highest posterior density intervals via
-        \code{\link[coda]{HPDinterval}} from the \pkg{coda} package.
-      }
-    }
-    If \code{object} contains results for at least one of RC, ERC, and MCML and at least one of FMA and BMA, \code{type} must be length 2 and specify one method for RC, ERC, and MCML, and one for FMA and BMA.
+    Interval type. For RC, ERC, and MCML, use \code{"wald.orig"},
+    \code{"wald.transformed"}, or \code{"proflik"}. For FMA and BMA, use
+    \code{"percentile"} or \code{"hpd"}. When both groups of methods are
+    present, supply one type for each group.
   }
   \item{maxit.profCI}{
-    Maximum number of iterations for the root-finding algorithm used to
-    locate profile likelihood interval bounds. Only used when
-    \code{type = "proflik"}. Defaults to \code{20}.
+    Maximum number of root-finding iterations for profile likelihood
+    intervals. Defaults to \code{20}.
   }
   \item{tol.profCI}{
-    Tolerance for the root-finding algorithm. Only used when
-    \code{type = "proflik"}. Defaults to \code{1e-2}. Reduce for more
-    precise bounds at the cost of additional computation.
+    Root-finding tolerance for profile likelihood intervals. Defaults to
+    \code{1e-2}.
   }
   \item{data}{
-    The original data frame used for fitting. Only required when
-    \code{type = "proflik"} and the model was fitted with
-    \code{keep.data = FALSE}
-  }
-  \item{force}{
-      Logical. If \code{TRUE}, confidence intervals are recomputed even if
-      they have already been computed for this object. Defaults to
-      \code{FALSE}, in which case a message is printed and the object is
-      returned unchanged if confidence intervals are already present.
-  }
-  \item{print}{
-      Logical. If \code{TRUE} (default), confidence intervals are printed to the console.
-  }
-  \item{digits}{
-      Number of significant digits to be printed. Default is
-      \code{max(3, getOption("digits") - 3)}.
+    Original fitting data. Required for profile likelihood intervals when the
+    model was fitted with \code{keep.data = FALSE}.
   }
   \item{\dots}{
-    Additional arguments, currently unused.
+    Additional arguments, currently unused. To attach intervals to a fitted
+    object or control printed output, use
+    \code{\link{add_confint}}.
   }
 }
 
 \value{
-  The original \code{amerasfit} object with a \code{CI} element added to
-  each fitted method result. The method-specific \code{timing} element is also
-  updated so that printed runtime summaries include confidence interval
-  computation time. For RC, ERC, and MCML the
-  \code{CI} element is a data frame with columns:
-  \describe{
-    \item{\code{lower}}{Lower confidence bound.}
-    \item{\code{upper}}{Upper confidence bound.}
-  }
-  When \code{type = "proflik"}, four additional columns are included:
-  \describe{
-    \item{\code{pval.lower}}{
-      P-value at the lower bound, should be close to \eqn{1 -}
-      \code{level}.
-    }
-    \item{\code{pval.upper}}{
-      P-value at the upper bound, should be close to \eqn{1 -}
-      \code{level}.
-    }
-    \item{\code{iter.lower}}{
-      Number of iterations used by the root-finding algorithm for the
-      lower bound.
-    }
-    \item{\code{iter.upper}}{
-      Number of iterations used by the root-finding algorithm for the
-      upper bound.
-    }
-  }
-  For FMA and BMA the \code{CI} element is a data frame with columns
-  \code{lower} and \code{upper}.
+  For an object containing one fitted method, a numeric matrix with parameters
+  in rows and the lower and upper confidence limits in two percentage-labelled
+  columns. For an object containing multiple fitted methods, a named list of
+  such matrices, one per method.
 }
 
 \details{
+  For RC, ERC, and MCML, Wald intervals on the original parameter scale use
+  the delta-method variance-covariance matrix. Wald intervals on the
+  transformed scale are computed in the optimization parametrization and then
+  back-transformed. More specifically, when
+  \eqn{\boldsymbol\theta = h(\boldsymbol\eta)}, transformed-scale intervals
+  apply \eqn{h} to the endpoints on the \eqn{\boldsymbol\eta} scale, whereas
+  original-scale intervals use the covariance matrix obtained from
+  \eqn{J H^{-1} J^T}, where \eqn{J} is the transformation Jacobian and
+  \eqn{H} is the optimization Hessian. Profile likelihood intervals repeatedly
+  re-evaluate the likelihood and can therefore be substantially more
+  expensive.
 
-  For (extended) regression calibration and Monte Carlo maximum likelihood, 
-  Wald and profile likelihood intervals can be obtained. When a parameter 
-  transformation \eqn{\bm\theta = h(\bm\eta)} is used, \code{type="wald.transformed"} 
-  yields the CI at significance level \eqn{\alpha} of \eqn{h(\bm\eta \pm z_{1-\alpha/2} \bm V)} 
-  where \eqn{z_{1-\alpha/2}} is the \eqn{1-\alpha/2}-quantile of the standard normal distribution and \eqn{\bm V} is the vector 
-  of standard deviations estimated using the inverse Hessian matrix, 
-  and \code{type="wald.orig"} uses the delta method to obtain the CI 
-  \eqn{h(\bm\eta)\pm z_{1-\alpha/2} \bm V_*} where \eqn{\bm V_*} is the vector of 
-  standard deviations estimated using \eqn{J H^{-1} J^T} with \eqn{J} the 
-  Jacobian of the transformation and \eqn{H} is the Hessian. When no 
-  transformation is used, \code{type="wald.orig"} should be used. 
-  The third option is \code{proflik}, which uses the profile likelihood to 
-  compute confidence bounds. 
-  
-  For FMA and BMA, the options for 
-  confidence/credible intervals are \code{type="percentile"} which uses 
-  percentiles, and \code{type="hpd"} which computes highest posterior density 
-  intervals using \code{HPDinterval} from the \code{coda} package, both using 
-  the FMA samples or Bayesian posterior samples.
-  
-  Profile likelihood intervals (\code{type="proflik"}) require
-  re-evaluating the likelihood repeatedly and can be time-consuming.
-  The \code{parm} argument can be used to restrict computation to dose
-  parameters only (the default) when intervals for the other parameters are
-  not of interest. If a profile likelihood bound cannot be reliably
-  bracketed or solved, the corresponding bound is returned as \code{NA}
-  with a warning that reports the last attempted parameter value and its
-  p-value. For transformed fits, the warning also reports the corresponding
-  internal optimizer-scale value. For models with formula effect modifiers,
-  subgroup-specific profile likelihood intervals can be obtained by fitting
-  subgroup-specific dose coefficients with \code{modifier=~0+M} or
-  \code{modifier=~M-1}.
+  For FMA and BMA, percentile intervals use equal-tailed sample quantiles and
+  HPD intervals use \code{\link[coda]{HPDinterval}}.
 
-  When the model was fitted with \code{keep.data=FALSE} and
-  \code{type="proflik"} is used for \code{confint}, the original data must be
-  supplied via the \code{data} argument. The missing-value policy used during
-  fitting is reapplied to the supplied data before profile likelihood
-  evaluation. Wald intervals do not require the data and can always be
-  computed from the stored Hessian and parameter estimates alone.
+  Profile likelihood diagnostics such as boundary p-values and iteration
+  counts are not included in the returned matrices. Use
+  \code{\link{add_confint}} to store these diagnostics in the method-specific
+  \code{CI} components of a fitted object.
+
+  The requested intervals are always computed, even if \code{object} already
+  contains attached intervals. The input object is left unchanged. If a
+  profile likelihood bound cannot be reliably bracketed or solved, that bound
+  is returned as \code{NA} with a diagnostic warning.
+
+  When a model was fitted with \code{keep.data = FALSE}, the original data must
+  be supplied through \code{data} for profile likelihood intervals. The
+  missing-value policy used during fitting is reapplied before likelihood
+  evaluation. Wald and sample-based intervals do not require the original
+  data. For models with formula effect modifiers, subgroup-specific profile
+  intervals can be obtained by fitting subgroup-specific dose coefficients
+  with \code{modifier = ~ 0 + M} or \code{modifier = ~ M - 1}.
 }
 
 \seealso{
+  \code{\link{add_confint}} for attaching intervals and diagnostics to a fit,
   \code{\link{ameras}} for model fitting,
-  \code{\link[=summary.amerasfit]{summary}} for a summary of the fitted model
-  including confidence intervals if computed,
+  \code{\link[=summary.amerasfit]{summary}} for fit summaries, and
   \code{\link[stats]{confint}} for the generic function.
 }
 
 \examples{
-## Fit the model
-fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
-               methods = "RC")
+fit <- ameras(
+  Y.binomial ~ dose(V1:V3, model = "ERR"),
+  data = ameras_simulated,
+  family = "binomial",
+  methods = "RC"
+)
 
-## Wald intervals (fast)
-fit <- confint(fit, type = "wald.orig")
-summary(fit)
+## A two-column matrix of Wald interval bounds
+confint(fit, type = "wald.orig")
 
-## Profile likelihood intervals for dose parameters only (slower)
-fit <- confint(fit, type = "proflik", parm = "dose", force = TRUE)
-summary(fit)
-
-## With keep.data = FALSE, supply data explicitly for proflik
-fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
-               methods = "RC", keep.data = FALSE)
-fit2 <- confint(fit2, type = "proflik", data = ameras_simulated)
-
-## FMA and BMA with percentile intervals
+## Profile likelihood intervals are slower
 \donttest{% slow
-fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
-               methods = c("FMA", "BMA"))
-fit3 <- confint(fit3, type = "percentile")
-summary(fit3)
+confint(fit, type = "proflik", parm = "dose")
 }
 }

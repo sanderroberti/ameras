@@ -142,7 +142,7 @@ test_that("confint records CI timing for sample-based intervals", {
     )
   ))
 
-  out <- suppressMessages(confint(object, type = "percentile", print = FALSE))
+  out <- suppressMessages(add_confint(object, type = "percentile", print = FALSE))
 
   expect_true(out$CI.computed)
   expect_equal(out$FMA$timing$fit$cpu, 1)

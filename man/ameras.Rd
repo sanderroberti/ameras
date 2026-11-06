@@ -168,7 +168,7 @@ the transformation, if applicable), \code{other.args} (any other arguments passe
 the formula, including \code{model$data}, which is either the data frame used for
 model fitting when \code{keep.data=TRUE} or \code{NULL} otherwise), and
 \code{CI.computed} (logical, whether confidence intervals have been attached by
-\code{\link[=confint.amerasfit]{confint}}).
+\code{\link{add_confint}}).
 
 For each method supplied to \code{methods}, the output contains a list with components:
   \item{coefficients}{named vector of model coefficients.}
@@ -195,7 +195,18 @@ Finally, for FMA the output additionally contains:
   \item{included.samples}{the total number of samples included.}
   \item{included.realizations}{indices of realization exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results. }
 
-The class \code{amerasfit} supports the methods \code{\link[=print.amerasfit]{print}}, \code{\link[=coef.amerasfit]{coef}}, \code{\link[=nobs.amerasfit]{nobs}}, \code{\link[=confint.amerasfit]{confint}}, \code{\link[=summary.amerasfit]{summary}}, \code{\link[=summary_table.amerasfit]{summary_table}}, \code{\link[=vcov.amerasfit]{vcov}}, \code{\link[=residuals.amerasfit]{residuals}}, \code{\link[=plot.amerasfit]{plot}}, \code{\link{traceplot}}, \code{\link[=convergence.amerasfit]{convergence}}, \code{\link[=Rhat.amerasfit]{Rhat}}, and \code{\link[=included_realizations.amerasfit]{included_realizations}}.
+The class \code{amerasfit} supports the methods
+\code{\link{add_confint}}, \code{\link[=print.amerasfit]{print}},
+\code{\link[=coef.amerasfit]{coef}}, \code{\link[=nobs.amerasfit]{nobs}},
+\code{\link[=confint.amerasfit]{confint}},
+\code{\link[=summary.amerasfit]{summary}},
+\code{\link[=summary_table.amerasfit]{summary_table}},
+\code{\link[=vcov.amerasfit]{vcov}},
+\code{\link[=residuals.amerasfit]{residuals}},
+\code{\link[=plot.amerasfit]{plot}}, \code{\link{traceplot}},
+\code{\link[=convergence.amerasfit]{convergence}},
+\code{\link[=Rhat.amerasfit]{Rhat}}, and
+\code{\link[=included_realizations.amerasfit]{included_realizations}}.
 }
 
 \details{
@@ -204,7 +215,8 @@ terms have been expanded. Thus missing values in raw variables and in derived
 covariate columns, such as factor contrasts, interactions, and spline bases,
 are handled consistently before model fitting. The omitted-row action is stored
 on the fitted object. When \code{keep.data=FALSE} and data are supplied later to
-methods such as \code{confint()}, \code{residuals()}, and \code{plot()}, the
+methods such as \code{confint()}, \code{add_confint()}, \code{residuals()},
+and \code{plot()}, the
 same missing-value policy is reapplied. Unlike
 \code{\link[stats]{lm}} and \code{\link[stats]{glm}}, \code{na.exclude} does not
 pad residuals or diagnostic plots back to the originally supplied row count;
@@ -239,7 +251,8 @@ Because the proportional hazards model is not available in \code{nimble}, \code{
 }
 
 \seealso{
-  \code{\link[=confint.amerasfit]{confint}} for computing confidence intervals,
+  \code{\link[=confint.amerasfit]{confint}} for returning confidence intervals,
+  \code{\link{add_confint}} for attaching confidence intervals,
   \code{\link[=summary.amerasfit]{summary}} for a summary of the fitted model
   including confidence intervals if computed, \code{\link[=coef.amerasfit]{coef}} 
   for extracting coefficients, \code{\link[=nobs.amerasfit]{nobs}} for the number
@@ -269,7 +282,7 @@ fit <- ameras(
 coef(fit)
 
 ## Add Wald confidence intervals and display a detailed summary
-fit <- confint(fit, type = "wald.orig", print = FALSE)
+fit <- add_confint(fit, type = "wald.orig", print = FALSE)
 summary(fit)
 }
 

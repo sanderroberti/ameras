@@ -64,9 +64,15 @@ fit <- ameras(Y.binomial~dose(V1:V10), data = ameras_simulated, family="binomial
 summary(fit)
 ```
 
-Finally, we add confidence intervals to the `fit` object:
+Finally, we add confidence intervals to the `fit` object. This is useful for a
+reporting workflow because subsequent summaries include the bounds, while any
+available profile diagnostics and confidence-interval timing are stored with
+the fit. Use `confint()` instead when only a standalone matrix or list of bounds
+is needed. Attaching intervals is particularly useful for computationally
+expensive profile likelihood intervals because subsequent summaries use the
+stored results without rerunning the profile calculation.
 ```{r}
-fit <- confint(fit, type=c("wald.orig","percentile"))
+fit <- add_confint(fit, type=c("wald.orig","percentile"))
 summary(fit)
 ```
 

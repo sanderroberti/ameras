@@ -10,7 +10,12 @@
     and Bayesian model averaging (Kwon et al. 2016 \doi{10.1002/sim.6635}). Supported model families are
     Gaussian, binomial, multinomial, Poisson, proportional hazards, and conditional logistic.}
 \details{
-  The function used to fit models is \code{\link{ameras}}. To attach confidence/credible intervals, use the method \code{\link[=confint.amerasfit]{confint}}. To visualize the exposure uncertainty in the dose realizations, use \code{\link{ecdfplot}}.
+  The function used to fit models is \code{\link{ameras}}. Use
+  \code{\link[=confint.amerasfit]{confint}} to return confidence or credible
+  interval bounds and \code{\link{add_confint}} to attach them to a fitted
+  object for inclusion in summaries and storage of available diagnostics and
+  timing information. To visualize exposure uncertainty in the dose
+  realizations, use \code{\link{ecdfplot}}.
 }
 \author{Sander Roberti \email{statspackages@sanderroberti.nl}, William Wheeler \email{WheelerB@imsweb.com}, Ruth Pfeiffer \email{pfeiffer@mail.nih.gov}, and Deukwoo Kwon \email{DKwon@uams.edu}}
 

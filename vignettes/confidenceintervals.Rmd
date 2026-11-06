@@ -20,8 +20,20 @@ library(ameras)
 ```
 
 # Introduction
-To compute confidence intervals, first fit the model using `ameras`, then use the `confint` method to attach confidence intervals.
-Several types of confidence intervals are supported, which should be supplied to the `type` argument of `confint`, see below. When the fitted object contains at least one of `RC`, `ERC`, and `MCML` and at least one of `FMA` and `BMA`, `type` should be a vector of length 2 with one interval type for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
+To compute confidence intervals, first fit the model using `ameras`, then use
+`confint()` when the interval bounds are needed as a standalone result, for
+example for immediate comparison or export. Use `add_confint()` when the fit
+will be retained for subsequent reporting: it stores the bounds with each
+fitted method so that `summary()` and `summary_table()` include them, stores
+profile-likelihood diagnostics when available, and records confidence-interval
+computation time in the fit. Because `add_confint()` returns an amended copy
+invisibly, assign its result to retain this information. This is particularly
+useful for computationally expensive profile likelihood intervals: subsequent
+summaries use the attached bounds and diagnostics without rerunning the profile
+calculation.
+Several interval types are supported through the `type` argument. When the
+fitted object contains at least one of `RC`, `ERC`, and `MCML` and at least one
+of `FMA` and `BMA`, `type` should contain one interval type for each group.
 
 # Regression calibration, extended regression calibration, and Monte Carlo maximum likelihood
 
@@ -51,13 +63,21 @@ dosevars <- paste0("V", 1:10)
 fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods=c("RC"))
 
-fit.ameras.waldorig <- confint(fit.ameras, type="wald.orig")
-fit.ameras.waldtransformed <- confint(fit.ameras, type="wald.transformed")
-fit.ameras.proflik <- confint(fit.ameras, type="proflik", parm="all")
+ci.ameras.waldorig <- confint(fit.ameras, type="wald.orig")
+ci.ameras.waldtransformed <- confint(fit.ameras, type="wald.transformed")
+ci.ameras.proflik <- confint(fit.ameras, type="proflik", parm="all")
 
+ci.ameras.waldorig
+ci.ameras.waldtransformed
+ci.ameras.proflik
+
+# Attach intervals when they should be included in the fit summary
+fit.ameras.waldorig <- add_confint(
+  fit.ameras,
+  type="wald.orig",
+  print=FALSE
+)
 summary(fit.ameras.waldorig)
-summary(fit.ameras.waldtransformed)
-summary(fit.ameras.proflik)
 ```
 
 # Frequentist and Bayesian model averaging
@@ -71,9 +91,9 @@ set.seed(123)
 fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data = ameras_simulated,
                             family="binomial", methods=c("FMA"))
 
-fit.ameras.hpd <- confint(fit.ameras2, type="hpd")
-fit.ameras.percentile <- confint(fit.ameras2, type="percentile")
+ci.ameras.hpd <- confint(fit.ameras2, type="hpd")
+ci.ameras.percentile <- confint(fit.ameras2, type="percentile")
 
-summary(fit.ameras.hpd)
-summary(fit.ameras.percentile)
+ci.ameras.hpd
+ci.ameras.percentile
 ```

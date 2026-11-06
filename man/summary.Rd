@@ -8,7 +8,7 @@
 \description{
   Produces a summary of a fitted \code{amerasfit} object, including
   parameter estimates, standard errors, and confidence intervals if
-  computed via \code{\link[=confint.amerasfit]{confint}}.
+  attached via \code{\link{add_confint}}.
 }
 
 \usage{
@@ -64,11 +64,11 @@
         \item{\code{SE}}{The standard error.}
         \item{\code{CI.lower}}{
           The lower confidence bound, if confidence intervals have been
-          computed via \code{\link[=confint.amerasfit]{confint}}.
+          attached via \code{\link{add_confint}}.
         }
         \item{\code{CI.upper}}{
           The upper confidence bound, if confidence intervals have been
-          computed via \code{\link[=confint.amerasfit]{confint}}.
+          attached via \code{\link{add_confint}}.
         }
         \item{\code{Rhat}}{
           The Gelman-Rubin convergence diagnostic, included only when
@@ -91,8 +91,8 @@
       The total CPU computation time in seconds across all methods.
     }
     \item{\code{CI.computed}}{
-      Logical. \code{TRUE} if confidence intervals have been computed
-      via \code{\link[=confint.amerasfit]{confint}}, \code{FALSE}
+      Logical. \code{TRUE} if confidence intervals have been attached
+      via \code{\link{add_confint}}, \code{FALSE}
       otherwise.
     }
   }
@@ -101,8 +101,8 @@
 \details{
   \code{summary.amerasfit} collects results from all estimation methods
   present in the fitted object into a single summary table. Columns for
-  confidence intervals are only printed if they have been computed by
-  \code{\link[=confint.amerasfit]{confint}}. When BMA results are present 
+  confidence intervals are only printed if they have been attached by
+  \code{\link{add_confint}}. When BMA results are present
   in the fitted object, the summary table includes columns \code{Rhat} and 
   \code{n.eff}, with \code{NA} values for all other methods. Profile
   likelihood diagnostic columns such as \code{pval.lower} and
@@ -124,8 +124,8 @@
 
 \seealso{
   \code{\link{ameras}} for model fitting,
-  \code{\link[=confint.amerasfit]{confint}} for computing confidence
-  intervals,
+  \code{\link{add_confint}} for attaching confidence intervals,
+  \code{\link[=confint.amerasfit]{confint}} for returning interval bounds,
   \code{\link[=print.amerasfit]{print}} for a shorter printed summary,
   \code{\link[=coef.amerasfit]{coef}} for extracting coefficients.
 }
@@ -139,7 +139,7 @@ fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, fam
 summary(fit)
 
 ## Summary with confidence intervals
-fit <- confint(fit, type = "wald.orig")
+fit <- add_confint(fit, type = "wald.orig")
 summary(fit)
 
 ## Access the summary table directly
@@ -149,7 +149,7 @@ s <- summary_table(fit)
 \donttest{% slow
 fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
               methods = c("RC", "ERC", "MCML"))
-fit2 <- confint(fit2, type = "wald.orig")
+fit2 <- add_confint(fit2, type = "wald.orig")
 summary(fit2)
 }
 }

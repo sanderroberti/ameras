@@ -59,8 +59,16 @@ test_that("public methods warn about unused dots", {
   )
   expect_unused_dots_warning(Rhat(fit, typo = TRUE))
   expect_unused_dots_warning(included_realizations(fit, typo = TRUE))
+  rc_fit <- fit
+  rc_fit$FMA <- NULL
+  rc_fit$BMA <- NULL
   expect_unused_dots_warning(
-    capture.output(suppressMessages(confint(fit, print = FALSE, typo = TRUE)))
+    capture.output(add_confint(
+      rc_fit,
+      type = "wald.orig",
+      print = FALSE,
+      typo = TRUE
+    ))
   )
   expect_identical(
     count_unused_dots_warnings(capture.output(print(fit, typo = TRUE))),
@@ -272,22 +280,22 @@ test_that("confint validates method-specific inputs and empty sample output", {
     )
   ))
 
-  # confint() has separate allowed interval types for sampling-based methods
+  # add_confint() has separate allowed interval types for sampling-based methods
   # (FMA/BMA) and likelihood/optimization-based methods (RC/ERC/MCML).
   expect_error(
-    confint(empty_fit, level = 1, print = FALSE),
+    add_confint(empty_fit, level = 1, print = FALSE),
     "level must be a single numeric value between 0 and 1"
   )
   expect_error(
-    confint(fma_fit, type = c("percentile", "hpd"), print = FALSE),
+    add_confint(fma_fit, type = c("percentile", "hpd"), print = FALSE),
     "Exactly one CI type .* for FMA"
   )
   expect_error(
-    confint(rc_fit, type = c("wald.orig", "proflik"), print = FALSE),
+    add_confint(rc_fit, type = c("wald.orig", "proflik"), print = FALSE),
     "Exactly one CI type .* for RC"
   )
 
-  # If all FMA realizations were excluded upstream, confint() should warn and
+  # If all FMA realizations were excluded upstream, add_confint() should warn and
   # return NA interval bounds rather than failing on the missing sample matrix.
   no_samples_fit <- ameras:::new_amerasfit(list(
     CI.computed = FALSE,
@@ -299,7 +307,7 @@ test_that("confint validates method-specific inputs and empty sample output", {
   ))
   fit_ci <- NULL
   expect_warning(
-    fit_ci <- confint(no_samples_fit, type = "percentile", print = FALSE),
+    fit_ci <- add_confint(no_samples_fit, type = "percentile", print = FALSE),
     "No samples available"
   )
 

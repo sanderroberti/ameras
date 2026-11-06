@@ -135,13 +135,19 @@ summary(fit)
 #>     BMA (Intercept)  -0.8736 0.07174 1.00 1024.00
 #>     BMA        dose   0.7911 0.13323 1.00  999.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
-Finally, we add confidence intervals to the `fit` object:
+Finally, we add confidence intervals to the `fit` object. This is useful for a
+reporting workflow because subsequent summaries include the bounds, while any
+available profile diagnostics and confidence-interval timing are stored with
+the fit. Use `confint()` instead when only a standalone matrix or list of bounds
+is needed. Attaching intervals is particularly useful for computationally
+expensive profile likelihood intervals because subsequent summaries use the
+stored results without rerunning the profile calculation.
 
 ``` r
-fit <- confint(fit, type=c("wald.orig","percentile"))
+fit <- add_confint(fit, type=c("wald.orig","percentile"))
 #> RC confidence intervals:
 #> 
 #>               lower   upper

@@ -424,7 +424,7 @@ print.summary.amerasfit <- function(
   if (!x$CI.computed) {
     cat(
       "\nNote: confidence intervals not yet computed.",
-      "Use confint() to add them.\n"
+      "Use add_confint() to add them.\n"
     )
   }
 
@@ -491,7 +491,10 @@ traceplot.amerasfit <- function(
 }
 
 
-confint.amerasfit <- function(
+add_confint <- function(object, ...) UseMethod("add_confint")
+
+
+compute_and_attach_confint <- function(
   object,
   parm = "dose",
   level = 0.95,
@@ -499,23 +502,9 @@ confint.amerasfit <- function(
   maxit.profCI = 20,
   tol.profCI = 1e-2,
   data = NULL,
-  force = FALSE,
   print = TRUE,
-  digits = max(3, getOption("digits") - 3),
-  ...
+  digits = max(3, getOption("digits") - 3)
 ) {
-  chkDots(...)
-
-  # Check if CIs have already been computed
-  if (object$CI.computed && !force) {
-    message(
-      "Confidence intervals have already been computed for this object. ",
-      "Returning the object unchanged. Use force=TRUE to recompute."
-    )
-    print_confint(object, digits = digits)
-    return(invisible(object))
-  }
-
   # Validate level
   if (!is.numeric(level) || length(level) != 1 || level <= 0 || level >= 1) {
     stop("level must be a single numeric value between 0 and 1")
@@ -525,9 +514,12 @@ confint.amerasfit <- function(
     names(object),
     c("RC", "ERC", "MCML", "FMA", "BMA")
   )]
+  if (!length(fitobj)) {
+    stop("No fitted methods found in object")
+  }
 
   res <- NULL
-  for (it in 1:length(fitobj)) {
+  for (it in seq_along(fitobj)) {
     method <- names(fitobj)[it]
     ci_timer <- start_runtime_timer()
 
@@ -632,6 +624,125 @@ confint.amerasfit <- function(
     print_confint(object, digits = digits)
   }
   invisible(object)
+}
+
+
+add_confint.amerasfit <- function(
+  object,
+  parm = "dose",
+  level = 0.95,
+  type = c("proflik", "percentile"),
+  maxit.profCI = 20,
+  tol.profCI = 1e-2,
+  data = NULL,
+  print = TRUE,
+  digits = max(3, getOption("digits") - 3),
+  ...
+) {
+  dots_call <- match.call(expand.dots = FALSE)$...
+  if ("force" %in% names(dots_call)) {
+    stop(
+      "`force` is no longer supported; `add_confint()` always computes ",
+      "and attaches the requested intervals.",
+      call. = FALSE
+    )
+  }
+  chkDots(...)
+
+  compute_and_attach_confint(
+    object = object,
+    parm = parm,
+    level = level,
+    type = type,
+    maxit.profCI = maxit.profCI,
+    tol.profCI = tol.profCI,
+    data = data,
+    print = print,
+    digits = digits
+  )
+}
+
+
+format_confint_bounds <- function(object, level) {
+  methods_present <- intersect(
+    names(object),
+    c("RC", "ERC", "MCML", "FMA", "BMA")
+  )
+  alpha <- (1 - level) / 2
+  probabilities <- c(alpha, 1 - alpha)
+  column_names <- paste(
+    format(
+      100 * probabilities,
+      trim = TRUE,
+      scientific = FALSE,
+      digits = 3
+    ),
+    "%"
+  )
+
+  result <- lapply(methods_present, function(method) {
+    bounds <- as.matrix(
+      object[[method]]$CI[, c("lower", "upper"), drop = FALSE]
+    )
+    colnames(bounds) <- column_names
+    bounds
+  })
+  names(result) <- methods_present
+
+  if (length(result) == 1L) result[[1L]] else result
+}
+
+
+confint.amerasfit <- function(
+  object,
+  parm = "dose",
+  level = 0.95,
+  type = c("proflik", "percentile"),
+  maxit.profCI = 20,
+  tol.profCI = 1e-2,
+  data = NULL,
+  ...
+) {
+  matched_call <- match.call(expand.dots = FALSE)
+  dots_call <- matched_call$...
+  if ("force" %in% names(dots_call)) {
+    stop(
+      "`force` is no longer supported; `confint()` always computes the ",
+      "requested intervals.",
+      call. = FALSE
+    )
+  }
+  attachment_args <- intersect(
+    names(dots_call),
+    c("print", "digits")
+  )
+  if (length(attachment_args)) {
+    stop(
+      paste0(
+        "`",
+        paste(attachment_args, collapse = "`, `"),
+        "` ",
+        if (length(attachment_args) == 1L) "is" else "are",
+        " only supported by `add_confint()`. ",
+        "`confint()` now returns confidence interval bounds."
+      ),
+      call. = FALSE
+    )
+  }
+  chkDots(...)
+
+  object_with_confint <- compute_and_attach_confint(
+    object = object,
+    parm = parm,
+    level = level,
+    type = type,
+    maxit.profCI = maxit.profCI,
+    tol.profCI = tol.profCI,
+    data = data,
+    print = FALSE
+  )
+
+  format_confint_bounds(object_with_confint, level = level)
 }
 
 summary_table <- function(object, ...) UseMethod("summary_table")
