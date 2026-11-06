@@ -33,7 +33,7 @@ print_summary_snapshot <- function(
   max_rhat = NULL,
   min_n_eff = 0
 ) {
-  tab <- summary(fit)$summary_table
+  tab <- coef(summary(fit))
 
   if ("Rhat" %in% names(tab)) {
     diagnostics <- tab[

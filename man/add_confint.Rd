@@ -80,7 +80,7 @@ add_confint(object, \dots)
   to \code{object} are replaced in the returned object; the input object is
   left unchanged. This function is useful when the fitted object will be kept
   for reporting or further inspection: \code{summary()} and
-  \code{summary_table()} include the attached bounds, profile-likelihood
+  \code{coef(summary(object))} include the attached bounds, profile-likelihood
   diagnostics are stored when available, and confidence-interval computation
   time is recorded in the method-specific timing information. Use
   \code{\link[=confint.amerasfit]{confint}} when only standalone interval

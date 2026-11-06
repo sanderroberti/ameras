@@ -18,9 +18,10 @@ test_that("binomial accessors and diagnostic plots return structured results", {
   expect_identical(vcov(fit, methods = "FMA"), fit$FMA$vcov)
 
   summ <- summary(fit)
-  table <- summary_table(fit)
+  table <- coef(summ)
   expect_s3_class(summ, "summary.amerasfit")
-  expect_identical(table, summ$summary_table)
+  expect_identical(table, summ$coefficients)
+  expect_null(summ$summary_table)
   expect_named(table, c("Method", "Term", "Estimate", "SE"))
   expect_setequal(unique(table$Method), c("RC", "FMA"))
 
@@ -66,7 +67,7 @@ test_that("multinomial accessors and plots preserve category structure", {
   )
 
   expect_identical(vcov(fit), fit$RC$vcov)
-  table <- summary_table(fit)
+  table <- coef(summary(fit))
   expect_identical(unique(table$Method), "RC")
   expect_identical(table$Term, names(fit$RC$coefficients))
 
@@ -93,7 +94,7 @@ test_that("proportional-hazards accessors and plots preserve coefficient terms",
   )
 
   expect_identical(vcov(fit), fit$RC$vcov)
-  table <- summary_table(fit)
+  table <- coef(summary(fit))
   expect_identical(unique(table$Method), "RC")
   expect_identical(table$Term, names(fit$RC$coefficients))
 

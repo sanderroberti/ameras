@@ -67,11 +67,11 @@ test_that("one-chain BMA fits support amerasfit methods", {
   expect_identical(names(coef(fit)), names(fit$BMA$coefficients))
   expect_identical(rownames(vcov(fit, methods = "BMA")), names(fit$BMA$coefficients))
 
-  summary_table <- summary(fit)$summary_table
-  expect_identical(summary_table$Method, rep("BMA", 3))
-  expect_identical(summary_table$Term, names(fit$BMA$coefficients))
-  expect_true(all(is.na(summary_table$Rhat)))
-  expect_true(all(is.na(summary_table$n.eff)))
+  coefficient_table <- coef(summary(fit))
+  expect_identical(coefficient_table$Method, rep("BMA", 3))
+  expect_identical(coefficient_table$Term, names(fit$BMA$coefficients))
+  expect_true(all(is.na(coefficient_table$Rhat)))
+  expect_true(all(is.na(coefficient_table$n.eff)))
 
   # Percentile intervals should work directly from the one-chain sample matrix.
   fit_ci <- suppressMessages(add_confint(fit, type = "percentile", print = FALSE))

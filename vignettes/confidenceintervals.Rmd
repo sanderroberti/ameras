@@ -24,7 +24,7 @@ To compute confidence intervals, first fit the model using `ameras`, then use
 `confint()` when the interval bounds are needed as a standalone result, for
 example for immediate comparison or export. Use `add_confint()` when the fit
 will be retained for subsequent reporting: it stores the bounds with each
-fitted method so that `summary()` and `summary_table()` include them, stores
+fitted method so that `summary()` and `coef(summary(fit))` include them, stores
 profile-likelihood diagnostics when available, and records confidence-interval
 computation time in the fit. Because `add_confint()` returns an amended copy
 invisibly, assign its result to retain this information. This is particularly

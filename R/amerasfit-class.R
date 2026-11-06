@@ -327,7 +327,7 @@ summary.amerasfit <- function(object, ...) {
 
   bma <- ("BMA" %in% names(object0))
 
-  summary_table <- do.call(
+  coefficient_table <- do.call(
     "rbind",
     lapply(1:length(object0), function(i) {
       y <- object0[[i]]
@@ -377,7 +377,7 @@ summary.amerasfit <- function(object, ...) {
   ans <- list(
     call = object$call,
     row_info = row_info_from_amerasfit(object),
-    summary_table = summary_table,
+    coefficients = coefficient_table,
     runtime_table = runtime_table,
     total_runtime_seconds = total_runtime,
     CI.computed = object$CI.computed
@@ -385,6 +385,13 @@ summary.amerasfit <- function(object, ...) {
 
   class(ans) <- "summary.amerasfit"
   return(ans)
+}
+
+
+coef.summary.amerasfit <- function(object, ...) {
+  chkDots(...)
+
+  object$coefficients
 }
 
 
@@ -419,7 +426,7 @@ print.summary.amerasfit <- function(
   print(format(x$runtime_table, digits = digits, nsmall = 1), row.names = FALSE)
 
   cat("\nSummary of coefficients by method:\n\n")
-  print(format(x$summary_table, digits = digits, nsmall = 2), row.names = FALSE)
+  print(format(x$coefficients, digits = digits, nsmall = 2), row.names = FALSE)
 
   if (!x$CI.computed) {
     cat(
@@ -744,16 +751,6 @@ confint.amerasfit <- function(
 
   format_confint_bounds(object_with_confint, level = level)
 }
-
-summary_table <- function(object, ...) UseMethod("summary_table")
-
-summary_table.amerasfit <- function(object, ...) {
-  chkDots(...)
-
-  summ <- summary(object)
-  return(summ$summary_table)
-}
-
 
 compute_residuals <- function(
   object,

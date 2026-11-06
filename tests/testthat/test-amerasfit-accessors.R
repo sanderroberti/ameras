@@ -54,7 +54,7 @@ test_that("public methods warn about unused dots", {
   expect_unused_dots_warning(nobs(fit, typo = TRUE))
   expect_unused_dots_warning(summary(fit, typo = TRUE))
   expect_identical(
-    count_unused_dots_warnings(summary_table(fit, typo = TRUE)),
+    count_unused_dots_warnings(coef(summary(fit), typo = TRUE)),
     1L
   )
   expect_unused_dots_warning(Rhat(fit, typo = TRUE))

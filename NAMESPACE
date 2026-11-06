@@ -59,10 +59,10 @@ export(
   add_confint,
   Rhat,
   included_realizations,
-  convergence,
-  summary_table
+  convergence
 )
 S3method(coef, amerasfit)
+S3method(coef, summary.amerasfit)
 S3method(nobs, amerasfit)
 S3method(summary, amerasfit)
 S3method(print, summary.amerasfit)
@@ -76,5 +76,4 @@ S3method(convergence, amerasfit)
 S3method(Rhat, amerasfit)
 S3method(residuals, amerasfit)
 S3method(plot, amerasfit)
-S3method(summary_table, amerasfit)
 S3method(vcov, amerasfit)

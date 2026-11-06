@@ -9,6 +9,10 @@
   provided by `add_confint()`. Both functions always compute the requested
   intervals, so a new `add_confint()` call replaces intervals already attached
   to the returned object.
+* Renamed the coefficient table in `summary.amerasfit` from `summary_table` to
+  `coefficients` and removed the package-specific `summary_table()` accessor.
+  Use `coef(summary(fit))` to retrieve the table. Printed summaries are
+  unchanged.
 * Removed the deprecated direct argument interface to `ameras()`. Models must
   now be specified through `formula`; calls using the former `Y`, `dosevars`,
   `doseRRmod`, `deg`, `M`, `X`, `offset`, `entry`, `exit`, or `setnr`

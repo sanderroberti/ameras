@@ -1,8 +1,7 @@
 \name{summary.amerasfit}
 \alias{summary.amerasfit}
 \alias{print.summary.amerasfit}
-\alias{summary_table}
-\alias{summary_table.amerasfit}
+\alias{coef.summary.amerasfit}
 \title{Summarize an amerasfit Object}
 
 \description{
@@ -14,15 +13,16 @@
 \usage{
 \method{summary}{amerasfit}(object, \dots)
 
-\method{summary_table}{amerasfit}(object, \dots)
+\method{coef}{summary.amerasfit}(object, \dots)
 
 \method{print}{summary.amerasfit}(x, digits = max(3, getOption("digits") - 3), \dots)
 }
 
 \arguments{
   \item{object}{
-    A fitted model object of class \code{amerasfit}, as returned by
-    \code{\link{ameras}}.
+    For \code{summary()}, a fitted model object of class \code{amerasfit}, as
+    returned by \code{\link{ameras}}. For \code{coef()}, an object of class
+    \code{summary.amerasfit}.
   }
   \item{x}{
     An object of class \code{summary.amerasfit}, as returned by
@@ -54,7 +54,7 @@
       number of rows excluded because they have zero follow-up time
       (\code{entry == exit}).
     }
-    \item{\code{summary_table}}{
+    \item{\code{coefficients}}{
       A data frame with one row per parameter per method, containing
       columns:
       \describe{
@@ -96,6 +96,9 @@
       otherwise.
     }
   }
+
+  \code{coef.summary.amerasfit} returns the \code{coefficients} data frame
+  from the summary object.
 }
 
 \details{
@@ -118,8 +121,8 @@
   model-specific exclusions are rows with zero follow-up time
   (\code{entry == exit}). When confidence intervals have been computed, CI
   runtime is included in the total runtime.
-  This table can also be accessed directly (i.e., to retrieve confidence
-  intervals) using \code{summary_table}.
+  The coefficient table can be accessed directly using
+  \code{coef(summary(fit))} or \code{summary(fit)$coefficients}.
 }
 
 \seealso{
@@ -142,8 +145,9 @@ summary(fit)
 fit <- add_confint(fit, type = "wald.orig")
 summary(fit)
 
-## Access the summary table directly
-s <- summary_table(fit)
+## Access the coefficient summary directly
+s <- summary(fit)
+coefficient_table <- coef(s)
 
 ## Multiple methods
 \donttest{% slow

@@ -200,7 +200,6 @@ The class \code{amerasfit} supports the methods
 \code{\link[=coef.amerasfit]{coef}}, \code{\link[=nobs.amerasfit]{nobs}},
 \code{\link[=confint.amerasfit]{confint}},
 \code{\link[=summary.amerasfit]{summary}},
-\code{\link[=summary_table.amerasfit]{summary_table}},
 \code{\link[=vcov.amerasfit]{vcov}},
 \code{\link[=residuals.amerasfit]{residuals}},
 \code{\link[=plot.amerasfit]{plot}}, \code{\link{traceplot}},

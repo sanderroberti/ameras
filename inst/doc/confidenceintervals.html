@@ -361,7 +361,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 bounds are needed as a standalone result, for example for immediate
 comparison or export. Use <code>add_confint()</code> when the fit will be
 retained for subsequent reporting: it stores the bounds with each fitted
-method so that <code>summary()</code> and <code>summary_table()</code>
+method so that <code>summary()</code> and <code>coef(summary(fit))</code>
 include them, stores profile-likelihood diagnostics when available, and
 records confidence-interval computation time in the fit. Because
 <code>add_confint()</code> returns an amended copy invisibly, assign its
