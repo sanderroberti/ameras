@@ -90,13 +90,19 @@ The usual `amerasfit` methods are available, including
 [`summary()`](https://rdrr.io/r/base/summary.html),
 [`coef()`](https://rdrr.io/r/stats/coef.html),
 [`vcov()`](https://rdrr.io/r/stats/vcov.html), and
-[`confint()`](https://rdrr.io/r/stats/confint.html).
+[`confint()`](https://rdrr.io/r/stats/confint.html). Use
+[`confint()`](https://rdrr.io/r/stats/confint.html) for a standalone
+matrix of interval bounds. Use
+[`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+when the bounds should travel with the fit and appear in subsequent
+summaries; it also stores available profile diagnostics and
+confidence-interval timing information.
 
 ``` r
 
-fit_ameras_gaussian <- confint(fit_ameras_gaussian,
-                               type = "wald.orig",
-                               print = FALSE)
+fit_ameras_gaussian <- add_confint(fit_ameras_gaussian,
+                                   type = "wald.orig",
+                                   print = FALSE)
 summary(fit_ameras_gaussian)
 #> Call:
 #> ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = standard_data, 
@@ -108,8 +114,8 @@ summary(fit_ameras_gaussian)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.349 0.0 0.349
+#>  Method  Fit    CI Total
+#>      RC 0.34 0.002 0.342
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -208,8 +214,8 @@ summary(fit_ameras_rc)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method Fit  CI Total
-#>      RC 0.2 0.0   0.2
+#>  Method   Fit  CI Total
+#>      RC 0.199 0.0 0.199
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -219,7 +225,7 @@ summary(fit_ameras_rc)
 #>      RC          X2  -0.3359 0.09596
 #>      RC        dose   0.4471 0.04101
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 Other methods can then be added through the `methods` argument:

@@ -239,13 +239,17 @@ For <code>RC</code>, <code>ERC</code>, and <code>MCML</code>, profile
 likelihood intervals treat subgroup effects as ordinary coefficient
 rows.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit_subgroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">ci_subgroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span></span>
 <span>  <span class="va">fit_subgroup</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"proflik"</span>,</span>
 <span>  parm <span class="op">=</span> <span class="st">"dose"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit_subgroup</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">ci_subgroup</span></span></code></pre></div>
+<p>If these intervals should be included in subsequent fitted-object
+summaries, use <code><a href="../reference/add_confint.html">add_confint()</a></code> with the same arguments and
+assign the returned fit. This also stores profile-likelihood diagnostics
+and confidence-interval timing with the fitted object.</p>
 <p>For <code>FMA</code> and <code>BMA</code>, sample-based confidence or
 credible intervals are computed from the sampled coefficients. When
 subgroup-specific coding is used, BMA priors and MCMC sampling remain on

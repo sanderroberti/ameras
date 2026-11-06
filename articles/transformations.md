@@ -209,7 +209,7 @@ summary(fit.ameras.sigmoid)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.641 0.0 0.641
+#>      RC 0.632 0.0 0.632
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -220,7 +220,7 @@ summary(fit.ameras.sigmoid)
 #>      RC         dose  0.04875 0.21281
 #>      RC dose_squared  0.28764 0.08100
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 Next with default settings, using `transform1`:
@@ -242,7 +242,7 @@ summary(fit.ameras.transform1)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.381 0.0 0.381
+#>      RC 0.383 0.0 0.383
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -253,7 +253,7 @@ summary(fit.ameras.transform1)
 #>      RC         dose  0.04878 0.21283
 #>      RC dose_squared  0.28763 0.08100
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 As expected, there is no difference between the results.

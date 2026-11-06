@@ -190,14 +190,21 @@ as ordinary coefficient rows.
 
 ``` r
 
-fit_subgroup <- confint(
+ci_subgroup <- confint(
   fit_subgroup,
   type = "proflik",
   parm = "dose"
 )
 
-summary(fit_subgroup)
+ci_subgroup
 ```
+
+If these intervals should be included in subsequent fitted-object
+summaries, use
+[`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+with the same arguments and assign the returned fit. This also stores
+profile-likelihood diagnostics and confidence-interval timing with the
+fitted object.
 
 For `FMA` and `BMA`, sample-based confidence or credible intervals are
 computed from the sampled coefficients. When subgroup-specific coding is

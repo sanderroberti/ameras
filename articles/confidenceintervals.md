@@ -20,12 +20,25 @@ library(ameras)
 ## Introduction
 
 To compute confidence intervals, first fit the model using `ameras`,
-then use the `confint` method to attach confidence intervals. Several
-types of confidence intervals are supported, which should be supplied to
-the `type` argument of `confint`, see below. When the fitted object
-contains at least one of `RC`, `ERC`, and `MCML` and at least one of
-`FMA` and `BMA`, `type` should be a vector of length 2 with one interval
-type for `RC`, `ERC` and `MCML` and one for `FMA` and `BMA`.
+then use [`confint()`](https://rdrr.io/r/stats/confint.html) when the
+interval bounds are needed as a standalone result, for example for
+immediate comparison or export. Use
+[`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+when the fit will be retained for subsequent reporting: it stores the
+bounds with each fitted method so that
+[`summary()`](https://rdrr.io/r/base/summary.html) and
+[`summary_table()`](https://ameras.sanderroberti.com/reference/summary.md)
+include them, stores profile-likelihood diagnostics when available, and
+records confidence-interval computation time in the fit. Because
+[`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+returns an amended copy invisibly, assign its result to retain this
+information. This is particularly useful for computationally expensive
+profile likelihood intervals: subsequent summaries use the attached
+bounds and diagnostics without rerunning the profile calculation.
+Several interval types are supported through the `type` argument. When
+the fitted object contains at least one of `RC`, `ERC`, and `MCML` and
+at least one of `FMA` and `BMA`, `type` should contain one interval type
+for each group.
 
 ## Regression calibration, extended regression calibration, and Monte Carlo maximum likelihood
 
@@ -73,35 +86,39 @@ fit.ameras <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data = ameras_s
                             family="binomial", methods=c("RC"))
 #> Fitting RC
 
-fit.ameras.waldorig <- confint(fit.ameras, type="wald.orig")
-#> RC confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.2363 -0.8918
-#> X1           0.2914  0.5904
-#> X2          -0.5230 -0.1489
-#> dose         0.5663  1.1353
-fit.ameras.waldtransformed <- confint(fit.ameras, type="wald.transformed")
-#> RC confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.2363 -0.8918
-#> X1           0.2914  0.5904
-#> X2          -0.5230 -0.1489
-#> dose         0.6050  1.1827
-fit.ameras.proflik <- confint(fit.ameras, type="proflik", parm="all")
+ci.ameras.waldorig <- confint(fit.ameras, type="wald.orig")
+ci.ameras.waldtransformed <- confint(fit.ameras, type="wald.transformed")
+ci.ameras.proflik <- confint(fit.ameras, type="proflik", parm="all")
 #> Obtaining profile likelihood CI for (Intercept)
 #> Obtaining profile likelihood CI for X1
 #> Obtaining profile likelihood CI for X2
 #> Obtaining profile likelihood CI for dose
-#> RC confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.2391 -0.8971
-#> X1           0.2908  0.5917
-#> X2          -0.5256 -0.1490
-#> dose         0.6009  1.1784
 
+ci.ameras.waldorig
+#>                  2.5 %     97.5 %
+#> (Intercept) -1.2363205 -0.8918389
+#> X1           0.2913841  0.5904082
+#> X2          -0.5230346 -0.1488986
+#> dose         0.5662850  1.1353411
+ci.ameras.waldtransformed
+#>                  2.5 %     97.5 %
+#> (Intercept) -1.2363205 -0.8918389
+#> X1           0.2913841  0.5904082
+#> X2          -0.5230346 -0.1488986
+#> dose         0.6050480  1.1827031
+ci.ameras.proflik
+#>                  2.5 %     97.5 %
+#> (Intercept) -1.2391335 -0.8971042
+#> X1           0.2908058  0.5916523
+#> X2          -0.5255986 -0.1490250
+#> dose         0.6009122  1.1784445
+
+# Attach intervals when they should be included in the fit summary
+fit.ameras.waldorig <- add_confint(
+  fit.ameras,
+  type="wald.orig",
+  print=FALSE
+)
 summary(fit.ameras.waldorig)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
@@ -113,8 +130,8 @@ summary(fit.ameras.waldorig)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.431 0.0 0.431
+#>  Method   Fit    CI Total
+#>      RC 0.434 0.001 0.435
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -123,48 +140,6 @@ summary(fit.ameras.waldorig)
 #>      RC          X1   0.4409 0.07628   0.2914   0.5904
 #>      RC          X2  -0.3360 0.09544  -0.5230  -0.1489
 #>      RC        dose   0.8508 0.14517   0.5663   1.1353
-summary(fit.ameras.waldtransformed)
-#> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
-#>     X2, data = ameras_simulated, family = "binomial", methods = c("RC"))
-#> 
-#> Rows: 3000
-#> 
-#> Total CPU runtime: 0.4 seconds
-#> 
-#> CPU runtime in seconds by method:
-#> 
-#>  Method   Fit  CI Total
-#>      RC 0.431 0.0 0.431
-#> 
-#> Summary of coefficients by method:
-#> 
-#>  Method        Term Estimate      SE CI.lower CI.upper
-#>      RC (Intercept)  -1.0641 0.08788  -1.2363  -0.8918
-#>      RC          X1   0.4409 0.07628   0.2914   0.5904
-#>      RC          X2  -0.3360 0.09544  -0.5230  -0.1489
-#>      RC        dose   0.8508 0.14517   0.6050   1.1827
-summary(fit.ameras.proflik)
-#> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
-#>     X2, data = ameras_simulated, family = "binomial", methods = c("RC"))
-#> 
-#> Rows: 3000
-#> 
-#> Total CPU runtime: 2.4 seconds
-#> 
-#> CPU runtime in seconds by method:
-#> 
-#>  Method   Fit    CI Total
-#>      RC 0.431 1.969   2.4
-#> 
-#> Summary of coefficients by method:
-#> 
-#>  Method        Term Estimate      SE CI.lower CI.upper
-#>      RC (Intercept)  -1.0641 0.08788  -1.2391  -0.8971
-#>      RC          X1   0.4409 0.07628   0.2908   0.5917
-#>      RC          X2  -0.3360 0.09544  -0.5256  -0.1490
-#>      RC        dose   0.8508 0.14517   0.6009   1.1784
 ```
 
 ## Frequentist and Bayesian model averaging
@@ -183,63 +158,19 @@ fit.ameras2 <- ameras(Y.binomial~dose(V1:V10, model="ERR")+X1+X2, data = ameras_
                             family="binomial", methods=c("FMA"))
 #> Fitting FMA
 
-fit.ameras.hpd <- confint(fit.ameras2, type="hpd")
-#> FMA confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.2284 -0.8856
-#> X1           0.2939  0.5937
-#> X2          -0.5260 -0.1530
-#> dose         0.5640  1.1317
-fit.ameras.percentile <- confint(fit.ameras2, type="percentile")
-#> FMA confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.2290 -0.8860
-#> X1           0.2938  0.5935
-#> X2          -0.5250 -0.1518
-#> dose         0.5616  1.1298
+ci.ameras.hpd <- confint(fit.ameras2, type="hpd")
+ci.ameras.percentile <- confint(fit.ameras2, type="percentile")
 
-summary(fit.ameras.hpd)
-#> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
-#>     X2, data = ameras_simulated, family = "binomial", methods = c("FMA"))
-#> 
-#> Rows: 3000
-#> 
-#> Total CPU runtime: 2 seconds
-#> 
-#> CPU runtime in seconds by method:
-#> 
-#>  Method   Fit    CI Total
-#>     FMA 1.961 0.074 2.035
-#> 
-#> Summary of coefficients by method:
-#> 
-#>  Method        Term Estimate      SE CI.lower CI.upper
-#>     FMA (Intercept)  -1.0576 0.08770  -1.2284  -0.8856
-#>     FMA          X1   0.4429 0.07652   0.2939   0.5937
-#>     FMA          X2  -0.3378 0.09572  -0.5260  -0.1530
-#>     FMA        dose   0.8447 0.14494   0.5640   1.1317
-summary(fit.ameras.percentile)
-#> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR") + X1 + 
-#>     X2, data = ameras_simulated, family = "binomial", methods = c("FMA"))
-#> 
-#> Rows: 3000
-#> 
-#> Total CPU runtime: 2 seconds
-#> 
-#> CPU runtime in seconds by method:
-#> 
-#>  Method   Fit    CI Total
-#>     FMA 1.961 0.038 1.999
-#> 
-#> Summary of coefficients by method:
-#> 
-#>  Method        Term Estimate      SE CI.lower CI.upper
-#>     FMA (Intercept)  -1.0576 0.08770  -1.2290  -0.8860
-#>     FMA          X1   0.4429 0.07652   0.2938   0.5935
-#>     FMA          X2  -0.3378 0.09572  -0.5250  -0.1518
-#>     FMA        dose   0.8447 0.14494   0.5616   1.1298
+ci.ameras.hpd
+#>                  2.5 %     97.5 %
+#> (Intercept) -1.2283922 -0.8856075
+#> X1           0.2939251  0.5936532
+#> X2          -0.5260442 -0.1530053
+#> dose         0.5639982  1.1317257
+ci.ameras.percentile
+#>                  2.5 %     97.5 %
+#> (Intercept) -1.2289745 -0.8860001
+#> X1           0.2937597  0.5934911
+#> X2          -0.5250004 -0.1517645
+#> dose         0.5615876  1.1297517
 ```

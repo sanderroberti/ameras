@@ -177,7 +177,7 @@ str(fit.ameras.linreg)
 #>   .. .. .. ..- attr(*, "order")= int [1:2] 1 1
 #>   .. .. .. ..- attr(*, "intercept")= int 1
 #>   .. .. .. ..- attr(*, "response")= int 0
-#>   .. .. .. ..- attr(*, ".Environment")=<environment: 0x62f15fdd1260> 
+#>   .. .. .. ..- attr(*, ".Environment")=<environment: 0x58f8cb841e38> 
 #>   .. .. .. ..- attr(*, "predvars")= language list(X1, X2)
 #>   .. .. .. ..- attr(*, "dataClasses")= Named chr [1:2] "numeric" "numeric"
 #>   .. .. .. .. ..- attr(*, "names")= chr [1:2] "X1" "X2"
@@ -223,14 +223,14 @@ str(fit.ameras.linreg)
 #>   ..$ loglik      : num -4563
 #>   ..$ timing      :List of 3
 #>   .. ..$ fit  :List of 2
-#>   .. .. ..$ cpu    : num 0.386
-#>   .. .. ..$ elapsed: num 0.385
+#>   .. .. ..$ cpu    : num 0.375
+#>   .. .. ..$ elapsed: num 0.376
 #>   .. ..$ ci   :List of 2
 #>   .. .. ..$ cpu    : num 0
 #>   .. .. ..$ elapsed: num 0
 #>   .. ..$ total:List of 2
-#>   .. .. ..$ cpu    : num 0.386
-#>   .. .. ..$ elapsed: num 0.385
+#>   .. .. ..$ cpu    : num 0.375
+#>   .. .. ..$ elapsed: num 0.376
 #>   ..$ ERC         : logi FALSE
 #>  $ ERC               :List of 7
 #>   ..$ coefficients: Named num [1:5] -1.361 0.48 -0.519 1.165 1.106
@@ -258,14 +258,14 @@ str(fit.ameras.linreg)
 #>   ..$ loglik      : num -4559
 #>   ..$ timing      :List of 3
 #>   .. ..$ fit  :List of 2
-#>   .. .. ..$ cpu    : num 618
-#>   .. .. ..$ elapsed: num 225
+#>   .. .. ..$ cpu    : num 619
+#>   .. .. ..$ elapsed: num 229
 #>   .. ..$ ci   :List of 2
 #>   .. .. ..$ cpu    : num 0
 #>   .. .. ..$ elapsed: num 0
 #>   .. ..$ total:List of 2
-#>   .. .. ..$ cpu    : num 618
-#>   .. .. ..$ elapsed: num 225
+#>   .. .. ..$ cpu    : num 619
+#>   .. .. ..$ elapsed: num 229
 #>   ..$ ERC         : logi TRUE
 #>  $ MCML              :List of 6
 #>   ..$ coefficients: Named num [1:5] -1.28 0.484 -0.517 1.079 1.138
@@ -293,14 +293,14 @@ str(fit.ameras.linreg)
 #>   ..$ loglik      : num -4646
 #>   ..$ timing      :List of 3
 #>   .. ..$ fit  :List of 2
-#>   .. .. ..$ cpu    : num 0.716
-#>   .. .. ..$ elapsed: num 0.715
+#>   .. .. ..$ cpu    : num 0.71
+#>   .. .. ..$ elapsed: num 0.726
 #>   .. ..$ ci   :List of 2
 #>   .. .. ..$ cpu    : num 0
 #>   .. .. ..$ elapsed: num 0
 #>   .. ..$ total:List of 2
-#>   .. .. ..$ cpu    : num 0.716
-#>   .. .. ..$ elapsed: num 0.715
+#>   .. .. ..$ cpu    : num 0.71
+#>   .. .. ..$ elapsed: num 0.726
 #>  $ FMA               :List of 8
 #>   ..$ coefficients         : Named num [1:5] -1.28 0.484 -0.517 1.079 1.138
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
@@ -322,14 +322,14 @@ str(fit.ameras.linreg)
 #>   .. ..$ sigma      : num [1:100000] 1.15 1.13 1.13 1.14 1.12 ...
 #>   ..$ timing               :List of 3
 #>   .. ..$ fit  :List of 2
-#>   .. .. ..$ cpu    : num 1.78
-#>   .. .. ..$ elapsed: num 1.7
+#>   .. .. ..$ cpu    : num 1.87
+#>   .. .. ..$ elapsed: num 1.8
 #>   .. ..$ ci   :List of 2
 #>   .. .. ..$ cpu    : num 0
 #>   .. .. ..$ elapsed: num 0
 #>   .. ..$ total:List of 2
-#>   .. .. ..$ cpu    : num 1.78
-#>   .. .. ..$ elapsed: num 1.7
+#>   .. .. ..$ cpu    : num 1.87
+#>   .. .. ..$ elapsed: num 1.8
 #>  $ BMA               :List of 7
 #>   ..$ coefficients         : Named num [1:5] -1.281 0.483 -0.516 1.08 1.139
 #>   .. ..- attr(*, "names")= chr [1:5] "(Intercept)" "X1" "X2" "dose" ...
@@ -354,14 +354,14 @@ str(fit.ameras.linreg)
 #>   ..$ included.realizations: int [1:10] 1 2 3 4 5 6 7 8 9 10
 #>   ..$ timing               :List of 3
 #>   .. ..$ fit  :List of 2
-#>   .. .. ..$ cpu    : num 85
-#>   .. .. ..$ elapsed: num 83.9
+#>   .. .. ..$ cpu    : num 86.1
+#>   .. .. ..$ elapsed: num 84.9
 #>   .. ..$ ci   :List of 2
 #>   .. .. ..$ cpu    : num 0
 #>   .. .. ..$ elapsed: num 0
 #>   .. ..$ total:List of 2
-#>   .. .. ..$ cpu    : num 85
-#>   .. .. ..$ elapsed: num 83.9
+#>   .. .. ..$ cpu    : num 86.1
+#>   .. .. ..$ elapsed: num 84.9
 #>  - attr(*, "class")= chr "amerasfit"
 ```
 
@@ -442,10 +442,10 @@ fit.ameras.linreg$RC
 #> $timing
 #> $timing$fit
 #> $timing$fit$cpu
-#> [1] 0.386
+#> [1] 0.375
 #> 
 #> $timing$fit$elapsed
-#> [1] 0.385
+#> [1] 0.376
 #> 
 #> 
 #> $timing$ci
@@ -458,10 +458,10 @@ fit.ameras.linreg$RC
 #> 
 #> $timing$total
 #> $timing$total$cpu
-#> [1] 0.386
+#> [1] 0.375
 #> 
 #> $timing$total$elapsed
-#> [1] 0.385
+#> [1] 0.376
 #> 
 #> 
 #> 
@@ -482,16 +482,16 @@ summary(fit.ameras.linreg)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 706.2 seconds
+#> Total CPU runtime: 708.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.386 0.0   0.386
-#>     ERC 618.290 0.0 618.290
-#>    MCML   0.716 0.0   0.716
-#>     FMA   1.776 0.0   1.776
-#>     BMA  85.047 0.0  85.047
+#>      RC   0.375 0.0   0.375
+#>     ERC 619.224 0.0 619.224
+#>    MCML   0.710 0.0   0.710
+#>     FMA   1.873 0.0   1.873
+#>     BMA  86.122 0.0  86.122
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -522,7 +522,7 @@ summary(fit.ameras.linreg)
 #>     BMA        dose   1.0799 0.02048 1.01 800.00
 #>     BMA       sigma   1.1391 0.01525 1.00 868.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 To extract model coefficients and compare between methods, use `coef`:
@@ -585,16 +585,16 @@ summary(fit.ameras.logreg)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 558.2 seconds
+#> Total CPU runtime: 561.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.383 0.0   0.383
-#>     ERC 488.467 0.0 488.467
-#>    MCML   1.085 0.0   1.085
-#>     FMA   3.050 0.0   3.050
-#>     BMA  65.200 0.0  65.200
+#>      RC   0.399 0.0   0.399
+#>     ERC 491.165 0.0 491.165
+#>    MCML   1.138 0.0   1.138
+#>     FMA   2.984 0.0   2.984
+#>     BMA  65.587 0.0  65.587
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -625,7 +625,7 @@ summary(fit.ameras.logreg)
 #>     BMA         dose  0.30658 0.09894 1.08   92.00
 #>     BMA dose_squared  0.04134 0.02564 1.11  105.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ``` r
@@ -664,16 +664,16 @@ summary(fit.ameras.logreg.lin)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 467.1 seconds
+#> Total CPU runtime: 425.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.197 0.0   0.197
-#>     ERC 403.887 0.0 403.887
-#>    MCML   0.753 0.0   0.753
-#>     FMA   1.710 0.0   1.710
-#>     BMA  60.578 0.0  60.578
+#>      RC   0.180 0.0   0.180
+#>     ERC 361.314 0.0 361.314
+#>    MCML   0.716 0.0   0.716
+#>     FMA   1.720 0.0   1.720
+#>     BMA  61.640 0.0  61.640
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -699,7 +699,7 @@ summary(fit.ameras.logreg.lin)
 #>     BMA          X2  -0.3486 0.09589 1.02 882.00
 #>     BMA        dose   0.4523 0.04042 1.03 518.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ``` r
@@ -829,16 +829,16 @@ summary(fit.ameras.poisson)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 77.6 seconds
+#> Total CPU runtime: 80.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.332 0.0  0.332
-#>     ERC  1.367 0.0  1.367
-#>    MCML  1.362 0.0  1.362
-#>     FMA  3.426 0.0  3.426
-#>     BMA 71.099 0.0 71.099
+#>      RC  0.356 0.0  0.356
+#>     ERC  1.387 0.0  1.387
+#>    MCML  1.808 0.0  1.808
+#>     FMA  3.531 0.0  3.531
+#>     BMA 73.347 0.0 73.347
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -869,7 +869,7 @@ summary(fit.ameras.poisson)
 #>     BMA         dose  0.60364 0.034757 1.04  84.00
 #>     BMA dose_squared -0.03708 0.006049 1.06  94.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ``` r
@@ -908,16 +908,16 @@ summary(fit.ameras.poisson.lin)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 70.1 seconds
+#> Total CPU runtime: 72.8 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.217 0.0  0.217
-#>     ERC  1.035 0.0  1.035
-#>    MCML  0.632 0.0  0.632
-#>     FMA  2.008 0.0  2.008
-#>     BMA 66.237 0.0 66.237
+#>      RC  0.208 0.0  0.208
+#>     ERC  1.127 0.0  1.127
+#>    MCML  0.658 0.0  0.658
+#>     FMA  2.044 0.0  2.044
+#>     BMA 68.746 0.0 68.746
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -943,7 +943,7 @@ summary(fit.ameras.poisson.lin)
 #>     BMA          X2  -0.3622 0.05604 1.00 694.00
 #>     BMA        dose   0.3828 0.01287 1.00 415.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ``` r
@@ -1227,16 +1227,16 @@ summary(fit.ameras.prophaz)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 129.6 seconds
+#> Total CPU runtime: 132.5 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.289 0.0   0.289
-#>     ERC   9.733 0.0   9.733
-#>    MCML   0.666 0.0   0.666
-#>     FMA   2.137 0.0   2.137
-#>     BMA 116.783 0.0 116.783
+#>      RC   0.300 0.0   0.300
+#>     ERC   9.254 0.0   9.254
+#>    MCML   0.673 0.0   0.673
+#>     FMA   2.801 0.0   2.801
+#>     BMA 119.488 0.0 119.488
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1272,7 +1272,7 @@ summary(fit.ameras.prophaz)
 #>     BMA        h0[9]  0.268182 0.04019 1.00 398.00
 #>     BMA       h0[10]  0.304145 0.04624 1.01 367.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ``` r
@@ -1333,16 +1333,16 @@ summary(fit.ameras.prophaz.lin)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 122.2 seconds
+#> Total CPU runtime: 122.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   0.144 0.0   0.144
-#>     ERC   4.553 0.0   4.553
-#>    MCML   1.177 0.0   1.177
-#>     FMA   1.254 0.0   1.254
-#>     BMA 115.051 0.0 115.051
+#>      RC   0.972 0.0   0.972
+#>     ERC   4.591 0.0   4.591
+#>    MCML   0.429 0.0   0.429
+#>     FMA   1.281 0.0   1.281
+#>     BMA 115.361 0.0 115.361
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1373,7 +1373,7 @@ summary(fit.ameras.prophaz.lin)
 #>     BMA  h0[9]   0.3091 0.04455 1.00 907.00
 #>     BMA h0[10]   0.3496 0.05211 1.01 542.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ``` r
@@ -1428,16 +1428,16 @@ summary(fit.ameras.multinomial)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 1083.1 seconds
+#> Total CPU runtime: 1076.9 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   1.314 0.0   1.314
-#>     ERC 804.374 0.0 804.374
-#>    MCML   9.764 0.0   9.764
-#>     FMA  12.832 0.0  12.832
-#>     BMA 254.768 0.0 254.768
+#>      RC   2.194 0.0   2.194
+#>     ERC 799.069 0.0 799.069
+#>    MCML   8.511 0.0   8.511
+#>     FMA  11.814 0.0  11.814
+#>     BMA 255.271 0.0 255.271
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1493,7 +1493,7 @@ summary(fit.ameras.multinomial)
 #>     BMA         (2)_dose  0.554817 0.12798 1.01  47.00
 #>     BMA (2)_dose_squared -0.037946 0.03326 1.01  45.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ``` r
@@ -1550,16 +1550,16 @@ summary(fit.ameras.multinomial.lin)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 850.1 seconds
+#> Total CPU runtime: 766.8 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method     Fit  CI   Total
-#>      RC   1.216 0.0   1.216
-#>     ERC 611.950 0.0 611.950
-#>    MCML   6.848 0.0   6.848
-#>     FMA   9.062 0.0   9.062
-#>     BMA 221.061 0.0 221.061
+#>      RC   1.124 0.0   1.124
+#>     ERC 526.553 0.0 526.553
+#>    MCML   7.739 0.0   7.739
+#>     FMA   9.234 0.0   9.234
+#>     BMA 222.142 0.0 222.142
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1605,7 +1605,7 @@ summary(fit.ameras.multinomial.lin)
 #>     BMA          (2)_X2  0.70371 0.11185 1.01 650.00
 #>     BMA        (2)_dose  0.42386 0.05084 1.00 313.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ``` r
@@ -1652,16 +1652,16 @@ summary(fit.ameras.clogit)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 169.6 seconds
+#> Total CPU runtime: 176.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  2.402 0.0  2.402
-#>     ERC 56.140 0.0 56.140
-#>    MCML  7.495 0.0  7.495
-#>     FMA 26.350 0.0 26.350
-#>     BMA 77.190 0.0 77.190
+#>      RC  2.481 0.0  2.481
+#>     ERC 58.681 0.0 58.681
+#>    MCML  9.797 0.0  9.797
+#>     FMA 28.192 0.0 28.192
+#>     BMA 77.027 0.0 77.027
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1687,7 +1687,7 @@ summary(fit.ameras.clogit)
 #>     BMA         dose  0.70058 0.10236 1.00 154.00
 #>     BMA dose_squared -0.05764 0.02212 1.00 131.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ``` r
@@ -1729,16 +1729,16 @@ summary(fit.ameras.clogit.lin)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 116.4 seconds
+#> Total CPU runtime: 119.6 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  1.490 0.0  1.490
-#>     ERC 25.533 0.0 25.533
-#>    MCML  3.247 0.0  3.247
-#>     FMA 15.303 0.0 15.303
-#>     BMA 70.875 0.0 70.875
+#>      RC  1.553 0.0  1.553
+#>     ERC 28.117 0.0 28.117
+#>    MCML  3.561 0.0  3.561
+#>     FMA 14.764 0.0 14.764
+#>     BMA 71.563 0.0 71.563
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -1759,7 +1759,7 @@ summary(fit.ameras.clogit.lin)
 #>     BMA   X2  -0.5265 0.11725 1.00 907.00
 #>     BMA dose   0.4578 0.04323 1.00 549.00
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ``` r

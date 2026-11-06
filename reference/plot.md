@@ -138,8 +138,11 @@ for computing residuals,
 [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md) for
 model fitting,
 [`confint`](https://ameras.sanderroberti.com/reference/confint.md) for
-confidence intervals, [`plot.lm`](https://rdrr.io/r/stats/plot.lm.html)
-for the equivalent method for linear models.
+returning confidence intervals,
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)
+for attaching confidence intervals,
+[`plot.lm`](https://rdrr.io/r/stats/plot.lm.html) for the equivalent
+method for linear models.
 
 ## Examples
 

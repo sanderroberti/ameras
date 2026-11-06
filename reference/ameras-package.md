@@ -20,10 +20,13 @@ proportional hazards, and conditional logistic.
 ## Details
 
 The function used to fit models is
-[`ameras`](https://ameras.sanderroberti.com/reference/ameras.md). To
-attach confidence/credible intervals, use the method
-[`confint`](https://ameras.sanderroberti.com/reference/confint.md). To
-visualize the exposure uncertainty in the dose realizations, use
+[`ameras`](https://ameras.sanderroberti.com/reference/ameras.md). Use
+[`confint`](https://ameras.sanderroberti.com/reference/confint.md) to
+return confidence or credible interval bounds and
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)
+to attach them to a fitted object for inclusion in summaries and storage
+of available diagnostics and timing information. To visualize exposure
+uncertainty in the dose realizations, use
 [`ecdfplot`](https://ameras.sanderroberti.com/reference/ecdfplot.md).
 
 ## Author

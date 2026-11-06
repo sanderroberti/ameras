@@ -4,6 +4,16 @@
 
 ### Breaking changes
 
+- [`confint()`](https://rdrr.io/r/stats/confint.html) now follows the
+  standard extractor convention: it returns a two-column matrix for a
+  fit containing one method and a named list of such matrices for a fit
+  containing multiple methods. The former behavior of attaching
+  intervals and their diagnostics to an `amerasfit` object is now
+  provided by
+  [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md).
+  Both functions always compute the requested intervals, so a new
+  [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+  call replaces intervals already attached to the returned object.
 - Removed the deprecated direct argument interface to
   [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md).
   Models must now be specified through `formula`; calls using the former
@@ -13,7 +23,7 @@
   `tol.profCI` arguments from
   [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md).
   Confidence intervals must be added after fitting with
-  [`confint()`](https://rdrr.io/r/stats/confint.html).
+  [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md).
 - Removed the deprecated `included.replicates.BMA` alias; use
   `included.realizations.BMA` instead.
 - Removed non-formula effect-modifier syntax. Use `modifier = ~ M1 + M2`

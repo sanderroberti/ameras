@@ -268,7 +268,7 @@ components parsed from the formula, including `model$data`, which is
 either the data frame used for model fitting when `keep.data=TRUE` or
 `NULL` otherwise), and `CI.computed` (logical, whether confidence
 intervals have been attached by
-[`confint`](https://ameras.sanderroberti.com/reference/confint.md)).
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)).
 
 For each method supplied to `methods`, the output contains a list with
 components:
@@ -376,6 +376,7 @@ Finally, for FMA the output additionally contains:
   to obtain results.
 
 The class `amerasfit` supports the methods
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md),
 [`print`](https://ameras.sanderroberti.com/reference/print.md),
 [`coef`](https://ameras.sanderroberti.com/reference/coef.md),
 [`nobs`](https://ameras.sanderroberti.com/reference/nobs.md),
@@ -399,6 +400,7 @@ spline bases, are handled consistently before model fitting. The
 omitted-row action is stored on the fitted object. When
 `keep.data=FALSE` and data are supplied later to methods such as
 [`confint()`](https://rdrr.io/r/stats/confint.html),
+[`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md),
 [`residuals()`](https://rdrr.io/r/stats/residuals.html), and
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html), the same
 missing-value policy is reapplied. Unlike
@@ -505,7 +507,9 @@ parameter is estimated for each subinterval.
 ## See also
 
 [`confint`](https://ameras.sanderroberti.com/reference/confint.md) for
-computing confidence intervals,
+returning confidence intervals,
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)
+for attaching confidence intervals,
 [`summary`](https://ameras.sanderroberti.com/reference/summary.md) for a
 summary of the fitted model including confidence intervals if computed,
 [`coef`](https://ameras.sanderroberti.com/reference/coef.md) for
@@ -552,7 +556,7 @@ coef(fit)
 #>  -1.4325161   0.5776954  -0.5216418   1.1596141   1.1238400 
 
 ## Add Wald confidence intervals and display a detailed summary
-fit <- confint(fit, type = "wald.orig", print = FALSE)
+fit <- add_confint(fit, type = "wald.orig", print = FALSE)
 summary(fit)
 #> Call:
 #> ameras(formula = Y.gaussian ~ dose(V1:V10) + X1 + X2, data = example_data, 
@@ -565,7 +569,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.137 0.0 0.137
+#>      RC 0.127 0.0 0.127
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -1,21 +1,21 @@
 # Confidence Intervals for an amerasfit Object
 
-Computes and/or prints confidence intervals for the parameters of a
-fitted `amerasfit` object. This is a separate step from model fitting,
-i.e., [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md)
-fits the model and `confint` computes intervals, attaches them to the
-fitted object, and prints them. If `confint` is called a second time on
-the same object, intervals are only printed and not recomputed, unless
-`force=TRUE`.
+Computes confidence or credible intervals for the parameters of a fitted
+`amerasfit` object and returns the interval bounds. The fitted object is
+not amended. Use
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)
+to attach intervals and any available profile diagnostics to an
+`amerasfit` object for inclusion in
+[`summary()`](https://rdrr.io/r/base/summary.html) output and recording
+of confidence-interval timing.
 
 ## Usage
 
 ``` r
 # S3 method for class 'amerasfit'
-confint(object, parm="dose", level=0.95, 
-        type=c("proflik","percentile"), maxit.profCI=20, 
-        tol.profCI=1e-2, data=NULL, force=FALSE, print=TRUE,
-        digits = max(3, getOption("digits") - 3), ...)
+confint(object, parm="dose", level=0.95,
+        type=c("proflik","percentile"), maxit.profCI=20,
+        tol.profCI=1e-2, data=NULL, ...)
 ```
 
 ## Arguments
@@ -27,326 +27,119 @@ confint(object, parm="dose", level=0.95,
 
 - parm:
 
-  Either `"dose"` to compute intervals for dose-related parameters only,
-  `"all"` for all parameters, or a character vector of specific
-  parameter names. Only used when `type = "proflik"` since Wald
-  intervals are cheap to compute for all parameters simultaneously.
-  Defaults to `"dose"` since profile likelihood computation can be
-  extensive.
+  Either `"dose"` to compute profile likelihood intervals for
+  dose-related parameters only, `"all"` for all parameters, or a
+  character vector of parameter names. Only used when
+  `type = "proflik"`. Defaults to `"dose"` because profile likelihood
+  intervals can be computationally intensive.
 
 - level:
 
-  The confidence level (default `0.95`).
+  Confidence level, as a single number between zero and one. Defaults to
+  `0.95`.
 
 - type:
 
-  The type(s) of confidence intervals to determine. For RC, ERC, and
-  MCML, this can be one of:
-
-  `"wald.orig"`
-
-  :   Wald intervals on the original parameter scale using the delta
-      method variance-covariance matrix.
-
-  `"wald.transformed"`
-
-  :   Wald intervals computed on the transformed (reparametrized) scale
-      and then back-transformed. Only available when a transformation
-      was used during fitting.
-
-  `"proflik"`
-
-  :   Profile likelihood intervals based on the chi-squared
-      approximation. More accurate than Wald intervals but
-      computationally intensive, especially for large datasets or
-      complex models.
-
-  For FMA and BMA, confidence intervals are based on the generated
-  samples and possible confidence interval types are:
-
-  `"percentile"`
-
-  :   Equal-tailed percentile intervals.
-
-  `"hpd"`
-
-  :   Highest posterior density intervals via
-      [`HPDinterval`](https://rdrr.io/pkg/coda/man/HPDinterval.html)
-      from the coda package.
-
-  If `object` contains results for at least one of RC, ERC, and MCML and
-  at least one of FMA and BMA, `type` must be length 2 and specify one
-  method for RC, ERC, and MCML, and one for FMA and BMA.
+  Interval type. For RC, ERC, and MCML, use `"wald.orig"`,
+  `"wald.transformed"`, or `"proflik"`. For FMA and BMA, use
+  `"percentile"` or `"hpd"`. When both groups of methods are present,
+  supply one type for each group.
 
 - maxit.profCI:
 
-  Maximum number of iterations for the root-finding algorithm used to
-  locate profile likelihood interval bounds. Only used when
-  `type = "proflik"`. Defaults to `20`.
+  Maximum number of root-finding iterations for profile likelihood
+  intervals. Defaults to `20`.
 
 - tol.profCI:
 
-  Tolerance for the root-finding algorithm. Only used when
-  `type = "proflik"`. Defaults to `1e-2`. Reduce for more precise bounds
-  at the cost of additional computation.
+  Root-finding tolerance for profile likelihood intervals. Defaults to
+  `1e-2`.
 
 - data:
 
-  The original data frame used for fitting. Only required when
-  `type = "proflik"` and the model was fitted with `keep.data = FALSE`
-
-- force:
-
-  Logical. If `TRUE`, confidence intervals are recomputed even if they
-  have already been computed for this object. Defaults to `FALSE`, in
-  which case a message is printed and the object is returned unchanged
-  if confidence intervals are already present.
-
-- print:
-
-  Logical. If `TRUE` (default), confidence intervals are printed to the
-  console.
-
-- digits:
-
-  Number of significant digits to be printed. Default is
-  `max(3, getOption("digits") - 3)`.
+  Original fitting data. Required for profile likelihood intervals when
+  the model was fitted with `keep.data = FALSE`.
 
 - ...:
 
-  Additional arguments, currently unused.
+  Additional arguments, currently unused. To attach intervals to a
+  fitted object or control printed output, use
+  [`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md).
 
 ## Value
 
-The original `amerasfit` object with a `CI` element added to each fitted
-method result. The method-specific `timing` element is also updated so
-that printed runtime summaries include confidence interval computation
-time. For RC, ERC, and MCML the `CI` element is a data frame with
-columns:
-
-- `lower`:
-
-  Lower confidence bound.
-
-- `upper`:
-
-  Upper confidence bound.
-
-When `type = "proflik"`, four additional columns are included:
-
-- `pval.lower`:
-
-  P-value at the lower bound, should be close to \\1 -\\ `level`.
-
-- `pval.upper`:
-
-  P-value at the upper bound, should be close to \\1 -\\ `level`.
-
-- `iter.lower`:
-
-  Number of iterations used by the root-finding algorithm for the lower
-  bound.
-
-- `iter.upper`:
-
-  Number of iterations used by the root-finding algorithm for the upper
-  bound.
-
-For FMA and BMA the `CI` element is a data frame with columns `lower`
-and `upper`.
+For an object containing one fitted method, a numeric matrix with
+parameters in rows and the lower and upper confidence limits in two
+percentage-labelled columns. For an object containing multiple fitted
+methods, a named list of such matrices, one per method.
 
 ## Details
 
-For (extended) regression calibration and Monte Carlo maximum
-likelihood, Wald and profile likelihood intervals can be obtained. When
-a parameter transformation \\\bm\theta = h(\bm\eta)\\ is used,
-`type="wald.transformed"` yields the CI at significance level \\\alpha\\
-of \\h(\bm\eta \pm z\_{1-\alpha/2} \bm V)\\ where \\z\_{1-\alpha/2}\\ is
-the \\1-\alpha/2\\-quantile of the standard normal distribution and
-\\\bm V\\ is the vector of standard deviations estimated using the
-inverse Hessian matrix, and `type="wald.orig"` uses the delta method to
-obtain the CI \\h(\bm\eta)\pm z\_{1-\alpha/2} \bm V\_\*\\ where \\\bm
-V\_\*\\ is the vector of standard deviations estimated using \\J H^{-1}
-J^T\\ with \\J\\ the Jacobian of the transformation and \\H\\ is the
-Hessian. When no transformation is used, `type="wald.orig"` should be
-used. The third option is `proflik`, which uses the profile likelihood
-to compute confidence bounds.
+For RC, ERC, and MCML, Wald intervals on the original parameter scale
+use the delta-method variance-covariance matrix. Wald intervals on the
+transformed scale are computed in the optimization parametrization and
+then back-transformed. More specifically, when \\\boldsymbol\theta =
+h(\boldsymbol\eta)\\, transformed-scale intervals apply \\h\\ to the
+endpoints on the \\\boldsymbol\eta\\ scale, whereas original-scale
+intervals use the covariance matrix obtained from \\J H^{-1} J^T\\,
+where \\J\\ is the transformation Jacobian and \\H\\ is the optimization
+Hessian. Profile likelihood intervals repeatedly re-evaluate the
+likelihood and can therefore be substantially more expensive.
 
-For FMA and BMA, the options for confidence/credible intervals are
-`type="percentile"` which uses percentiles, and `type="hpd"` which
-computes highest posterior density intervals using `HPDinterval` from
-the `coda` package, both using the FMA samples or Bayesian posterior
-samples.
+For FMA and BMA, percentile intervals use equal-tailed sample quantiles
+and HPD intervals use
+[`HPDinterval`](https://rdrr.io/pkg/coda/man/HPDinterval.html).
 
-Profile likelihood intervals (`type="proflik"`) require re-evaluating
-the likelihood repeatedly and can be time-consuming. The `parm` argument
-can be used to restrict computation to dose parameters only (the
-default) when intervals for the other parameters are not of interest. If
-a profile likelihood bound cannot be reliably bracketed or solved, the
-corresponding bound is returned as `NA` with a warning that reports the
-last attempted parameter value and its p-value. For transformed fits,
-the warning also reports the corresponding internal optimizer-scale
-value. For models with formula effect modifiers, subgroup-specific
-profile likelihood intervals can be obtained by fitting
-subgroup-specific dose coefficients with `modifier=~0+M` or
-`modifier=~M-1`.
+Profile likelihood diagnostics such as boundary p-values and iteration
+counts are not included in the returned matrices. Use
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)
+to store these diagnostics in the method-specific `CI` components of a
+fitted object.
 
-When the model was fitted with `keep.data=FALSE` and `type="proflik"` is
-used for `confint`, the original data must be supplied via the `data`
-argument. The missing-value policy used during fitting is reapplied to
-the supplied data before profile likelihood evaluation. Wald intervals
-do not require the data and can always be computed from the stored
-Hessian and parameter estimates alone.
+The requested intervals are always computed, even if `object` already
+contains attached intervals. The input object is left unchanged. If a
+profile likelihood bound cannot be reliably bracketed or solved, that
+bound is returned as `NA` with a diagnostic warning.
+
+When a model was fitted with `keep.data = FALSE`, the original data must
+be supplied through `data` for profile likelihood intervals. The
+missing-value policy used during fitting is reapplied before likelihood
+evaluation. Wald and sample-based intervals do not require the original
+data. For models with formula effect modifiers, subgroup-specific
+profile intervals can be obtained by fitting subgroup-specific dose
+coefficients with `modifier = ~ 0 + M` or `modifier = ~ M - 1`.
 
 ## See also
 
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)
+for attaching intervals and diagnostics to a fit,
 [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md) for
 model fitting,
-[`summary`](https://ameras.sanderroberti.com/reference/summary.md) for a
-summary of the fitted model including confidence intervals if computed,
-[`confint`](https://rdrr.io/r/stats/confint.html) for the generic
-function.
+[`summary`](https://ameras.sanderroberti.com/reference/summary.md) for
+fit summaries, and [`confint`](https://rdrr.io/r/stats/confint.html) for
+the generic function.
 
 ## Examples
 
 ``` r
-## Fit the model
-fit <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
-               methods = "RC")
+fit <- ameras(
+  Y.binomial ~ dose(V1:V3, model = "ERR"),
+  data = ameras_simulated,
+  family = "binomial",
+  methods = "RC"
+)
 #> Fitting RC
 
-## Wald intervals (fast)
-fit <- confint(fit, type = "wald.orig")
-#> RC confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.0293 -0.7401
-#> dose         0.5324  1.0715
-#> 
-summary(fit)
-#> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
-#>     family = "binomial", methods = "RC")
-#> 
-#> Rows: 3000
-#> 
-#> Total CPU runtime: 0 seconds
-#> 
-#> CPU runtime in seconds by method:
-#> 
-#>  Method   Fit  CI Total
-#>      RC 0.039 0.0 0.039
-#> 
-#> Summary of coefficients by method:
-#> 
-#>  Method        Term Estimate      SE CI.lower CI.upper
-#>      RC (Intercept)  -0.8847 0.07378  -1.0293  -0.7401
-#>      RC        dose   0.8020 0.13751   0.5324   1.0715
-#> 
+## A two-column matrix of Wald interval bounds
+confint(fit, type = "wald.orig")
+#>                  2.5 %     97.5 %
+#> (Intercept) -1.0297063 -0.7404073
+#> dose         0.5338981  1.0748159
 
-## Profile likelihood intervals for dose parameters only (slower)
-fit <- confint(fit, type = "proflik", parm = "dose", force = TRUE)
+## Profile likelihood intervals are slower
+
+confint(fit, type = "proflik", parm = "dose")
 #> Obtaining profile likelihood CI for dose
-#> RC confidence intervals:
-#> 
-#>       lower upper
-#> dose 0.5648 1.112
-#> 
-summary(fit)
-#> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
-#>     family = "binomial", methods = "RC")
-#> 
-#> Rows: 3000
-#> 
-#> Total CPU runtime: 0.1 seconds
-#> 
-#> CPU runtime in seconds by method:
-#> 
-#>  Method   Fit    CI Total
-#>      RC 0.039 0.066 0.105
-#> 
-#> Summary of coefficients by method:
-#> 
-#>  Method        Term Estimate      SE CI.lower CI.upper
-#>      RC (Intercept)  -0.8847 0.07378       NA       NA
-#>      RC        dose   0.8020 0.13751   0.5648    1.112
-#> 
-
-## With keep.data = FALSE, supply data explicitly for proflik
-fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
-               methods = "RC", keep.data = FALSE)
-#> Fitting RC
-fit2 <- confint(fit2, type = "proflik", data = ameras_simulated)
-#> Obtaining profile likelihood CI for dose
-#> RC confidence intervals:
-#> 
-#>       lower upper
-#> dose 0.5648 1.112
-#> 
-
-## FMA and BMA with percentile intervals
-
-fit3 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, family = "binomial",
-               methods = c("FMA", "BMA"))
-#> Note: BMA may require extensive computation time
-#> Fitting FMA
-#> Fitting BMA
-#> Defining model
-#> Building model
-#> Setting data and initial values
-#> Running calculate on model
-#>   [Note] Any error reports that follow may simply reflect missing values in model variables.
-#> Checking model sizes and dimensions
-#>   [Note] This model is not fully initialized. This is not an error.
-#>          To see which variables are not initialized, use model$initializeInfo().
-#>          For more information on model initialization, see help(modelInitialization).
-#> Compiling
-#>   [Note] This may take a minute.
-#>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
-#> Compiling
-#>   [Note] This may take a minute.
-#>   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
-#> running chain 1...
-#> |-------------|-------------|-------------|-------------|
-#> |-------------------------------------------------------|
-#> running chain 2...
-#> |-------------|-------------|-------------|-------------|
-#> |-------------------------------------------------------|
-fit3 <- confint(fit3, type = "percentile")
-#> FMA confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.0203 -0.7321
-#> dose         0.5243  1.0583
-#> 
-#> BMA confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.0083 -0.7337
-#> dose         0.5554  1.0806
-#> 
-summary(fit3)
-#> Call:
-#> ameras(formula = Y.binomial ~ dose(V1:V10, model = "ERR"), data = ameras_simulated, 
-#>     family = "binomial", methods = c("FMA", "BMA"))
-#> 
-#> Rows: 3000
-#> 
-#> Total CPU runtime: 95.9 seconds
-#> 
-#> CPU runtime in seconds by method:
-#> 
-#>  Method    Fit    CI  Total
-#>     FMA  0.536 0.007  0.543
-#>     BMA 95.358 0.001 95.359
-#> 
-#> Summary of coefficients by method:
-#> 
-#>  Method        Term Estimate      SE CI.lower CI.upper Rhat   n.eff
-#>     FMA (Intercept)  -0.8759 0.07349  -1.0203  -0.7321   NA      NA
-#>     FMA        dose   0.7913 0.13664   0.5243   1.0583   NA      NA
-#>     BMA (Intercept)  -0.8780 0.07121  -1.0083  -0.7337 1.00 1073.00
-#>     BMA        dose   0.8003 0.13344   0.5554   1.0806 1.00 1068.00
-#> 
+#>          2.5 %   97.5 %
+#> dose 0.5663534 1.115075
 ```

@@ -146,11 +146,15 @@ coefficients.</p>
 <span><span class="co">#&gt; 4        dose  1.0920   1.0920</span></span></code></pre></div>
 <p>The usual <code>amerasfit</code> methods are available, including
 <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code>, <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code>, and
-<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>.</p>
+<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>. Use <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> for a standalone
+matrix of interval bounds. Use <code><a href="../reference/add_confint.html">add_confint()</a></code> when the
+bounds should travel with the fit and appear in subsequent summaries; it
+also stores available profile diagnostics and confidence-interval timing
+information.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit_ameras_gaussian</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit_ameras_gaussian</span>,</span>
-<span>                               type <span class="op">=</span> <span class="st">"wald.orig"</span>,</span>
-<span>                               print <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit_ameras_gaussian</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_confint.html">add_confint</a></span><span class="op">(</span><span class="va">fit_ameras_gaussian</span>,</span>
+<span>                                   type <span class="op">=</span> <span class="st">"wald.orig"</span>,</span>
+<span>                                   print <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit_ameras_gaussian</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = standard_data, </span></span>
@@ -162,8 +166,8 @@ coefficients.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.349 0.0 0.349</span></span>
+<span><span class="co">#&gt;  Method  Fit    CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.34 0.002 0.342</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -259,8 +263,8 @@ analysis using all 10 realizations:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.2 0.0   0.2</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.199 0.0 0.199</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -270,7 +274,7 @@ analysis using all 10 realizations:</p>
 <span><span class="co">#&gt;      RC          X2  -0.3359 0.09596</span></span>
 <span><span class="co">#&gt;      RC        dose   0.4471 0.04101</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use add_confint() to add them.</span></span></code></pre></div>
 <p>Other methods can then be added through the <code>methods</code>
 argument:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">

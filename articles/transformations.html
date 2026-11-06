@@ -267,7 +267,7 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.641 0.0 0.641</span></span>
+<span><span class="co">#&gt;      RC 0.632 0.0 0.632</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -278,7 +278,7 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt;      RC         dose  0.04875 0.21281</span></span>
 <span><span class="co">#&gt;      RC dose_squared  0.28764 0.08100</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use add_confint() to add them.</span></span></code></pre></div>
 <p>Next with default settings, using <code>transform1</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.ameras.transform1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ameras.html">ameras</a></span><span class="op">(</span><span class="va">Y.binomial</span><span class="op">~</span><span class="fu">dose</span><span class="op">(</span><span class="va">V1</span><span class="op">:</span><span class="va">V10</span>, deg<span class="op">=</span><span class="fl">2</span>, model<span class="op">=</span><span class="st">"ERR"</span><span class="op">)</span><span class="op">+</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span>, data <span class="op">=</span> <span class="va">ameras_simulated</span>,</span>
@@ -296,7 +296,7 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.381 0.0 0.381</span></span>
+<span><span class="co">#&gt;      RC 0.383 0.0 0.383</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -307,7 +307,7 @@ sigmoid transformation:</p>
 <span><span class="co">#&gt;      RC         dose  0.04878 0.21283</span></span>
 <span><span class="co">#&gt;      RC dose_squared  0.28763 0.08100</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use confint() to add them.</span></span></code></pre></div>
+<span><span class="co">#&gt; Note: confidence intervals not yet computed. Use add_confint() to add them.</span></span></code></pre></div>
 <p>As expected, there is no difference between the results.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

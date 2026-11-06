@@ -257,7 +257,7 @@ the transformation, if applicable), <code>other.args</code> (any other arguments
 the formula, including <code>model$data</code>, which is either the data frame used for
 model fitting when <code>keep.data=TRUE</code> or <code>NULL</code> otherwise), and
 <code>CI.computed</code> (logical, whether confidence intervals have been attached by
-<code><a href="confint.html">confint</a></code>).</p>
+<code><a href="add_confint.html">add_confint</a></code>).</p>
 <p>For each method supplied to <code>methods</code>, the output contains a list with components:</p>
 <dl><dt>coefficients</dt>
 <dd><p>named vector of model coefficients.</p></dd>
@@ -313,7 +313,18 @@ model fitting when <code>keep.data=TRUE</code> or <code>NULL</code> otherwise), 
 <dd><p>indices of realization exposures that were included to obtain results. Fits without a valid variance estimate (i.e., non-invertible Hessian or inverse that is not positive definite) or that reach the maximal number of iterations without convergence are filtered out and not used to obtain results.</p></dd>
 
 
-</dl><p>The class <code>amerasfit</code> supports the methods <code><a href="print.html">print</a></code>, <code><a href="coef.html">coef</a></code>, <code><a href="nobs.html">nobs</a></code>, <code><a href="confint.html">confint</a></code>, <code><a href="summary.html">summary</a></code>, <code><a href="summary.html">summary_table</a></code>, <code><a href="vcov.html">vcov</a></code>, <code><a href="residuals.html">residuals</a></code>, <code><a href="plot.html">plot</a></code>, <code><a href="traceplot.html">traceplot</a></code>, <code><a href="convergence.html">convergence</a></code>, <code><a href="Rhat.html">Rhat</a></code>, and <code><a href="included_realizations.html">included_realizations</a></code>.</p>
+</dl><p>The class <code>amerasfit</code> supports the methods
+<code><a href="add_confint.html">add_confint</a></code>, <code><a href="print.html">print</a></code>,
+<code><a href="coef.html">coef</a></code>, <code><a href="nobs.html">nobs</a></code>,
+<code><a href="confint.html">confint</a></code>,
+<code><a href="summary.html">summary</a></code>,
+<code><a href="summary.html">summary_table</a></code>,
+<code><a href="vcov.html">vcov</a></code>,
+<code><a href="residuals.html">residuals</a></code>,
+<code><a href="plot.html">plot</a></code>, <code><a href="traceplot.html">traceplot</a></code>,
+<code><a href="convergence.html">convergence</a></code>,
+<code><a href="Rhat.html">Rhat</a></code>, and
+<code><a href="included_realizations.html">included_realizations</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -322,7 +333,8 @@ terms have been expanded. Thus missing values in raw variables and in derived
 covariate columns, such as factor contrasts, interactions, and spline bases,
 are handled consistently before model fitting. The omitted-row action is stored
 on the fitted object. When <code>keep.data=FALSE</code> and data are supplied later to
-methods such as <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>, <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code>, and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, the
+methods such as <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>, <code><a href="add_confint.html">add_confint()</a></code>, <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code>,
+and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, the
 same missing-value policy is reapplied. Unlike
 <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></code> and <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></code>, <code>na.exclude</code> does not
 pad residuals or diagnostic plots back to the originally supplied row count;
@@ -348,7 +360,8 @@ time under the <code>entry &lt; t &lt;= exit</code> risk-set convention.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="confint.html">confint</a></code> for computing confidence intervals,
+    <div class="dont-index"><p><code><a href="confint.html">confint</a></code> for returning confidence intervals,
+  <code><a href="add_confint.html">add_confint</a></code> for attaching confidence intervals,
   <code><a href="summary.html">summary</a></code> for a summary of the fitted model
   including confidence intervals if computed, <code><a href="coef.html">coef</a></code>
   for extracting coefficients, <code><a href="nobs.html">nobs</a></code> for the number
@@ -386,7 +399,7 @@ time under the <code>entry &lt; t &lt;= exit</code> risk-set convention.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  -1.4325161   0.5776954  -0.5216418   1.1596141   1.1238400 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Add Wald confidence intervals and display a detailed summary</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"wald.orig"</span>, print <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="add_confint.html">add_confint</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"wald.orig"</span>, print <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ameras(formula = Y.gaussian ~ dose(V1:V10) + X1 + X2, data = example_data, </span>
@@ -399,7 +412,7 @@ time under the <code>entry &lt; t &lt;= exit</code> risk-set convention.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.137 0.0 0.137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.127 0.0 0.127</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

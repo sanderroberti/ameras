@@ -1,8 +1,8 @@
 # Summarize an amerasfit Object
 
 Produces a summary of a fitted `amerasfit` object, including parameter
-estimates, standard errors, and confidence intervals if computed via
-[`confint`](https://ameras.sanderroberti.com/reference/confint.md).
+estimates, standard errors, and confidence intervals if attached via
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md).
 
 ## Usage
 
@@ -82,14 +82,14 @@ which is a list containing the following elements:
   `CI.lower`
 
   :   The lower confidence bound, if confidence intervals have been
-      computed via
-      [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
+      attached via
+      [`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md).
 
   `CI.upper`
 
   :   The upper confidence bound, if confidence intervals have been
-      computed via
-      [`confint`](https://ameras.sanderroberti.com/reference/confint.md).
+      attached via
+      [`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md).
 
   `Rhat`
 
@@ -117,19 +117,19 @@ which is a list containing the following elements:
 
 - `CI.computed`:
 
-  Logical. `TRUE` if confidence intervals have been computed via
-  [`confint`](https://ameras.sanderroberti.com/reference/confint.md),
+  Logical. `TRUE` if confidence intervals have been attached via
+  [`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md),
   `FALSE` otherwise.
 
 ## Details
 
 `summary.amerasfit` collects results from all estimation methods present
 in the fitted object into a single summary table. Columns for confidence
-intervals are only printed if they have been computed by
-[`confint`](https://ameras.sanderroberti.com/reference/confint.md). When
-BMA results are present in the fitted object, the summary table includes
-columns `Rhat` and `n.eff`, with `NA` values for all other methods.
-Profile likelihood diagnostic columns such as `pval.lower` and
+intervals are only printed if they have been attached by
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md).
+When BMA results are present in the fitted object, the summary table
+includes columns `Rhat` and `n.eff`, with `NA` values for all other
+methods. Profile likelihood diagnostic columns such as `pval.lower` and
 `pval.upper` remain available in the stored `CI` component but are not
 printed in the summary table.
 
@@ -149,8 +149,10 @@ using `summary_table`.
 
 [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md) for
 model fitting,
+[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)
+for attaching confidence intervals,
 [`confint`](https://ameras.sanderroberti.com/reference/confint.md) for
-computing confidence intervals,
+returning interval bounds,
 [`print`](https://ameras.sanderroberti.com/reference/print.md) for a
 shorter printed summary,
 [`coef`](https://ameras.sanderroberti.com/reference/coef.md) for
@@ -177,7 +179,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.087 0.0 0.087
+#>      RC 0.059 0.0 0.059
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -185,11 +187,11 @@ summary(fit)
 #>      RC (Intercept)  -0.8847 0.07378
 #>      RC        dose   0.8020 0.13751
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 #> 
 
 ## Summary with confidence intervals
-fit <- confint(fit, type = "wald.orig")
+fit <- add_confint(fit, type = "wald.orig")
 #> RC confidence intervals:
 #> 
 #>               lower   upper
@@ -208,7 +210,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.087 0.0 0.087
+#>      RC 0.059 0.0 0.059
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -227,7 +229,7 @@ fit2 <- ameras(Y.binomial~dose(V1:V10, model="ERR"), data = ameras_simulated, fa
 #> Fitting RC
 #> Fitting ERC
 #> Fitting MCML
-fit2 <- confint(fit2, type = "wald.orig")
+fit2 <- add_confint(fit2, type = "wald.orig")
 #> RC confidence intervals:
 #> 
 #>               lower   upper
@@ -253,14 +255,14 @@ summary(fit2)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 109.5 seconds
+#> Total CPU runtime: 95.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method     Fit    CI   Total
-#>      RC   0.039 0.000   0.039
-#>     ERC 109.254 0.000 109.254
-#>    MCML   0.228 0.001   0.229
+#>  Method    Fit    CI  Total
+#>      RC  0.061 0.001  0.062
+#>     ERC 95.097 0.000 95.097
+#>    MCML  0.274 0.000  0.274
 #> 
 #> Summary of coefficients by method:
 #> 

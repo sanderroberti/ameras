@@ -62,7 +62,7 @@ summary(fit.ameras.exp)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.363 0.0 0.363
+#>      RC 0.359 0.0 0.359
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -73,7 +73,7 @@ summary(fit.ameras.exp)
 #>      RC         dose  0.37904 0.10388
 #>      RC dose_squared  0.01943 0.02750
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ## Linear excess relative risk
@@ -102,7 +102,7 @@ summary(fit.ameras.err)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.391 0.0 0.391
+#>      RC 0.392 0.0 0.392
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -113,7 +113,7 @@ summary(fit.ameras.err)
 #>      RC         dose  0.04878 0.21283
 #>      RC dose_squared  0.28763 0.08100
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ## Linear-exponential relative risk
@@ -141,7 +141,7 @@ summary(fit.ameras.linexp)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.608 0.0 0.608
+#>      RC 0.592 0.0 0.592
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -152,7 +152,7 @@ summary(fit.ameras.linexp)
 #>      RC      dose_linear   0.3255 0.11919
 #>      RC dose_exponential   0.3455 0.10814
 #> 
-#> Note: confidence intervals not yet computed. Use confint() to add them.
+#> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
 ## Comparison between models
