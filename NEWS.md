@@ -52,6 +52,11 @@
 
 ## Improvements
 
+* Formula parsing now rejects unknown or duplicated named arguments in
+  `dose()`, missing or multiple `dose()` terms, empty dose selections, and
+  special terms used in unsupported positions or outcome families.
+  Non-survival responses and arguments to `Surv()`, `strata()`, and `offset()`
+  now produce targeted errors when they are not plain data-column names.
 * Public `amerasfit` methods now warn about unused arguments passed through
   `...`, helping detect misspelled or unsupported arguments.
 * Improved validation messages, including correcting factor-validation errors

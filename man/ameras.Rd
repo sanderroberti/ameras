@@ -52,14 +52,16 @@ Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncat
 \section{Formula Syntax}{
 Models are specified through formulas of the form
 \code{Y ~ dose(dose_expression, model="ERR", deg=1, modifier=~M1+M2) + X1 + X2}.
-Exactly one \code{dose()} term is required. Its unnamed
+Exactly one \code{dose()} term is required. It must be a standalone additive
+term rather than part of an interaction or transformation. Its unnamed
 \code{dose_expression} argument selects the exposure realization columns using
 \code{\link[tidyselect]{eval_select}} syntax. For example, use
 \code{D1:D1000} for sequentially named columns or
 \code{all_of(dosevars)} for a character vector of column names.
 
 The recognized named arguments inside \code{dose()} are \code{model},
-\code{deg}, and \code{modifier}; their names must be written exactly. For
+\code{deg}, and \code{modifier}; their names must be written exactly. Unknown
+or duplicated named arguments produce an error. For
 non-Gaussian families, \code{model} selects the exponential relative risk
 model (\code{"EXP"}), linear-exponential model (\code{"LINEXP"}), or linear
 excess relative risk model (\code{"ERR"}, the default). For exponential and
@@ -83,7 +85,10 @@ untransformed data column. Proportional hazards models require
 argument naming a data column. Expressions such as
 \code{offset(log(person_time))} or
 \code{strata(interaction(center, set))} are therefore not supported; create
-the derived column in \code{data} first.
+the derived column in \code{data} first. Exactly one \code{strata()} term is
+required for conditional logistic models, while an optional \code{offset()}
+term may occur at most once in Poisson models. These terms are not supported
+for other outcome families.
 
 Additional right-hand-side covariates are expanded with
 \code{\link[stats]{model.matrix}} and may use standard formula features such as
