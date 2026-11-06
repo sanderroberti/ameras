@@ -125,7 +125,7 @@
   to <code>object</code> are replaced in the returned object; the input object is
   left unchanged. This function is useful when the fitted object will be kept
   for reporting or further inspection: <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and
-  <code><a href="summary.html">summary_table()</a></code> include the attached bounds, profile-likelihood
+  <code>coef(summary(object))</code> include the attached bounds, profile-likelihood
   diagnostics are stored when available, and confidence-interval computation
   time is recorded in the method-specific timing information. Use
   <code><a href="confint.html">confint</a></code> when only standalone interval
@@ -178,7 +178,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.057 0.001 0.058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.051 0.001 0.052</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -207,8 +207,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit   CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.057 0.07 0.127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.051 0.065 0.116</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

@@ -33,7 +33,7 @@
 - [`residuals(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/residuals.md)
   : Residuals for an amerasfit Object
 - [`summary(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/summary.md)
-  [`summary_table(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/summary.md)
+  [`coef(`*`<summary.amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/summary.md)
   [`print(`*`<summary.amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/summary.md)
   : Summarize an amerasfit Object
 - [`traceplot()`](https://ameras.sanderroberti.com/reference/traceplot.md)

@@ -27,9 +27,9 @@ immediate comparison or export. Use
 when the fit will be retained for subsequent reporting: it stores the
 bounds with each fitted method so that
 [`summary()`](https://rdrr.io/r/base/summary.html) and
-[`summary_table()`](https://ameras.sanderroberti.com/reference/summary.md)
-include them, stores profile-likelihood diagnostics when available, and
-records confidence-interval computation time in the fit. Because
+`coef(summary(fit))` include them, stores profile-likelihood diagnostics
+when available, and records confidence-interval computation time in the
+fit. Because
 [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
 returns an amended copy invisibly, assign its result to retain this
 information. This is particularly useful for computationally expensive
@@ -130,8 +130,8 @@ summary(fit.ameras.waldorig)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.434 0.001 0.435
+#>  Method   Fit  CI Total
+#>      RC 0.432 0.0 0.432
 #> 
 #> Summary of coefficients by method:
 #> 

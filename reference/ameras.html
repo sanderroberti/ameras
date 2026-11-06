@@ -147,13 +147,15 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
     <h2 id="formula-syntax">Formula Syntax<a class="anchor" aria-label="anchor" href="#formula-syntax"></a></h2>
     <p>Models are specified through formulas of the form
 <code>Y ~ dose(dose_expression, model="ERR", deg=1, modifier=~M1+M2) + X1 + X2</code>.
-Exactly one <code>dose()</code> term is required. Its unnamed
+Exactly one <code>dose()</code> term is required. It must be a standalone additive
+term rather than part of an interaction or transformation. Its unnamed
 <code>dose_expression</code> argument selects the exposure realization columns using
 <code><a href="https://tidyselect.r-lib.org/reference/eval_select.html" class="external-link">eval_select</a></code> syntax. For example, use
 <code>D1:D1000</code> for sequentially named columns or
 <code>all_of(dosevars)</code> for a character vector of column names.</p>
 <p>The recognized named arguments inside <code>dose()</code> are <code>model</code>,
-<code>deg</code>, and <code>modifier</code>; their names must be written exactly. For
+<code>deg</code>, and <code>modifier</code>; their names must be written exactly. Unknown
+or duplicated named arguments produce an error. For
 non-Gaussian families, <code>model</code> selects the exponential relative risk
 model (<code>"EXP"</code>), linear-exponential model (<code>"LINEXP"</code>), or linear
 excess relative risk model (<code>"ERR"</code>, the default). For exponential and
@@ -175,7 +177,10 @@ untransformed data column. Proportional hazards models require
 argument naming a data column. Expressions such as
 <code>offset(log(person_time))</code> or
 <code>strata(interaction(center, set))</code> are therefore not supported; create
-the derived column in <code>data</code> first.</p>
+the derived column in <code>data</code> first. Exactly one <code>strata()</code> term is
+required for conditional logistic models, while an optional <code><a href="https://rdrr.io/r/stats/offset.html" class="external-link">offset()</a></code>
+term may occur at most once in Poisson models. These terms are not supported
+for other outcome families.</p>
 <p>Additional right-hand-side covariates are expanded with
 <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></code> and may use standard formula features such as
 factor contrasts, interactions, <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code> terms, and basis functions. For
@@ -318,7 +323,6 @@ model fitting when <code>keep.data=TRUE</code> or <code>NULL</code> otherwise), 
 <code><a href="coef.html">coef</a></code>, <code><a href="nobs.html">nobs</a></code>,
 <code><a href="confint.html">confint</a></code>,
 <code><a href="summary.html">summary</a></code>,
-<code><a href="summary.html">summary_table</a></code>,
 <code><a href="vcov.html">vcov</a></code>,
 <code><a href="residuals.html">residuals</a></code>,
 <code><a href="plot.html">plot</a></code>, <code><a href="traceplot.html">traceplot</a></code>,
@@ -412,7 +416,7 @@ time under the <code>entry &lt; t &lt;= exit</code> risk-set convention.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.127 0.0 0.127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.128 0.0 0.128</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

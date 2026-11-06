@@ -154,15 +154,18 @@ ameras(formula, data, family="gaussian", methods="RC",
 
 Models are specified through formulas of the form
 `Y ~ dose(dose_expression, model="ERR", deg=1, modifier=~M1+M2) + X1 + X2`.
-Exactly one `dose()` term is required. Its unnamed `dose_expression`
-argument selects the exposure realization columns using
+Exactly one `dose()` term is required. It must be a standalone additive
+term rather than part of an interaction or transformation. Its unnamed
+`dose_expression` argument selects the exposure realization columns
+using
 [`eval_select`](https://tidyselect.r-lib.org/reference/eval_select.html)
 syntax. For example, use `D1:D1000` for sequentially named columns or
 `all_of(dosevars)` for a character vector of column names.
 
 The recognized named arguments inside `dose()` are `model`, `deg`, and
-`modifier`; their names must be written exactly. For non-Gaussian
-families, `model` selects the exponential relative risk model (`"EXP"`),
+`modifier`; their names must be written exactly. Unknown or duplicated
+named arguments produce an error. For non-Gaussian families, `model`
+selects the exponential relative risk model (`"EXP"`),
 linear-exponential model (`"LINEXP"`), or linear excess relative risk
 model (`"ERR"`, the default). For exponential and linear ERR models,
 `deg=1` fits a linear exposure effect and `deg=2` adds a quadratic term.
@@ -185,6 +188,10 @@ require `Surv(exit, status)` or `Surv(entry, exit, status)`, with each
 argument naming a data column. Expressions such as
 `offset(log(person_time))` or `strata(interaction(center, set))` are
 therefore not supported; create the derived column in `data` first.
+Exactly one `strata()` term is required for conditional logistic models,
+while an optional [`offset()`](https://rdrr.io/r/stats/offset.html) term
+may occur at most once in Poisson models. These terms are not supported
+for other outcome families.
 
 Additional right-hand-side covariates are expanded with
 [`model.matrix`](https://rdrr.io/r/stats/model.matrix.html) and may use
@@ -382,7 +389,6 @@ The class `amerasfit` supports the methods
 [`nobs`](https://ameras.sanderroberti.com/reference/nobs.md),
 [`confint`](https://ameras.sanderroberti.com/reference/confint.md),
 [`summary`](https://ameras.sanderroberti.com/reference/summary.md),
-[`summary_table`](https://ameras.sanderroberti.com/reference/summary.md),
 [`vcov`](https://ameras.sanderroberti.com/reference/vcov.md),
 [`residuals`](https://ameras.sanderroberti.com/reference/residuals.md),
 [`plot`](https://ameras.sanderroberti.com/reference/plot.md),
@@ -569,7 +575,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.127 0.0 0.127
+#>      RC 0.128 0.0 0.128
 #> 
 #> Summary of coefficients by method:
 #> 

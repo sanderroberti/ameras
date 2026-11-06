@@ -44,6 +44,7 @@
 <h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
 <ul><li>
 <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> now follows the standard extractor convention: it returns a two-column matrix for a fit containing one method and a named list of such matrices for a fit containing multiple methods. The former behavior of attaching intervals and their diagnostics to an <code>amerasfit</code> object is now provided by <code><a href="../reference/add_confint.html">add_confint()</a></code>. Both functions always compute the requested intervals, so a new <code><a href="../reference/add_confint.html">add_confint()</a></code> call replaces intervals already attached to the returned object.</li>
+<li>Renamed the coefficient table in <code>summary.amerasfit</code> from <code>summary_table</code> to <code>coefficients</code> and removed the package-specific <code>summary_table()</code> accessor. Use <code>coef(summary(fit))</code> to retrieve the table. Printed summaries are unchanged.</li>
 <li>Removed the deprecated direct argument interface to <code><a href="../reference/ameras.html">ameras()</a></code>. Models must now be specified through <code>formula</code>; calls using the former <code>Y</code>, <code>dosevars</code>, <code>doseRRmod</code>, <code>deg</code>, <code>M</code>, <code>X</code>, <code>offset</code>, <code>entry</code>, <code>exit</code>, or <code>setnr</code> arguments fail with migration guidance.</li>
 <li>Removed the deprecated <code>CI</code>, <code>params.profCI</code>, <code>maxit.profCI</code>, and <code>tol.profCI</code> arguments from <code><a href="../reference/ameras.html">ameras()</a></code>. Confidence intervals must be added after fitting with <code><a href="../reference/add_confint.html">add_confint()</a></code>.</li>
 <li>Removed the deprecated <code>included.replicates.BMA</code> alias; use <code>included.realizations.BMA</code> instead.</li>
@@ -66,7 +67,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
-<ul><li>Public <code>amerasfit</code> methods now warn about unused arguments passed through <code>...</code>, helping detect misspelled or unsupported arguments.</li>
+<ul><li>Formula parsing now rejects unknown or duplicated named arguments in <code>dose()</code>, missing or multiple <code>dose()</code> terms, empty dose selections, and special terms used in unsupported positions or outcome families. Non-survival responses and arguments to <code>Surv()</code>, <code>strata()</code>, and <code><a href="https://rdrr.io/r/stats/offset.html" class="external-link">offset()</a></code> now produce targeted errors when they are not plain data-column names.</li>
+<li>Public <code>amerasfit</code> methods now warn about unused arguments passed through <code>...</code>, helping detect misspelled or unsupported arguments.</li>
 <li>Improved validation messages, including correcting factor-validation errors and removing redundant <code>ERROR:</code> and <code>WARNING:</code> prefixes.</li>
 </ul></div>
 <div class="section level3">
@@ -158,7 +160,7 @@
 <li>
 <code><a href="../reference/Rhat.html">Rhat()</a></code>: returns the Gelman-Rubin convergence diagnostics and effective sample sizes for BMA results.</li>
 <li>
-<code><a href="../reference/summary.html">summary_table()</a></code>: extracts the summary table from a <code>summary.amerasfit</code> object as a data frame, for programmatic access to parameter estimates, standard errors, and confidence intervals.</li>
+<code>summary_table()</code>: extracts the summary table from a <code>summary.amerasfit</code> object as a data frame, for programmatic access to parameter estimates, standard errors, and confidence intervals.</li>
 </ul></div>
 </div>
     <div class="section level2">

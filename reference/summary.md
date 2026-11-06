@@ -10,8 +10,8 @@ estimates, standard errors, and confidence intervals if attached via
 # S3 method for class 'amerasfit'
 summary(object, ...)
 
-# S3 method for class 'amerasfit'
-summary_table(object, ...)
+# S3 method for class 'summary.amerasfit'
+coef(object, ...)
 
 # S3 method for class 'summary.amerasfit'
 print(x, digits = max(3, getOption("digits") - 3), ...)
@@ -21,8 +21,11 @@ print(x, digits = max(3, getOption("digits") - 3), ...)
 
 - object:
 
-  A fitted model object of class `amerasfit`, as returned by
-  [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md).
+  For [`summary()`](https://rdrr.io/r/base/summary.html), a fitted model
+  object of class `amerasfit`, as returned by
+  [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md). For
+  [`coef()`](https://rdrr.io/r/stats/coef.html), an object of class
+  `summary.amerasfit`.
 
 - x:
 
@@ -58,7 +61,7 @@ which is a list containing the following elements:
   the number of rows excluded because they have zero follow-up time
   (`entry == exit`).
 
-- `summary_table`:
+- `coefficients`:
 
   A data frame with one row per parameter per method, containing
   columns:
@@ -121,6 +124,9 @@ which is a list containing the following elements:
   [`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md),
   `FALSE` otherwise.
 
+`coef.summary.amerasfit` returns the `coefficients` data frame from the
+summary object.
+
 ## Details
 
 `summary.amerasfit` collects results from all estimation methods present
@@ -141,9 +147,9 @@ model-specific exclusions are rows in uninformative matched sets, i.e.,
 matched sets of size 1 or with no cases. For proportional hazards
 regression with entry times, model-specific exclusions are rows with
 zero follow-up time (`entry == exit`). When confidence intervals have
-been computed, CI runtime is included in the total runtime. This table
-can also be accessed directly (i.e., to retrieve confidence intervals)
-using `summary_table`.
+been computed, CI runtime is included in the total runtime. The
+coefficient table can be accessed directly using `coef(summary(fit))` or
+`summary(fit)$coefficients`.
 
 ## See also
 
@@ -179,7 +185,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.059 0.0 0.059
+#>      RC 0.058 0.0 0.058
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -210,7 +216,7 @@ summary(fit)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.059 0.0 0.059
+#>      RC 0.058 0.0 0.058
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -219,8 +225,9 @@ summary(fit)
 #>      RC        dose   0.8020 0.13751   0.5324   1.0715
 #> 
 
-## Access the summary table directly
-s <- summary_table(fit)
+## Access the coefficient summary directly
+s <- summary(fit)
+coefficient_table <- coef(s)
 
 ## Multiple methods
 
@@ -255,13 +262,13 @@ summary(fit2)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 95.4 seconds
+#> Total CPU runtime: 94.7 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>      RC  0.061 0.001  0.062
-#>     ERC 95.097 0.000 95.097
+#>      RC  0.059 0.000  0.059
+#>     ERC 94.347 0.001 94.348
 #>    MCML  0.274 0.000  0.274
 #> 
 #> Summary of coefficients by method:

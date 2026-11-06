@@ -95,7 +95,7 @@ bounds are needed as a standalone result, for example for immediate
 comparison or export. Use <code><a href="../reference/add_confint.html">add_confint()</a></code> when the fit will
 be retained for subsequent reporting: it stores the bounds with each
 fitted method so that <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and
-<code><a href="../reference/summary.html">summary_table()</a></code> include them, stores profile-likelihood
+<code>coef(summary(fit))</code> include them, stores profile-likelihood
 diagnostics when available, and records confidence-interval computation
 time in the fit. Because <code><a href="../reference/add_confint.html">add_confint()</a></code> returns an amended
 copy invisibly, assign its result to retain this information. This is
@@ -202,8 +202,8 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.434 0.001 0.435</span></span>
+<span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span><span class="co">#&gt;      RC 0.432 0.0 0.432</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

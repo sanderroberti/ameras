@@ -14,6 +14,10 @@
   Both functions always compute the requested intervals, so a new
   [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
   call replaces intervals already attached to the returned object.
+- Renamed the coefficient table in `summary.amerasfit` from
+  `summary_table` to `coefficients` and removed the package-specific
+  `summary_table()` accessor. Use `coef(summary(fit))` to retrieve the
+  table. Printed summaries are unchanged.
 - Removed the deprecated direct argument interface to
   [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md).
   Models must now be specified through `formula`; calls using the former
@@ -58,6 +62,12 @@
 
 ### Improvements
 
+- Formula parsing now rejects unknown or duplicated named arguments in
+  `dose()`, missing or multiple `dose()` terms, empty dose selections,
+  and special terms used in unsupported positions or outcome families.
+  Non-survival responses and arguments to `Surv()`, `strata()`, and
+  [`offset()`](https://rdrr.io/r/stats/offset.html) now produce targeted
+  errors when they are not plain data-column names.
 - Public `amerasfit` methods now warn about unused arguments passed
   through `...`, helping detect misspelled or unsupported arguments.
 - Improved validation messages, including correcting factor-validation
@@ -282,10 +292,9 @@ CRAN release: 2026-05-29
 - [`Rhat()`](https://ameras.sanderroberti.com/reference/Rhat.md):
   returns the Gelman-Rubin convergence diagnostics and effective sample
   sizes for BMA results.
-- [`summary_table()`](https://ameras.sanderroberti.com/reference/summary.md):
-  extracts the summary table from a `summary.amerasfit` object as a data
-  frame, for programmatic access to parameter estimates, standard
-  errors, and confidence intervals.
+- `summary_table()`: extracts the summary table from a
+  `summary.amerasfit` object as a data frame, for programmatic access to
+  parameter estimates, standard errors, and confidence intervals.
 
 ## ameras 0.3.0
 

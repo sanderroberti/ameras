@@ -89,12 +89,11 @@ attached to `object` are replaced in the returned object; the input
 object is left unchanged. This function is useful when the fitted object
 will be kept for reporting or further inspection:
 [`summary()`](https://rdrr.io/r/base/summary.html) and
-[`summary_table()`](https://ameras.sanderroberti.com/reference/summary.md)
-include the attached bounds, profile-likelihood diagnostics are stored
-when available, and confidence-interval computation time is recorded in
-the method-specific timing information. Use
-[`confint`](https://ameras.sanderroberti.com/reference/confint.md) when
-only standalone interval bounds are needed. Attaching intervals is
+`coef(summary(object))` include the attached bounds, profile-likelihood
+diagnostics are stored when available, and confidence-interval
+computation time is recorded in the method-specific timing information.
+Use [`confint`](https://ameras.sanderroberti.com/reference/confint.md)
+when only standalone interval bounds are needed. Attaching intervals is
 particularly useful for computationally expensive profile likelihood
 intervals because subsequent summaries use the attached bounds and
 diagnostics without repeating the profile calculation. Computation and
@@ -148,7 +147,7 @@ summary(fit_with_ci)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.057 0.001 0.058
+#>      RC 0.051 0.001 0.052
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -177,8 +176,8 @@ summary(fit_with_profile_ci)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit   CI Total
-#>      RC 0.057 0.07 0.127
+#>  Method   Fit    CI Total
+#>      RC 0.051 0.065 0.116
 #> 
 #> Summary of coefficients by method:
 #> 
