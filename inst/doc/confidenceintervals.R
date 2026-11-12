@@ -4,10 +4,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-
 ## ----setup--------------------------------------------------------------------
 library(ameras)
-
 
 
 ## ----fits1, eval = identical(Sys.getenv("NOT_CRAN"), "true")------------------
@@ -30,7 +28,6 @@ fit.ameras.waldorig <- add_confint(
   print=FALSE
 )
 summary(fit.ameras.waldorig)
-
 
 ## ----fits2, eval = identical(Sys.getenv("NOT_CRAN"), "true")------------------
 set.seed(123)

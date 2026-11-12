@@ -532,7 +532,7 @@ before each call so that the final FMA sampling step is comparable.</p>
 <span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  <span class="at">elapsed_seconds =</span> <span class="fu">round</span>(<span class="fu">c</span>(sequential_elapsed, parallel_elapsed), <span class="dv">2</span>)</span>
 <span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>)</span>
 <span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;           plan elapsed_seconds</span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 1   sequential            1.05</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 1   sequential            0.98</span></span>
 <span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; 2 multisession            1.82</span></span></code></pre></div>
 <p>The estimates should agree up to ordinary numerical precision.
 Parallel execution is not guaranteed to be faster for small examples

@@ -110,16 +110,16 @@ summary(fit)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 68.1 seconds
+#> Total CPU runtime: 66 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit  CI  Total
-#>      RC  0.036 0.0  0.036
-#>     ERC 11.041 0.0 11.041
-#>    MCML  0.182 0.0  0.182
-#>     FMA  0.410 0.0  0.410
-#>     BMA 56.460 0.0 56.460
+#>      RC  0.035 0.0  0.035
+#>     ERC 10.467 0.0 10.467
+#>    MCML  0.184 0.0  0.184
+#>     FMA  0.411 0.0  0.411
+#>     BMA 54.905 0.0 54.905
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -138,13 +138,14 @@ summary(fit)
 #> Note: confidence intervals not yet computed. Use add_confint() to add them.
 ```
 
-Finally, we add confidence intervals to the `fit` object. This is useful for a
-reporting workflow because subsequent summaries include the bounds, while any
-available profile diagnostics and confidence-interval timing are stored with
-the fit. Use `confint()` instead when only a standalone matrix or list of bounds
-is needed. Attaching intervals is particularly useful for computationally
-expensive profile likelihood intervals because subsequent summaries use the
-stored results without rerunning the profile calculation.
+Finally, we add confidence intervals to the `fit` object. This is useful
+for a reporting workflow because subsequent summaries include the
+bounds, while any available profile diagnostics and confidence-interval
+timing are stored with the fit. Use `confint()` instead when only a
+standalone matrix or list of bounds is needed. Attaching intervals is
+particularly useful for computationally expensive profile likelihood
+intervals because subsequent summaries use the stored results without
+rerunning the profile calculation.
 
 ``` r
 fit <- add_confint(fit, type=c("wald.orig","percentile"))
@@ -185,16 +186,16 @@ summary(fit)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 68.1 seconds
+#> Total CPU runtime: 66 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method    Fit    CI  Total
-#>      RC  0.036 0.001  0.037
-#>     ERC 11.041 0.000 11.041
-#>    MCML  0.182 0.000  0.182
-#>     FMA  0.410 0.007  0.417
-#>     BMA 56.460 0.000 56.460
+#>      RC  0.035 0.000  0.035
+#>     ERC 10.467 0.000 10.467
+#>    MCML  0.184 0.001  0.185
+#>     FMA  0.411 0.006  0.417
+#>     BMA 54.905 0.001 54.906
 #> 
 #> Summary of coefficients by method:
 #> 

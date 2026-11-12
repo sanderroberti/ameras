@@ -359,20 +359,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>To compute confidence intervals, first fit the model using
 <code>ameras</code>, then use <code>confint()</code> when the interval
 bounds are needed as a standalone result, for example for immediate
-comparison or export. Use <code>add_confint()</code> when the fit will be
-retained for subsequent reporting: it stores the bounds with each fitted
-method so that <code>summary()</code> and <code>coef(summary(fit))</code>
-include them, stores profile-likelihood diagnostics when available, and
-records confidence-interval computation time in the fit. Because
-<code>add_confint()</code> returns an amended copy invisibly, assign its
-result to retain this information. This is particularly useful for
-computationally expensive profile likelihood intervals: subsequent
-summaries use the attached bounds and diagnostics without rerunning the
-profile calculation. Several interval types are supported through the <code>type</code>
-argument. When the fitted object contains at least one of
-<code>RC</code>, <code>ERC</code>, and <code>MCML</code> and at least
-one of <code>FMA</code> and <code>BMA</code>, <code>type</code> should
-contain one interval type for each group.</p>
+comparison or export. Use <code>add_confint()</code> when the fit will
+be retained for subsequent reporting: it stores the bounds with each
+fitted method so that <code>summary()</code> and
+<code>coef(summary(fit))</code> include them, stores profile-likelihood
+diagnostics when available, and records confidence-interval computation
+time in the fit. Because <code>add_confint()</code> returns an amended
+copy invisibly, assign its result to retain this information. This is
+particularly useful for computationally expensive profile likelihood
+intervals: subsequent summaries use the attached bounds and diagnostics
+without rerunning the profile calculation. Several interval types are
+supported through the <code>type</code> argument. When the fitted object
+contains at least one of <code>RC</code>, <code>ERC</code>, and
+<code>MCML</code> and at least one of <code>FMA</code> and
+<code>BMA</code>, <code>type</code> should contain one interval type for
+each group.</p>
 </div>
 <div id="regression-calibration-extended-regression-calibration-and-monte-carlo-maximum-likelihood" class="section level1">
 <h1>Regression calibration, extended regression calibration, and Monte
@@ -463,12 +464,12 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
 <span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt;  Method   Fit    CI Total</span></span>
-<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt;      RC 0.284 0.001 0.285</span></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt;      RC 0.238 0.0 0.238</span></span>
 <span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a><span class="co">#&gt; </span></span>

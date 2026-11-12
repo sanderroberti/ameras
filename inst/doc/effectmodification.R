@@ -5,11 +5,9 @@ knitr::opts_chunk$set(
   message = FALSE
 )
 
-
 ## ----setup--------------------------------------------------------------------
 library(ameras)
 effect_data <- ameras_simulated
-
 
 ## ----contrast-fit-------------------------------------------------------------
 fit_contrast <- ameras(
@@ -21,7 +19,6 @@ fit_contrast <- ameras(
 
 coef(fit_contrast)
 
-
 ## ----subgroup-fit-------------------------------------------------------------
 fit_subgroup <- ameras(
   Y.gaussian ~ dose(V1:V10, modifier = ~ 0 + M1) + X1 + X2,
@@ -31,7 +28,6 @@ fit_subgroup <- ameras(
 )
 
 coef(fit_subgroup)
-
 
 ## ----coding-equivalence-------------------------------------------------------
 contrast_coef <- fit_contrast$RC$coefficients
@@ -50,13 +46,11 @@ data.frame(
   row.names = NULL
 )
 
-
 ## ----factor-setup-------------------------------------------------------------
 effect_data$M_factor <- factor(
   ifelse(effect_data$M1 == 0, "unexposed modifier group", "modifier group"),
   levels = c("unexposed modifier group", "modifier group")
 )
-
 
 ## ----factor-contrast----------------------------------------------------------
 fit_factor_contrast <- ameras(
@@ -68,7 +62,6 @@ fit_factor_contrast <- ameras(
 
 coef(fit_factor_contrast)
 
-
 ## ----factor-subgroup----------------------------------------------------------
 fit_factor_subgroup <- ameras(
   Y.gaussian ~ dose(V1:V10, modifier = ~ 0 + M_factor) + X1 + X2,
@@ -78,7 +71,6 @@ fit_factor_subgroup <- ameras(
 )
 
 coef(fit_factor_subgroup)
-
 
 ## ----three-level-factor-------------------------------------------------------
 effect_data$M3 <- factor(
@@ -94,7 +86,6 @@ fit_three_level <- ameras(
 )
 
 coef(fit_three_level)
-
 
 ## ----subgroup-ci, eval = FALSE------------------------------------------------
 # ci_subgroup <- confint(
