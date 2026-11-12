@@ -146,8 +146,8 @@ summary(fit_with_ci)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.051 0.001 0.052
+#>  Method  Fit  CI Total
+#>      RC 0.05 0.0  0.05
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -176,8 +176,8 @@ summary(fit_with_profile_ci)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.051 0.065 0.116
+#>  Method  Fit    CI Total
+#>      RC 0.05 0.064 0.114
 #> 
 #> Summary of coefficients by method:
 #> 

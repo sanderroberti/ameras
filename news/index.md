@@ -13,7 +13,15 @@
   [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md).
   Both functions always compute the requested intervals, so a new
   [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
-  call replaces intervals already attached to the returned object.
+  call replaces intervals already attached to the returned object. The
+  `force` argument has been removed; `print` and `digits` are now
+  supported by
+  [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+  only.
+- [`coef()`](https://rdrr.io/r/stats/coef.html) now returns a named
+  numeric vector when an `amerasfit` object contains one fitted method.
+  Objects containing multiple methods continue to return a data frame
+  with one column per method.
 - Renamed the coefficient table in `summary.amerasfit` from
   `summary_table` to `coefficients` and removed the package-specific
   `summary_table()` accessor. Use `coef(summary(fit))` to retrieve the
@@ -32,6 +40,7 @@
   `included.realizations.BMA` instead.
 - Removed non-formula effect-modifier syntax. Use `modifier = ~ M1 + M2`
   instead of `modifier = M1 + M2` inside `dose()`.
+- Renamed the bundled example dataset from `data` to `ameras_simulated`.
 
 ### Bug fixes
 
@@ -45,15 +54,6 @@
   fit. The Nelder-Mead solution is retained and assessed using the usual
   Hessian and convergence diagnostics.
 
-### Changes
-
-- Renamed the bundled example dataset from `data` to `ameras_simulated`,
-  enabled lazy loading, and expanded its documentation.
-- [`coef()`](https://rdrr.io/r/stats/coef.html) now returns a named
-  numeric vector when an `amerasfit` object contains one fitted method.
-  Objects containing multiple methods continue to return a data frame
-  with one column per method.
-
 ### New features
 
 - Added an [`nobs()`](https://rdrr.io/r/stats/nobs.html) method for
@@ -62,9 +62,10 @@
 
 ### Improvements
 
-- Formula parsing now rejects unknown or duplicated named arguments in
-  `dose()`, missing or multiple `dose()` terms, empty dose selections,
-  and special terms used in unsupported positions or outcome families.
+- Formula parsing now requires a two-sided formula and rejects unknown
+  or duplicated named arguments in `dose()`, invalid model or degree
+  values, missing or multiple `dose()` terms, empty dose selections, and
+  special terms used in unsupported positions or outcome families.
   Non-survival responses and arguments to `Surv()`, `strata()`, and
   [`offset()`](https://rdrr.io/r/stats/offset.html) now produce targeted
   errors when they are not plain data-column names.
@@ -72,6 +73,7 @@
   through `...`, helping detect misspelled or unsupported arguments.
 - Improved validation messages, including correcting factor-validation
   errors and removing redundant `ERROR:` and `WARNING:` prefixes.
+- The bundled example dataset now loads lazily.
 
 ### Documentation
 
@@ -80,6 +82,12 @@
   dedicated formula-syntax and outcome-model sections, documented
   restrictions on special formula terms, and added a more complete
   example with links to the relevant vignettes.
+- Updated the README and vignettes for the revised confidence-interval
+  and coefficient-summary interfaces, including the benefits of
+  attaching expensive profile likelihood intervals with
+  [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+  for reuse in summaries. Expanded documentation of the simulated
+  example data.
 
 ## ameras 0.5.2
 

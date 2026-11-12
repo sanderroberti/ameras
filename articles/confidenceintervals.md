@@ -131,7 +131,7 @@ summary(fit.ameras.waldorig)
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.432 0.0 0.432
+#>      RC 0.427 0.0 0.427
 #> 
 #> Summary of coefficients by method:
 #> 
