@@ -75,7 +75,7 @@ flowchart TD
   U --> AG["CI table"]
   V --> AG
   W --> AG
-  AG --> AH["confint stores CI on method result<br/>set_ci_timing()<br/>mark CI.computed"]
+  AG --> AH["compute_and_attach_confint()<br/>store CI on method result<br/>set_ci_timing()"]
   AH --> AI["updated amerasfit object"]
 ```
 

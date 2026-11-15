@@ -68,6 +68,44 @@ test_that("profile likelihood bracketing expands beyond initial limits", {
 })
 
 
+test_that("default profile settings resolve narrow intervals", {
+  profile_sd <- 0.01
+  compute_interval <- function(...) {
+    ameras:::compute_proflik_ci_one(
+      index = 1,
+      inpar = c(theta = 0),
+      optval = 0,
+      loglik_fn = function(params) params[1]^2 / (2 * profile_sd^2),
+      lowlim = -4 * profile_sd,
+      uplim = 4 * profile_sd,
+      parname = "theta",
+      ...
+    )
+  }
+
+  expect_no_warning(ci <- compute_interval())
+  expected_limit <- qnorm(0.975) * profile_sd
+  expect_equal(ci$lower, -expected_limit, tolerance = 1e-6)
+  expect_equal(ci$upper, expected_limit, tolerance = 1e-6)
+  expect_equal(ci$pval.lower, 0.05, tolerance = 1e-4)
+  expect_equal(ci$pval.upper, 0.05, tolerance = 1e-4)
+
+  # Users can request a cheaper, coarse tolerance, but the p-value accuracy
+  # check still rejects endpoints that do not reach the requested CI level.
+  expect_warning(
+    expect_warning(
+      coarse <- compute_interval(tol.profCI = 1e-2),
+      "lower bound for theta was not solved accurately; returning NA.*decreasing tol.profCI"
+    ),
+    "upper bound for theta was not solved accurately; returning NA.*decreasing tol.profCI"
+  )
+  expect_true(is.na(coarse$lower))
+  expect_true(is.na(coarse$upper))
+  expect_gt(abs(coarse$pval.lower - 0.05), 0.005)
+  expect_gt(abs(coarse$pval.upper - 0.05), 0.005)
+})
+
+
 test_that("profile likelihood unresolved bounds return NA with diagnostics", {
   # This transform maps very small optimizer-scale values to a small negative
   # reported-scale value. The warning should preserve that value instead of
@@ -103,7 +141,9 @@ test_that("profile likelihood unresolved bounds return NA with diagnostics", {
       "lower bound for dose could not be bracketed; returning NA.*",
       "Last attempted value: -0.045 ",
       "\\(internal optimizer-scale value: .*\\).*",
-      "p-value at last attempted value: .*target p-value: 0.05"
+      "p-value at last attempted value: .*target p-value: 0.05.*",
+      "Check the original fit's convergence diagnostics and parameter scaling; ",
+      "a finite bound may not exist"
     )
   )
 
@@ -113,7 +153,7 @@ test_that("profile likelihood unresolved bounds return NA with diagnostics", {
 })
 
 
-test_that("profile likelihood inaccurate roots return NA with diagnostics", {
+test_that("profile likelihood iteration limits suggest increasing maxit", {
   quadratic_loglik <- function(params) {
     params[1]^2
   }
@@ -134,12 +174,14 @@ test_that("profile likelihood inaccurate roots return NA with diagnostics", {
       ),
       paste0(
         "lower bound for theta was not solved accurately; returning NA.*",
-        "p-value at last attempted value: .*target p-value: 0.05"
+        "p-value at last attempted value: .*target p-value: 0.05.*",
+        "Root-finding warning: .*Increase maxit.profCI"
       )
     ),
     paste0(
       "upper bound for theta was not solved accurately; returning NA.*",
-      "p-value at last attempted value: .*target p-value: 0.05"
+      "p-value at last attempted value: .*target p-value: 0.05.*",
+      "Root-finding warning: .*Increase maxit.profCI"
     )
   )
 
@@ -149,4 +191,36 @@ test_that("profile likelihood inaccurate roots return NA with diagnostics", {
   expect_true(is.finite(ci$pval.upper))
   expect_equal(ci$iter.lower, 1)
   expect_equal(ci$iter.upper, 1)
+})
+
+
+test_that("profile likelihood evaluation errors retain their cause", {
+  target_fn <- function(x) {
+    if (x > 0 && x < 3) {
+      stop("profile evaluation failed")
+    }
+    if (x == 0) 0.95 else -0.05
+  }
+
+  expect_warning(
+    result <- ameras:::solve_profile_bound(
+      target_fn = target_fn,
+      center = 0,
+      initial = 3,
+      direction = 1,
+      direction_name = "upper",
+      parname = "theta",
+      alpha = 0.05,
+      maxit.profCI = 100,
+      tol.profCI = 1e-6,
+      index = 1,
+      inpar = c(theta = 0)
+    ),
+    paste0(
+      "could not be solved \\(profile evaluation failed\\).*",
+      "Check the original fit's convergence diagnostics and parameter scaling.*",
+      "Numerical instability during the constrained optimizations"
+    )
+  )
+  expect_true(is.na(result$root))
 })

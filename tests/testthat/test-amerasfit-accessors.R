@@ -17,7 +17,6 @@ test_that("public methods warn about unused dots", {
     num.rows = 1L,
     num.rows.original = 1L,
     num.realizations = 1L,
-    CI.computed = TRUE,
     model = list(family = "gaussian"),
     RC = method_fit,
     FMA = c(method_fit, list(included.realizations = 1L)),
@@ -66,7 +65,6 @@ test_that("public methods warn about unused dots", {
     capture.output(add_confint(
       rc_fit,
       type = "wald.orig",
-      print = FALSE,
       typo = TRUE
     ))
   )
@@ -252,9 +250,8 @@ test_that("traceplot forwards BMA samples and plotting arguments", {
 })
 
 test_that("confint validates method-specific inputs and empty sample output", {
-  empty_fit <- ameras:::new_amerasfit(list(CI.computed = FALSE))
+  empty_fit <- ameras:::new_amerasfit(list())
   fma_fit <- ameras:::new_amerasfit(list(
-    CI.computed = FALSE,
     FMA = list(
       coefficients = c(dose = 1),
       samples = matrix(
@@ -266,7 +263,6 @@ test_that("confint validates method-specific inputs and empty sample output", {
     )
   ))
   rc_fit <- ameras:::new_amerasfit(list(
-    CI.computed = FALSE,
     transform = NULL,
     other.args = list(),
     model = list(family = "gaussian"),
@@ -283,22 +279,21 @@ test_that("confint validates method-specific inputs and empty sample output", {
   # add_confint() has separate allowed interval types for sampling-based methods
   # (FMA/BMA) and likelihood/optimization-based methods (RC/ERC/MCML).
   expect_error(
-    add_confint(empty_fit, level = 1, print = FALSE),
+    add_confint(empty_fit, level = 1),
     "level must be a single numeric value between 0 and 1"
   )
   expect_error(
-    add_confint(fma_fit, type = c("percentile", "hpd"), print = FALSE),
+    add_confint(fma_fit, type = c("percentile", "hpd")),
     "Exactly one CI type .* for FMA"
   )
   expect_error(
-    add_confint(rc_fit, type = c("wald.orig", "proflik"), print = FALSE),
+    add_confint(rc_fit, type = c("wald.orig", "proflik")),
     "Exactly one CI type .* for RC"
   )
 
   # If all FMA realizations were excluded upstream, add_confint() should warn and
   # return NA interval bounds rather than failing on the missing sample matrix.
   no_samples_fit <- ameras:::new_amerasfit(list(
-    CI.computed = FALSE,
     FMA = list(
       coefficients = c(dose = 1),
       samples = NULL,
@@ -307,11 +302,10 @@ test_that("confint validates method-specific inputs and empty sample output", {
   ))
   fit_ci <- NULL
   expect_warning(
-    fit_ci <- add_confint(no_samples_fit, type = "percentile", print = FALSE),
+    fit_ci <- add_confint(no_samples_fit, type = "percentile"),
     "No samples available"
   )
 
-  expect_true(fit_ci$CI.computed)
   expect_identical(rownames(fit_ci$FMA$CI), "dose")
   expect_true(all(is.na(fit_ci$FMA$CI$lower)))
   expect_true(all(is.na(fit_ci$FMA$CI$upper)))

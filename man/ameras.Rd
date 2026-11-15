@@ -169,11 +169,9 @@ omitted-row object returned by the missing-value action, when applicable),
 \code{transform} (the used transformation 
 function, if applicable), \code{transform.jacobian} (the used Jacobian function for 
 the transformation, if applicable), \code{other.args} (any other arguments passed to 
-\dots), \code{model} (a list containing the specified model components parsed from 
+\dots), and \code{model} (a list containing the specified model components parsed from
 the formula, including \code{model$data}, which is either the data frame used for
-model fitting when \code{keep.data=TRUE} or \code{NULL} otherwise), and
-\code{CI.computed} (logical, whether confidence intervals have been attached by
-\code{\link{add_confint}}).
+model fitting when \code{keep.data=TRUE} or \code{NULL} otherwise).
 
 For each method supplied to \code{methods}, the output contains a list with components:
   \item{coefficients}{named vector of model coefficients.}
@@ -286,7 +284,7 @@ fit <- ameras(
 coef(fit)
 
 ## Add Wald confidence intervals and display a detailed summary
-fit <- add_confint(fit, type = "wald.orig", print = FALSE)
+fit <- add_confint(fit, type = "wald.orig")
 summary(fit)
 }
 

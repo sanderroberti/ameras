@@ -149,35 +149,6 @@ rerunning the profile calculation.
 
 ``` r
 fit <- add_confint(fit, type=c("wald.orig","percentile"))
-#> RC confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.0293 -0.7401
-#> dose         0.5324  1.0715
-#> 
-#> ERC confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.0314 -0.7384
-#> dose         0.5411  1.1018
-#> 
-#> MCML confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.0193 -0.7323
-#> dose         0.5236  1.0584
-#> 
-#> FMA confidence intervals:
-#> 
-#>               lower   upper
-#> (Intercept) -1.0199 -0.7327
-#> dose         0.5241  1.0594
-#> 
-#> BMA confidence intervals:
-#> 
-#>              lower  upper
-#> (Intercept) -1.019 -0.735
-#> dose         0.552  1.080
 summary(fit)
 #> Call:
 #> ameras(formula = Y.binomial ~ dose(V1:V10), data = ameras_simulated, 

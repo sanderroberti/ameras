@@ -588,8 +588,7 @@ ameras <- function(
       transform = result$transform,
       transform.jacobian = result$transform.jacobian,
       other.args = list(...),
-      model = model_list,
-      CI.computed = FALSE
+      model = model_list
     ),
     result[setdiff(names(result), c("transform", "transform.jacobian"))]
   )

@@ -47,7 +47,6 @@ test_that("summary uses structured timing when available", {
     call = quote(ameras(Y ~ dose(D), data = dat)),
     num.rows = 1,
     num.realizations = 1,
-    CI.computed = FALSE,
     RC = list(
       coefficients = c(a = 1),
       sd = c(a = 0.1),
@@ -74,7 +73,6 @@ test_that("printed runtime totals are rounded for display", {
     call = quote(ameras(Y ~ dose(D), data = dat)),
     num.rows = 1,
     num.realizations = 1,
-    CI.computed = FALSE,
     RC = list(
       coefficients = c(a = 1),
       sd = c(a = 0.1),
@@ -109,7 +107,6 @@ test_that("summary falls back to legacy runtime strings", {
     call = quote(ameras(Y ~ dose(D), data = dat)),
     num.rows = 1,
     num.realizations = 1,
-    CI.computed = FALSE,
     RC = list(
       coefficients = c(a = 1),
       sd = c(a = 0.1),
@@ -130,7 +127,6 @@ test_that("confint records CI timing for sample-based intervals", {
     call = quote(ameras(Y ~ dose(D), data = dat, methods = "FMA")),
     num.rows = 3,
     num.realizations = 1,
-    CI.computed = FALSE,
     FMA = list(
       coefficients = c(a = 1),
       sd = c(a = 0.1),
@@ -142,9 +138,9 @@ test_that("confint records CI timing for sample-based intervals", {
     )
   ))
 
-  out <- suppressMessages(add_confint(object, type = "percentile", print = FALSE))
+  out <- suppressMessages(add_confint(object, type = "percentile"))
 
-  expect_true(out$CI.computed)
+  expect_named(out$FMA$CI, c("lower", "upper"))
   expect_equal(out$FMA$timing$fit$cpu, 1)
   expect_true(out$FMA$timing$ci$cpu >= 0)
   expect_equal(

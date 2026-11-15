@@ -90,11 +90,6 @@
     \item{\code{total_runtime_seconds}}{
       The total CPU computation time in seconds across all methods.
     }
-    \item{\code{CI.computed}}{
-      Logical. \code{TRUE} if confidence intervals have been attached
-      via \code{\link{add_confint}}, \code{FALSE}
-      otherwise.
-    }
   }
 
   \code{coef.summary.amerasfit} returns the \code{coefficients} data frame
@@ -104,8 +99,10 @@
 \details{
   \code{summary.amerasfit} collects results from all estimation methods
   present in the fitted object into a single summary table. Columns for
-  confidence intervals are only printed if they have been attached by
-  \code{\link{add_confint}}. When BMA results are present
+  confidence intervals are included when any fitted method contains a stored
+  \code{CI} component, even if its bounds are \code{NA}. Methods without
+  attached intervals receive \code{NA} entries in these columns.
+  When BMA results are present
   in the fitted object, the summary table includes columns \code{Rhat} and 
   \code{n.eff}, with \code{NA} values for all other methods. Profile
   likelihood diagnostic columns such as \code{pval.lower} and

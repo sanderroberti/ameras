@@ -4,8 +4,10 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+
 ## ----setup--------------------------------------------------------------------
 library(ameras)
+
 
 
 ## ----fits1, eval = identical(Sys.getenv("NOT_CRAN"), "true")------------------
@@ -24,10 +26,10 @@ ci.ameras.proflik
 # Attach intervals when they should be included in the fit summary
 fit.ameras.waldorig <- add_confint(
   fit.ameras,
-  type="wald.orig",
-  print=FALSE
+  type="wald.orig"
 )
 summary(fit.ameras.waldorig)
+
 
 ## ----fits2, eval = identical(Sys.getenv("NOT_CRAN"), "true")------------------
 set.seed(123)

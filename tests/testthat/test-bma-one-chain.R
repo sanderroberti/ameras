@@ -47,7 +47,7 @@ test_that("one-chain BMA fits support amerasfit methods", {
   expect_s3_class(fit, "amerasfit")
   expect_true(all(c(
     "call", "formula", "num.rows", "num.realizations", "transform",
-    "transform.jacobian", "other.args", "model", "CI.computed", "BMA"
+    "transform.jacobian", "other.args", "model", "BMA"
   ) %in% names(fit)))
   expect_named(fit$BMA$coefficients, c("(Intercept)", "dose", "sigma"))
   expect_true(is.matrix(fit$BMA$samples))
@@ -74,8 +74,7 @@ test_that("one-chain BMA fits support amerasfit methods", {
   expect_true(all(is.na(coefficient_table$n.eff)))
 
   # Percentile intervals should work directly from the one-chain sample matrix.
-  fit_ci <- suppressMessages(add_confint(fit, type = "percentile", print = FALSE))
-  expect_true(fit_ci$CI.computed)
+  fit_ci <- suppressMessages(add_confint(fit, type = "percentile"))
   expect_named(fit_ci$BMA$CI, c("lower", "upper"))
   expect_identical(rownames(fit_ci$BMA$CI), names(fit$BMA$coefficients))
   expect_true(all(is.finite(as.matrix(fit_ci$BMA$CI))))
@@ -143,10 +142,10 @@ test_that("one-parameter BMA fits preserve sample matrix dimensions", {
   # CI computation should preserve the single model parameter name after
   # stacking chains and dropping the sampled realization indicator.
   fit_percentile <- suppressMessages(
-    add_confint(fit, type = "percentile", print = FALSE)
+    add_confint(fit, type = "percentile")
   )
   expect_identical(rownames(fit_percentile$BMA$CI), "dose")
 
-  fit_hpd <- suppressMessages(add_confint(fit, type = "hpd", print = FALSE))
+  fit_hpd <- suppressMessages(add_confint(fit, type = "hpd"))
   expect_identical(rownames(fit_hpd$BMA$CI), "dose")
 })

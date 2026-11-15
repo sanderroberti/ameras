@@ -341,19 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ameras)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; Loading required package: nimble</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; nimble version 1.4.3 is loaded.</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; For more information on NIMBLE and a User Manual,</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; please visit https://R-nimble.org.</span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;nimble&#39;</span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt; The following object is masked from &#39;package:stats&#39;:</span></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co">#&gt;     simulate</span></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co">#&gt; The following object is masked from &#39;package:base&#39;:</span></span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co">#&gt;     declare</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ameras)</span></code></pre></div>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>To compute confidence intervals, first fit the model using
@@ -368,12 +356,15 @@ time in the fit. Because <code>add_confint()</code> returns an amended
 copy invisibly, assign its result to retain this information. This is
 particularly useful for computationally expensive profile likelihood
 intervals: subsequent summaries use the attached bounds and diagnostics
-without rerunning the profile calculation. Several interval types are
-supported through the <code>type</code> argument. When the fitted object
-contains at least one of <code>RC</code>, <code>ERC</code>, and
-<code>MCML</code> and at least one of <code>FMA</code> and
-<code>BMA</code>, <code>type</code> should contain one interval type for
-each group.</p>
+without rerunning the profile calculation. The interval table is
+displayed by <code>summary()</code>, rather than automatically by
+<code>add_confint()</code>; use
+<code>print(summary(fit), digits = 3)</code>, for example, to control
+the printed precision. Several interval types are supported through the
+<code>type</code> argument. When the fitted object contains at least one
+of <code>RC</code>, <code>ERC</code>, and <code>MCML</code> and at least
+one of <code>FMA</code> and <code>BMA</code>, <code>type</code> should
+contain one interval type for each group.</p>
 </div>
 <div id="regression-calibration-extended-regression-calibration-and-monte-carlo-maximum-likelihood" class="section level1">
 <h1>Regression calibration, extended regression calibration, and Monte
@@ -403,14 +394,53 @@ is defined as <span class="math display">\[PL_p (\theta_p^*) =
 log (partial) likelihood. Next, profile confidence intervals <span class="math inline">\((\theta_p^l, \theta_p^h)\)</span> are obtained for
 parameter <span class="math inline">\(\theta_p\)</span> at significance
 level <span class="math inline">\(\alpha\)</span> by solving <span class="math inline">\(-2 \{PL_p(\theta_p^*) -
-\ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}\)</span> using the
-bisection method, with <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> the maximum
+\ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}\)</span> using
+<code>uniroot()</code> after finding a bracket, with <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> the maximum
 likelihood estimate. Note that profile likelihoods are more
 computationally intensive to obtain. For this reason,
 <code>confint</code> offers the option to only determine them for the
 exposure-related parameters, which is the default setting. To obtain
 profile likelihood intervals for all parameters, use
 <code>parm = &quot;all&quot;</code>.</p>
+<div id="bracketing-and-numerical-controls" class="section level2">
+<h2>Bracketing and numerical controls</h2>
+<p>Before solving for an endpoint, both <code>confint()</code> and
+<code>add_confint()</code> first search for a bracket separately for the
+lower and upper bounds. A bracket consists of two parameter values
+between which the likelihood-ratio p-value crosses the target
+<code>1 - level</code> (for example, <code>0.05</code> for a 95%
+interval).</p>
+<p>The search starts from the fitted parameter value on the internal
+optimizer scale. When the stored Hessian is usable, the initial
+candidate is four approximate standard errors away in the direction of
+the bound; otherwise, fallback starting points are used. If the target
+is not reached, the search distance is doubled, with up to 12 doublings.
+Each profile evaluation may require re-optimizing the nuisance
+parameters, so bracketing itself can be costly, especially for ERC and
+MCML.</p>
+<p>Once a bracket has been found, <code>uniroot()</code> locates the
+bound within it. Root finding defaults to <code>tol.profCI = 1e-6</code>
+and <code>maxit.profCI = 100</code>. The tolerance applies to the
+internal optimizer parameter scale, rather than the p-value scale. The
+iteration limit is a ceiling: computation stops earlier when convergence
+is reached. A larger tolerance can reduce computation time when less
+precision is acceptable, but a bound is still returned as
+<code>NA</code> with a warning if root finding warns or its p-value
+differs from the target <code>1 - level</code> by more than
+<code>0.005</code>. Warnings distinguish inaccurate roots from iteration
+limits and bracketing failures; changing <code>tol.profCI</code> or
+<code>maxit.profCI</code> does not extend the separate bracketing search
+or change the nuisance-parameter optimizer.</p>
+<p>If no suitable bracket is found, the corresponding bound is returned
+as <code>NA</code> with a warning showing the last attempted value and
+its p-value. This can reflect a limited search range, parameter scaling,
+numerical instability in the constrained optimizations, or the absence
+of a finite bound. It does not prove that the mathematical bound is
+infinite. Check the original fit’s convergence diagnostics and parameter
+scaling when investigating such a failure.</p>
+</div>
+<div id="example" class="section level2">
+<h2>Example</h2>
 <p>To illustrate, we determine the three types of confidence intervals
 for a regression calibration analysis using the example data, using a
 linear excess relative risk model with the default exponential
@@ -446,38 +476,38 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; dose         0.6050480  1.1827031</span></span>
 <span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>ci.ameras.proflik</span>
 <span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt;                  2.5 %     97.5 %</span></span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt; (Intercept) -1.2391335 -0.8971041</span></span>
-<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt; X1           0.2908058  0.5916523</span></span>
-<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt; X2          -0.5255986 -0.1490250</span></span>
-<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; dose         0.6009122  1.1784445</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt; (Intercept) -1.2410617 -0.8960193</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt; X1           0.2916105  0.5906751</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt; X2          -0.5241009 -0.1498246</span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; dose         0.6005363  1.1776549</span></span>
 <span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a></span>
 <span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co"># Attach intervals when they should be included in the fit summary</span></span>
 <span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>fit.ameras.waldorig <span class="ot">&lt;-</span> <span class="fu">add_confint</span>(</span>
 <span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>  fit.ameras,</span>
-<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>  <span class="at">type=</span><span class="st">&quot;wald.orig&quot;</span>,</span>
-<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>  <span class="at">print=</span><span class="cn">FALSE</span></span>
-<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>)</span>
-<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.waldorig)</span>
-<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
-<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt;     X2, data = ameras_simulated, family = &quot;binomial&quot;, methods = c(&quot;RC&quot;))</span></span>
-<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
-<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
-<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
-<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt;      RC 0.238 0.0 0.238</span></span>
-<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
-<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
-<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788  -1.2363  -0.8918</span></span>
-<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628   0.2914   0.5904</span></span>
-<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544  -0.5230  -0.1489</span></span>
-<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517   0.5663   1.1353</span></span></code></pre></div>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>  <span class="at">type=</span><span class="st">&quot;wald.orig&quot;</span></span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>)</span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="fu">summary</span>(fit.ameras.waldorig)</span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt; ameras(formula = Y.binomial ~ dose(V1:V10, model = &quot;ERR&quot;) + X1 + </span></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt;     X2, data = ameras_simulated, family = &quot;binomial&quot;, methods = c(&quot;RC&quot;))</span></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt;  Method  Fit    CI Total</span></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt;      RC 0.27 0.001 0.271</span></span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a><span class="co">#&gt;  Method        Term Estimate      SE CI.lower CI.upper</span></span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a><span class="co">#&gt;      RC (Intercept)  -1.0641 0.08788  -1.2363  -0.8918</span></span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a><span class="co">#&gt;      RC          X1   0.4409 0.07628   0.2914   0.5904</span></span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a><span class="co">#&gt;      RC          X2  -0.3360 0.09544  -0.5230  -0.1489</span></span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a><span class="co">#&gt;      RC        dose   0.8508 0.14517   0.5663   1.1353</span></span></code></pre></div>
+</div>
 </div>
 <div id="frequentist-and-bayesian-model-averaging" class="section level1">
 <h1>Frequentist and Bayesian model averaging</h1>

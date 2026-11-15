@@ -468,7 +468,7 @@ details.</p>
 <p>The output is a list object with a <code>call</code> component, and
 one component for each method, each being a list:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">str</span>(fit.ameras.linreg)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; List of 16</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; List of 15</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;  $ call              : language ameras(formula = Y.gaussian ~ dose(V1:V10) + X1 + X2, data = ameras_simulated,      family = &quot;gaussian&quot;, methods | __truncated__ ...</span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;  $ formula           :Class &#39;formula&#39;  language Y.gaussian ~ dose(V1:V10) + X1 + X2</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;   .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: base&gt; </span></span>
@@ -549,7 +549,6 @@ one component for each method, each being a list:</p>
 <span id="cb4-80"><a href="#cb4-80" tabindex="-1"></a><span class="co">#&gt;   ..$ loglim       : num 1e-30</span></span>
 <span id="cb4-81"><a href="#cb4-81" tabindex="-1"></a><span class="co">#&gt;   ..$ optim.method : chr &quot;Nelder-Mead&quot;</span></span>
 <span id="cb4-82"><a href="#cb4-82" tabindex="-1"></a><span class="co">#&gt;   ..$ control      : NULL</span></span>
-<span id="cb4-83"><a href="#cb4-83" tabindex="-1"></a><span class="co">#&gt;  $ CI.computed       : logi FALSE</span></span>
 <span id="cb4-84"><a href="#cb4-84" tabindex="-1"></a><span class="co">#&gt;  $ RC                :List of 7</span></span>
 <span id="cb4-85"><a href="#cb4-85" tabindex="-1"></a><span class="co">#&gt;   ..$ coefficients: Named num [1:5] -1.362 0.481 -0.519 1.166 1.108</span></span>
 <span id="cb4-86"><a href="#cb4-86" tabindex="-1"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:5] &quot;(Intercept)&quot; &quot;X1&quot; &quot;X2&quot; &quot;dose&quot; ...</span></span>

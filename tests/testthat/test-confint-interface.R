@@ -11,7 +11,6 @@ make_confint_test_fit <- function(include_fma = FALSE) {
     timing = ameras:::new_method_timing()
   )
   fit <- list(
-    CI.computed = FALSE,
     transform = NULL,
     other.args = list(),
     RC = method_fit
@@ -31,7 +30,7 @@ make_confint_test_fit <- function(include_fma = FALSE) {
 test_that("confint returns bounds without amending a one-method fit", {
   fit <- make_confint_test_fit()
   visibility <- withVisible(confint(fit, type = "wald.orig"))
-  amended <- add_confint(fit, type = "wald.orig", print = FALSE)
+  amended <- add_confint(fit, type = "wald.orig")
 
   expect_true(visibility$visible)
   expect_true(is.matrix(visibility$value))
@@ -40,7 +39,6 @@ test_that("confint returns bounds without amending a one-method fit", {
     unname(visibility$value),
     unname(as.matrix(amended$RC$CI[, c("lower", "upper")]))
   )
-  expect_false(fit$CI.computed)
   expect_null(fit$RC$CI)
 })
 
@@ -50,8 +48,7 @@ test_that("confint returns a named list for multiple fitted methods", {
   result <- confint(fit, type = c("wald.orig", "percentile"))
   amended <- add_confint(
     fit,
-    type = c("wald.orig", "percentile"),
-    print = FALSE
+    type = c("wald.orig", "percentile")
   )
 
   expect_named(result, c("RC", "FMA"))
@@ -76,7 +73,6 @@ test_that("confint formatting excludes stored profile diagnostics", {
     iter.upper = c(3L, NA_integer_),
     row.names = c("a", "b")
   )
-  fit$CI.computed <- TRUE
 
   result <- ameras:::format_confint_bounds(fit, level = 0.95)
 
@@ -95,7 +91,41 @@ test_that("confint formatting excludes stored profile diagnostics", {
 })
 
 
-test_that("printing arguments direct confint users to add_confint", {
+test_that("summaries detect attached intervals from method results", {
+  fit <- make_confint_test_fit(include_fma = TRUE)
+  fit$call <- quote(ameras(Y ~ dose(D), data = dat))
+  fit$num.rows <- 2L
+  without_ci <- summary(fit)
+
+  expect_false("CI.computed" %in% names(without_ci))
+  expect_named(coef(without_ci), c("Method", "Term", "Estimate", "SE"))
+  expect_output(print(without_ci), "confidence intervals not yet computed")
+
+  # A stored CI counts even when every bound is NA. A missing parameter or
+  # method receives NA bounds so the combined table keeps the same columns.
+  for (bounds in list(c(NA_real_, NA_real_), c(1.5, 2.5))) {
+    fit$RC$CI <- data.frame(
+      lower = bounds[1],
+      upper = bounds[2],
+      row.names = "b"
+    )
+    with_ci <- summary(fit)
+
+    expect_equal(coef(with_ci)$CI.lower, c(NA, bounds[1], NA, NA))
+    expect_equal(coef(with_ci)$CI.upper, c(NA, bounds[2], NA, NA))
+    expect_false(any(grepl(
+      "confidence intervals not yet computed",
+      capture.output(print(with_ci)),
+      fixed = TRUE
+    )))
+  }
+
+  fit$RC$CI <- NULL
+  expect_identical(summary(fit), without_ci)
+})
+
+
+test_that("CI methods leave interval-table printing to the caller", {
   fit <- make_confint_test_fit()
 
   for (argument in c("print", "digits")) {
@@ -105,7 +135,12 @@ test_that("printing arguments direct confint users to add_confint", {
     )
     expect_error(
       do.call(confint, args),
-      "only supported by `add_confint\\(\\)`",
+      "not supported by `confint\\(\\)`.*Assign its result.*print\\(confint",
+      info = argument
+    )
+    expect_warning(
+      do.call(add_confint, args),
+      "extra argument",
       info = argument
     )
   }
@@ -128,23 +163,22 @@ test_that("printing arguments direct confint users to add_confint", {
 
 test_that("add_confint invisibly amends a copy with the requested intervals", {
   fit <- make_confint_test_fit()
-  visibility <- withVisible(add_confint(
+  output <- capture.output(visibility <- withVisible(add_confint(
     fit,
-    type = "wald.orig",
-    print = FALSE
-  ))
+    type = "wald.orig"
+  )))
 
+  expect_identical(output, character())
   expect_false(visibility$visible)
   expect_s3_class(visibility$value, "amerasfit")
-  expect_true(visibility$value$CI.computed)
+  expect_false("CI.computed" %in% names(visibility$value))
   expect_named(visibility$value$RC$CI, c("lower", "upper"))
-  expect_false(fit$CI.computed)
+  expect_null(fit$RC$CI)
 
   replaced <- add_confint(
     visibility$value,
     type = "wald.orig",
-    level = 0.90,
-    print = FALSE
+    level = 0.90
   )
   expected <- confint(fit, type = "wald.orig", level = 0.90)
 

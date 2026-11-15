@@ -8,8 +8,8 @@
   attaching intervals and their diagnostics to an `amerasfit` object is now
   provided by `add_confint()`. Both functions always compute the requested
   intervals, so a new `add_confint()` call replaces intervals already attached
-  to the returned object. The `force` argument has been removed; `print` and
-  `digits` are now supported by `add_confint()` only.
+  to the returned object. The `force`, `print`, and `digits` arguments have
+  been removed; use `summary()` to display intervals attached to a fit.
 * `coef()` now returns a named numeric vector when an `amerasfit` object
   contains one fitted method. Objects containing multiple methods continue to
   return a data frame with one column per method.
@@ -17,6 +17,9 @@
   `coefficients` and removed the package-specific `summary_table()` accessor.
   Use `coef(summary(fit))` to retrieve the table. Printed summaries are
   unchanged.
+* Removed the redundant `CI.computed` component from fitted objects and
+  summaries. Attached intervals are detected from method-specific `CI`
+  components.
 * Removed the deprecated direct argument interface to `ameras()`. Models must
   now be specified through `formula`; calls using the former `Y`, `dosevars`,
   `doseRRmod`, `deg`, `M`, `X`, `offset`, `entry`, `exit`, or `setnr`
@@ -49,6 +52,13 @@
 
 ## Improvements
 
+* Profile likelihood intervals now default to `tol.profCI = 1e-6` and
+  `maxit.profCI = 100`, replacing `1e-2` and `20` to improve accuracy for
+  narrow intervals. Larger tolerances can still be requested to reduce
+  computation time, especially for ERC and MCML; the p-value accuracy check
+  is unchanged. Warnings now suggest decreasing the tolerance for inaccurate
+  roots or increasing the iteration limit when reached, retain root-finding
+  warning details, and give separate guidance for bracketing failures.
 * Formula parsing now requires a two-sided formula and rejects unknown or
   duplicated named arguments in `dose()`, invalid model or degree values,
   missing or multiple `dose()` terms, empty dose selections, and special terms

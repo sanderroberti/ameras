@@ -295,28 +295,6 @@ coef.amerasfit <- function(object, ...) {
   res
 }
 
-print_confint <- function(object, digits = max(3, getOption("digits") - 3)) {
-  methods_present <- intersect(
-    names(object),
-    c("RC", "ERC", "MCML", "FMA", "BMA")
-  )
-
-  for (m in methods_present) {
-    if (is.null(object[[m]]$CI)) {
-      next()
-    }
-
-    cat(m, "confidence intervals:\n\n")
-    print(
-      format(object[[m]]$CI[, c("lower", "upper")], digits = digits),
-      row.names = TRUE
-    )
-    cat("\n")
-  }
-
-  invisible(object)
-}
-
 summary.amerasfit <- function(object, ...) {
   chkDots(...)
 
@@ -326,6 +304,7 @@ summary.amerasfit <- function(object, ...) {
   )]
 
   bma <- ("BMA" %in% names(object0))
+  has_ci <- any(vapply(object0, function(x) !is.null(x$CI), logical(1)))
 
   coefficient_table <- do.call(
     "rbind",
@@ -344,11 +323,13 @@ summary.amerasfit <- function(object, ...) {
         SE = se
       )
 
-      if (object$CI.computed) {
+      if (has_ci) {
         CI <- y$CI
         CI.lower <- CI.upper <- coef * NA
-        CI.lower[match(rownames(CI), names(coef))] <- CI$lower
-        CI.upper[match(rownames(CI), names(coef))] <- CI$upper
+        if (!is.null(CI)) {
+          CI.lower[match(rownames(CI), names(coef))] <- CI$lower
+          CI.upper[match(rownames(CI), names(coef))] <- CI$upper
+        }
 
         res <- cbind(
           res,
@@ -379,8 +360,7 @@ summary.amerasfit <- function(object, ...) {
     row_info = row_info_from_amerasfit(object),
     coefficients = coefficient_table,
     runtime_table = runtime_table,
-    total_runtime_seconds = total_runtime,
-    CI.computed = object$CI.computed
+    total_runtime_seconds = total_runtime
   )
 
   class(ans) <- "summary.amerasfit"
@@ -428,7 +408,7 @@ print.summary.amerasfit <- function(
   cat("\nSummary of coefficients by method:\n\n")
   print(format(x$coefficients, digits = digits, nsmall = 2), row.names = FALSE)
 
-  if (!x$CI.computed) {
+  if (!all(c("CI.lower", "CI.upper") %in% names(x$coefficients))) {
     cat(
       "\nNote: confidence intervals not yet computed.",
       "Use add_confint() to add them.\n"
@@ -506,11 +486,9 @@ compute_and_attach_confint <- function(
   parm = "dose",
   level = 0.95,
   type = c("proflik", "percentile"),
-  maxit.profCI = 20,
-  tol.profCI = 1e-2,
-  data = NULL,
-  print = TRUE,
-  digits = max(3, getOption("digits") - 3)
+  maxit.profCI = 100,
+  tol.profCI = 1e-6,
+  data = NULL
 ) {
   # Validate level
   if (!is.numeric(level) || length(level) != 1 || level <= 0 || level >= 1) {
@@ -525,7 +503,6 @@ compute_and_attach_confint <- function(
     stop("No fitted methods found in object")
   }
 
-  res <- NULL
   for (it in seq_along(fitobj)) {
     method <- names(fitobj)[it]
     ci_timer <- start_runtime_timer()
@@ -626,10 +603,6 @@ compute_and_attach_confint <- function(
     )
   }
 
-  object$CI.computed <- TRUE
-  if (print) {
-    print_confint(object, digits = digits)
-  }
   invisible(object)
 }
 
@@ -639,11 +612,9 @@ add_confint.amerasfit <- function(
   parm = "dose",
   level = 0.95,
   type = c("proflik", "percentile"),
-  maxit.profCI = 20,
-  tol.profCI = 1e-2,
+  maxit.profCI = 100,
+  tol.profCI = 1e-6,
   data = NULL,
-  print = TRUE,
-  digits = max(3, getOption("digits") - 3),
   ...
 ) {
   dots_call <- match.call(expand.dots = FALSE)$...
@@ -663,9 +634,7 @@ add_confint.amerasfit <- function(
     type = type,
     maxit.profCI = maxit.profCI,
     tol.profCI = tol.profCI,
-    data = data,
-    print = print,
-    digits = digits
+    data = data
   )
 }
 
@@ -705,8 +674,8 @@ confint.amerasfit <- function(
   parm = "dose",
   level = 0.95,
   type = c("proflik", "percentile"),
-  maxit.profCI = 20,
-  tol.profCI = 1e-2,
+  maxit.profCI = 100,
+  tol.profCI = 1e-6,
   data = NULL,
   ...
 ) {
@@ -719,19 +688,20 @@ confint.amerasfit <- function(
       call. = FALSE
     )
   }
-  attachment_args <- intersect(
+  printing_args <- intersect(
     names(dots_call),
     c("print", "digits")
   )
-  if (length(attachment_args)) {
+  if (length(printing_args)) {
     stop(
       paste0(
         "`",
-        paste(attachment_args, collapse = "`, `"),
+        paste(printing_args, collapse = "`, `"),
         "` ",
-        if (length(attachment_args) == 1L) "is" else "are",
-        " only supported by `add_confint()`. ",
-        "`confint()` now returns confidence interval bounds."
+        if (length(printing_args) == 1L) "is" else "are",
+        " not supported by `confint()`. ",
+        "Assign its result to suppress display, or use ",
+        "`print(confint(...), digits = ...)` to format the bounds."
       ),
       call. = FALSE
     )
@@ -745,8 +715,7 @@ confint.amerasfit <- function(
     type = type,
     maxit.profCI = maxit.profCI,
     tol.profCI = tol.profCI,
-    data = data,
-    print = FALSE
+    data = data
   )
 
   format_confint_bounds(object_with_confint, level = level)

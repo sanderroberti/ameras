@@ -40,13 +40,16 @@ that old calls fail explicitly rather than being silently reinterpreted.
   or a named list of matrices for multiple methods. Code that previously used
   `fit <- confint(fit, ...)` should use `fit <- add_confint(fit, ...)` to
   attach intervals, diagnostics, and computation timing. Both functions
-  compute the requested intervals on every call. The `force` argument has
-  been removed; `print` and `digits` are supported by `add_confint()` only.
+  compute the requested intervals on every call. The `force`, `print`, and
+  `digits` arguments have been removed; attached intervals are displayed
+  through `summary()`.
 * `coef(fit)` now returns a named numeric vector for a single fitted method.
   The data-frame return for multiple methods is unchanged.
 * The coefficient table in `summary(fit)` is now named `coefficients` rather
   than `summary_table`. The `summary_table()` accessor has been removed;
   use `coef(summary(fit))` instead. Printed summaries are unchanged.
+* The redundant `CI.computed` component has been removed from fitted objects
+  and summaries. Attached intervals are detected from the stored method results.
 * The bundled simulated dataset has been renamed from `data` to
   `ameras_simulated` to give it a descriptive, package-specific name.
 

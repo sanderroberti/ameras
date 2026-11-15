@@ -10,10 +10,10 @@
 
 ---
 
-    structure(list(lower = c(NA, 0.124824485619156), upper = c(0.481936149545665,
-    0.388528138266399), pval.lower = c(NA, 0.0497852731937511), pval.upper = c(0.0500507010336095,
-    0.0493297310517574), iter.lower = c(NA, 7L), iter.upper = c(11L,
-    7L)), row.names = c("dose", "dose_squared"), class = "data.frame")
+    structure(list(lower = c(NA, 0.124961898141977), upper = c(0.482045840196121,
+    0.388181572572819), pval.lower = c(NA, 0.0499999897871505), pval.upper = c(0.0500000132359157,
+    0.050000132266128), iter.lower = c(NA, 8L), iter.upper = c(14L,
+    10L)), row.names = c("dose", "dose_squared"), class = "data.frame")
 
 ---
 
@@ -64,10 +64,10 @@
 
 ---
 
-    structure(list(lower = c(NA, 0.23166893036439), upper = c(NA,
-    0.420152375346261), pval.lower = c(NA, 0.0493096605911812), pval.upper = c(NA,
-    0.0494652222864629), iter.lower = c(NA, 6L), iter.upper = c(NA,
-    4)), row.names = c("dose", "dose_squared"), class = "data.frame")
+    structure(list(lower = c(NA, 0.23189868120243), upper = c(NA,
+    0.419875835140352), pval.lower = c(NA, 0.049999971296101), pval.upper = c(NA,
+    0.0500000040749272), iter.lower = c(NA, 8L), iter.upper = c(NA,
+    7L)), row.names = c("dose", "dose_squared"), class = "data.frame")
 
 ---
 
@@ -117,10 +117,10 @@
 
 ---
 
-    structure(list(lower = c(NA, 0.13142716402424), upper = c(0.44192112536042,
-    0.380982697766377), pval.lower = c(NA, 0.049834619436305), pval.upper = c(0.0500763939119137,
-    0.0494530130995442), iter.lower = c(NA, 7L), iter.upper = c(14L,
-    7L)), row.names = c("dose", "dose_squared"), class = "data.frame")
+    structure(list(lower = c(NA, 0.131530742615537), upper = c(0.442084337858745,
+    0.380707391677936), pval.lower = c(NA, 0.0500000035177202), pval.upper = c(0.050000000616259,
+    0.0499999872763763), iter.lower = c(NA, 9L), iter.upper = c(16L,
+    10L)), row.names = c("dose", "dose_squared"), class = "data.frame")
 
 ---
 

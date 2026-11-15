@@ -76,8 +76,8 @@ compute_proflik_CI <- function(
   data,
   parm = "dose",
   level = 0.95,
-  maxit.profCI = 20,
-  tol.profCI = 1e-2,
+  maxit.profCI = 100,
+  tol.profCI = 1e-6,
   optim.method = "Nelder-Mead",
   control = list(reltol = 1e-10)
 ) {
@@ -272,7 +272,8 @@ warn_profile_bound_failure <- function(
   index,
   inpar,
   transform = NULL,
-  other.args = NULL
+  other.args = NULL,
+  advice = NULL
 ) {
   pval <- target + alpha
   reported <- profile_reported_value(
@@ -306,7 +307,8 @@ warn_profile_bound_failure <- function(
       format_profile_boundary(pval),
       ", target p-value: ",
       format_profile_boundary(alpha),
-      "."
+      ".",
+      if (!is.null(advice)) paste0(" ", advice)
     ),
     call. = FALSE
   )
@@ -418,7 +420,12 @@ solve_profile_bound <- function(
       index = index,
       inpar = inpar,
       transform = transform,
-      other.args = other.args
+      other.args = other.args,
+      advice = paste0(
+        "Check the original fit's convergence diagnostics and ",
+        "parameter scaling; ",
+        "a finite bound may not exist."
+      )
     )
     return(list(
       root = NA_real_,
@@ -449,6 +456,12 @@ solve_profile_bound <- function(
     }
   )
 
+  numerical_advice <- paste0(
+    "Check the original fit's convergence diagnostics and parameter scaling. ",
+    "Numerical instability during the constrained optimizations may ",
+    "prevent reliable profile likelihood bounds."
+  )
+
   if (is.null(root)) {
     warn_profile_bound_failure(
       parname = parname,
@@ -464,7 +477,8 @@ solve_profile_bound <- function(
       index = index,
       inpar = inpar,
       transform = transform,
-      other.args = other.args
+      other.args = other.args,
+      advice = numerical_advice
     )
     return(list(root = NA_real_, f.root = bracket$last.target, iter = NA_integer_))
   }
@@ -474,6 +488,28 @@ solve_profile_bound <- function(
       is.na(root$f.root) ||
       abs(root$f.root) > target.tol
   ) {
+    # A root-finding iteration limit calls for a larger budget, whereas a
+    # converged root with an inaccurate p-value calls for a tighter tolerance.
+    # Retain the original warning so other numerical failures are diagnosable.
+    advice <- if (!is.null(root_warning)) {
+      paste0(
+        "Root-finding warning: ", root_warning, ". ",
+        if (isTRUE(root$iter >= maxit.profCI)) {
+          paste0(
+            "Increase maxit.profCI (currently ", maxit.profCI, ")."
+          )
+        } else {
+          numerical_advice
+        }
+      )
+    } else {
+      paste0(
+        "Try decreasing tol.profCI (currently ",
+        format_profile_boundary(tol.profCI),
+        "). ",
+        numerical_advice
+      )
+    }
     warn_profile_bound_failure(
       parname = parname,
       direction = direction_name,
@@ -484,7 +520,8 @@ solve_profile_bound <- function(
       index = index,
       inpar = inpar,
       transform = transform,
-      other.args = other.args
+      other.args = other.args,
+      advice = advice
     )
     return(list(root = NA_real_, f.root = root$f.root, iter = root$iter))
   }
@@ -501,8 +538,8 @@ compute_proflik_ci_one <- function(
   lowlim,
   uplim,
   alpha = 0.05,
-  maxit.profCI = 20,
-  tol.profCI = 1e-2,
+  maxit.profCI = 100,
+  tol.profCI = 1e-6,
   optim.method = "Nelder-Mead",
   control = list(reltol = 1e-10),
   parname = "parameter",

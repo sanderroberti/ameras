@@ -77,8 +77,7 @@ and confidence-interval timing information.
 
 ```{r gaussian-summary}
 fit_ameras_gaussian <- add_confint(fit_ameras_gaussian,
-                                   type = "wald.orig",
-                                   print = FALSE)
+                                   type = "wald.orig")
 summary(fit_ameras_gaussian)
 ```
 

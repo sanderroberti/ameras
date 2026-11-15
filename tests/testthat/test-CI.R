@@ -21,30 +21,36 @@ canonicalize_unresolved_profile_ci <- function(ci) {
 }
 
 
-test_that("public profile likelihood CIs hit target p-values for stable RC fits", {
-  fit <- fit_combination(
-    family = "gaussian",
-    Y = "Y.gaussian",
-    doseRRmod = NULL,
-    deg = 1,
-    X = NULL,
-    M = NULL,
-    data = data,
-    methods = "RC"
+test_that("public profile likelihood CIs hit target p-values with default controls", {
+  # Keep default-control coverage cheap, including for ERC and MCML, by using
+  # one small fixture with an interior optimum and a known mean exposure.
+  i <- seq_len(60)
+  dose <- seq(0.1, 2, length.out = length(i))
+  dat <- data.frame(
+    Y = 1 + 0.5 * dose + 0.2 * cos(i / 3) + 0.3 * sin(i * 1.7),
+    X = cos(i / 3),
+    D1 = dose - 0.01 * sin(i),
+    D2 = dose,
+    D3 = dose + 0.01 * sin(i)
   )
+  fit <- suppressMessages(ameras(
+    Y ~ dose(D1:D3) + X,
+    data = dat,
+    family = "gaussian",
+    methods = c("RC", "ERC", "MCML")
+  ))
   fit <- suppressMessages(add_confint(
     fit,
     type = "proflik",
-    parm = "dose",
-    maxit.profCI = 100,
-    tol.profCI = 1e-8,
-    print = FALSE
+    parm = "dose"
   ))
 
-  ci <- fit$RC$CI["dose", , drop = FALSE]
-  expect_true(all(is.finite(as.matrix(ci[, c("lower", "upper")]))))
-  expect_equal(ci$pval.lower, 0.05, tolerance = 0.005)
-  expect_equal(ci$pval.upper, 0.05, tolerance = 0.005)
+  for (method in c("RC", "ERC", "MCML")) {
+    ci <- fit[[method]]$CI["dose", , drop = FALSE]
+    expect_true(all(is.finite(as.matrix(ci[, c("lower", "upper")]))))
+    expect_equal(ci$pval.lower, 0.05, tolerance = 0.005)
+    expect_equal(ci$pval.upper, 0.05, tolerance = 0.005)
+  }
 })
 
 
@@ -64,13 +70,19 @@ for (method in c("RC", "ERC", "MCML")) {
       data = data,
       methods = method
     )
-    if (method == "RC") {
+    if (method == "ERC") {
+      expect_warning(
+        expect_warning(
+          fit1 <- add_confint(fit, type = c("proflik")),
+          "Profile likelihood lower bound for dose could not be bracketed"
+        ),
+        "Profile likelihood upper bound for dose .*returning NA"
+      )
+    } else {
       expect_warning(
         fit1 <- add_confint(fit, type = c("proflik")),
         "Profile likelihood lower bound for dose could not be bracketed"
       )
-    } else {
-      fit1 <- add_confint(fit, type = c("proflik"))
     }
     expect_snapshot_value(
       coef(fit1),

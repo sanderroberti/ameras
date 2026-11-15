@@ -500,8 +500,7 @@ test_that("subgroup-coded modifiers work for profile CIs with keep.data FALSE", 
     type = "proflik",
     parm = "dose",
     data = data,
-    maxit.profCI = 10,
-    print = FALSE
+    maxit.profCI = 10
   ))
 
   expect_identical(
@@ -567,7 +566,7 @@ test_that("subgroup-coded modifiers report subgroup BMA samples", {
   expect_identical(rownames(fit$BMA$vcov), expected)
   expect_identical(colnames(fit$BMA$samples), c(expected, "col.ind"))
 
-  fit_ci <- suppressMessages(add_confint(fit, type = "percentile", print = FALSE))
+  fit_ci <- suppressMessages(add_confint(fit, type = "percentile"))
   expect_identical(rownames(fit_ci$BMA$CI), expected)
 })
 

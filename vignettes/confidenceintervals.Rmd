@@ -31,6 +31,9 @@ invisibly, assign its result to retain this information. This is particularly
 useful for computationally expensive profile likelihood intervals: subsequent
 summaries use the attached bounds and diagnostics without rerunning the profile
 calculation.
+The interval table is displayed by `summary()`, rather than automatically by
+`add_confint()`; use `print(summary(fit), digits = 3)`, for example, to control
+the printed precision.
 Several interval types are supported through the `type` argument. When the
 fitted object contains at least one of `RC`, `ERC`, and `MCML` and at least one
 of `FMA` and `BMA`, `type` should contain one interval type for each group.
@@ -54,7 +57,42 @@ $$
     PL_p (\theta_p^*) = \max_{\mathbf\theta: \theta_p = \theta_p^*} \ell (\mathbf \theta),
 $$
 where $\ell$ is the log (partial) likelihood. Next, profile confidence intervals $(\theta_p^l, \theta_p^h)$ are obtained for parameter $\theta_p$ at significance level $\alpha$ by solving 
-$-2 \{PL_p(\theta_p^*) - \ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}$ using the bisection method, with $\hat{\mathbf{\theta}}$ the maximum likelihood estimate. Note that profile likelihoods are more computationally intensive to obtain. For this reason, `confint` offers the option to only determine them for the exposure-related parameters, which is the default setting. To obtain profile likelihood intervals for all parameters, use `parm = "all"`.
+$-2 \{PL_p(\theta_p^*) - \ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}$ using `uniroot()` after finding a bracket, with $\hat{\mathbf{\theta}}$ the maximum likelihood estimate. Note that profile likelihoods are more computationally intensive to obtain. For this reason, `confint` offers the option to only determine them for the exposure-related parameters, which is the default setting. To obtain profile likelihood intervals for all parameters, use `parm = "all"`.
+
+## Bracketing and numerical controls
+
+Before solving for the bounds, both `confint()` and `add_confint()` first
+search for a bracket separately for the lower and upper bounds. A bracket
+is an interval within which the likelihood-ratio p-value
+crosses the target `1 - level` (for example, `0.05` for a 95% interval).
+
+The search starts from the fitted parameter value on the internal optimizer
+scale. When the stored Hessian is usable, the initial candidate is four
+approximate standard errors away in the direction of the bound; otherwise,
+fallback starting points are used. If the target is not reached, the search
+distance is doubled, with up to 12 doublings. Each profile evaluation may
+require re-optimizing the nuisance parameters, so bracketing itself can be
+costly, especially for ERC and MCML.
+
+Once a bracket has been found, `uniroot()` locates the bound within it.
+Root finding defaults to `tol.profCI = 1e-6` and
+`maxit.profCI = 100`. The tolerance applies to the internal optimizer
+parameter scale, rather than the p-value scale.
+A larger tolerance can reduce computation time when less precision
+is acceptable, but a bound is still returned as `NA` with a warning if root
+finding warns or its p-value differs from the target `1 - level` by more than
+`0.005`. Warnings distinguish inaccurate roots from iteration limits and
+bracketing failures; changing `tol.profCI` or `maxit.profCI` does not affect
+the separate bracketing search or the nuisance-parameter optimizer.
+
+If no suitable bracket is found, the corresponding bound is returned as `NA`
+with a warning showing the last attempted value and its p-value. This can
+reflect a limited search range, parameter scaling, numerical instability in
+the constrained optimizations, or the absence of a finite bound. Check the original fit's
+convergence diagnostics and parameter scaling when investigating such a
+failure.
+
+## Example
 
 To illustrate, we determine the three types of confidence intervals for a regression calibration analysis using the example data, using a linear excess relative risk model with the default exponential transformation (see [Parameter transformations](transformations.html)). For subgroup-specific intervals in models with effect modifiers, fit subgroup-specific dose coefficients with `modifier = ~ 0 + M` or `modifier = ~ M - 1`; see [Effect modification](effectmodification.html).
 
@@ -74,8 +112,7 @@ ci.ameras.proflik
 # Attach intervals when they should be included in the fit summary
 fit.ameras.waldorig <- add_confint(
   fit.ameras,
-  type="wald.orig",
-  print=FALSE
+  type="wald.orig"
 )
 summary(fit.ameras.waldorig)
 ```
