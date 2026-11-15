@@ -1,21 +1,26 @@
-# Confidence Intervals for an amerasfit Object
+# Compute or Attach Confidence Intervals for an amerasfit Object
 
-Computes confidence or credible intervals for the parameters of a fitted
-`amerasfit` object and returns the interval bounds. The fitted object is
-not amended. Use
-[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)
-to attach intervals and any available profile diagnostics to an
-`amerasfit` object for inclusion in
-[`summary()`](https://rdrr.io/r/base/summary.html) output and recording
-of confidence-interval timing.
+Compute confidence or credible intervals for the parameters of a fitted
+`amerasfit` object. [`confint()`](https://rdrr.io/r/stats/confint.html)
+returns standalone interval bounds. `add_confint()` attaches bounds and
+any available diagnostics to a copy of the fitted object for inclusion
+in [`summary()`](https://rdrr.io/r/base/summary.html) output, and
+records confidence-interval timing.
 
 ## Usage
 
 ``` r
 # S3 method for class 'amerasfit'
 confint(object, parm="dose", level=0.95,
-        type=c("proflik","percentile"), maxit.profCI=20,
-        tol.profCI=1e-2, data=NULL, ...)
+        type=c("proflik","percentile"), maxit.profCI=100,
+        tol.profCI=1e-6, data=NULL, ...)
+
+add_confint(object, ...)
+
+# S3 method for class 'amerasfit'
+add_confint(object, parm="dose", level=0.95,
+        type=c("proflik","percentile"), maxit.profCI=100,
+        tol.profCI=1e-6, data=NULL, ...)
 ```
 
 ## Arguments
@@ -47,13 +52,18 @@ confint(object, parm="dose", level=0.95,
 
 - maxit.profCI:
 
-  Maximum number of root-finding iterations for profile likelihood
-  intervals. Defaults to `20`.
+  Maximum number of root-finding iterations per profile likelihood
+  bound. Defaults to `100`. This does not control the separate
+  bracketing search or the nuisance-parameter optimizer.
 
 - tol.profCI:
 
-  Root-finding tolerance for profile likelihood intervals. Defaults to
-  `1e-2`.
+  Root-finding tolerance on the internal optimizer parameter scale.
+  Defaults to `1e-6`. Larger values can reduce computation time,
+  particularly for ERC and MCML, but may produce inaccurate bounds. A
+  bound is returned as `NA` with a warning if root finding warns or its
+  p-value differs from `1 - level` by more than `0.005`, even when a
+  larger tolerance is explicitly requested.
 
 - data:
 
@@ -62,18 +72,48 @@ confint(object, parm="dose", level=0.95,
 
 - ...:
 
-  Additional arguments, currently unused. To attach intervals to a
-  fitted object or control printed output, use
-  [`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md).
+  Additional arguments, currently unused.
 
 ## Value
 
-For an object containing one fitted method, a numeric matrix with
-parameters in rows and the lower and upper confidence limits in two
-percentage-labelled columns. For an object containing multiple fitted
-methods, a named list of such matrices, one per method.
+- [`confint()`](https://rdrr.io/r/stats/confint.html):
+
+  For an object containing one fitted method, a numeric matrix with
+  parameters in rows and the lower and upper confidence limits in two
+  percentage-labelled columns. For an object containing multiple fitted
+  methods, a named list of such matrices, one per method. The result is
+  returned visibly and contains only interval bounds.
+
+- `add_confint()`:
+
+  A copy of the `amerasfit` object, returned invisibly, with a `CI`
+  element added to each fitted method. Method-specific timing is updated
+  to include interval computation. Each `CI` element contains `lower`
+  and `upper`. Profile likelihood results additionally contain boundary
+  p-values and iteration counts in `pval.lower`, `pval.upper`,
+  `iter.lower`, and `iter.upper`.
 
 ## Details
+
+Both functions use the same interval calculations and always compute the
+requested intervals, even if `object` already contains attached
+intervals. The input object is left unchanged.
+
+Use [`confint()`](https://rdrr.io/r/stats/confint.html) when only
+standalone bounds are needed, for example for comparison or export. Use
+`add_confint()` when the fit will be retained for reporting or further
+inspection: [`summary()`](https://rdrr.io/r/base/summary.html) and
+`coef(summary(object))` include the attached bounds, profile-likelihood
+diagnostics are stored when available, and computation time is recorded.
+Assign the invisibly returned object to retain this information. Any
+previously attached intervals are replaced in that returned copy. Use
+[`summary()`](https://rdrr.io/r/base/summary.html) to display the stored
+intervals and `print(summary(fit), digits = 3)`, for example, to control
+the printed precision. Attaching intervals is particularly useful for
+expensive profile likelihood calculations because subsequent summaries
+use the stored results without repeating the calculation.
+
+## Interval types
 
 For RC, ERC, and MCML, Wald intervals on the original parameter scale
 use the delta-method variance-covariance matrix. Wald intervals on the
@@ -83,23 +123,37 @@ h(\boldsymbol\eta)\\, transformed-scale intervals apply \\h\\ to the
 endpoints on the \\\boldsymbol\eta\\ scale, whereas original-scale
 intervals use the covariance matrix obtained from \\J H^{-1} J^T\\,
 where \\J\\ is the transformation Jacobian and \\H\\ is the optimization
-Hessian. Profile likelihood intervals repeatedly re-evaluate the
-likelihood and can therefore be substantially more expensive.
+Hessian. Transformed-scale intervals can therefore be asymmetric on the
+reported parameter scale. Profile likelihood intervals repeatedly
+re-evaluate the likelihood and can therefore be substantially more
+expensive.
 
 For FMA and BMA, percentile intervals use equal-tailed sample quantiles
 and HPD intervals use
 [`HPDinterval`](https://rdrr.io/pkg/coda/man/HPDinterval.html).
 
-Profile likelihood diagnostics such as boundary p-values and iteration
-counts are not included in the returned matrices. Use
-[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)
-to store these diagnostics in the method-specific `CI` components of a
-fitted object.
+## Profile likelihood bracketing
 
-The requested intervals are always computed, even if `object` already
-contains attached intervals. The input object is left unchanged. If a
-profile likelihood bound cannot be reliably bracketed or solved, that
-bound is returned as `NA` with a diagnostic warning.
+Before determining bounds, a separate adaptive search first finds a
+bracket for each lower and upper bound. A bracket is an interval within
+which the likelihood-ratio p-value crosses the target `1 - level`. The
+search proceeds outward from the fitted parameter value on the internal
+optimizer scale. Initial search distances are four approximate standard
+errors when the stored Hessian is usable; otherwise, fallback starting
+points are used. If necessary, the search distance is doubled up to 12
+times. Each profile evaluation may require re-optimizing the nuisance
+parameters, so bracketing can itself be computationally expensive,
+particularly for ERC and MCML.
+
+Once a bracket is found,
+[`uniroot`](https://rdrr.io/r/stats/uniroot.html) locates the bound
+within it using `tol.profCI` and `maxit.profCI`. These arguments control
+root finding only; they do not affect the bracketing search. If a bound
+cannot be bracketed or reliably solved, it is returned as `NA` with a
+warning reporting the last attempted parameter value and its p-value. A
+bracketing failure can reflect a limited search range, parameter
+scaling, numerical problems in the profile evaluations, or the absence
+of a finite bound.
 
 When a model was fitted with `keep.data = FALSE`, the original data must
 be supplied through `data` for profile likelihood intervals. The
@@ -111,13 +165,12 @@ coefficients with `modifier = ~ 0 + M` or `modifier = ~ M - 1`.
 
 ## See also
 
-[`add_confint`](https://ameras.sanderroberti.com/reference/add_confint.md)
-for attaching intervals and diagnostics to a fit,
 [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md) for
 model fitting,
 [`summary`](https://ameras.sanderroberti.com/reference/summary.md) for
 fit summaries, and [`confint`](https://rdrr.io/r/stats/confint.html) for
-the generic function.
+the generic function. See also
+[`vignette("confidenceintervals", package = "ameras")`](https://ameras.sanderroberti.com/articles/confidenceintervals.md).
 
 ## Examples
 
@@ -130,16 +183,61 @@ fit <- ameras(
 )
 #> Fitting RC
 
-## A two-column matrix of Wald interval bounds
+## Compute standalone Wald bounds
 confint(fit, type = "wald.orig")
 #>                  2.5 %     97.5 %
 #> (Intercept) -1.0297063 -0.7404073
 #> dose         0.5338981  1.0748159
 
-## Profile likelihood intervals are slower
+## Attach Wald intervals for use in summaries
+fit_with_ci <- add_confint(fit, type = "wald.orig")
+summary(fit_with_ci)
+#> Call:
+#> ameras(formula = Y.binomial ~ dose(V1:V3, model = "ERR"), data = ameras_simulated, 
+#>     family = "binomial", methods = "RC")
+#> 
+#> Rows: 3000
+#> 
+#> Total CPU runtime: 0 seconds
+#> 
+#> CPU runtime in seconds by method:
+#> 
+#>  Method   Fit  CI Total
+#>      RC 0.021 0.0 0.021
+#> 
+#> Summary of coefficients by method:
+#> 
+#>  Method        Term Estimate     SE CI.lower CI.upper
+#>      RC (Intercept)  -0.8851 0.0738  -1.0297  -0.7404
+#>      RC        dose   0.8044 0.1380   0.5339   1.0748
+#> 
 
-confint(fit, type = "proflik", parm = "dose")
+## Attach expensive profile intervals for subsequent reporting
+
+fit_with_profile_ci <- add_confint(
+  fit,
+  type = "proflik",
+  parm = "dose"
+)
 #> Obtaining profile likelihood CI for dose
-#>          2.5 %   97.5 %
-#> dose 0.5663534 1.115075
+summary(fit_with_profile_ci)
+#> Call:
+#> ameras(formula = Y.binomial ~ dose(V1:V3, model = "ERR"), data = ameras_simulated, 
+#>     family = "binomial", methods = "RC")
+#> 
+#> Rows: 3000
+#> 
+#> Total CPU runtime: 0.1 seconds
+#> 
+#> CPU runtime in seconds by method:
+#> 
+#>  Method   Fit    CI Total
+#>      RC 0.021 0.054 0.075
+#> 
+#> Summary of coefficients by method:
+#> 
+#>  Method        Term Estimate     SE CI.lower CI.upper
+#>      RC (Intercept)  -0.8851 0.0738       NA       NA
+#>      RC        dose   0.8044 0.1380   0.5661    1.114
+#> 
 ```

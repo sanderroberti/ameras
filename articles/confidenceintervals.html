@@ -92,21 +92,24 @@
 <p>To compute confidence intervals, first fit the model using
 <code>ameras</code>, then use <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> when the interval
 bounds are needed as a standalone result, for example for immediate
-comparison or export. Use <code><a href="../reference/add_confint.html">add_confint()</a></code> when the fit will
+comparison or export. Use <code><a href="../reference/confint.html">add_confint()</a></code> when the fit will
 be retained for subsequent reporting: it stores the bounds with each
 fitted method so that <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and
 <code>coef(summary(fit))</code> include them, stores profile-likelihood
 diagnostics when available, and records confidence-interval computation
-time in the fit. Because <code><a href="../reference/add_confint.html">add_confint()</a></code> returns an amended
+time in the fit. Because <code><a href="../reference/confint.html">add_confint()</a></code> returns an amended
 copy invisibly, assign its result to retain this information. This is
 particularly useful for computationally expensive profile likelihood
 intervals: subsequent summaries use the attached bounds and diagnostics
-without rerunning the profile calculation. Several interval types are
-supported through the <code>type</code> argument. When the fitted object
-contains at least one of <code>RC</code>, <code>ERC</code>, and
-<code>MCML</code> and at least one of <code>FMA</code> and
-<code>BMA</code>, <code>type</code> should contain one interval type for
-each group.</p>
+without rerunning the profile calculation. The interval table is
+displayed by <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, rather than automatically by
+<code><a href="../reference/confint.html">add_confint()</a></code>; use
+<code>print(summary(fit), digits = 3)</code>, for example, to control
+the printed precision. Several interval types are supported through the
+<code>type</code> argument. When the fitted object contains at least one
+of <code>RC</code>, <code>ERC</code>, and <code>MCML</code> and at least
+one of <code>FMA</code> and <code>BMA</code>, <code>type</code> should
+contain one interval type for each group.</p>
 </div>
 <div class="section level2">
 <h2 id="regression-calibration-extended-regression-calibration-and-monte-carlo-maximum-likelihood">Regression calibration, extended regression calibration, and Monte
@@ -137,13 +140,51 @@ defined as <span class="math display">
 likelihood. Next, profile confidence intervals <span class="math inline">(\theta_p^l, \theta_p^h)</span> are obtained for
 parameter <span class="math inline">\theta_p</span> at significance
 level <span class="math inline">\alpha</span> by solving <span class="math inline">-2 \{PL_p(\theta_p^*) -
-\ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}</span> using the
-bisection method, with <span class="math inline">\hat{\mathbf{\theta}}</span> the maximum likelihood
+\ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}</span> using
+<code><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">uniroot()</a></code> after finding a bracket, with <span class="math inline">\hat{\mathbf{\theta}}</span> the maximum likelihood
 estimate. Note that profile likelihoods are more computationally
 intensive to obtain. For this reason, <code>confint</code> offers the
 option to only determine them for the exposure-related parameters, which
 is the default setting. To obtain profile likelihood intervals for all
 parameters, use <code>parm = "all"</code>.</p>
+<div class="section level3">
+<h3 id="bracketing-and-numerical-controls">Bracketing and numerical controls<a class="anchor" aria-label="anchor" href="#bracketing-and-numerical-controls"></a>
+</h3>
+<p>Before solving for the bounds, both <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> and
+<code><a href="../reference/confint.html">add_confint()</a></code> first search for a bracket separately for the
+lower and upper bounds. A bracket is an interval within which the
+likelihood-ratio p-value crosses the target <code>1 - level</code> (for
+example, <code>0.05</code> for a 95% interval).</p>
+<p>The search starts from the fitted parameter value on the internal
+optimizer scale. When the stored Hessian is usable, the initial
+candidate is four approximate standard errors away in the direction of
+the bound; otherwise, fallback starting points are used. If the target
+is not reached, the search distance is doubled, with up to 12 doublings.
+Each profile evaluation may require re-optimizing the nuisance
+parameters, so bracketing itself can be costly, especially for ERC and
+MCML.</p>
+<p>Once a bracket has been found, <code><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">uniroot()</a></code> locates the
+bound within it. Root finding defaults to <code>tol.profCI = 1e-6</code>
+and <code>maxit.profCI = 100</code>. The tolerance applies to the
+internal optimizer parameter scale, rather than the p-value scale. A
+larger tolerance can reduce computation time when less precision is
+acceptable, but a bound is still returned as <code>NA</code> with a
+warning if root finding warns or its p-value differs from the target
+<code>1 - level</code> by more than <code>0.005</code>. Warnings
+distinguish inaccurate roots from iteration limits and bracketing
+failures; changing <code>tol.profCI</code> or <code>maxit.profCI</code>
+does not affect the separate bracketing search or the nuisance-parameter
+optimizer.</p>
+<p>If no suitable bracket is found, the corresponding bound is returned
+as <code>NA</code> with a warning showing the last attempted value and
+its p-value. This can reflect a limited search range, parameter scaling,
+numerical instability in the constrained optimizations, or the absence
+of a finite bound. Check the original fit’s convergence diagnostics and
+parameter scaling when investigating such a failure.</p>
+</div>
+<div class="section level3">
+<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h3>
 <p>To illustrate, we determine the three types of confidence intervals
 for a regression calibration analysis using the example data, using a
 linear excess relative risk model with the default exponential
@@ -180,16 +221,15 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span><span class="co">#&gt; dose         0.6050480  1.1827031</span></span>
 <span><span class="va">ci.ameras.proflik</span></span>
 <span><span class="co">#&gt;                  2.5 %     97.5 %</span></span>
-<span><span class="co">#&gt; (Intercept) -1.2391335 -0.8971042</span></span>
-<span><span class="co">#&gt; X1           0.2908058  0.5916523</span></span>
-<span><span class="co">#&gt; X2          -0.5255986 -0.1490250</span></span>
-<span><span class="co">#&gt; dose         0.6009122  1.1784445</span></span>
+<span><span class="co">#&gt; (Intercept) -1.2410617 -0.8960193</span></span>
+<span><span class="co">#&gt; X1           0.2916105  0.5906751</span></span>
+<span><span class="co">#&gt; X2          -0.5241009 -0.1498246</span></span>
+<span><span class="co">#&gt; dose         0.6005363  1.1776549</span></span>
 <span></span>
 <span><span class="co"># Attach intervals when they should be included in the fit summary</span></span>
-<span><span class="va">fit.ameras.waldorig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_confint.html">add_confint</a></span><span class="op">(</span></span>
+<span><span class="va">fit.ameras.waldorig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/confint.html">add_confint</a></span><span class="op">(</span></span>
 <span>  <span class="va">fit.ameras</span>,</span>
-<span>  type<span class="op">=</span><span class="st">"wald.orig"</span>,</span>
-<span>  print<span class="op">=</span><span class="cn">FALSE</span></span>
+<span>  type<span class="op">=</span><span class="st">"wald.orig"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.ameras.waldorig</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -198,12 +238,12 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.427 0.0 0.427</span></span>
+<span><span class="co">#&gt;      RC 0.325 0.0 0.325</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -212,6 +252,7 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span><span class="co">#&gt;      RC          X1   0.4409 0.07628   0.2914   0.5904</span></span>
 <span><span class="co">#&gt;      RC          X2  -0.3360 0.09544  -0.5230  -0.1489</span></span>
 <span><span class="co">#&gt;      RC        dose   0.8508 0.14517   0.5663   1.1353</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="frequentist-and-bayesian-model-averaging">Frequentist and Bayesian model averaging<a class="anchor" aria-label="anchor" href="#frequentist-and-bayesian-model-averaging"></a>

@@ -10,14 +10,13 @@
   containing multiple methods. The former behavior of attaching
   intervals and their diagnostics to an `amerasfit` object is now
   provided by
-  [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md).
+  [`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md).
   Both functions always compute the requested intervals, so a new
-  [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+  [`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md)
   call replaces intervals already attached to the returned object. The
-  `force` argument has been removed; `print` and `digits` are now
-  supported by
-  [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
-  only.
+  `force`, `print`, and `digits` arguments have been removed; use
+  [`summary()`](https://rdrr.io/r/base/summary.html) to display
+  intervals attached to a fit.
 - [`coef()`](https://rdrr.io/r/stats/coef.html) now returns a named
   numeric vector when an `amerasfit` object contains one fitted method.
   Objects containing multiple methods continue to return a data frame
@@ -26,6 +25,9 @@
   `summary_table` to `coefficients` and removed the package-specific
   `summary_table()` accessor. Use `coef(summary(fit))` to retrieve the
   table. Printed summaries are unchanged.
+- Removed the redundant `CI.computed` component from fitted objects and
+  summaries. Attached intervals are detected from method-specific `CI`
+  components.
 - Removed the deprecated direct argument interface to
   [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md).
   Models must now be specified through `formula`; calls using the former
@@ -35,7 +37,7 @@
   `tol.profCI` arguments from
   [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md).
   Confidence intervals must be added after fitting with
-  [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md).
+  [`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md).
 - Removed the deprecated `included.replicates.BMA` alias; use
   `included.realizations.BMA` instead.
 - Removed non-formula effect-modifier syntax. Use `modifier = ~ M1 + M2`
@@ -62,6 +64,14 @@
 
 ### Improvements
 
+- Profile likelihood intervals now default to `tol.profCI = 1e-6` and
+  `maxit.profCI = 100`, replacing `1e-2` and `20` to improve accuracy
+  for narrow intervals. Larger tolerances can still be requested to
+  reduce computation time, especially for ERC and MCML; the p-value
+  accuracy check is unchanged. Warnings now suggest decreasing the
+  tolerance for inaccurate roots or increasing the iteration limit when
+  reached, retain root-finding warning details, and give separate
+  guidance for bracketing failures.
 - Formula parsing now requires a two-sided formula and rejects unknown
   or duplicated named arguments in `dose()`, invalid model or degree
   values, missing or multiple `dose()` terms, empty dose selections, and
@@ -85,7 +95,7 @@
 - Updated the README and vignettes for the revised confidence-interval
   and coefficient-summary interfaces, including the benefits of
   attaching expensive profile likelihood intervals with
-  [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+  [`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md)
   for reuse in summaries. Expanded documentation of the simulated
   example data.
 

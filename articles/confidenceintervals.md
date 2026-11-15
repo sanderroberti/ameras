@@ -23,22 +23,27 @@ To compute confidence intervals, first fit the model using `ameras`,
 then use [`confint()`](https://rdrr.io/r/stats/confint.html) when the
 interval bounds are needed as a standalone result, for example for
 immediate comparison or export. Use
-[`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+[`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md)
 when the fit will be retained for subsequent reporting: it stores the
 bounds with each fitted method so that
 [`summary()`](https://rdrr.io/r/base/summary.html) and
 `coef(summary(fit))` include them, stores profile-likelihood diagnostics
 when available, and records confidence-interval computation time in the
 fit. Because
-[`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+[`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md)
 returns an amended copy invisibly, assign its result to retain this
 information. This is particularly useful for computationally expensive
 profile likelihood intervals: subsequent summaries use the attached
-bounds and diagnostics without rerunning the profile calculation.
-Several interval types are supported through the `type` argument. When
-the fitted object contains at least one of `RC`, `ERC`, and `MCML` and
-at least one of `FMA` and `BMA`, `type` should contain one interval type
-for each group.
+bounds and diagnostics without rerunning the profile calculation. The
+interval table is displayed by
+[`summary()`](https://rdrr.io/r/base/summary.html), rather than
+automatically by
+[`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md);
+use `print(summary(fit), digits = 3)`, for example, to control the
+printed precision. Several interval types are supported through the
+`type` argument. When the fitted object contains at least one of `RC`,
+`ERC`, and `MCML` and at least one of `FMA` and `BMA`, `type` should
+contain one interval type for each group.
 
 ## Regression calibration, extended regression calibration, and Monte Carlo maximum likelihood
 
@@ -62,12 +67,54 @@ parameter \theta_p is defined as PL_p (\theta_p^\*) =
 where \ell is the log (partial) likelihood. Next, profile confidence
 intervals (\theta_p^l, \theta_p^h) are obtained for parameter \theta_p
 at significance level \alpha by solving -2 \\PL_p(\theta_p^\*) -
-\ell(\hat{\mathbf{\theta}})\\=\chi^2\_{1,1-\alpha} using the bisection
-method, with \hat{\mathbf{\theta}} the maximum likelihood estimate. Note
-that profile likelihoods are more computationally intensive to obtain.
-For this reason, `confint` offers the option to only determine them for
-the exposure-related parameters, which is the default setting. To obtain
-profile likelihood intervals for all parameters, use `parm = "all"`.
+\ell(\hat{\mathbf{\theta}})\\=\chi^2\_{1,1-\alpha} using
+[`uniroot()`](https://rdrr.io/r/stats/uniroot.html) after finding a
+bracket, with \hat{\mathbf{\theta}} the maximum likelihood estimate.
+Note that profile likelihoods are more computationally intensive to
+obtain. For this reason, `confint` offers the option to only determine
+them for the exposure-related parameters, which is the default setting.
+To obtain profile likelihood intervals for all parameters, use
+`parm = "all"`.
+
+### Bracketing and numerical controls
+
+Before solving for the bounds, both
+[`confint()`](https://rdrr.io/r/stats/confint.html) and
+[`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md)
+first search for a bracket separately for the lower and upper bounds. A
+bracket is an interval within which the likelihood-ratio p-value crosses
+the target `1 - level` (for example, `0.05` for a 95% interval).
+
+The search starts from the fitted parameter value on the internal
+optimizer scale. When the stored Hessian is usable, the initial
+candidate is four approximate standard errors away in the direction of
+the bound; otherwise, fallback starting points are used. If the target
+is not reached, the search distance is doubled, with up to 12 doublings.
+Each profile evaluation may require re-optimizing the nuisance
+parameters, so bracketing itself can be costly, especially for ERC and
+MCML.
+
+Once a bracket has been found,
+[`uniroot()`](https://rdrr.io/r/stats/uniroot.html) locates the bound
+within it. Root finding defaults to `tol.profCI = 1e-6` and
+`maxit.profCI = 100`. The tolerance applies to the internal optimizer
+parameter scale, rather than the p-value scale. A larger tolerance can
+reduce computation time when less precision is acceptable, but a bound
+is still returned as `NA` with a warning if root finding warns or its
+p-value differs from the target `1 - level` by more than `0.005`.
+Warnings distinguish inaccurate roots from iteration limits and
+bracketing failures; changing `tol.profCI` or `maxit.profCI` does not
+affect the separate bracketing search or the nuisance-parameter
+optimizer.
+
+If no suitable bracket is found, the corresponding bound is returned as
+`NA` with a warning showing the last attempted value and its p-value.
+This can reflect a limited search range, parameter scaling, numerical
+instability in the constrained optimizations, or the absence of a finite
+bound. Check the original fit’s convergence diagnostics and parameter
+scaling when investigating such a failure.
+
+### Example
 
 To illustrate, we determine the three types of confidence intervals for
 a regression calibration analysis using the example data, using a linear
@@ -108,16 +155,15 @@ ci.ameras.waldtransformed
 #> dose         0.6050480  1.1827031
 ci.ameras.proflik
 #>                  2.5 %     97.5 %
-#> (Intercept) -1.2391335 -0.8971042
-#> X1           0.2908058  0.5916523
-#> X2          -0.5255986 -0.1490250
-#> dose         0.6009122  1.1784445
+#> (Intercept) -1.2410617 -0.8960193
+#> X1           0.2916105  0.5906751
+#> X2          -0.5241009 -0.1498246
+#> dose         0.6005363  1.1776549
 
 # Attach intervals when they should be included in the fit summary
 fit.ameras.waldorig <- add_confint(
   fit.ameras,
-  type="wald.orig",
-  print=FALSE
+  type="wald.orig"
 )
 summary(fit.ameras.waldorig)
 #> Call:
@@ -126,12 +172,12 @@ summary(fit.ameras.waldorig)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.427 0.0 0.427
+#>      RC 0.325 0.0 0.325
 #> 
 #> Summary of coefficients by method:
 #> 

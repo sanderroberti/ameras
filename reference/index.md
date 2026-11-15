@@ -4,8 +4,6 @@
 
 - [`Rhat()`](https://ameras.sanderroberti.com/reference/Rhat.md) :
   Extract MCMC Convergence Diagnostics from an amerasfit Object
-- [`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
-  : Attach Confidence Intervals to an amerasfit Object
 - [`ameras-package`](https://ameras.sanderroberti.com/reference/ameras-package.md)
   : Analyze Multiple Exposure Realizations in Association Studies
 - [`ameras()`](https://ameras.sanderroberti.com/reference/ameras.md) :
@@ -15,7 +13,8 @@
 - [`coef(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/coef.md)
   : Estimated Coefficients for an amerasfit Object
 - [`confint(`*`<amerasfit>`*`)`](https://ameras.sanderroberti.com/reference/confint.md)
-  : Confidence Intervals for an amerasfit Object
+  [`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md)
+  : Compute or Attach Confidence Intervals for an amerasfit Object
 - [`convergence()`](https://ameras.sanderroberti.com/reference/convergence.md)
   : Optimizer Convergence Diagnostics
 - [`dose_lrt()`](https://ameras.sanderroberti.com/reference/dose_lrt.md)

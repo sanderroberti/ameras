@@ -93,7 +93,7 @@ The usual `amerasfit` methods are available, including
 [`confint()`](https://rdrr.io/r/stats/confint.html). Use
 [`confint()`](https://rdrr.io/r/stats/confint.html) for a standalone
 matrix of interval bounds. Use
-[`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+[`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md)
 when the bounds should travel with the fit and appear in subsequent
 summaries; it also stores available profile diagnostics and
 confidence-interval timing information.
@@ -101,8 +101,7 @@ confidence-interval timing information.
 ``` r
 
 fit_ameras_gaussian <- add_confint(fit_ameras_gaussian,
-                                   type = "wald.orig",
-                                   print = FALSE)
+                                   type = "wald.orig")
 summary(fit_ameras_gaussian)
 #> Call:
 #> ameras(formula = Y.gaussian ~ dose(D) + X1 + X2, data = standard_data, 
@@ -114,8 +113,8 @@ summary(fit_ameras_gaussian)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit    CI Total
-#>      RC 0.343 0.001 0.344
+#>  Method   Fit  CI Total
+#>      RC 0.288 0.0 0.288
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -210,12 +209,12 @@ summary(fit_ameras_rc)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.4 seconds
+#> Total CPU runtime: 0.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.374 0.0 0.374
+#>      RC 0.116 0.0 0.116
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -201,7 +201,7 @@ ci_subgroup
 
 If these intervals should be included in subsequent fitted-object
 summaries, use
-[`add_confint()`](https://ameras.sanderroberti.com/reference/add_confint.md)
+[`add_confint()`](https://ameras.sanderroberti.com/reference/confint.md)
 with the same arguments and assign the returned fit. This also stores
 profile-likelihood diagnostics and confidence-interval timing with the
 fitted object.
