@@ -1565,7 +1565,8 @@ setting <code>deg=2</code>.</p>
 <p>The BMA output now contains the intervals with piecewise constant
 baseline hazards, corresponding to the estimates <code>h0</code>:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>fit.ameras.prophaz<span class="sc">$</span>BMA<span class="sc">$</span>prophaz.timepoints</span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co">#&gt;  [1] 0.00000000 0.02485645 0.04878169 0.08074039 0.11024094 0.13891700</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="co">#&gt;  [7] 0.16230556 0.19814360 0.23016117 0.26799621 0.30376565</span></span></code></pre></div>
 <p>Without the quadratic term (<code>deg=1</code>):</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">24978252</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>fit.ameras.prophaz.lin <span class="ot">&lt;-</span> <span class="fu">ameras</span>(<span class="fu">Surv</span>(time, status)<span class="sc">~</span></span>

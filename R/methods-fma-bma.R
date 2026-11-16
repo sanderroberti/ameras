@@ -1240,7 +1240,7 @@ ameras.bma <- function(
     out <- c(
       out,
       list(
-        prophaz_timepoints = prophaz_timepoints
+        prophaz.timepoints = prophaz_timepoints
       )
     )
   }

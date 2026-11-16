@@ -32,6 +32,8 @@
 * Removed non-formula effect-modifier syntax. Use `modifier = ~ M1 + M2`
   instead of `modifier = M1 + M2` inside `dose()`.
 * Renamed the bundled example dataset from `data` to `ameras_simulated`.
+* Renamed the proportional hazards BMA output component `prophaz_timepoints`
+  to `prophaz.timepoints`, matching the documented name and vignette examples.
 
 ## Bug fixes
 
