@@ -294,6 +294,36 @@ modifier_dose_names <- function(
 }
 
 
+modifier_dose_design <- function(data, dose.col, model) {
+  dose <- data[, dose.col]
+  basis <- if (identical(model$doseRRmod, "LINEXP")) {
+    cbind(dose, dose)
+  } else if (model$deg == 2) {
+    cbind(dose, dose^2)
+  } else {
+    matrix(dose, ncol = 1L)
+  }
+  design <- basis
+  if (!is.null(model$M)) {
+    modifiers <- as.matrix(data[, model$M, drop = FALSE])
+    if (modifier_is_group_coded(model$modifier_info)) {
+      groups <- cbind(1 - rowSums(modifiers), modifiers)
+      design <- do.call(cbind, lapply(seq_len(ncol(groups)), function(j) {
+        sweep(basis, 1, groups[, j], "*")
+      }))
+    } else {
+      design <- do.call(cbind, c(list(basis), lapply(seq_len(ncol(basis)), function(j) {
+        sweep(modifiers, 1, basis[, j], "*")
+      })))
+    }
+  }
+  colnames(design) <- modifier_dose_names(
+    model$doseRRmod, model$deg, data, model$M, model$modifier_info
+  )
+  design
+}
+
+
 modifier_reported_to_internal_params <- function(
   params,
   family,

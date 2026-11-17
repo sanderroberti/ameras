@@ -17,6 +17,7 @@ make_transform <- function(index.t = NULL, lowlimit = NULL) {
     do.call(transform1, args)
   }
   environment(f) <- e
+  attr(f, "ameras.componentwise") <- TRUE
   f
 }
 
@@ -32,8 +33,10 @@ make_transform.jacobian <- function(index.t = NULL, lowlimit = NULL) {
     do.call(transform1.jacobian, args)
   }
   environment(f) <- e
+  attr(f, "ameras.componentwise") <- TRUE
   f
 }
+
 
 transform1 <- function(
   params,

@@ -6,8 +6,7 @@ compute_sample_CI <- function(samples, type = "percentile", level = .95) {
     CIresult <- data.frame(lower = CIlower, upper = CIupper)
   } else if (type == "hpd") {
     CIresult <- as.data.frame(
-      coda::HPDinterval(coda::as.mcmc(samples)),
-      prob = level
+      coda::HPDinterval(coda::as.mcmc(samples), prob = level)
     )
   }
   return(CIresult)
@@ -18,7 +17,8 @@ compute_wald_CI <- function(
   level = .95,
   transform = NULL,
   other.args = NULL,
-  type = "orig"
+  type = "orig",
+  transform.jacobian = NULL
 ) {
   if (type == "transformed" & is.null(transform)) {
     stop(
@@ -43,20 +43,19 @@ compute_wald_CI <- function(
 
     hess_inv <- chol2inv(chol(hessian))
 
-    CIlower <- do.call(
-      transform,
-      c(
-        list(params = method_fit$optim$par - z * sqrt(diag(hess_inv))),
-        other.args
-      )
+    params <- method_fit$optim$par
+    distance <- z * sqrt(diag(hess_inv))
+    direction <- check_transform(
+      transform, transform.jacobian, params, other.args
     )
-    CIupper <- do.call(
-      transform,
-      c(
-        list(params = method_fit$optim$par + z * sqrt(diag(hess_inv))),
-        other.args
+    endpoint <- function(i, side) {
+      profile_reported_value(
+        params[i] + side * direction[i] * distance[i], i, params,
+        transform, other.args
       )
-    )
+    }
+    CIlower <- vapply(seq_along(params), endpoint, numeric(1), side = -1)
+    CIupper <- vapply(seq_along(params), endpoint, numeric(1), side = 1)
   } else if (type == "orig") {
     CIlower <- method_fit$coefficients - z * sqrt(diag(method_fit$vcov))
     CIupper <- method_fit$coefficients + z * sqrt(diag(method_fit$vcov))
@@ -81,10 +80,14 @@ compute_proflik_CI <- function(
   optim.method = "Nelder-Mead",
   control = list(reltol = 1e-10)
 ) {
+  control <- control %||% list(reltol = 1e-10)
   alpha <- 1 - level
   optval <- -method_fit$loglik # stored as positive log-likelihood
   inpar <- method_fit$optim$par
   parnames <- names(method_fit$coefficients)
+  direction <- check_transform(
+    object$transform, object$transform.jacobian, inpar, object$other.args
+  ) %||% rep(1, length(inpar))
 
   # Determine which parameters to compute CIs for
   if (identical(parm, "dose")) {
@@ -153,27 +156,22 @@ compute_proflik_CI <- function(
       control = control,
       parname = parnames[myindex],
       transform = object$transform,
-      other.args = object$other.args
+      other.args = object$other.args,
+      decreasing = direction[myindex] < 0
     )
 
-    CIlower[myindex] <- profCI_one$lower
-    CIupper[myindex] <- profCI_one$upper
-    pval_lower[myindex] <- profCI_one$pval.lower
-    pval_upper[myindex] <- profCI_one$pval.upper
-    iter_lower[myindex] <- profCI_one$iter.lower
-    iter_upper[myindex] <- profCI_one$iter.upper
-  }
-
-  # Back-transform if needed
-  if (!is.null(object$transform)) {
-    CIlower <- do.call(
-      object$transform,
-      c(list(params = CIlower), object$other.args)
+    lower_side <- if (direction[myindex] < 0) "upper" else "lower"
+    upper_side <- if (direction[myindex] < 0) "lower" else "upper"
+    CIlower[myindex] <- profile_reported_value(
+      profCI_one[[lower_side]], myindex, inpar, object$transform, object$other.args
     )
-    CIupper <- do.call(
-      object$transform,
-      c(list(params = CIupper), object$other.args)
+    CIupper[myindex] <- profile_reported_value(
+      profCI_one[[upper_side]], myindex, inpar, object$transform, object$other.args
     )
+    pval_lower[myindex] <- profCI_one[[paste0("pval.", lower_side)]]
+    pval_upper[myindex] <- profCI_one[[paste0("pval.", upper_side)]]
+    iter_lower[myindex] <- profCI_one[[paste0("iter.", lower_side)]]
+    iter_upper[myindex] <- profCI_one[[paste0("iter.", upper_side)]]
   }
 
   result <- data.frame(
@@ -249,6 +247,7 @@ profile_reported_value <- function(
   transform = NULL,
   other.args = NULL
 ) {
+  if (is.na(par)) return(NA_real_)
   if (is.null(transform)) {
     return(par)
   }
@@ -544,7 +543,8 @@ compute_proflik_ci_one <- function(
   control = list(reltol = 1e-10),
   parname = "parameter",
   transform = NULL,
-  other.args = NULL
+  other.args = NULL,
+  decreasing = FALSE
 ) {
   profCI_fn <- make_profile_target_fn(
     index = index,
@@ -561,7 +561,7 @@ compute_proflik_ci_one <- function(
     center = inpar[index],
     initial = lowlim,
     direction = -1,
-    direction_name = "lower",
+    direction_name = if (decreasing) "upper" else "lower",
     parname = parname,
     alpha = alpha,
     maxit.profCI = maxit.profCI,
@@ -577,7 +577,7 @@ compute_proflik_ci_one <- function(
     center = inpar[index],
     initial = uplim,
     direction = 1,
-    direction_name = "upper",
+    direction_name = if (decreasing) "lower" else "upper",
     parname = parname,
     alpha = alpha,
     maxit.profCI = maxit.profCI,

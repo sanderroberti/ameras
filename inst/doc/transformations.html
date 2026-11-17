@@ -344,6 +344,20 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>  <span class="fu">library</span>(ameras)</span></code></pre></div>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
+<p>User transformations must be componentwise and strictly monotone:
+each reported parameter can depend only on its corresponding optimizer
+parameter. Increasing and decreasing components are supported. Coupled
+transformations are not supported. Internal subgroup coding conversions
+are separate from the user transformation. Initial checks evaluate the
+transformation and its Jacobian at the starting values and coordinate
+perturbations, using a row-relative tolerance of <code>1e-8</code> for
+off-diagonal Jacobian entries. The original function is then used
+directly during optimization. Transformed Wald and profile likelihood
+intervals check the transformation at the fitted parameters and
+determine its directions locally, including for older fits. These
+directions are not stored on the fit. Initial checks cannot prove global
+properties; custom functions must satisfy the requirements throughout
+the optimization domain.</p>
 <p>A transformation can be used to reparametrize parameters for
 optimization, such that the likelihoods are evaluated at
 <code>transform(parameters)</code>, where <code>parameters</code> are
@@ -385,9 +399,11 @@ numerically robust because bounds are applied directly to each subgroup
 dose-effect parameter. All output is returned in the original
 parametrization given in <code>?ameras</code>. The Jacobian of the
 transformation (<code>transform.jacobian</code>) is required when using
-a transformation with methods other than BMA. For
-<code>transform1</code>, the Jacobian is given by
-<code>transform1.jacobian</code>.</p>
+a transformation with methods other than BMA. BMA-only calls may omit it
+because BMA does not apply the transformation; any supplied function is
+still checked against the transformation requirements, using numerical
+derivatives when its Jacobian is omitted. For <code>transform1</code>,
+the Jacobian is given by <code>transform1.jacobian</code>.</p>
 </div>
 <div id="exponential-transformation-using-transform1" class="section level1">
 <h1>Exponential transformation using transform1</h1>
@@ -519,7 +535,7 @@ sigmoid transformation:</p>
 <span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt;      RC 0.251 0.0 0.251</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt;      RC 0.289 0.0 0.289</span></span>
 <span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -542,12 +558,12 @@ sigmoid transformation:</p>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
 <span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;      RC 0.212 0.0 0.212</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;      RC 0.296 0.0 0.296</span></span>
 <span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; </span></span>

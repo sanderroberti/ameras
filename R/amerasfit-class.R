@@ -91,6 +91,10 @@ convergence.amerasfit <- function(
     }
 
     if (is.null(fit_diag)) {
+      check_transform(
+        object$transform, object$transform.jacobian,
+        method_fit$optim$par, object$other.args
+      )
       if (is.null(resolved_data)) {
         resolved_data <<- resolve_data(object, data)
       }
@@ -575,6 +579,7 @@ compute_and_attach_confint <- function(
         object[[method]]$CI <- compute_wald_CI(
           method_fit = fitobj[[it]],
           transform = object$transform,
+          transform.jacobian = object$transform.jacobian,
           level = level,
           type = "transformed",
           other.args = object$other.args
@@ -811,46 +816,7 @@ compute_residuals <- function(
     }
   } else if (m$family == "prophaz") {
     if (type == "schoenfeld") {
-      if (m$doseRRmod == "LINEXP") {
-        dose_mat <- cbind(
-          resolved_data[, dose.col],
-          resolved_data[, dose.col]
-        )
-        colnames(dose_mat) <- c("dose_linear", "dose_exponential")
-      } else if (m$deg == 2) {
-        dose_mat <- cbind(
-          resolved_data[, dose.col],
-          resolved_data[, dose.col]^2
-        )
-        colnames(dose_mat) <- c("dose", "dose_squared")
-      } else {
-        dose_mat <- matrix(resolved_data[, dose.col], ncol = 1)
-        colnames(dose_mat) <- "dose"
-      }
-
-      # Modifier columns: observed M * D values
-      if (!is.null(m$M)) {
-        M_mat <- as.matrix(resolved_data[, m$M, drop = FALSE])
-        M_names <- m$M_names
-
-        if (m$doseRRmod == "LINEXP") {
-          mod_lin <- sweep(M_mat, 1, resolved_data[, dose.col], "*")
-          mod_exp <- sweep(M_mat, 1, resolved_data[, dose.col], "*")
-          colnames(mod_lin) <- paste0("dose_linear:", M_names)
-          colnames(mod_exp) <- paste0("dose_exponential:", M_names)
-          dose_mat <- cbind(dose_mat, mod_lin, mod_exp)
-        } else if (m$deg == 2) {
-          mod_lin <- sweep(M_mat, 1, resolved_data[, dose.col], "*")
-          mod_sq <- sweep(M_mat, 1, resolved_data[, dose.col]^2, "*")
-          colnames(mod_lin) <- paste0("dose:", M_names)
-          colnames(mod_sq) <- paste0("dose_squared:", M_names)
-          dose_mat <- cbind(dose_mat, mod_lin, mod_sq)
-        } else {
-          mod_lin <- sweep(M_mat, 1, resolved_data[, dose.col], "*")
-          colnames(mod_lin) <- paste0("dose:", M_names)
-          dose_mat <- cbind(dose_mat, mod_lin)
-        }
-      }
+      dose_mat <- modifier_dose_design(resolved_data, dose.col, m)
 
       if (!is.null(m$X)) {
         X_mat <- resolved_data[, m$X, drop = FALSE]
@@ -863,11 +829,11 @@ compute_residuals <- function(
         dose_mat
       }
 
-      vcov.mat <- object[[method]]$vcov[
-        colnames(covariates),
-        colnames(covariates),
-        drop = FALSE
-      ]
+      vcov.mat <- if (scaled.schoenfeld) {
+        object[[method]]$vcov[
+          colnames(covariates), colnames(covariates), drop = FALSE
+        ]
+      } else NULL
 
       sf <- compute_schoenfeld_residuals(
         exit = resolved_data[, m$exit],

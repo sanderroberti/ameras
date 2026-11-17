@@ -20,6 +20,15 @@ vignette: >
 
 # Introduction
 
+User transformations must be componentwise and strictly monotone: each reported
+parameter can depend only on its corresponding optimizer parameter. Both increasing
+and decreasing components are supported. Coupled transformations are not
+supported. Initial checks evaluate the transformation and its Jacobian at the starting
+values and coordinate perturbations, using a row-relative tolerance of `1e-8`
+for off-diagonal Jacobian entries to detect non-monotonicity.
+These checks cannot prove global properties: custom functions must satisfy
+the requirements throughout the optimization domain.
+
 A transformation can be used to reparametrize parameters for optimization, such that the likelihoods are evaluated at `transform(parameters)`, where `parameters` are unconstrained. This should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function `transform1` applies an exponential transformation to the desired parameters, see below.
 
 When supplying a function to `transform`, this should be a function of the full parameter vector, returning a full transformed parameter vector. The parameter order is the same order used by `coef()` for the fitted method. For models without subgroup-coded modifiers, this order is $\alpha_0, \mathbf \alpha, \beta_1, \beta_2, \mathbf \beta_{m1}, \mathbf \beta_{m2}, \sigma$, where $\mathbf \alpha$, $\mathbf\beta_{m1}$ and $\mathbf \beta_{m2}$ can be vectors, with lengths matching the covariates and modifier design columns, respectively. $\sigma$ is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For multinomial models, the full parameter vector is the concatenation of the parameter vectors for the non-reference outcome levels. For subgroup-coded modifiers, user-specified transformations act on the reported subgroup-effect scale before ameras maps those subgroup effects to the internal reference-plus-contrast scale used by the likelihood.

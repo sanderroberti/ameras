@@ -10,9 +10,9 @@
 
 ---
 
-    structure(list(lower = c(NA, 0.124961898141977), upper = c(0.482045840196121,
-    0.388181572572819), pval.lower = c(NA, 0.0499999897871505), pval.upper = c(0.0500000132359157,
-    0.050000132266128), iter.lower = c(NA, 8L), iter.upper = c(14L,
+    structure(list(lower = c(NA, 0.124961569473749), upper = c(0.482046443479874,
+    0.388183743107454), pval.lower = c(NA, 0.0499999947428095), pval.upper = c(0.0500000006334262,
+    0.0500000027330523), iter.lower = c(NA, 9L), iter.upper = c(14L,
     10L)), row.names = c("dose", "dose_squared"), class = "data.frame")
 
 ---
@@ -64,9 +64,9 @@
 
 ---
 
-    structure(list(lower = c(NA, 0.23189868120243), upper = c(NA,
-    0.419875835140352), pval.lower = c(NA, 0.049999971296101), pval.upper = c(NA,
-    0.0500000040749272), iter.lower = c(NA, 8L), iter.upper = c(NA,
+    structure(list(lower = c(NA, 0.231770011612445), upper = c(NA,
+    0.419875836184606), pval.lower = c(NA, 0.0496126640493249), pval.upper = c(NA,
+    0.0500000069751279), iter.lower = c(NA, 22L), iter.upper = c(NA,
     7L)), row.names = c("dose", "dose_squared"), class = "data.frame")
 
 ---

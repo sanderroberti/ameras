@@ -121,6 +121,13 @@ add_confint(object, \dots)
   Profile likelihood intervals repeatedly re-evaluate the likelihood and can
   therefore be substantially more expensive.
 
+  Transformations must be componentwise and strictly monotone, as required by
+  \code{\link{ameras}}. Decreasing transformations reverse endpoint order;
+  bounds and profile diagnostics are returned in reported lower/upper order.
+  Transformed Wald and profile likelihood intervals check the transformation
+  at the fitted parameters and determine its directions locally. Original-scale
+  Wald intervals and sample-based intervals do not require this check.
+
   For FMA and BMA, percentile intervals use equal-tailed sample quantiles and
   HPD intervals use \code{\link[coda]{HPDinterval}}.
 }
@@ -144,6 +151,12 @@ add_confint(object, \dots)
   p-value. A bracketing failure can reflect a limited search range, parameter
   scaling, numerical problems in the profile evaluations, or the absence of
   a finite bound.
+
+  Nuisance optimizations use the effective fitting controls. Missing or
+  \code{NULL} controls on older objects default to
+  \code{list(reltol = 1e-10)}. When only
+  one nuisance parameter remains, \code{optimize()} uses its own tolerance;
+  \code{reltol} does not control that optimization.
 
   When a model was fitted with \code{keep.data = FALSE}, the original data must
   be supplied through \code{data} for profile likelihood intervals. The

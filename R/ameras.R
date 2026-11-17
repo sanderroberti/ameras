@@ -32,12 +32,10 @@ ameras_main <- function(
   control = NULL,
   ...
 ) {
-  if (is.null(control)) {
-    control <- list(reltol = 1e-10)
-  }
+  control <- control %||% list(reltol = 1e-10)
   future.chunk.size.FMA <- check_future_chunk_size_FMA(future.chunk.size.FMA)
 
-  if (!is.null(transform) & is.null(transform.jacobian)) {
+  if (!is.null(transform) && is.null(transform.jacobian) && any(methods != "BMA")) {
     stop("transform.jacobian is required when using a transformation")
   }
 
@@ -132,6 +130,16 @@ ameras_main <- function(
         lowlimit = transform_settings$lowlimit
       )
     }
+  }
+
+  if (!is.null(transform)) {
+    npar <- length(make_method_parnames(
+      family = family, data = data, Y = Y, X = X, M = M, deg = deg,
+      doseRRmod = doseRRmod, modifier_info = modifier_info
+    ))
+    check_transform(
+      transform, transform.jacobian, inpar %||% rep(0, npar), list(...)
+    )
   }
 
   results <- list(
@@ -239,6 +247,7 @@ ameras_main <- function(
         status = status,
         setnr = setnr,
         doseRRmod = doseRRmod,
+        loglim = loglim,
         unweighted = unweightedFMA,
         MFMA = MFMA,
         future.chunk.size.FMA = future.chunk.size.FMA,
@@ -386,6 +395,7 @@ ameras <- function(
   na_action_fun <- resolve_na_action(na.action, env = call_env)
   num.rows.original <- nrow(data)
   methods <- check_methods(methods)
+  control <- control %||% list(reltol = 1e-10)
   future.chunk.size.FMA <- check_future_chunk_size_FMA(future.chunk.size.FMA)
 
   if ("BMA" %in% methods) {

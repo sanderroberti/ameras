@@ -58,14 +58,8 @@ dose_lrt(object, ...)
 
   For transformed fits, nuisance parameters are evaluated through the fitted
   transformation. The tested dose parameters are then fixed to zero before the
-  likelihood is evaluated. This is most straightforward for component-wise
-  transformations, including the default transformations used by \pkg{ameras}.
-  Results from coupled custom transformations should be interpreted with
-  caution. For example, if a custom transformation defines one reported
-  parameter as a function of multiple optimizer-scale parameters, or makes a
-  non-dose reported parameter depend directly on a dose parameter, fixing only
-  the reported dose parameter to zero may not correspond to the intended
-  constrained model.
+  likelihood is evaluated. Transformations must be componentwise and strictly
+  monotone, as required by \code{\link{ameras}}.
 
   For speed, constrained null fits report only the optimizer convergence code.
   They do not run the additional numerical-gradient diagnostics stored for the

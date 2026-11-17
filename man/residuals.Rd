@@ -118,7 +118,8 @@
   For \code{family="prophaz"} with \code{type="schoenfeld"}, a data
   frame with columns \code{id} (row index of the event), \code{time}
   (event time), and one additional column per model parameter
-  containing the Schoenfeld residuals. Only rows corresponding to
+  containing the Schoenfeld residuals. BMA baseline-hazard parameters
+  do not have residual columns. Only rows corresponding to
   events (\code{status=1}) are included.
 }
 

@@ -51,6 +51,9 @@ $h(\mathbf\eta)\pm z_{1-\alpha/2} \mathbf V_*$ where $\mathbf V_*$ is the vector
 standard deviations estimated using $J H^{-1} J^T$ with $J$ the 
 Jacobian of the transformation (obtained with `transform.jacobian`) and $H$ is the Hessian. When no 
 transformation is used, `type="wald.orig"` should be used. 
+Transformations must be componentwise and strictly monotone, as required for
+fitting. For decreasing components, endpoints and profile diagnostics are
+reordered to give the reported lower and upper bounds.
 The third option is `type="proflik"`, which uses the profile likelihood to 
 compute confidence bounds. For this, the profile log (partial) likelihood for parameter $\theta_p$ is defined as
 $$
@@ -89,8 +92,7 @@ If no suitable bracket is found, the corresponding bound is returned as `NA`
 with a warning showing the last attempted value and its p-value. This can
 reflect a limited search range, parameter scaling, numerical instability in
 the constrained optimizations, or the absence of a finite bound. Check the original fit's
-convergence diagnostics and parameter scaling when investigating such a
-failure.
+convergence diagnostics and parameter scaling when investigating such a failure.
 
 ## Example
 

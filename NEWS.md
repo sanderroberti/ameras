@@ -34,9 +34,32 @@
 * Renamed the bundled example dataset from `data` to `ameras_simulated`.
 * Renamed the proportional hazards BMA output component `prophaz_timepoints`
   to `prophaz.timepoints`, matching the documented name and vignette examples.
+* User-supplied parameter transformations must now be componentwise and
+  strictly monotone: each reported parameter may depend only on its matching
+  optimizer parameter. Initial checks inspect the starting values and coordinate
+  perturbations. Increasing and decreasing transformations are supported;
+  directions are determined locally when obtaining transformed Wald or profile
+  likelihood intervals.
 
 ## Bug fixes
 
+* HPD intervals for FMA and BMA now honor `level`; previously they always used
+  95% even when the returned column labels showed a different requested level.
+* Schoenfeld residuals and diagnostic plots now use the fitted factor and
+  subgroup modifier names and designs, avoiding covariance-indexing errors.
+* Transformed Wald and profile likelihood intervals now order decreasing
+  transformations correctly, including profile diagnostics and one-sided
+  failures.
+* Profile nuisance optimizations now use the effective fitting controls.
+  Omitted or `NULL` controls are stored as `list(reltol = 1e-10)`, and the same
+  fallback is applied when recomputing intervals for older objects. This can
+  change recomputed profile bounds that previously used `optim()`'s looser
+  default. Explicit control lists and one-dimensional `optimize()` tolerances
+  are unchanged.
+* FMA now passes the requested `loglim` to its realization-specific likelihoods
+  instead of silently using `1e-30`.
+* BMA-only calls no longer require a Jacobian for a supplied transformation,
+  which BMA does not apply. Calls with methods including a frequentist method still require a Jacobian.
 * RC, ERC, and MCML fits now warn when the selected final optimizer result
   returns a nonzero convergence code. For automatic Nelder-Mead plus BFGS
   fitting, the warning is based on the BFGS result when refinement completes

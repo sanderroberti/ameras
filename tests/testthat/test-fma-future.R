@@ -109,6 +109,14 @@ test_that("FMA gives the same result with sequential and multisession plans", {
           family = "gaussian",
           methods = "FMA",
           unweightedFMA = TRUE,
+          loglim = 0.1,
+          transform = function(params, ...) {
+            c(params[1], -params[2], exp(params[3]))
+          },
+          transform.jacobian = function(params, ...) {
+            diag(c(1, -1, exp(params[3])))
+          },
+          inpar = c(1, -0.75, log(0.2)),
           MFMA = 120,
           future.chunk.size.FMA = 1
         )
@@ -118,6 +126,9 @@ test_that("FMA gives the same result with sequential and multisession plans", {
 
   sequential_fit <- fit_with_plan("sequential")
   multisession_fit <- fit_with_plan("multisession")
+
+  expect_identical(sequential_fit$model$loglim, 0.1)
+  expect_identical(multisession_fit$model$loglim, 0.1)
 
   expect_identical(
     multisession_fit$FMA$included.realizations,

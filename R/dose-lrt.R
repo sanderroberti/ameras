@@ -206,6 +206,10 @@ compute_dose_lrt_for_method <- function(
 
   optim_method <- object$model$optim.method %||% "Nelder-Mead"
   control <- object$model$control %||% list(reltol = 1e-10)
+  check_transform(
+    object$transform, object$transform.jacobian,
+    method_fit$optim$par, object$other.args
+  )
 
   fit_fixed <- function(fixed_idx) {
     objective <- make_constrained_lrt_objective(

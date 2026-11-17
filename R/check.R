@@ -373,6 +373,112 @@ check_inpar <- function(x, family, M, X, deg, multinom_levels = 0) {
   x
 }
 
+# Validate the transformation and Jacobian at the supplied point and coordinate probes.
+# Return component directions (+1/-1) for intervals, or NULL without a transform.
+check_transform <- function(
+  transform,
+  jacobian,
+  params,
+  other.args = list()
+) {
+  if (is.null(transform)) return(NULL)
+  if (!is.function(transform) || (!is.null(jacobian) && !is.function(jacobian))) {
+    stop("transform and transform.jacobian should be functions", call. = FALSE)
+  }
+  n <- length(params)
+  # Built-in transformations are known to be componentwise and increasing.
+  if (
+    (identical(transform, transform1) && identical(jacobian, transform1.jacobian)) ||
+      (isTRUE(attr(transform, "ameras.componentwise")) &&
+        isTRUE(attr(jacobian, "ameras.componentwise")))
+  ) return(rep(1, n))
+
+  other.args <- other.args %||% list()
+  # Evaluate only at the supplied point and the coordinate probes below.
+  evaluate <- function(x) {
+    value <- do.call(transform, c(list(params = x), other.args))
+    if (!is.numeric(value) || !is.null(dim(value)) || length(value) != n) {
+      stop(
+        "transform must return a numeric parameter vector of unchanged length",
+        call. = FALSE
+      )
+    }
+    J <- if (is.null(jacobian)) {
+      numDeriv::jacobian(function(z) {
+        do.call(transform, c(list(params = z), other.args))
+      }, x)
+    } else {
+      do.call(jacobian, c(list(params = x), other.args))
+    }
+    if (!is.numeric(J) || !identical(dim(J), c(n, n))) {
+      stop(
+        "transform.jacobian must return a square matrix matching the parameter vector",
+        call. = FALSE
+      )
+    }
+    # Non-finite evaluations are left to the usual numerical optimizer handling.
+    if (all(is.finite(J))) {
+      # Off-diagonal derivatives indicate coupling; scale the tolerance by row.
+      off_diagonal <- J
+      diag(off_diagonal) <- 0
+      scale <- pmax(apply(abs(J), 1, max), .Machine$double.eps)
+      if (any(abs(off_diagonal) > 1e-8 * scale)) {
+        stop(paste0(
+          "Coupled transformations are not supported. Each transformed parameter ",
+          "must depend only on its corresponding optimizer parameter."
+        ), call. = FALSE)
+      }
+    }
+    list(value = value, derivative = diag(J))
+  }
+
+  initial <- evaluate(params)
+  # Derivative signs give directions; zero derivatives need the probes below.
+  direction <- sign(initial$derivative)
+  # Probe both sides at two scales to expose coupling hidden at the initial point.
+  for (j in seq_len(n)) {
+    for (step in c(-1, -0.1, 0.1, 1) * max(1, abs(params[j]))) {
+      candidate <- params
+      candidate[j] <- candidate[j] + step
+      probe <- evaluate(candidate)
+      # Changing parameter j must not change any other transformed parameter.
+      other <- setdiff(seq_len(n), j)
+      tol <- 1e-8 * pmax(1, abs(initial$value[other]), abs(probe$value[other]))
+      if (any(abs(probe$value[other] - initial$value[other]) > tol, na.rm = TRUE)) {
+        stop(
+          "Coupled transformations are not supported; parameters must transform independently",
+          call. = FALSE
+        )
+      }
+      # Nonzero slopes recover direction at stationary points (e.g. x^3 at zero).
+      # Slopes and probe derivatives must agree with the same direction.
+      slope <- (probe$value[j] - initial$value[j]) / step
+      if (is.finite(slope) && slope != 0) {
+        if (is.na(direction[j]) || direction[j] == 0) direction[j] <- sign(slope)
+        if (sign(slope) != direction[j]) {
+          stop("Each parameter transformation must be strictly monotone", call. = FALSE)
+        }
+      }
+      if (any(is.finite(probe$derivative) & probe$derivative * direction < 0, na.rm = TRUE)) {
+        stop("Each parameter transformation must be strictly monotone", call. = FALSE)
+      }
+    }
+  }
+  # Reject components whose direction remains unknown after all probes.
+  if (any(!is.finite(direction) | direction == 0)) {
+    stop(
+      paste0(
+        "Could not determine an increasing or decreasing direction for at least one ",
+        "parameter transformation. Each transformation must be strictly monotone ",
+        "throughout the optimization domain."
+      ),
+      call. = FALSE
+    )
+  }
+  direction
+}
+
+
 check_future_chunk_size_FMA <- function(x) {
   if (is.null(x)) {
     return(NULL)

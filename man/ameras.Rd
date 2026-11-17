@@ -27,15 +27,18 @@ ameras(formula, data, family="gaussian", methods="RC",
 \item{data}{input data frame.}
 \item{family}{outcome model family: \code{"gaussian"}, \code{"binomial"}, \code{"poisson"}, \code{"prophaz"}, \code{"multinomial"} or \code{"clogit"} (default \code{"gaussian"}).}
 \item{methods}{character vector of one or multiple methods to apply. Options: \code{"RC"}, \code{"ERC"}, \code{"MCML"}, \code{"FMA"}, \code{"BMA"} (default \code{"RC"}).}
-\item{transform}{function for parameter transformation during optimization
-(see Details).}
-\item{transform.jacobian}{Jacobian of the transformation function (see Details).}
+\item{transform}{componentwise, strictly monotone function for parameter
+transformation during optimization (see Details). Coupled transformations are
+not supported.}
+\item{transform.jacobian}{Jacobian of the transformation function. Required
+with a supplied transformation when RC, ERC, MCML, or FMA is requested. For
+BMA-only calls it may be omitted.}
 \item{inpar}{vector of initial values for log-likelihood optimization (optional).}
 \item{loglim}{parameter used in likelihood computations to avoid taking the log of very small or negative numbers via \code{log(max(x, loglim))} (default \code{1e-30}).}
 \item{MFMA}{number of samples for \code{"FMA"} to compute estimates and CIs (default 100,000).}
 \item{future.chunk.size.FMA}{optional positive number controlling the average number of FMA dose realizations per future. When \code{NULL} (the default), approximately one future per available worker is used. Parallel execution is controlled by the user's current \code{future::plan()}; the default plan is sequential.}
 \item{prophaz.numints.BMA}{for \code{methods="BMA"} with \code{family="prophaz"}, the number of subintervals with constant baseline hazard (default 10). Cut points are determined based on quantiles of the event time distribution among cases.}
-\item{ERRprior.BMA}{prior for dose-related parameters when \code{doseRRmod="ERR"} or \code{"LINEXP"} and \code{methods="BMA"}.
+\item{ERRprior.BMA}{prior for dose-related parameters when \code{model="ERR"} or \code{"LINEXP"} is specified inside \code{dose()} and \code{methods="BMA"}.
 Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncated_doubleexponential"}, \code{"normal"}, \code{"horseshoe"}, \code{"doubleexponential"}, see Details (default \code{"doubleexponential"}).}
 \item{nburnin.BMA}{number of MCMC burn-in iterations for BMA (default 5,000).}
 \item{niter.BMA}{number of MCMC iterations per chain for BMA (default 20,000).}
@@ -43,7 +46,8 @@ Options: \code{"truncated_normal"}, \code{"truncated_horseshoe"}, \code{"truncat
 \item{thin.BMA}{thinning rate for BMA (default 10).}
 \item{included.realizations.BMA}{indices of exposure realizations used in BMA (defaults to all realizations).}
 \item{optim.method}{method used for optimization by \code{optim}. Options are \code{"Nelder-Mead"} and \code{"BFGS"}. When using Nelder-Mead, a second optimization with BFGS is normally run to refine the fit. If this automatic BFGS refinement fails because its finite-difference evaluations are non-finite, the Nelder-Mead solution is retained and checked using the usual Hessian and convergence diagnostics. A warning is emitted if the selected final optimizer result has a nonzero convergence code.}
-\item{control}{control list passed to \code{optim} (default \code{list(reltol=1e-10)}).}
+\item{control}{control list passed to \code{optim}. Omitted or \code{NULL}
+controls become \code{list(reltol=1e-10)}.}
 \item{keep.data}{whether to attach data to the output object (default \code{TRUE}). When the data object is large, \code{keep.data} can be set to \code{FALSE} to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied separately when \code{keep.data=FALSE}. See \code{\link[=confint.amerasfit]{confint}}.}
 \item{na.action}{function or function name controlling missing-value handling for model inputs after formula terms have been expanded. By default, \code{getOption("na.action")} is used, typically \code{na.omit}. Use \code{na.fail} to reject missing model inputs explicitly, or \code{na.pass} to skip row removal; missing model inputs left by \code{na.pass} will generally cause an error during input checks or model fitting. \code{na.exclude} is accepted for fitting, but residuals and diagnostic plots are returned for the fitted rows rather than padded back to the originally supplied row count.}
 \item{\dots}{other arguments, passed to functions such as \code{transform}.}
@@ -168,7 +172,7 @@ omitted-row object returned by the missing-value action, when applicable),
 \code{num.realizations} (the number of dose realizations provided),
 \code{transform} (the used transformation 
 function, if applicable), \code{transform.jacobian} (the used Jacobian function for 
-the transformation, if applicable), \code{other.args} (any other arguments passed to 
+the transformation, if applicable), \code{other.args} (any other arguments passed to
 \dots), and \code{model} (a list containing the specified model components parsed from
 the formula, including \code{model$data}, which is either the data frame used for
 model fitting when \code{keep.data=TRUE} or \code{NULL} otherwise).
@@ -238,7 +242,7 @@ time under the \code{entry < t <= exit} risk-set convention.
 
 A transformation can be used to reparametrize parameters for optimization, such that the likelihoods are evaluated at \code{transform(parameters)}, where \code{parameters} are unconstrained. This should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function \code{\link{transform1}} applies an exponential transformation to the desired parameters, see \code{?transform1}. When supplying a function to \code{transform}, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \eqn{\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma}, where \eqn{\bm \alpha}, \eqn{\bm\beta_{m1}} and \eqn{\bm \beta_{m2}} can be vectors, with lengths matching \eqn{\bm X} and \eqn{\bm M}, respectively. \eqn{\sigma} is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \eqn{Z-1} parameter vectors in the order as given above, where \eqn{Z} is the number of outcome categories, with the last category chosen as the referent category. See \code{vignette("transformations", package="ameras")} for an example of how to specify a custom transformation function. 
 
-When no transformation is specified and the linear ERR model is used, \code{transform1} is used for ERR parameters \eqn{\beta_1} and \eqn{\beta_2} by default, with lower limits \eqn{-1/max(D)} for \eqn{\beta_1} in the linear dose-response and \eqn{(0,-1/max(D^2))} for \eqn{(\beta_1,\beta_2)} in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \eqn{\beta_1}, and no transformation is used for \eqn{\beta_2}. If reference-plus-contrast effect modifiers are specified, no transformation is used for modifier contrast parameters. With subgroup-specific modifier coding, the default transformation is applied to the subgroup dose-effect parameters. For ERR and linear-exponential models with effect modifiers, subgroup-specific coding can therefore be more numerically robust than reference-plus-contrast coding, because bounds are applied directly to each subgroup dose-effect parameter. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (\code{transform.jacobian}) is required when using a transformation. For \code{\link{transform1}}, the Jacobian is given by \code{\link{transform1.jacobian}}. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given above with variances obtained using the delta method with the provided Jacobian function.
+When no transformation is specified and the linear ERR model is used, \code{transform1} is used for ERR parameters \eqn{\beta_1} and \eqn{\beta_2} by default, with lower limits \eqn{-1/max(D)} for \eqn{\beta_1} in the linear dose-response and \eqn{(0,-1/max(D^2))} for \eqn{(\beta_1,\beta_2)} in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \eqn{\beta_1}, and no transformation is used for \eqn{\beta_2}. If reference-plus-contrast effect modifiers are specified, no transformation is used for modifier contrast parameters. With subgroup-specific modifier coding, the default transformation is applied to the subgroup dose-effect parameters. For ERR and linear-exponential models with effect modifiers, subgroup-specific coding can therefore be more numerically robust than reference-plus-contrast coding, because bounds are applied directly to each subgroup dose-effect parameter. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (\code{transform.jacobian}) is required when a transformation is supplied and a frequentist method is requested; it may be omitted for BMA-only calls. For \code{\link{transform1}}, the Jacobian is given by \code{\link{transform1.jacobian}}. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given above with variances obtained using the delta method with the provided Jacobian function.
 
 For BMA, a prior distribution for exposure-response parameters can be chosen when using linear or linear-exponential exposure-response model. The options are normal, horseshoe, and double exponential priors, and the same priors truncated at 0 to yield positive values. In particular:
 
@@ -247,9 +251,20 @@ For BMA, a prior distribution for exposure-response parameters can be chosen whe
   \item Horseshoe (shrinkage prior): \eqn{\tau \sim \text{Cauchy}(0,1)^+; \lambda_j \sim \text{Cauchy}(0,1)^+; \beta_j \sim N(0, \tau^2 \lambda_j^2)}. Here \eqn{\tau} is shared across all parameters
   \item Double exponential (shrinkage prior): \eqn{\lambda_j \sim \text{Cauchy}(0,1)^+; \beta_j \sim \text{DoubleExponential}(0,\lambda_j)}
 }
-For all other parameters, and when using the exponential exposure-response model or the Gaussian outcome family, the prior is \eqn{N(0, 1000)}. For the parameter \eqn{\sigma} in the Gaussian family, this prior is truncated at 0. When subgroup-specific modifier coding is used in BMA, priors and MCMC sampling remain on the internal reference-plus-contrast scale; reported coefficients, variance matrices, samples, diagnostics, and sample-based intervals are converted to the subgroup-specific scale.
+For all other regression parameters, and when using the exponential exposure-response model or the Gaussian outcome family, the prior is \eqn{N(0, 1000)}. For the parameter \eqn{\sigma} in the Gaussian family, this prior is truncated at 0. Proportional hazards baseline-hazard parameters instead use Gamma priors with shape and rate both equal to \eqn{0.01}. When subgroup-specific modifier coding is used in BMA, priors and MCMC sampling remain on the internal reference-plus-contrast scale; reported coefficients, variance matrices, samples, diagnostics, and sample-based intervals are converted to the subgroup-specific scale.
 
 Because the proportional hazards model is not available in \code{nimble}, \code{ameras} uses a piecewise constant baseline hazard for Bayesian model averaging. The interval \code{min(entry), max(exit))} is divided into \code{prophaz.numints.BMA} subintervals with cutpoints obtained as quantiles of the distribution of event times among cases, and a baseline hazard parameter is estimated for each subinterval.
+}
+
+\section{Transformation requirements}{
+User transformations must have the form \eqn{\theta_i=h_i(\eta_i)}: each
+reported parameter depends only on the optimizer parameter at the same
+position. Each component must be strictly monotone, either increasing or
+decreasing. Coupled transformations are not supported for any estimation
+method. Initial numerical checks evaluate the transformation and its Jacobian
+at the starting values and coordinate perturbations. The supplied function is
+then used directly during optimization and must satisfy these requirements
+throughout its domain; initial checks cannot establish global validity.
 }
 
 \seealso{

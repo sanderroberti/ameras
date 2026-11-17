@@ -384,14 +384,18 @@ inverse Hessian matrix (returned by <code>optim</code>), and
 V_*\)</span> where <span class="math inline">\(\mathbf V_*\)</span> is
 the vector of standard deviations estimated using <span class="math inline">\(J H^{-1} J^T\)</span> with <span class="math inline">\(J\)</span> the Jacobian of the transformation
 (obtained with <code>transform.jacobian</code>) and <span class="math inline">\(H\)</span> is the Hessian. When no transformation
-is used, <code>type=&quot;wald.orig&quot;</code> should be used. The third option
-is <code>type=&quot;proflik&quot;</code>, which uses the profile likelihood to
-compute confidence bounds. For this, the profile log (partial)
-likelihood for parameter <span class="math inline">\(\theta_p\)</span>
-is defined as <span class="math display">\[PL_p (\theta_p^*) =
-\max_{\mathbf\theta: \theta_p = \theta_p^*} \ell (\mathbf
-\theta),\]</span> where <span class="math inline">\(\ell\)</span> is the
-log (partial) likelihood. Next, profile confidence intervals <span class="math inline">\((\theta_p^l, \theta_p^h)\)</span> are obtained for
+is used, <code>type=&quot;wald.orig&quot;</code> should be used. Transformations
+must be componentwise and strictly monotone, as required for fitting.
+For decreasing components, endpoints and profile diagnostics are
+reordered to give the reported lower and upper bounds. Each endpoint is
+evaluated with a complete parameter vector. Transformed Wald and profile
+likelihood intervals check the transformation at the fitted parameters
+and determine its directions locally; no directions are stored on the
+fit. The third option is <code>type=&quot;proflik&quot;</code>, which uses the
+profile likelihood to compute confidence bounds. For this, the profile
+log (partial) likelihood for parameter <span class="math inline">\(\theta_p\)</span> is defined as <span class="math display">\[PL_p (\theta_p^*) = \max_{\mathbf\theta: \theta_p
+= \theta_p^*} \ell (\mathbf \theta),\]</span> where <span class="math inline">\(\ell\)</span> is the log (partial) likelihood.
+Next, profile confidence intervals <span class="math inline">\((\theta_p^l, \theta_p^h)\)</span> are obtained for
 parameter <span class="math inline">\(\theta_p\)</span> at significance
 level <span class="math inline">\(\alpha\)</span> by solving <span class="math inline">\(-2 \{PL_p(\theta_p^*) -
 \ell(\hat{\mathbf{\theta}})\}=\chi^2_{1,1-\alpha}\)</span> using
@@ -404,12 +408,18 @@ profile likelihood intervals for all parameters, use
 <code>parm = &quot;all&quot;</code>.</p>
 <div id="bracketing-and-numerical-controls" class="section level2">
 <h2>Bracketing and numerical controls</h2>
-<p>Before solving for an endpoint, both <code>confint()</code> and
+<p>Nuisance-parameter optimizations reuse the effective fitting
+controls. New fits store <code>list(reltol = 1e-10)</code> when
+<code>control</code> is omitted or <code>NULL</code>; the same fallback
+is used when recomputing intervals for older objects. This can change
+bounds previously obtained with the looser <code>optim()</code> default.
+Explicit control lists are preserved. The one-nuisance-parameter
+<code>optimize()</code> path has its own tolerance.</p>
+<p>Before solving for the bounds, both <code>confint()</code> and
 <code>add_confint()</code> first search for a bracket separately for the
-lower and upper bounds. A bracket consists of two parameter values
-between which the likelihood-ratio p-value crosses the target
-<code>1 - level</code> (for example, <code>0.05</code> for a 95%
-interval).</p>
+lower and upper bounds. A bracket is an interval within which the
+likelihood-ratio p-value crosses the target <code>1 - level</code> (for
+example, <code>0.05</code> for a 95% interval).</p>
 <p>The search starts from the fitted parameter value on the internal
 optimizer scale. When the stored Hessian is usable, the initial
 candidate is four approximate standard errors away in the direction of
@@ -429,8 +439,8 @@ precision is acceptable, but a bound is still returned as
 differs from the target <code>1 - level</code> by more than
 <code>0.005</code>. Warnings distinguish inaccurate roots from iteration
 limits and bracketing failures; changing <code>tol.profCI</code> or
-<code>maxit.profCI</code> does not extend the separate bracketing search
-or change the nuisance-parameter optimizer.</p>
+<code>maxit.profCI</code> does not affect the separate bracketing search
+or the nuisance-parameter optimizer.</p>
 <p>If no suitable bracket is found, the corresponding bound is returned
 as <code>NA</code> with a warning showing the last attempted value and
 its p-value. This can reflect a limited search range, parameter scaling,
@@ -476,10 +486,10 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; dose         0.6050480  1.1827031</span></span>
 <span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>ci.ameras.proflik</span>
 <span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt;                  2.5 %     97.5 %</span></span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt; (Intercept) -1.2410617 -0.8960193</span></span>
-<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt; X1           0.2916105  0.5906751</span></span>
-<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt; X2          -0.5241009 -0.1498246</span></span>
-<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; dose         0.6005363  1.1776549</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt; (Intercept) -1.2410618 -0.8960192</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt; X1           0.2916101  0.5906752</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt; X2          -0.5241011 -0.1498243</span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; dose         0.6005351  1.1776561</span></span>
 <span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a></span>
 <span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co"># Attach intervals when they should be included in the fit summary</span></span>
 <span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>fit.ameras.waldorig <span class="ot">&lt;-</span> <span class="fu">add_confint</span>(</span>
@@ -493,12 +503,12 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; Rows: 3000</span></span>
 <span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt; Total CPU runtime: 0.2 seconds</span></span>
 <span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt;  Method  Fit    CI Total</span></span>
-<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt;      RC 0.27 0.001 0.271</span></span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt;  Method   Fit  CI Total</span></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt;      RC 0.175 0.0 0.175</span></span>
 <span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="co">#&gt; </span></span>
