@@ -117,7 +117,8 @@ combination of the other categories.
 For `family="prophaz"` with `type="schoenfeld"`, a data frame with
 columns `id` (row index of the event), `time` (event time), and one
 additional column per model parameter containing the Schoenfeld
-residuals. Only rows corresponding to events (`status=1`) are included.
+residuals. BMA baseline-hazard parameters do not have residual columns.
+Only rows corresponding to events (`status=1`) are included.
 
 ## Details
 

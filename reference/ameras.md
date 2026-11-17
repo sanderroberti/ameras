@@ -44,12 +44,15 @@ ameras(formula, data, family="gaussian", methods="RC",
 
 - transform:
 
-  function for parameter transformation during optimization (see
-  Details).
+  componentwise, strictly monotone function for parameter transformation
+  during optimization (see Details). Coupled transformations are not
+  supported.
 
 - transform.jacobian:
 
-  Jacobian of the transformation function (see Details).
+  Jacobian of the transformation function. Required with a supplied
+  transformation when RC, ERC, MCML, or FMA is requested. For BMA-only
+  calls it may be omitted.
 
 - inpar:
 
@@ -84,11 +87,11 @@ ameras(formula, data, family="gaussian", methods="RC",
 
 - ERRprior.BMA:
 
-  prior for dose-related parameters when `doseRRmod="ERR"` or `"LINEXP"`
-  and `methods="BMA"`. Options: `"truncated_normal"`,
-  `"truncated_horseshoe"`, `"truncated_doubleexponential"`, `"normal"`,
-  `"horseshoe"`, `"doubleexponential"`, see Details (default
-  `"doubleexponential"`).
+  prior for dose-related parameters when `model="ERR"` or `"LINEXP"` is
+  specified inside `dose()` and `methods="BMA"`. Options:
+  `"truncated_normal"`, `"truncated_horseshoe"`,
+  `"truncated_doubleexponential"`, `"normal"`, `"horseshoe"`,
+  `"doubleexponential"`, see Details (default `"doubleexponential"`).
 
 - nburnin.BMA:
 
@@ -123,7 +126,8 @@ ameras(formula, data, family="gaussian", methods="RC",
 
 - control:
 
-  control list passed to `optim` (default `list(reltol=1e-10)`).
+  control list passed to `optim`. Omitted or `NULL` controls become
+  `list(reltol=1e-10)`.
 
 - keep.data:
 
@@ -468,7 +472,9 @@ each subgroup dose-effect parameter. When negative RRs are obtained
 during optimization, an error will be generated and a different
 transformation or bounds should be used. All output is returned in the
 original parametrization. The Jacobian of the transformation
-(`transform.jacobian`) is required when using a transformation. For
+(`transform.jacobian`) is required when a transformation is supplied and
+a frequentist method is requested; it may be omitted for BMA-only calls.
+For
 [`transform1`](https://ameras.sanderroberti.com/reference/transform1.md),
 the Jacobian is given by
 [`transform1.jacobian`](https://ameras.sanderroberti.com/reference/transform1jacobian.md).
@@ -492,14 +498,15 @@ the same priors truncated at 0 to yield positive values. In particular:
   \text{Cauchy}(0,1)^+; \beta_j \sim
   \text{DoubleExponential}(0,\lambda_j)\\
 
-For all other parameters, and when using the exponential
+For all other regression parameters, and when using the exponential
 exposure-response model or the Gaussian outcome family, the prior is
 \\N(0, 1000)\\. For the parameter \\\sigma\\ in the Gaussian family,
-this prior is truncated at 0. When subgroup-specific modifier coding is
-used in BMA, priors and MCMC sampling remain on the internal
-reference-plus-contrast scale; reported coefficients, variance matrices,
-samples, diagnostics, and sample-based intervals are converted to the
-subgroup-specific scale.
+this prior is truncated at 0. Proportional hazards baseline-hazard
+parameters instead use Gamma priors with shape and rate both equal to
+\\0.01\\. When subgroup-specific modifier coding is used in BMA, priors
+and MCMC sampling remain on the internal reference-plus-contrast scale;
+reported coefficients, variance matrices, samples, diagnostics, and
+sample-based intervals are converted to the subgroup-specific scale.
 
 Because the proportional hazards model is not available in `nimble`,
 `ameras` uses a piecewise constant baseline hazard for Bayesian model
@@ -507,6 +514,18 @@ averaging. The interval `min(entry), max(exit))` is divided into
 `prophaz.numints.BMA` subintervals with cutpoints obtained as quantiles
 of the distribution of event times among cases, and a baseline hazard
 parameter is estimated for each subinterval.
+
+## Transformation requirements
+
+User transformations must have the form \\\theta_i=h_i(\eta_i)\\: each
+reported parameter depends only on the optimizer parameter at the same
+position. Each component must be strictly monotone, either increasing or
+decreasing. Coupled transformations are not supported for any estimation
+method. Initial numerical checks evaluate the transformation and its
+Jacobian at the starting values and coordinate perturbations. The
+supplied function is then used directly during optimization and must
+satisfy these requirements throughout its domain; initial checks cannot
+establish global validity.
 
 ## See also
 
@@ -572,8 +591,8 @@ summary(fit)
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.064 0.0 0.064
+#>  Method   Fit    CI Total
+#>      RC 0.097 0.001 0.098
 #> 
 #> Summary of coefficients by method:
 #> 

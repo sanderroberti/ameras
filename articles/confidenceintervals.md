@@ -59,7 +59,10 @@ delta method to obtain the CI h(\mathbf\eta)\pm z\_{1-\alpha/2} \mathbf
 V\_\* where \mathbf V\_\* is the vector of standard deviations estimated
 using J H^{-1} J^T with J the Jacobian of the transformation (obtained
 with `transform.jacobian`) and H is the Hessian. When no transformation
-is used, `type="wald.orig"` should be used. The third option is
+is used, `type="wald.orig"` should be used. Transformations must be
+componentwise and strictly monotone, as required for fitting. For
+decreasing components, endpoints and profile diagnostics are reordered
+to give the reported lower and upper bounds. The third option is
 `type="proflik"`, which uses the profile likelihood to compute
 confidence bounds. For this, the profile log (partial) likelihood for
 parameter \theta_p is defined as PL_p (\theta_p^\*) =
@@ -155,10 +158,10 @@ ci.ameras.waldtransformed
 #> dose         0.6050480  1.1827031
 ci.ameras.proflik
 #>                  2.5 %     97.5 %
-#> (Intercept) -1.2410617 -0.8960193
-#> X1           0.2916105  0.5906751
-#> X2          -0.5241009 -0.1498246
-#> dose         0.6005363  1.1776549
+#> (Intercept) -1.2410618 -0.8960192
+#> X1           0.2916101  0.5906752
+#> X2          -0.5241011 -0.1498243
+#> dose         0.6005351  1.1776561
 
 # Attach intervals when they should be included in the fit summary
 fit.ameras.waldorig <- add_confint(
@@ -172,12 +175,12 @@ summary(fit.ameras.waldorig)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.3 seconds
+#> Total CPU runtime: 0.4 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.325 0.0 0.325
+#>      RC 0.389 0.0 0.389
 #> 
 #> Summary of coefficients by method:
 #> 

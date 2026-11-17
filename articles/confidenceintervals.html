@@ -129,7 +129,10 @@ where <span class="math inline">\mathbf V_*</span> is the vector of
 standard deviations estimated using <span class="math inline">J H^{-1}
 J^T</span> with <span class="math inline">J</span> the Jacobian of the
 transformation (obtained with <code>transform.jacobian</code>) and <span class="math inline">H</span> is the Hessian. When no transformation is
-used, <code>type="wald.orig"</code> should be used. The third option is
+used, <code>type="wald.orig"</code> should be used. Transformations must
+be componentwise and strictly monotone, as required for fitting. For
+decreasing components, endpoints and profile diagnostics are reordered
+to give the reported lower and upper bounds. The third option is
 <code>type="proflik"</code>, which uses the profile likelihood to
 compute confidence bounds. For this, the profile log (partial)
 likelihood for parameter <span class="math inline">\theta_p</span> is
@@ -221,10 +224,10 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span><span class="co">#&gt; dose         0.6050480  1.1827031</span></span>
 <span><span class="va">ci.ameras.proflik</span></span>
 <span><span class="co">#&gt;                  2.5 %     97.5 %</span></span>
-<span><span class="co">#&gt; (Intercept) -1.2410617 -0.8960193</span></span>
-<span><span class="co">#&gt; X1           0.2916105  0.5906751</span></span>
-<span><span class="co">#&gt; X2          -0.5241009 -0.1498246</span></span>
-<span><span class="co">#&gt; dose         0.6005363  1.1776549</span></span>
+<span><span class="co">#&gt; (Intercept) -1.2410618 -0.8960192</span></span>
+<span><span class="co">#&gt; X1           0.2916101  0.5906752</span></span>
+<span><span class="co">#&gt; X2          -0.5241011 -0.1498243</span></span>
+<span><span class="co">#&gt; dose         0.6005351  1.1776561</span></span>
 <span></span>
 <span><span class="co"># Attach intervals when they should be included in the fit summary</span></span>
 <span><span class="va">fit.ameras.waldorig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/confint.html">add_confint</a></span><span class="op">(</span></span>
@@ -238,12 +241,12 @@ effect modifiers, fit subgroup-specific dose coefficients with
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Rows: 3000</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Total CPU runtime: 0.3 seconds</span></span>
+<span><span class="co">#&gt; Total CPU runtime: 0.4 seconds</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; CPU runtime in seconds by method:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Method   Fit  CI Total</span></span>
-<span><span class="co">#&gt;      RC 0.325 0.0 0.325</span></span>
+<span><span class="co">#&gt;      RC 0.389 0.0 0.389</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Summary of coefficients by method:</span></span>
 <span><span class="co">#&gt; </span></span>

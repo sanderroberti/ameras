@@ -19,6 +19,16 @@
 
 ## Introduction
 
+User transformations must be componentwise and strictly monotone: each
+reported parameter can depend only on its corresponding optimizer
+parameter. Both increasing and decreasing components are supported.
+Coupled transformations are not supported. Initial checks evaluate the
+transformation and its Jacobian at the starting values and coordinate
+perturbations, using a row-relative tolerance of `1e-8` for off-diagonal
+Jacobian entries to detect non-monotonicity. These checks cannot prove
+global properties: custom functions must satisfy the requirements
+throughout the optimization domain.
+
 A transformation can be used to reparametrize parameters for
 optimization, such that the likelihoods are evaluated at
 `transform(parameters)`, where `parameters` are unconstrained. This
@@ -204,12 +214,12 @@ summary(fit.ameras.sigmoid)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.5 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method  Fit  CI Total
-#>      RC 0.46 0.0  0.46
+#>  Method   Fit  CI Total
+#>      RC 0.325 0.0 0.325
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -237,12 +247,12 @@ summary(fit.ameras.transform1)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.2 seconds
+#> Total CPU runtime: 0.3 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
-#>  Method   Fit  CI Total
-#>      RC 0.212 0.0 0.212
+#>  Method  Fit  CI Total
+#>      RC 0.28 0.0  0.28
 #> 
 #> Summary of coefficients by method:
 #> 

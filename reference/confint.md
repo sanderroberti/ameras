@@ -128,6 +128,14 @@ reported parameter scale. Profile likelihood intervals repeatedly
 re-evaluate the likelihood and can therefore be substantially more
 expensive.
 
+Transformations must be componentwise and strictly monotone, as required
+by [`ameras`](https://ameras.sanderroberti.com/reference/ameras.md).
+Decreasing transformations reverse endpoint order; bounds and profile
+diagnostics are returned in reported lower/upper order. Transformed Wald
+and profile likelihood intervals check the transformation at the fitted
+parameters and determine its directions locally. Original-scale Wald
+intervals and sample-based intervals do not require this check.
+
 For FMA and BMA, percentile intervals use equal-tailed sample quantiles
 and HPD intervals use
 [`HPDinterval`](https://rdrr.io/pkg/coda/man/HPDinterval.html).
@@ -154,6 +162,12 @@ warning reporting the last attempted parameter value and its p-value. A
 bracketing failure can reflect a limited search range, parameter
 scaling, numerical problems in the profile evaluations, or the absence
 of a finite bound.
+
+Nuisance optimizations use the effective fitting controls. Missing or
+`NULL` controls on older objects default to `list(reltol = 1e-10)`. When
+only one nuisance parameter remains,
+[`optimize()`](https://rdrr.io/r/stats/optimize.html) uses its own
+tolerance; `reltol` does not control that optimization.
 
 When a model was fitted with `keep.data = FALSE`, the original data must
 be supplied through `data` for profile likelihood intervals. The
@@ -198,12 +212,12 @@ summary(fit_with_ci)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0 seconds
+#> Total CPU runtime: 0.1 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit  CI Total
-#>      RC 0.021 0.0 0.021
+#>      RC 0.078 0.0 0.078
 #> 
 #> Summary of coefficients by method:
 #> 
@@ -227,12 +241,12 @@ summary(fit_with_profile_ci)
 #> 
 #> Rows: 3000
 #> 
-#> Total CPU runtime: 0.1 seconds
+#> Total CPU runtime: 0.2 seconds
 #> 
 #> CPU runtime in seconds by method:
 #> 
 #>  Method   Fit    CI Total
-#>      RC 0.021 0.054 0.075
+#>      RC 0.078 0.076 0.154
 #> 
 #> Summary of coefficients by method:
 #> 

@@ -166,6 +166,12 @@
   therefore be asymmetric on the reported parameter scale.
   Profile likelihood intervals repeatedly re-evaluate the likelihood and can
   therefore be substantially more expensive.</p>
+<p>Transformations must be componentwise and strictly monotone, as required by
+  <code><a href="ameras.html">ameras</a></code>. Decreasing transformations reverse endpoint order;
+  bounds and profile diagnostics are returned in reported lower/upper order.
+  Transformed Wald and profile likelihood intervals check the transformation
+  at the fitted parameters and determine its directions locally. Original-scale
+  Wald intervals and sample-based intervals do not require this check.</p>
 <p>For FMA and BMA, percentile intervals use equal-tailed sample quantiles and
   HPD intervals use <code><a href="https://rdrr.io/pkg/coda/man/HPDinterval.html" class="external-link">HPDinterval</a></code>.</p>
     </div>
@@ -188,6 +194,11 @@
   p-value. A bracketing failure can reflect a limited search range, parameter
   scaling, numerical problems in the profile evaluations, or the absence of
   a finite bound.</p>
+<p>Nuisance optimizations use the effective fitting controls. Missing or
+  <code>NULL</code> controls on older objects default to
+  <code>list(reltol = 1e-10)</code>. When only
+  one nuisance parameter remains, <code><a href="https://rdrr.io/r/stats/optimize.html" class="external-link">optimize()</a></code> uses its own tolerance;
+  <code>reltol</code> does not control that optimization.</p>
 <p>When a model was fitted with <code>keep.data = FALSE</code>, the original data must
   be supplied through <code>data</code> for profile likelihood intervals. The
   missing-value policy used during fitting is reapplied before likelihood
@@ -229,12 +240,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.1 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.021 0.0 0.021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.078 0.0 0.078</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -258,12 +269,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 3000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.1 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total CPU runtime: 0.2 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.021 0.054 0.075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.078 0.076 0.154</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

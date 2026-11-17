@@ -87,11 +87,14 @@ frequentist model averaging (FMA), and Bayesian model averaging (BMA).</p>
 <dd><p>character vector of one or multiple methods to apply. Options: <code>"RC"</code>, <code>"ERC"</code>, <code>"MCML"</code>, <code>"FMA"</code>, <code>"BMA"</code> (default <code>"RC"</code>).</p></dd>
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
-<dd><p>function for parameter transformation during optimization
-(see Details).</p></dd>
+<dd><p>componentwise, strictly monotone function for parameter
+transformation during optimization (see Details). Coupled transformations are
+not supported.</p></dd>
 
 <dt id="arg-transform-jacobian">transform.jacobian<a class="anchor" aria-label="anchor" href="#arg-transform-jacobian"></a></dt>
-<dd><p>Jacobian of the transformation function (see Details).</p></dd>
+<dd><p>Jacobian of the transformation function. Required
+with a supplied transformation when RC, ERC, MCML, or FMA is requested. For
+BMA-only calls it may be omitted.</p></dd>
 
 <dt id="arg-inpar">inpar<a class="anchor" aria-label="anchor" href="#arg-inpar"></a></dt>
 <dd><p>vector of initial values for log-likelihood optimization (optional).</p></dd>
@@ -109,7 +112,7 @@ frequentist model averaging (FMA), and Bayesian model averaging (BMA).</p>
 <dd><p>for <code>methods="BMA"</code> with <code>family="prophaz"</code>, the number of subintervals with constant baseline hazard (default 10). Cut points are determined based on quantiles of the event time distribution among cases.</p></dd>
 
 <dt id="arg-errprior-bma">ERRprior.BMA<a class="anchor" aria-label="anchor" href="#arg-errprior-bma"></a></dt>
-<dd><p>prior for dose-related parameters when <code>doseRRmod="ERR"</code> or <code>"LINEXP"</code> and <code>methods="BMA"</code>.
+<dd><p>prior for dose-related parameters when <code>model="ERR"</code> or <code>"LINEXP"</code> is specified inside <code>dose()</code> and <code>methods="BMA"</code>.
 Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <code>"truncated_doubleexponential"</code>, <code>"normal"</code>, <code>"horseshoe"</code>, <code>"doubleexponential"</code>, see Details (default <code>"doubleexponential"</code>).</p></dd>
 
 <dt id="arg-nburnin-bma">nburnin.BMA<a class="anchor" aria-label="anchor" href="#arg-nburnin-bma"></a></dt>
@@ -131,7 +134,8 @@ Options: <code>"truncated_normal"</code>, <code>"truncated_horseshoe"</code>, <c
 <dd><p>method used for optimization by <code>optim</code>. Options are <code>"Nelder-Mead"</code> and <code>"BFGS"</code>. When using Nelder-Mead, a second optimization with BFGS is normally run to refine the fit. If this automatic BFGS refinement fails because its finite-difference evaluations are non-finite, the Nelder-Mead solution is retained and checked using the usual Hessian and convergence diagnostics. A warning is emitted if the selected final optimizer result has a nonzero convergence code.</p></dd>
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
-<dd><p>control list passed to <code>optim</code> (default <code>list(reltol=1e-10)</code>).</p></dd>
+<dd><p>control list passed to <code>optim</code>. Omitted or <code>NULL</code>
+controls become <code>list(reltol=1e-10)</code>.</p></dd>
 
 <dt id="arg-keep-data">keep.data<a class="anchor" aria-label="anchor" href="#arg-keep-data"></a></dt>
 <dd><p>whether to attach data to the output object (default <code>TRUE</code>). When the data object is large, <code>keep.data</code> can be set to <code>FALSE</code> to preserve memory. The attached data is used to compute profile likelihood confidence intervals, but can also be supplied separately when <code>keep.data=FALSE</code>. See <code><a href="confint.html">confint</a></code>.</p></dd>
@@ -352,13 +356,24 @@ currently supported. For proportional hazards regression with entry times,
 rows with <code>entry == exit</code> are excluded because they have zero follow-up
 time under the <code>entry &lt; t &lt;= exit</code> risk-set convention.</p>
 <p>A transformation can be used to reparametrize parameters for optimization, such that the likelihoods are evaluated at <code>transform(parameters)</code>, where <code>parameters</code> are unconstrained. This should be specified when fitting linear excess relative risk and linear-exponential models to ensure nonnegative odds/risk/hazard. The included function <code><a href="transform1.html">transform1</a></code> applies an exponential transformation to the desired parameters, see <code><a href="transform1.html">?transform1</a></code>. When supplying a function to <code>transform</code>, this should be a function of the full parameter vector, returning a full (transformed) parameter vector. In particular, the full parameter vector contains parameters in the following order: \(\alpha_0, \bm \alpha, \beta_1, \beta_2, \bm \beta_{m1}, \bm \beta_{m2}, \sigma\), where \(\bm \alpha\), \(\bm\beta_{m1}\) and \(\bm \beta_{m2}\) can be vectors, with lengths matching \(\bm X\) and \(\bm M\), respectively. \(\sigma\) is only included for the linear model (Gaussian family), and no intercept is included for the proportional hazards and conditional logistic models. For the multinomial model, the full parameter vector is the concatenation of \(Z-1\) parameter vectors in the order as given above, where \(Z\) is the number of outcome categories, with the last category chosen as the referent category. See <code><a href="../articles/transformations.html">vignette("transformations", package="ameras")</a></code> for an example of how to specify a custom transformation function.</p>
-<p>When no transformation is specified and the linear ERR model is used, <code>transform1</code> is used for ERR parameters \(\beta_1\) and \(\beta_2\) by default, with lower limits \(-1/max(D)\) for \(\beta_1\) in the linear dose-response and \((0,-1/max(D^2))\) for \((\beta_1,\beta_2)\) in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \(\beta_1\), and no transformation is used for \(\beta_2\). If reference-plus-contrast effect modifiers are specified, no transformation is used for modifier contrast parameters. With subgroup-specific modifier coding, the default transformation is applied to the subgroup dose-effect parameters. For ERR and linear-exponential models with effect modifiers, subgroup-specific coding can therefore be more numerically robust than reference-plus-contrast coding, because bounds are applied directly to each subgroup dose-effect parameter. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (<code>transform.jacobian</code>) is required when using a transformation. For <code><a href="transform1.html">transform1</a></code>, the Jacobian is given by <code><a href="transform1jacobian.html">transform1.jacobian</a></code>. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given above with variances obtained using the delta method with the provided Jacobian function.</p>
+<p>When no transformation is specified and the linear ERR model is used, <code>transform1</code> is used for ERR parameters \(\beta_1\) and \(\beta_2\) by default, with lower limits \(-1/max(D)\) for \(\beta_1\) in the linear dose-response and \((0,-1/max(D^2))\) for \((\beta_1,\beta_2)\) in the linear-quadratic dose-response, respectively. For the linear-exponential model, a lower limit of 0 is used for \(\beta_1\), and no transformation is used for \(\beta_2\). If reference-plus-contrast effect modifiers are specified, no transformation is used for modifier contrast parameters. With subgroup-specific modifier coding, the default transformation is applied to the subgroup dose-effect parameters. For ERR and linear-exponential models with effect modifiers, subgroup-specific coding can therefore be more numerically robust than reference-plus-contrast coding, because bounds are applied directly to each subgroup dose-effect parameter. When negative RRs are obtained during optimization, an error will be generated and a different transformation or bounds should be used. All output is returned in the original parametrization. The Jacobian of the transformation (<code>transform.jacobian</code>) is required when a transformation is supplied and a frequentist method is requested; it may be omitted for BMA-only calls. For <code><a href="transform1.html">transform1</a></code>, the Jacobian is given by <code><a href="transform1jacobian.html">transform1.jacobian</a></code>. No transformations are used in BMA, and FMA is applied on the parameters using the parametrization as given above with variances obtained using the delta method with the provided Jacobian function.</p>
 <p>For BMA, a prior distribution for exposure-response parameters can be chosen when using linear or linear-exponential exposure-response model. The options are normal, horseshoe, and double exponential priors, and the same priors truncated at 0 to yield positive values. In particular:</p>
 <ul><li><p>Normal: \(\beta_j \sim N(0,1000)\) for all exposure-response parameters \(\beta_j\)</p></li>
 <li><p>Horseshoe (shrinkage prior): \(\tau \sim \text{Cauchy}(0,1)^+; \lambda_j \sim \text{Cauchy}(0,1)^+; \beta_j \sim N(0, \tau^2 \lambda_j^2)\). Here \(\tau\) is shared across all parameters</p></li>
 <li><p>Double exponential (shrinkage prior): \(\lambda_j \sim \text{Cauchy}(0,1)^+; \beta_j \sim \text{DoubleExponential}(0,\lambda_j)\)</p></li>
-</ul><p>For all other parameters, and when using the exponential exposure-response model or the Gaussian outcome family, the prior is \(N(0, 1000)\). For the parameter \(\sigma\) in the Gaussian family, this prior is truncated at 0. When subgroup-specific modifier coding is used in BMA, priors and MCMC sampling remain on the internal reference-plus-contrast scale; reported coefficients, variance matrices, samples, diagnostics, and sample-based intervals are converted to the subgroup-specific scale.</p>
+</ul><p>For all other regression parameters, and when using the exponential exposure-response model or the Gaussian outcome family, the prior is \(N(0, 1000)\). For the parameter \(\sigma\) in the Gaussian family, this prior is truncated at 0. Proportional hazards baseline-hazard parameters instead use Gamma priors with shape and rate both equal to \(0.01\). When subgroup-specific modifier coding is used in BMA, priors and MCMC sampling remain on the internal reference-plus-contrast scale; reported coefficients, variance matrices, samples, diagnostics, and sample-based intervals are converted to the subgroup-specific scale.</p>
 <p>Because the proportional hazards model is not available in <code>nimble</code>, <code>ameras</code> uses a piecewise constant baseline hazard for Bayesian model averaging. The interval <code>min(entry), max(exit))</code> is divided into <code>prophaz.numints.BMA</code> subintervals with cutpoints obtained as quantiles of the distribution of event times among cases, and a baseline hazard parameter is estimated for each subinterval.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="transformation-requirements">Transformation requirements<a class="anchor" aria-label="anchor" href="#transformation-requirements"></a></h2>
+    <p>User transformations must have the form \(\theta_i=h_i(\eta_i)\): each
+reported parameter depends only on the optimizer parameter at the same
+position. Each component must be strictly monotone, either increasing or
+decreasing. Coupled transformations are not supported for any estimation
+method. Initial numerical checks evaluate the transformation and its Jacobian
+at the starting values and coordinate perturbations. The supplied function is
+then used directly during optimization and must satisfy these requirements
+throughout its domain; initial checks cannot establish global validity.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -413,8 +428,8 @@ time under the <code>entry &lt; t &lt;= exit</code> risk-set convention.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CPU runtime in seconds by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit  CI Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.064 0.0 0.064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Method   Fit    CI Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RC 0.097 0.001 0.098</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients by method:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

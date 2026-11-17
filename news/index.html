@@ -53,10 +53,18 @@
 <li>Removed the deprecated <code>included.replicates.BMA</code> alias; use <code>included.realizations.BMA</code> instead.</li>
 <li>Removed non-formula effect-modifier syntax. Use <code>modifier = ~ M1 + M2</code> instead of <code>modifier = M1 + M2</code> inside <code>dose()</code>.</li>
 <li>Renamed the bundled example dataset from <code>data</code> to <code>ameras_simulated</code>.</li>
+<li>Renamed the proportional hazards BMA output component <code>prophaz_timepoints</code> to <code>prophaz.timepoints</code>, matching the documented name and vignette examples.</li>
+<li>User-supplied parameter transformations must now be componentwise and strictly monotone: each reported parameter may depend only on its matching optimizer parameter. Initial checks inspect the starting values and coordinate perturbations. Increasing and decreasing transformations are supported; directions are determined locally when obtaining transformed Wald or profile likelihood intervals.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li>RC, ERC, and MCML fits now warn when the selected final optimizer result returns a nonzero convergence code. For automatic Nelder-Mead plus BFGS fitting, the warning is based on the BFGS result when refinement completes and on the retained Nelder-Mead result when refinement fails.</li>
+<ul><li>HPD intervals for FMA and BMA now honor <code>level</code>; previously they always used 95% even when the returned column labels showed a different requested level.</li>
+<li>Schoenfeld residuals and diagnostic plots now use the fitted factor and subgroup modifier names and designs, avoiding covariance-indexing errors.</li>
+<li>Transformed Wald and profile likelihood intervals now order decreasing transformations correctly, including profile diagnostics and one-sided failures.</li>
+<li>Profile nuisance optimizations now use the effective fitting controls. Omitted or <code>NULL</code> controls are stored as <code>list(reltol = 1e-10)</code>, and the same fallback is applied when recomputing intervals for older objects. This can change recomputed profile bounds that previously used <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim()</a></code>’s looser default. Explicit control lists and one-dimensional <code><a href="https://rdrr.io/r/stats/optimize.html" class="external-link">optimize()</a></code> tolerances are unchanged.</li>
+<li>FMA now passes the requested <code>loglim</code> to its realization-specific likelihoods instead of silently using <code>1e-30</code>.</li>
+<li>BMA-only calls no longer require a Jacobian for a supplied transformation, which BMA does not apply. Calls with methods including a frequentist method still require a Jacobian.</li>
+<li>RC, ERC, and MCML fits now warn when the selected final optimizer result returns a nonzero convergence code. For automatic Nelder-Mead plus BFGS fitting, the warning is based on the BFGS result when refinement completes and on the retained Nelder-Mead result when refinement fails.</li>
 <li>A failure of the automatic BFGS refinement due to non-finite finite-difference evaluations no longer aborts a valid Nelder-Mead fit. The Nelder-Mead solution is retained and assessed using the usual Hessian and convergence diagnostics.</li>
 </ul></div>
 <div class="section level3">
